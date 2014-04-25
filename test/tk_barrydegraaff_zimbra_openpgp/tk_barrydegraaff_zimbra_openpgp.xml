@@ -1,0 +1,8 @@
+<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="0.1" description="Zimbra OpenPGP">
+    <zimletPanelItem label="${msg.zimbra_openpgp_label}" icon="zimbraIcon">
+      <toolTipText>${msg.zimbra_openpgp_tooltip}</toolTipText>
+   </zimletPanelItem>
+   <userProperties>
+      <property type="string" label="Trusted public keys" name="zimbra_openpgp_pubkeys" rows="20"/>
+	</userProperties>
+</zimlet>
