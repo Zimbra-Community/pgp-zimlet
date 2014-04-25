@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>OpenPGP.js - Sign test for Zimbra OpenPGP Zimlet</title>
+<script src="scripts/openpgp.js"></script>
+</head>
+<body>
+<h1>OpenPGP.js - Sign test for Zimbra OpenPGP Zimlet</h1>
+<script type="text/javascript">   
+var openpgp = window.openpgp;
+var mPubKey = '-----BEGIN PGP PUBLIC KEY BLOCK-----\n' +
+'Version: GnuPG v1\n' +
+'\n' +
+'mQENBFNaGZsBCACor4dD3KIG5Ndj4Lj/AJahrFYagYvLvQbFjU+IUNyHsxmEAqJs\n' +
+'yZJKNQNU41F21VWrvJsiUlyztcuAXmCaJIwKawXFUhyojgTKbMz1o3SBMpUP2S8+\n' +
+'F9iUMN/Z5+2+OA941fD2dfeHVC+8cKBDrajMjPzELQN4WzFWLkzxjtb8lAbnO90b\n' +
+'zkXtGfghKDHViMxbDBBx1xHqLirVUk1SZVM4/jpaiK4XteT/O3SLjy4INOf8QQeA\n' +
+'DHKkRbJNRUwIGligkCu337ufMBbxKlLpgWDyKL4cOqSaQ5xMjN40eZcAmt4gIvg7\n' +
+'WwaSbldjVoTkpjmPcXayJo/FXHH/aQHKuEr9ABEBAAG0dlppbWJyYSBPcGVuUEdQ\n' +
+'IFppbWxldCBURVNUIEtFWSAob25seSB1c2UgZm9yIHRlc3RpbmcgcHVycG9zZSBO\n' +
+'T1QgU0VDVVJFISEpIDxwbGVhc2UtdXNlLWZvci10ZXN0aW5nLW9ubHlAbXl6aW1i\n' +
+'cmEudGVzdD6JATgEEwECACIFAlNaGZsCGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4B\n' +
+'AheAAAoJEOYLztpNOxPbcBEH/0t3D6IVseHUM6lIimyW6aIorQy49+LkZgzWKgxD\n' +
+'7y+tBH1gWt2Axf+2jn5U/FsGQn47qk4o5tmO4695OrFJbpF69IZwB64AitgfRoKh\n' +
+'obh41Ec2qMhyZqV2ovfbMMa8vzEjsSnUaP8W1Uhtrougt1ZLx/hPIZu6V+2FEMbC\n' +
+'5AOnMX1CVWPui49tgY4Sn5EFfkHcx+pPn5n2MWQ9CeQ5dK2RQbsViqcqJdCf0EY8\n' +
+'ZVGGrMW7E0IwLdEiBeXsvjXNOLd2A3CyBpHMoqIlNIP2LHyrEPRk93jVQxT0Kqaa\n' +
+'wj2QHjvG2rSw43wQcuwKqjH6vmY1qqKdvEELxB7yVNbSj5G5AQ0EU1oZmwEIAJkK\n' +
+'e7mrneY6ZreTTvVwsVOxhb9ydH82lhM8bkGduh0vCLp/87ING8AGQzrc8SVymnCQ\n' +
+'hNmzjRFsEdO/ETtFhEfiMoMxfB9JWTVJXx7ISvBfmMEYGnK9p5TXqRHxIuVj4jmY\n' +
+'/d+FcY5HYItFAJKXWf9tGiSjix/ixf1XnXukfDNKWp79kPwLV8nHvSHCZSEVQFTC\n' +
+'EuwufCg4S/N96v8g4urZ21xZO3eggfzO7TKEtzp7HnqcE9Aa4v7x/I++bLvHqwOr\n' +
+'QLW+HmMIwyoMRD63JlNcwBX2HFmzPJm4CK01zrhhJ6JADv8QDVBiARB/OE7H3gbI\n' +
+'Sl+uwcOlm7zcx+hedQUAEQEAAYkBHwQYAQIACQUCU1oZmwIbDAAKCRDmC87aTTsT\n' +
+'23uXB/4ypjA0ZVNYGQctClGJ+1u/0c0+AuyCCQoSTsA+1IkxtuKJy3ibWekYhNd2\n' +
+'bc4ju248zJIiHJkNLzrDk8oxe0W79ONjnhEkC0G4y1anGl8KAL47j0kkbeQku5hx\n' +
+'yw3via/HzlUR3SARUON7xhKjKoqJCtdmkSGR0kSa13VdFpbF0i26FVWIurTm3YVg\n' +
+'I2bJ8sl48d7fRR6GakGmTC9bw1EaFgovWFq6z3GKbxF7JvICt9svfqktf4EDGEfS\n' +
+'y4H4yZ0xkCM+LsseQGOtcloPpgoyTVvN7Qd41cCXUKV2P3ZN1j0d4YPwckz2n3xy\n' +
+'8p6Oio6x2QfjcWJQ4/HA44RXPni3\n' +
+'=ldYW\n' +
+'-----END PGP PUBLIC KEY BLOCK-----';
+
+var mSecKey = '-----BEGIN PGP PRIVATE KEY BLOCK-----\n' +
+'Version: GnuPG v1\n' +
+'\n' +
+'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\n' +
+'wOOEVz54tw==\n' +
+'=NGzy\n' +
+'-----END PGP PRIVATE KEY BLOCK-----';
+
+//Sign:
+
+var passphrase = 'dummy'; // Password of the private key.
+var privKeys = openpgp.key.readArmored(mSecKey);
+var publicKeys = openpgp.key.readArmored(mPubKey);
+
+var privKey = privKeys.keys[0];
+var success = privKey.decrypt(passphrase);
+
+var signed = openpgp.signClearMessage(privKeys.keys, 'This is a signed message');
+
+document.write('<pre>'+signed+'</pre>');      
+        
+</script>
+<pre>
+This file is part of the Zimbra OpenPGP Zimlet project.
+Copyright (C) 2014  Barry de Graaff info@barrydegraaff.tk
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see http://www.gnu.org/licenses/.   
+</pre>    
+</body>
+</html>
