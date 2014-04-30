@@ -1,8 +1,38 @@
-<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="0.1" description="Zimbra OpenPGP">
-    <zimletPanelItem label="${msg.zimbra_openpgp_label}" icon="zimbraIcon">
-      <toolTipText>${msg.zimbra_openpgp_tooltip}</toolTipText>
+<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="0.2" description="Zimbra OpenPGP">
+   <summary>
+Zimbra OpenPGP Zimlet DEVELOPMENT VERSION NOT FOR PRODUCTION USE!
+
+   https://github.com/barrydegraaff/pgp-zimlet
+   https://www.indiegogo.com/projects/zimbra-openpgp-zimlet
+
+Copyright (C) 2014  Barry de Graaff 
+
+Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see http://www.gnu.org/licenses/. 
+   </summary>
+   <include>openpgp.js</include>
+   <resource>icon.png</resource>
+   <include>tk_barrydegraaff_zimbra_openpgp.js</include>
+   <handlerObject>tk_barrydegraaff_zimbra_openpgp</handlerObject>
+   <includeCSS>tk_barrydegraaff_zimbra_openpgp.css</includeCSS>
+   <zimletPanelItem label="OpenPGP" icon="tk_barrydegraaff_zimbra_openpgp-panelIcon">
+      <toolTipText>Double-click to manage PGP keys or drag-drop a message to verify.</toolTipText>
+      <dragSource type="ZmConv" />
+		<dragSource type="ZmMailMsg" />
    </zimletPanelItem>
    <userProperties>
       <property type="string" label="Trusted public keys" name="zimbra_openpgp_pubkeys" rows="20"/>
-	</userProperties>
+   </userProperties>
 </zimlet>
