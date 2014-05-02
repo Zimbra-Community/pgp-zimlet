@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses/.
 */ 
 .DwtInputField
-{
+{   
    width: 500px;
 }
 .Imgtk_barrydegraaff_zimbra_openpgp-panelIcon {
@@ -26,4 +26,10 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
  width: 18px;
  height: 18px;
  overflow: hidden;
+}
+
+input, textarea
+{
+   width:500px;
+   height: 50px;
 }

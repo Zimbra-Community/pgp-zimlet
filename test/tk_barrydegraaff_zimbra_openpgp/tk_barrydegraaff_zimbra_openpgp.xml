@@ -1,4 +1,4 @@
-<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="0.2" description="Zimbra OpenPGP">
+<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="0.3" description="Zimbra OpenPGP">
    <summary>
 Zimbra OpenPGP Zimlet DEVELOPMENT VERSION NOT FOR PRODUCTION USE!
 
@@ -28,11 +28,19 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
    <handlerObject>tk_barrydegraaff_zimbra_openpgp</handlerObject>
    <includeCSS>tk_barrydegraaff_zimbra_openpgp.css</includeCSS>
    <zimletPanelItem label="OpenPGP" icon="tk_barrydegraaff_zimbra_openpgp-panelIcon">
-      <toolTipText>Double-click to manage PGP keys or drag-drop a message to verify.</toolTipText>
+      <toolTipText>Double-click to manage PGP keys or drag-drop a message to verify/decrypt.</toolTipText>
       <dragSource type="ZmConv" />
 		<dragSource type="ZmMailMsg" />
    </zimletPanelItem>
    <userProperties>
-      <property type="string" label="Trusted public keys" name="zimbra_openpgp_pubkeys" rows="20"/>
+      <property type="string" label="Trusted public keys" name="zimbra_openpgp_pubkeys" rows="2"/>
+      <property type="string" label="Trusted public key 1" name="zimbra_openpgp_pubkeys1" rows="2"/>
+      <property type="string" label="Trusted public key 2" name="zimbra_openpgp_pubkeys2" rows="2"/>
+      <property type="string" label="Trusted public key 3" name="zimbra_openpgp_pubkeys3" rows="2"/>
+      <property type="string" label="Trusted public key 4" name="zimbra_openpgp_pubkeys4" rows="2"/>
+      <property type="string" label="Trusted public key 5" name="zimbra_openpgp_pubkeys5" rows="2"/>
+      <property type="string" label="Trusted public key 6" name="zimbra_openpgp_pubkeys6" rows="2"/>
+      <property type="string" label="Trusted public key 7" name="zimbra_openpgp_pubkeys7" rows="2"/>
+      <property type="string" label="Trusted public key 8" name="zimbra_openpgp_pubkeys8" rows="2"/>
    </userProperties>
 </zimlet>
