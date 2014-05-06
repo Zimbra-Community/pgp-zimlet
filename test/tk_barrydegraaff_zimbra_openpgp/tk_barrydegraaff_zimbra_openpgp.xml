@@ -31,6 +31,9 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
       <toolTipText>Double-click to manage PGP keys or drag-drop a message to verify/decrypt.</toolTipText>
       <dragSource type="ZmConv" />
 		<dragSource type="ZmMailMsg" />
+      <contextMenu>
+         <menuItem label="Sign message" id="sign" />
+      </contextMenu>      
    </zimletPanelItem>
    <userProperties>
       <property type="string" label="Trusted public key 1" name="zimbra_openpgp_pubkeys1" rows="2"/>

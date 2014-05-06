@@ -27,13 +27,13 @@ tk_barrydegraaff_zimbra_openpgp.prototype = new ZmZimletBase;
 tk_barrydegraaff_zimbra_openpgp.prototype.constructor = tk_barrydegraaff_zimbra_openpgp;
 
 //Required by Zimbra
-tk_barrydegraaff_zimbra_openpgp.prototype.toString = 
+tk_barrydegraaff_zimbra_openpgp.prototype.toString =
 function() {
    return "tk_barrydegraaff_zimbra_openpgp";
 };
 
 //Required by Zimbra
-tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {   
+tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
 };
 
 /* This method gets called by the Zimlet framework when double-click is performed.
@@ -41,6 +41,17 @@ tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
 tk_barrydegraaff_zimbra_openpgp.prototype.doubleClicked =
 function() {
 	this.displayDialog(3, "Maintain public keys", null);
+};
+
+/* Context menu handler
+ * */
+tk_barrydegraaff_zimbra_openpgp.prototype.menuItemSelected =
+function(itemId) {
+	switch (itemId) {
+	case "sign":
+      this.displayDialog(4, "Sign message", null);
+		break;
+	}
 };
 
 /* doDrop handler for verify and decrypt messages
@@ -68,23 +79,23 @@ function(zmObject) {
       }  
       this.verify(message);  
    }
-   else if (msg.match(pgpMessageRegEx)) {      
+   else if (msg.match(pgpMessageRegEx)) {
       this.displayDialog(1, "Please provide private key", msg);
    }   
    else {
       this.status("No PGP signed message detected.", ZmStatusView.LEVEL_WARNING);
-      return;  
+      return;
    }
 };
 
-tk_barrydegraaff_zimbra_openpgp.prototype.decrypt = function(message) {         
-   
-}   
+tk_barrydegraaff_zimbra_openpgp.prototype.decrypt = function(message) {
 
-/* verify method loops through public trusted keys and calls do_verify for each of the keys, 
+}
+
+/* verify method loops through public trusted keys and calls do_verify for each of the keys,
  * will update the status bar with the result (good/bad signature).
  * */
-tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {         
+tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
    try {
       //Zimbra can only accept 5000 chars or so for each user input, so we have to combine multiple.
       var publicKeys1 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
@@ -118,15 +129,15 @@ tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
       var publicKeys29 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value);
       var publicKeys30 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value);
       var combinedPublicKeys = [publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys,];
-      
+
       var result = 0;
-      
+
       combinedPublicKeys.forEach(function(entry) {
          if(entry) {
             result += tk_barrydegraaff_zimbra_openpgp.prototype.do_verify(message, entry);
          }
       });
-      
+
       if(result > 0) {
          tk_barrydegraaff_zimbra_openpgp.prototype.status("Got a good signature.", ZmStatusView.LEVEL_INFO);
       }
@@ -142,13 +153,13 @@ tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
 
 /* do_verify method calls openpgp.verifyClearSignedMessage, returns boolean 1 for good signature or 0 for bad signature
  * */
-tk_barrydegraaff_zimbra_openpgp.prototype.do_verify = function(message, keyObj) {               
+tk_barrydegraaff_zimbra_openpgp.prototype.do_verify = function(message, keyObj) {
    try {
       var verified = openpgp.verifyClearSignedMessage(keyObj, message);
    }
-   catch(err) {  
+   catch(err) {
      return 0;
-   }         
+   }
 
    try {
       if(verified.signatures[0].valid==true) {
@@ -240,7 +251,28 @@ function(id, title, message) {
       view.getHtmlElement().innerHTML = html;
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );      
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnPubKeySave)); 
-      break;      
+      break; 
+   case 4:
+      view.setSize("600", "350");
+      html = "<table><tr><td colspan='2'>" +
+      "Please compose a message below to be signed with your private key.<br><br>" +
+      "</td></tr><tr><td>" +
+      "Private Key:" +
+      "</td><td>" +
+      "<textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"20\" id='privateKeyInput'/></textarea>" +
+      "</td></tr><tr><td>" +
+      "Passphrase:" +
+      "</td><td>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='text' value=''>" +
+      "</td></tr><tr><td>" +
+      "Message:" +
+      "</td><td>" +
+      "<textarea class=\"barrydegraaff_zimbra_openpgp-msg\" id='message'></textarea>" +
+      "</td></tr></table>";	
+      view.getHtmlElement().innerHTML = html;
+      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );      
+      this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnSign)); 
+      break;           
    }
 	this._dialog.popup();
 };
@@ -258,34 +290,33 @@ function() {
       var privKey = privKeys.keys[0];
       var success = privKey.decrypt(passphraseInput);
    }
-   catch (err) {      
+   catch (err) {
       tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not parse private key!", ZmStatusView.LEVEL_WARNING);
    }   
    
-   if (success) {   
+   if (success) {
       try {
          var message = openpgp.message.readArmored(msg);
          var decrypted = openpgp.decryptMessage(privKey, message);
       }
       catch (err)
       {
-         tk_barrydegraaff_zimbra_openpgp.prototype.status("Decryption failed!", ZmStatusView.LEVEL_WARNING);      
+         tk_barrydegraaff_zimbra_openpgp.prototype.status("Decryption failed!", ZmStatusView.LEVEL_WARNING);
       }
    }
    else {
-      tk_barrydegraaff_zimbra_openpgp.prototype.status("Wrong password!", ZmStatusView.LEVEL_WARNING);            
-   }   
+      tk_barrydegraaff_zimbra_openpgp.prototype.status("Wrong password!", ZmStatusView.LEVEL_WARNING);
+   }
    
-         
+
    if(decrypted)
    {   
 	   // What is the DWT method to destroy this._dialog? This only clears its contents.
       this._dialog.clearContent();
       this._dialog.popdown();
       this.displayDialog(2,'Decrypted result',decrypted);
-   }   
+   }
 };
-
 
 /* This method is called when the dialog "OK" button is clicked after public keys have been maintained
  */
@@ -324,4 +355,43 @@ function() {
 
    this._dialog.clearContent();
    this._dialog.popdown();
+};
+
+/* This method is called when the dialog "OK" button is clicked after private key has been entered.
+ */
+tk_barrydegraaff_zimbra_openpgp.prototype.okBtnSign =
+function() {
+	var privateKeyInput = document.getElementById("privateKeyInput").value;
+   var passphrase = document.getElementById("passphraseInput").value;
+   var msg = document.getElementById("message").value;
+
+   try {
+      var privKeys = openpgp.key.readArmored(privateKeyInput);
+      var privKey = privKeys.keys[0];
+      var success = privKey.decrypt(passphrase);
+   }
+   catch (err) {
+      tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not parse private key!", ZmStatusView.LEVEL_WARNING);
+   }
+
+   if (success) {
+      try {
+         var signed = openpgp.signClearMessage(privKeys.keys, msg);
+      }
+      catch (err)
+      {
+         tk_barrydegraaff_zimbra_openpgp.prototype.status("Sign failed!" + err, ZmStatusView.LEVEL_WARNING);
+      }
+   }
+   else {
+      tk_barrydegraaff_zimbra_openpgp.prototype.status("Wrong password!", ZmStatusView.LEVEL_WARNING);
+   }
+
+   if(signed)
+   {   
+	   // What is the DWT method to destroy this._dialog? This only clears its contents.
+      this._dialog.clearContent();
+      this._dialog.popdown();
+      this.displayDialog(2,'Signed message',signed);
+   }
 };
