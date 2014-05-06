@@ -43,5 +43,5 @@ wget https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/test/tk_b
 wget https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/test/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.js
 wget https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/test/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.css
 wget https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/test/tk_barrydegraaff_zimbra_openpgp/icon.png
-wget https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/test/tk_barrydegraaff_zimbra_openpgp/openpgp.js
+wget https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/test/tk_barrydegraaff_zimbra_openpgp/openpgp.min.js
 
