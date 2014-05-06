@@ -1,4 +1,4 @@
-<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="0.3" description="Zimbra OpenPGP">
+<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="0.4" description="Zimbra OpenPGP">
    <summary>
 Zimbra OpenPGP Zimlet DEVELOPMENT VERSION NOT FOR PRODUCTION USE!
 
@@ -33,7 +33,6 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 		<dragSource type="ZmMailMsg" />
    </zimletPanelItem>
    <userProperties>
-      <property type="string" label="Trusted public keys" name="zimbra_openpgp_pubkeys" rows="2"/>
       <property type="string" label="Trusted public key 1" name="zimbra_openpgp_pubkeys1" rows="2"/>
       <property type="string" label="Trusted public key 2" name="zimbra_openpgp_pubkeys2" rows="2"/>
       <property type="string" label="Trusted public key 3" name="zimbra_openpgp_pubkeys3" rows="2"/>
@@ -42,5 +41,27 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
       <property type="string" label="Trusted public key 6" name="zimbra_openpgp_pubkeys6" rows="2"/>
       <property type="string" label="Trusted public key 7" name="zimbra_openpgp_pubkeys7" rows="2"/>
       <property type="string" label="Trusted public key 8" name="zimbra_openpgp_pubkeys8" rows="2"/>
+      <property type="string" label="Trusted public key 9" name="zimbra_openpgp_pubkeys9" rows="2"/>
+      <property type="string" label="Trusted public key 10" name="zimbra_openpgp_pubkeys10" rows="2"/>
+      <property type="string" label="Trusted public key 11" name="zimbra_openpgp_pubkeys11" rows="2"/>
+      <property type="string" label="Trusted public key 12" name="zimbra_openpgp_pubkeys12" rows="2"/>
+      <property type="string" label="Trusted public key 13" name="zimbra_openpgp_pubkeys13" rows="2"/>
+      <property type="string" label="Trusted public key 14" name="zimbra_openpgp_pubkeys14" rows="2"/>
+      <property type="string" label="Trusted public key 15" name="zimbra_openpgp_pubkeys15" rows="2"/>
+      <property type="string" label="Trusted public key 16" name="zimbra_openpgp_pubkeys16" rows="2"/>
+      <property type="string" label="Trusted public key 17" name="zimbra_openpgp_pubkeys17" rows="2"/>
+      <property type="string" label="Trusted public key 18" name="zimbra_openpgp_pubkeys18" rows="2"/>
+      <property type="string" label="Trusted public key 19" name="zimbra_openpgp_pubkeys19" rows="2"/>
+      <property type="string" label="Trusted public key 20" name="zimbra_openpgp_pubkeys20" rows="2"/>
+      <property type="string" label="Trusted public key 21" name="zimbra_openpgp_pubkeys21" rows="2"/>
+      <property type="string" label="Trusted public key 22" name="zimbra_openpgp_pubkeys22" rows="2"/>
+      <property type="string" label="Trusted public key 23" name="zimbra_openpgp_pubkeys23" rows="2"/>
+      <property type="string" label="Trusted public key 24" name="zimbra_openpgp_pubkeys24" rows="2"/>
+      <property type="string" label="Trusted public key 25" name="zimbra_openpgp_pubkeys25" rows="2"/>
+      <property type="string" label="Trusted public key 26" name="zimbra_openpgp_pubkeys26" rows="2"/>
+      <property type="string" label="Trusted public key 27" name="zimbra_openpgp_pubkeys27" rows="2"/>
+      <property type="string" label="Trusted public key 28" name="zimbra_openpgp_pubkeys28" rows="2"/>
+      <property type="string" label="Trusted public key 29" name="zimbra_openpgp_pubkeys29" rows="2"/>
+      <property type="string" label="Trusted public key 30" name="zimbra_openpgp_pubkeys30" rows="2"/>
    </userProperties>
 </zimlet>
