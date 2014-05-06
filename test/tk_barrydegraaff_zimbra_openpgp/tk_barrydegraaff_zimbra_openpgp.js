@@ -188,7 +188,7 @@ function(id, title, message) {
 
    switch(id) {
    case 1:
-      view.setSize("600", "170");
+      view.setSize("600", "180");
       html = "<table><tr><td colspan='2'>" +
       "The information you enter here is NOT saved to your computer or the server.<br><br>" +
       "</td></tr><tr><td>" +
@@ -198,7 +198,7 @@ function(id, title, message) {
       "</td></tr><tr><td>" +
       "Passphrase:" +
       "</td><td>" +
-      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='text' value=''>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value=''>" +
       "</td></tr><tr><td>" +
       "Message:" +
       "</td><td>" +
@@ -263,7 +263,7 @@ function(id, title, message) {
       "</td></tr><tr><td>" +
       "Passphrase:" +
       "</td><td>" +
-      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='text' value=''>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value=''>" +
       "</td></tr><tr><td>" +
       "Message:" +
       "</td><td>" +
