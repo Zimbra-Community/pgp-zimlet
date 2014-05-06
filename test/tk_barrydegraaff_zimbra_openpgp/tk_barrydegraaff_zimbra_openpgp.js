@@ -51,7 +51,7 @@ function(itemId) {
 	case "sign":
       this.displayDialog(4, "Sign message", null);
 		break;
-	}
+   }
 };
 
 /* doDrop handler for verify and decrypt messages
@@ -392,6 +392,17 @@ function() {
 	   // What is the DWT method to destroy this._dialog? This only clears its contents.
       this._dialog.clearContent();
       this._dialog.popdown();
-      this.displayDialog(2,'Signed message',signed);
+
+      // Tries to open the compose view on its own.
+      var composeController = AjxDispatcher.run("GetComposeController");
+      if(composeController) {
+         var appCtxt = window.top.appCtxt;
+         var zmApp = appCtxt.getApp();
+         var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
+         var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:newWindow, 
+         toOverride:null, subjOverride:null, extraBodyText:signed, callback:null}
+         composeController.doAction(params); // opens asynchronously the window.
+         this.displayStatusMessage("Trying to open a new message dialog. Please wait ...");
+      }      
    }
 };
