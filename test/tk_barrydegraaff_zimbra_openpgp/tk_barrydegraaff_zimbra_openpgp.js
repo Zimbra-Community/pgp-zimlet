@@ -34,6 +34,7 @@ function() {
 
 //Required by Zimbra
 tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
+   var cachePrivKey = 'mijn naam is haas';
 };
 
 /* doDrop handler for verify and decrypt messages
@@ -62,7 +63,7 @@ function(zmObject) {
       this.verify(message);  
    }
    else if (msg.match(pgpMessageRegEx)) {      
-      this.displayPrivateKeyInputDialog(msg);
+      this.displayDialog(1, "Please provide private key", msg);
    }   
    else {
       this.status("No PGP signed message detected.", ZmStatusView.LEVEL_WARNING);
@@ -132,8 +133,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.do_verify = function(message, keyObj) 
    } 
 };
 
-
-
 /* status method show a Zimbra status message
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.status = function(text, type) {         
@@ -141,73 +140,46 @@ tk_barrydegraaff_zimbra_openpgp.prototype.status = function(text, type) {
    appCtxt.getAppController().setStatusMsg(text, type, null, transitions);
 };
 
-
-/* Displays PrivateKey dialog.
+/* displays dialogs.
  */
-tk_barrydegraaff_zimbra_openpgp.prototype.displayPrivateKeyInputDialog = 
-function(message) {
-	if (this._dialog) { //if zimlet dialog already exists...
-		this._dialog.popup(); // simply popup the dialog
-		return;
-	}
+tk_barrydegraaff_zimbra_openpgp.prototype.displayDialog = 
+function(id, title, message) {
 		
-	var view = new DwtComposite(this.getShell()); // creates an empty div as a child of main shell div
-	view.setSize("600", "150"); // set width and height
-	view.getHtmlElement().style.overflow = "auto"; // adds scrollbar
-	view.getHtmlElement().innerHTML = this.privateKeyInputDialog(message); // insert HTML to the dialog
-	
-	// pass the title and view information to create dialog box
-	this._dialog = new ZmDialog( { title:"Please provide private key", view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );
+	var view = new DwtComposite(this.getShell());
+	view.getHtmlElement().style.overflow = "auto";
 
-	// set listener for "OK" button events
-	this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecrypt)); 
-
-	//show the dialog
+   switch(id) {
+   case 1:
+      view.setSize("600", "170");
+      html = "<table><tr><td colspan='2'>" +
+      "The information you enter here is NOT saved to your computer or the server.<br><br>" +
+      "</td></tr><tr><td>" +
+      "Private Key:" +
+      "</td><td>" +
+      "<textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"20\" id='privateKeyInput'/></textarea>" +
+      "</td></tr><tr><td>" +
+      "Passphrase:" +
+      "</td><td>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='text' value=''>" +
+      "</td></tr><tr><td>" +
+      "Message:" +
+      "</td><td>" +
+      "<textarea class=\"barrydegraaff_zimbra_openpgp-input\" id='message'>"+message+"</textarea>" +
+      "</td></tr></table>";	
+      view.getHtmlElement().innerHTML = html;
+      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );      
+      this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecrypt)); 
+      break;
+   case 2:
+      view.setSize("600", "350");
+      view.getHtmlElement().innerHTML = '<textarea class="barrydegraaff_zimbra_openpgp-msg">'+message+'</textarea>';
+      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.DISMISS_BUTTON] } );      
+      break;   
+   }
 	this._dialog.popup();
 };
 
-/* Creates the dialog for PrivateKey input.
- */
-tk_barrydegraaff_zimbra_openpgp.prototype.privateKeyInputDialog =
-function(message) {
-	var html = new Array();
-	var i = 0;
-	html[i++] = "<table>";
-	html[i++] = "<tr>";
-	html[i++] = "<td colspan='2'>";
-	html[i++] = "The information you enter here is cached in your session until you log-off or re-load your browser window.<br><br>";
-	html[i++] = "</td>";
-	html[i++] = "</tr>";
-	html[i++] = "<tr>";
-	html[i++] = "<td>";
-	html[i++] = "Private Key:";
-	html[i++] = "</td>";
-	html[i++] = "<td>";
-	html[i++] = "<textarea rows=\"3\" cols=\"20\" id='privateKeyInput'/></textarea>";
-	html[i++] = "</td>";
-	html[i++] = "</tr>";
-	html[i++] = "<tr>";
-	html[i++] = "<td>";
-	html[i++] = "Passphrase:";
-	html[i++] = "</td>";
-	html[i++] = "<td>";
-	html[i++] = "<input id='passphraseInput' type='text' value=''>";
-	html[i++] = "</td>";
-	html[i++] = "</tr>";
-	html[i++] = "<tr>";
-	html[i++] = "<td>";
-	html[i++] = "Message:";
-	html[i++] = "</td>";
-	html[i++] = "<td>";
-	html[i++] = "<textarea id='message'>"+message+"</textarea>";
-	html[i++] = "</td>";
-	html[i++] = "</tr>"
-	html[i++] = "</table>";
-	
-	return html.join("");
-};
-
-/* This method is called when the dialog "OK" button is clicked.
+/* This method is called when the dialog "OK" button is clicked after private key has been entered.
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnDecrypt =
 function() {
@@ -241,12 +213,9 @@ function() {
          
    if(decrypted)
    {   
-      this.simpleDialog('Decrypted result',decrypted);
-	   this._dialog.popdown(); // hide the dialog
+	   // What is the DWT method to destroy this._dialog? This only clears its contents.
+      this._dialog.clearContent();
+      this._dialog.popdown();
+      this.displayDialog(2,'Decrypted result',decrypted);
    }   
 };
-
-tk_barrydegraaff_zimbra_openpgp.prototype.simpleDialog =
-function(title, message) {
-	alert(title + ": " + message);
-}

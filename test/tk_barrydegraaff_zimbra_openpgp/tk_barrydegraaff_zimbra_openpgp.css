@@ -28,8 +28,14 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
  overflow: hidden;
 }
 
-input, textarea
-{
+.barrydegraaff_zimbra_openpgp-input {
    width:500px;
    height: 50px;
 }
+
+.barrydegraaff_zimbra_openpgp-msg {
+   background-color: white;
+   width: 95%;
+   height: 340px;
+}
+
