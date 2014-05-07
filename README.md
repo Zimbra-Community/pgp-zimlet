@@ -46,3 +46,29 @@ wget https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/test/tk_b
 wget https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/test/tk_barrydegraaff_zimbra_openpgp/openpgp.min.js
 wget https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/test/tk_barrydegraaff_zimbra_openpgp/de_dieploegers_shortcutHandler.js
 
+========================================================================
+
+Known issues
+
+DEALING WITH PUBLIC KEYS LONGER THAN 5120 CHARS
+
+Sometimes people generate public keys that are to long for Zimba to store in zimbraZimletUserProperties.
+
+Saving long pubkeys will trow an warning message, but the key is saved correctly.
+
+To resolve this you can:
+A - Ask for a shorter pubkey
+
+B - Ignore the message
+
+C - Edit zimbra-attrs.xml (at your own risk) !MIGRATION?! like this:
+
+   As root:
+   nano /opt/zimbra/conf/attrs/zimbra-attrs.xml
+   Find the line: 
+   name="zimbraZimletUserProperties" type="cstring" max="5120"
+   and change it to
+   name="zimbraZimletUserProperties" type="cstring" max="15120"
+   
+   As zimbra:
+   zmcontrol restart
