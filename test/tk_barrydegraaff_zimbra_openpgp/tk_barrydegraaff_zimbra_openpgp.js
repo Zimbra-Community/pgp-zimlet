@@ -34,14 +34,31 @@ function() {
 
 //Required by Zimbra
 tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
+//Key-press handler
+tk_barrydegraaff_zimbra_openpgpKeyMap = new de_dieploegers_shortcutHandler('tk_barrydegraaff_zimbra_openpgp', tk_barrydegraaff_zimbra_openpgp.prototype.getKeyMapName);
 };
 
 /* This method gets called by the Zimlet framework when double-click is performed.
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.doubleClicked =
 function() {
-	this.displayDialog(3, "Maintain public keys", null);
+	this.displayDialog(3, "Manage public keys", null);
 };
+
+/* When escape key is pressed, dwt dialog does not get cleared, and entered data remains in the browser memory
+ * therefore we flush it with reload */
+tk_barrydegraaff_zimbra_openpgp.prototype.getKeyMapName = function (actioncode) {
+   switch(actioncode) {
+      case 'Cancel':
+         try {
+            if(document.getElementsByClassName('DwtDialog')[0].className = 'DwtDialog')
+            {
+               location.reload();
+            };         
+         } catch (err) { }
+         break;
+   }      
+}
 
 /* Context menu handler
  * */
@@ -50,6 +67,12 @@ function(itemId) {
 	switch (itemId) {
 	case "sign":
       this.displayDialog(4, "Sign message", null);
+		break;
+	case "pubkeys":
+      this.displayDialog(3, "Manage public keys", null);
+		break;
+	case "about":
+      this.displayDialog(2, "About OpenPGP", '<h1><span style="font-family: sans-serif;">Zimbra OpenPGP Zimlet ' + this._zimletContext.version +'</span></h1><ul> <li><a href="https://github.com/barrydegraaff/pgp-zimlet"><span style="font-family: sans-serif;">https://github.com/barrydegraaff/pgp-zimlet</span></a></li> <li><a href="https://www.indiegogo.com/projects/zimbra-openpgp-zimlet"><span style="font-family: sans-serif;"></span><span style="font-family: sans-serif;">https://www.indiegogo.com/projects/zimbra-openpgp-zimlet</span></a><br style="font-family: sans-serif;"> </li> </ul> <span style="font-family: sans-serif;">Copyright (C) 2014&nbsp; Barry de Graaff </span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">Bugs and feedback: <a href="https://github.com/barrydegraaff/pgp-zimlet/issues">https://github.com/barrydegraaff/pgp-zimlet/issues</a></span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif; font-weight: bold;">Thank you contributors</span><span style="font-weight: bold;">!</span><br> <ul> <li> <a href="http://www.oneCentral.nl"><span style="font-family: sans-serif;">oneCentral.nl</span></a></li> <li><span style="font-family: sans-serif;">profluid</span></li> <li><span style="font-family: sans-serif;">a.werner</span></li> <li><span style="font-family: sans-serif;">Igor Galić</span><br> <span style="font-family: sans-serif;"></span></li> <li><span style="font-family: sans-serif;">moisesber</span></li> <li><span style="font-family: sans-serif;">Brent Dalley</span></li> </ul> <span style="font-family: sans-serif; font-weight: bold;">Special thanks to the people at the <a href="http://openpgpjs.org/">OpenPGP.js</a> project</span><br> <br> <span style="font-family: sans-serif;">and <a href="https://raw.githubusercontent.com/dploeger/attic/master/de_dieploegers_shortcut/de_dieploegers_shortcutHandler.js">Dennis Ploeger</a>.</span><br> <br> <span style="font-family: sans-serif;">This program is free software: you can redistribute it and/or modify</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">it under the terms of the GNU General Public License as published by</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">the Free Software Foundation, either version 3 of the License, or</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">(at your option) any later version.</span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">This program is distributed in the hope that it will be useful,</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">but WITHOUT ANY WARRANTY; without even the implied warranty of</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&nbsp; See the</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">GNU General Public License for more details.</span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">You should have received a copy of the GNU General Public License</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">along with this program.&nbsp; If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</span><br> <br>');
 		break;
    }
 };
@@ -207,11 +230,13 @@ function(id, title, message) {
       view.getHtmlElement().innerHTML = html;
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );      
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecrypt)); 
+      this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn)); 
       break;
    case 2:
       view.setSize("600", "350");
-      view.getHtmlElement().innerHTML = '<textarea class="barrydegraaff_zimbra_openpgp-msg">'+message+'</textarea>';
+      view.getHtmlElement().innerHTML = message;
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.DISMISS_BUTTON] } );      
+      this._dialog.setButtonListener(DwtDialog.DISMISS_BUTTON, new AjxListener(this, this.cancelBtn)); 
       break;   
    case 3:
       view.setSize("600", "500");
@@ -251,6 +276,7 @@ function(id, title, message) {
       view.getHtmlElement().innerHTML = html;
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );      
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnPubKeySave)); 
+      this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));       
       break; 
    case 4:
       view.setSize("600", "350");
@@ -272,6 +298,7 @@ function(id, title, message) {
       view.getHtmlElement().innerHTML = html;
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );      
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnSign)); 
+      this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn)); 
       break;           
    }
 	this._dialog.popup();
@@ -314,7 +341,7 @@ function() {
 	   // What is the DWT method to destroy this._dialog? This only clears its contents.
       this._dialog.clearContent();
       this._dialog.popdown();
-      this.displayDialog(2,'Decrypted result',decrypted);
+      this.displayDialog(2,'Decrypted result','<textarea class="barrydegraaff_zimbra_openpgp-msg">'+decrypted+'</textarea>');
    }
 };
 
@@ -405,4 +432,13 @@ function() {
          this.displayStatusMessage("Trying to open a new message dialog. Please wait ...");
       }      
    }
+};
+
+/* This method is called when the dialog "CANCEL" or "DISMISS" button is clicked
+ */
+tk_barrydegraaff_zimbra_openpgp.prototype.cancelBtn =
+function() {
+   // What is the DWT method to destroy this._dialog? This only clears its contents.
+   this._dialog.clearContent();
+   this._dialog.popdown();
 };
