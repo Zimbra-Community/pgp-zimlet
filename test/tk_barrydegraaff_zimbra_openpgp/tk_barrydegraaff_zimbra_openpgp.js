@@ -20,6 +20,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 
 //Constructor
 tk_barrydegraaff_zimbra_openpgp = function() {
+   this.privateKeyCache='';
 };
 
 //Required by Zimbra
@@ -103,10 +104,10 @@ function(zmObject) {
       this.verify(message);  
    }
    else if (msg.match(pgpMessageRegEx)) {
-      this.displayDialog(1, "Please provide private key", msg);
+      this.displayDialog(1, "Please provide private key and passphrase for decryption", msg);
    }   
    else {
-      this.status("No PGP signed message detected.", ZmStatusView.LEVEL_WARNING);
+      this.status("No PGP message detected.", ZmStatusView.LEVEL_WARNING);
       return;
    }
 };
@@ -213,11 +214,11 @@ function(id, title, message) {
    case 1:
       view.setSize("600", "180");
       html = "<table><tr><td colspan='2'>" +
-      "The information you enter here is NOT saved to your computer or the server.<br><br>" +
+      "Please provide private key and passphrase for decryption. Your private key will remain in memory until you reload your browser.<br><br>" +
       "</td></tr><tr><td>" +
       "Private Key:" +
       "</td><td>" +
-      "<textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"20\" id='privateKeyInput'/></textarea>" +
+      "<textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"20\" id='privateKeyInput'/>" + this.privateKeyCache + "</textarea>" +
       "</td></tr><tr><td>" +
       "Passphrase:" +
       "</td><td>" +
@@ -281,11 +282,11 @@ function(id, title, message) {
    case 4:
       view.setSize("600", "350");
       html = "<table><tr><td colspan='2'>" +
-      "Please compose a message below to be signed with your private key.<br><br>" +
+      "Please compose a message below to be signed with your private key. Your private key will remain in memory until you reload your browser.<br><br>" +
       "</td></tr><tr><td>" +
       "Private Key:" +
       "</td><td>" +
-      "<textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"20\" id='privateKeyInput'/></textarea>" +
+      "<textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"20\" id='privateKeyInput'/>" + this.privateKeyCache + "</textarea>" +
       "</td></tr><tr><td>" +
       "Passphrase:" +
       "</td><td>" +
@@ -309,6 +310,7 @@ function(id, title, message) {
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnDecrypt =
 function() {
 	var privateKeyInput = document.getElementById("privateKeyInput").value;
+   this.privateKeyCache = privateKeyInput;
    var passphraseInput = document.getElementById("passphraseInput").value;
    var msg = document.getElementById("message").value;
    
@@ -389,6 +391,7 @@ function() {
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnSign =
 function() {
 	var privateKeyInput = document.getElementById("privateKeyInput").value;
+   this.privateKeyCache = privateKeyInput;   
    var passphrase = document.getElementById("passphraseInput").value;
    var msg = document.getElementById("message").value;
 
