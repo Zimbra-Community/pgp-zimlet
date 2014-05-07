@@ -35,28 +35,9 @@ To install
 
 su zimbra
 
-cd $ZIMBRA_HOME/zimlets-deployed/ 
+wget https://github.com/barrydegraaff/pgp-zimlet/blob/master/test/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.zip
 
-mkdir _dev 
-
-cd _dev 
-
-mkdir tk_barrydegraaff_zimbra_openpgp 
-
-cd tk_barrydegraaff_zimbra_openpgp 
-
-wget https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/test/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.xml
-
-wget https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/test/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.js
-
-wget https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/test/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.css
-
-wget https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/test/tk_barrydegraaff_zimbra_openpgp/icon.png
-
-wget https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/test/tk_barrydegraaff_zimbra_openpgp/openpgp.min.js
-
-wget https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/test/tk_barrydegraaff_zimbra_openpgp/de_dieploegers_shortcutHandler.js
-
+zmzimletctl deploy tk_barrydegraaff_zimbra_openpgp.zip
 
 ========================================================================
 
