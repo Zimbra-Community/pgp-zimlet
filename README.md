@@ -37,7 +37,7 @@ zmzimletctl deploy tk_barrydegraaff_zimbra_openpgp.zip
 
 If you have a LOT of Internet Explorer users, they will see an error message, you can disable this zimlet via COS:
 
-https://github.com/barrydegraaff/pgp-zimlet/blob/master/test/tk_barrydegraaff_zimbra_openpgp/zimlet-cos-for-internet-explorer.png
+https://github.com/barrydegraaff/pgp-zimlet/blob/docu/zimlet-cos-for-internet-explorer.png
 
 And then only enable it on a per-user basis.
 
