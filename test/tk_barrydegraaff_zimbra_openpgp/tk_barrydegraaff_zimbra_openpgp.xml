@@ -33,10 +33,11 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
       <dragSource type="ZmConv" />
 		<dragSource type="ZmMailMsg" />
       <contextMenu>
-         <menuItem label="Sign message" id="sign" />
-         <menuItem label="Manage public keys" id="pubkeys" />
-         <menuItem label="Generate key pair" id="keypair" />
-         <menuItem label="About" id="about" />
+         <menuItem icon="tk_barrydegraaff_zimbra_openpgp-sign" label="Sign message" id="sign" />
+         <menuItem icon="tk_barrydegraaff_zimbra_openpgp-panelIcon" label="Encrypt message" id="encrypt" />
+         <menuItem icon="tk_barrydegraaff_zimbra_openpgp-pubkeys" label="Manage public keys" id="pubkeys" />
+         <menuItem icon="tk_barrydegraaff_zimbra_openpgp-keypair" label="Generate key pair" id="keypair" />
+         <menuItem icon="tk_barrydegraaff_zimbra_openpgp-about" label="About" id="about" />
       </contextMenu>      
    </zimletPanelItem>
    <userProperties>

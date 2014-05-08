@@ -69,6 +69,9 @@ function(itemId) {
 	case "sign":
       this.displayDialog(4, "Sign message", null);
 		break;
+	case "encrypt":
+      this.displayDialog(6, "Encrypt message", null);
+		break;
 	case "pubkeys":
       this.displayDialog(3, "Manage public keys", null);
 		break;
@@ -101,7 +104,7 @@ function(zmObject) {
          var message = openpgp.cleartext.readArmored(msg);
       }
       catch(err) {  
-         this.status("Could not read armored message! + err", ZmStatusView.LEVEL_CRITICAL);
+         this.status("Could not read armored message!", ZmStatusView.LEVEL_CRITICAL);
          return;
       }  
       this.verify(message);  
@@ -124,7 +127,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.decrypt = function(message) {
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
    try {
-      //Zimbra can only accept 5000 chars or so for each user input, so we have to combine multiple.
       var publicKeys1 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
       var publicKeys2 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value);
       var publicKeys3 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys3").value);
@@ -160,7 +162,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
       var result = 0;
 
       combinedPublicKeys.forEach(function(entry) {
-         if(entry) {
+         if(entry[0]) {
             result += tk_barrydegraaff_zimbra_openpgp.prototype.do_verify(message, entry);
          }
       });
@@ -173,7 +175,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
       };
    }
    catch(err) {
-      tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not parse your trusted public keys!"+err, ZmStatusView.LEVEL_WARNING);
+      tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not parse your trusted public keys!", ZmStatusView.LEVEL_WARNING);
       return;
    }
 }
@@ -321,7 +323,24 @@ function(id, title, message) {
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );      
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnKeyPair)); 
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn)); 
-      break;                 
+      break;   
+   case 6:
+      view.setSize("600", "250");
+      html = "<table><tr><td colspan='2'>" +
+      "Please compose a message below to be encrypted.<br><br>" +
+      "</td></tr><tr><td>" +
+      "Recipient:" +
+      "</td><td>" + this.pubKeySelect() + 
+      "</td></tr><tr><td>" +
+      "Message:" +
+      "</td><td>" +
+      "<textarea class=\"barrydegraaff_zimbra_openpgp-msg\" id='message'></textarea>" +
+      "</td></tr></table>";	
+      view.getHtmlElement().innerHTML = html;
+      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );      
+      this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnEncrypt)); 
+      this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn)); 
+      break;                    
    }
 	this._dialog.popup();
 };
@@ -431,7 +450,7 @@ function() {
       }
       catch (err)
       {
-         tk_barrydegraaff_zimbra_openpgp.prototype.status("Sign failed!" + err, ZmStatusView.LEVEL_WARNING);
+         tk_barrydegraaff_zimbra_openpgp.prototype.status("Sign failed!", ZmStatusView.LEVEL_WARNING);
       }
    }
    else {
@@ -478,6 +497,95 @@ function() {
    }
    else {
       this.status("You must provide a user ID and passphrase", ZmStatusView.LEVEL_WARNING);
+   }
+};
+
+/* This method generates an html select list with public keys
+ * */
+tk_barrydegraaff_zimbra_openpgp.prototype.pubKeySelect =
+function() {
+   try {
+      var publicKeys1 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
+      var publicKeys2 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value);
+      var publicKeys3 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys3").value);
+      var publicKeys4 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys4").value);
+      var publicKeys5 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys5").value);
+      var publicKeys6 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys6").value);
+      var publicKeys7 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys7").value);
+      var publicKeys8 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys8").value);
+      var publicKeys9 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys9").value);
+      var publicKeys10 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys10").value);
+      var publicKeys11 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys11").value);
+      var publicKeys12 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys12").value);
+      var publicKeys13 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys13").value);
+      var publicKeys14 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys14").value);
+      var publicKeys15 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys15").value);
+      var publicKeys16 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys16").value);
+      var publicKeys17 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys17").value);
+      var publicKeys18 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys18").value);
+      var publicKeys19 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys19").value);
+      var publicKeys20 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys20").value);
+      var publicKeys21 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys21").value);
+      var publicKeys22 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys22").value);
+      var publicKeys23 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys23").value);
+      var publicKeys24 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys24").value);
+      var publicKeys25 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys25").value);
+      var publicKeys26 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys26").value);
+      var publicKeys27 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys27").value);
+      var publicKeys28 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys28").value);
+      var publicKeys29 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value);
+      var publicKeys30 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value);
+      var combinedPublicKeys = [publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys,];
+   
+      var result = '<select class="barrydegraaff_zimbra_openpgp-input" id="pubKeySelect">';
+   
+      combinedPublicKeys.forEach(function(entry) {
+         if(entry[0]) {
+            userid = entry[0].users[0].userId.userid.replace(/\</g,"&lt;");
+            userid = userid.replace(/\>/g,"&gt;") ;            
+            result = result + '<option value="'+entry[0].armor()+'">'+userid+'</option>';
+         }
+      });   
+      result = result + '</select>';
+   }
+   catch(err) {
+      tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not parse your trusted public keys!", ZmStatusView.LEVEL_WARNING);
+      return;
+   }
+   return result;
+}
+
+/* This method is called when OK is pressed in encrypt dialog
+ * */
+tk_barrydegraaff_zimbra_openpgp.prototype.okBtnEncrypt =
+function() {
+   var pubKeySelect = document.getElementById("pubKeySelect").value;
+   var msg = document.getElementById("message").value;
+
+   try {
+   var publicKey = openpgp.key.readArmored(pubKeySelect);
+   var pgpMessage = openpgp.encryptMessage(publicKey.keys, msg);
+   } 
+   catch (err) {
+      // This is probably never trown, as encryptMessage never fails
+      tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not encrypt message!", ZmStatusView.LEVEL_WARNING);
+   }
+   if(pgpMessage)
+   {
+      // What is the DWT method to destroy this._dialog? This only clears its contents.
+      this._dialog.clearContent();
+      this._dialog.popdown();
+   
+      // Tries to open the compose view on its own.
+      var composeController = AjxDispatcher.run("GetComposeController");
+      if(composeController) {
+         var appCtxt = window.top.appCtxt;
+         var zmApp = appCtxt.getApp();
+         var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
+         var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, 
+         toOverride:publicKey.keys[0].users[0].userId.userid, subjOverride:null, extraBodyText:pgpMessage, callback:null}
+         composeController.doAction(params); // opens asynchronously the window.
+      }
    }
 };
 
