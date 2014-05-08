@@ -27,7 +27,11 @@ INSTALL INSTRUCTION --- THIS IS A DEVELOPMENT - ALPHA VERSION
 
 su zimbra
 
-wget https://github.com/barrydegraaff/pgp-zimlet/blob/master/test/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.zip
+cd /tmp
+
+rm tk_barrydegraaff_zimbra_openpgp*
+
+wget https://github.com/barrydegraaff/pgp-zimlet/raw/master/test/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.zip
 
 zmzimletctl deploy tk_barrydegraaff_zimbra_openpgp.zip
 

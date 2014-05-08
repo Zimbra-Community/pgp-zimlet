@@ -383,7 +383,7 @@ function() {
 	   // What is the DWT method to destroy this._dialog? This only clears its contents.
       this._dialog.clearContent();
       this._dialog.popdown();
-      this.displayDialog(2,'Decrypted result','<textarea class="barrydegraaff_zimbra_openpgp-msg">'+decrypted+'</textarea>');
+      this.displayDialog(2,'Decrypted result','<textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:340px;">'+decrypted+'</textarea>');
    }
 };
 
