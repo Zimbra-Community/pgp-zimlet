@@ -72,6 +72,9 @@ function(itemId) {
 	case "pubkeys":
       this.displayDialog(3, "Manage public keys", null);
 		break;
+	case "keypair":
+      this.displayDialog(5, "Generate new key pair", null);
+		break;
 	case "about":
       this.displayDialog(2, "About OpenPGP", '<h1><span style="font-family: sans-serif;">Zimbra OpenPGP Zimlet ' + this._zimletContext.version +'</span></h1><ul> <li><a href="https://github.com/barrydegraaff/pgp-zimlet"><span style="font-family: sans-serif;">https://github.com/barrydegraaff/pgp-zimlet</span></a></li> <li><a href="https://www.indiegogo.com/projects/zimbra-openpgp-zimlet"><span style="font-family: sans-serif;"></span><span style="font-family: sans-serif;">https://www.indiegogo.com/projects/zimbra-openpgp-zimlet</span></a><br style="font-family: sans-serif;"> </li> </ul> <span style="font-family: sans-serif;">Copyright (C) 2014&nbsp; Barry de Graaff </span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">Bugs and feedback: <a href="https://github.com/barrydegraaff/pgp-zimlet/issues">https://github.com/barrydegraaff/pgp-zimlet/issues</a></span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif; font-weight: bold;">Thank you contributors</span><span style="font-weight: bold;">!</span><br> <ul> <li> <a href="http://www.oneCentral.nl"><span style="font-family: sans-serif;">oneCentral.nl</span></a></li> <li><span style="font-family: sans-serif;">profluid</span></li> <li><span style="font-family: sans-serif;">a.werner</span></li> <li><span style="font-family: sans-serif;">Igor Galić</span><br> <span style="font-family: sans-serif;"></span></li> <li><span style="font-family: sans-serif;">moisesber</span></li> <li><span style="font-family: sans-serif;">Brent Dalley</span></li> </ul> <span style="font-family: sans-serif; font-weight: bold;">Special thanks to the people at the <a href="http://openpgpjs.org/">OpenPGP.js</a> project</span><br> <br> <span style="font-family: sans-serif;">and <a href="https://raw.githubusercontent.com/dploeger/attic/master/de_dieploegers_shortcut/de_dieploegers_shortcutHandler.js">Dennis Ploeger</a>.</span><br> <br> <span style="font-family: sans-serif;">This program is free software: you can redistribute it and/or modify</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">it under the terms of the GNU General Public License as published by</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">the Free Software Foundation, either version 3 of the License, or</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">(at your option) any later version.</span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">This program is distributed in the hope that it will be useful,</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">but WITHOUT ANY WARRANTY; without even the implied warranty of</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&nbsp; See the</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">GNU General Public License for more details.</span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">You should have received a copy of the GNU General Public License</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">along with this program.&nbsp; If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</span><br> <br>');
 		break;
@@ -300,7 +303,25 @@ function(id, title, message) {
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );      
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnSign)); 
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn)); 
-      break;           
+      break; 
+   case 5:
+      view.setSize("600", "100");
+      html = "<table><tr><td colspan='2'>" +
+      "Please enter User ID (example: Firstname Lastname &lt;your@email.com&gt;) and passphrase for new key pair.<br><br>" +
+      "</td></tr><tr><td>" +
+      "User ID:" +
+      "</td><td>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='uid' value=''>" +
+      "</td></tr><tr><td>" +
+      "Passphrase:" +
+      "</td><td>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value=''>" +
+      "</td></tr></table>";	
+      view.getHtmlElement().innerHTML = html;
+      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );      
+      this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnKeyPair)); 
+      this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn)); 
+      break;                 
    }
 	this._dialog.popup();
 };
@@ -433,6 +454,30 @@ function() {
          toOverride:null, subjOverride:null, extraBodyText:signed, callback:null}
          composeController.doAction(params); // opens asynchronously the window.
       }      
+   }
+};
+
+/* This method is called when the dialog "OK" button is clicked after private key has been entered.
+ */
+tk_barrydegraaff_zimbra_openpgp.prototype.okBtnKeyPair =
+function() {
+	var userid = document.getElementById("uid").value;
+   var passphrase = document.getElementById("passphraseInput").value;
+   
+   if ((userid) && (passphrase)) {
+      var key = openpgp.generateKeyPair(openpgp.enums.publicKey.rsa_encrypt_sign, 512, userid, passphrase);
+   
+      if((key.privateKeyArmored) && (key.publicKeyArmored))
+      {
+         // What is the DWT method to destroy this._dialog? This only clears its contents.
+         this._dialog.clearContent();
+         this._dialog.popdown();
+         
+         this.displayDialog(2,'Your new key pair','Please make sure to store this information in a safe place:<br><br>Passphrase ' + passphrase + ' for ' + userid + '<br><pre>'+key.privateKeyArmored+'</pre><br><pre>'+key.publicKeyArmored+'</pre>');      
+      }
+   }
+   else {
+      this.status("You must provide a user ID and passphrase", ZmStatusView.LEVEL_WARNING);
    }
 };
 

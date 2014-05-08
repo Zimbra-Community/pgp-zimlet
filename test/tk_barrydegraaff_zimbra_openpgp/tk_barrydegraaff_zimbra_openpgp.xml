@@ -1,4 +1,4 @@
-<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="0.5" description="Zimbra OpenPGP">
+<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="0.6" description="Zimbra OpenPGP">
    <summary>
 Zimbra OpenPGP Zimlet DEVELOPMENT VERSION NOT FOR PRODUCTION USE!
 
@@ -35,6 +35,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
       <contextMenu>
          <menuItem label="Sign message" id="sign" />
          <menuItem label="Manage public keys" id="pubkeys" />
+         <menuItem label="Generate key pair" id="keypair" />
          <menuItem label="About" id="about" />
       </contextMenu>      
    </zimletPanelItem>
