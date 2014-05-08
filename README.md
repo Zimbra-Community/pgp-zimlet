@@ -23,15 +23,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 
 Zimbra OpenPGP Zimlet
 
-INSTALL INSTRUCTION
-
-Currently the PGP Zimlet for Zimbra runs in dev mode, this because I 
-still have to analyze the Zimbra Javascript optimizer 
-(That currently breaks openpgp.js).
-
-THIS IS A DEVELOPMENT - ALPHA VERSION
-
-To install
+INSTALL INSTRUCTION --- THIS IS A DEVELOPMENT - ALPHA VERSION
 
 su zimbra
 
