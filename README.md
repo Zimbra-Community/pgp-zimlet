@@ -1,6 +1,9 @@
 pgp-zimlet
 ==========
 
+Demo video: https://drive.google.com/file/d/0B_lMZlQY3S2lNXJfUjlrMU1faXM/edit?usp=sharing
+
+
 This file is part of the Zimbra OpenPGP Zimlet project.
 Copyright (C) 2014  Barry de Graaff
 
@@ -37,7 +40,7 @@ zmzimletctl deploy tk_barrydegraaff_zimbra_openpgp.zip
 
 If you have a LOT of Internet Explorer users, they will see an error message, you can disable this zimlet via COS:
 
-https://github.com/barrydegraaff/pgp-zimlet/blob/docu/zimlet-cos-for-internet-explorer.png
+https://github.com/barrydegraaff/pgp-zimlet/blob/master/docu/zimlet-cos-for-internet-explorer.png
 
 And then only enable it on a per-user basis.
 
