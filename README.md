@@ -70,3 +70,11 @@ C - Edit zimbra-attrs.xml (at your own risk) !MIGRATION?! like this:
    
    As zimbra:
    zmcontrol restart
+
+
+DEALING WITH LARGE ENCRYPTED MESSAGES 
+
+If you receive a large encrypted message and Zimbra displays "This message is too large to display properly." You cannot
+immediately drop your message in the Zimlet. You have to click "View entire message" and drop it onto the Zimlet
+again after a minute or so. If you are in a hurry you can copy paste the message text to the text input field in 
+the decrypt dialog.
