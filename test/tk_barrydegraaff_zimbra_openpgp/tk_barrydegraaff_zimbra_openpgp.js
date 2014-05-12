@@ -118,10 +118,6 @@ function(zmObject) {
    }
 };
 
-tk_barrydegraaff_zimbra_openpgp.prototype.decrypt = function(message) {
-
-}
-
 /* verify method loops through public trusted keys and calls do_verify for each of the keys,
  * will update the status bar with the result (good/bad signature).
  * */
