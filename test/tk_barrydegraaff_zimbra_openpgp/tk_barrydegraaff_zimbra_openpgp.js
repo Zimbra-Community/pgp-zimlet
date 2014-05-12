@@ -98,7 +98,7 @@ function(itemId) {
 /* doDrop handler for verify and decrypt messages
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.doDrop =
-function(zmObject) {  
+function(zmObject) {
    var msgObj = zmObject.srcObj;
    
    //if its a conversation i.e. "ZmConv" object, get the first loaded message "ZmMailMsg" object within that.
