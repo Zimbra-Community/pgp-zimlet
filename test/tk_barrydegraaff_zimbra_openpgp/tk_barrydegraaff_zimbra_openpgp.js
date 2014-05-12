@@ -34,9 +34,20 @@ function() {
 };
 
 //Required by Zimbra
-tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
-//Key-press handler
-tk_barrydegraaff_zimbra_openpgpKeyMap = new de_dieploegers_shortcutHandler('tk_barrydegraaff_zimbra_openpgp', tk_barrydegraaff_zimbra_openpgp.prototype.getKeyMapName);
+tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {   
+   if (navigator.appName == "Microsoft Internet Explorer") {
+      return;
+   }
+   else
+   {      
+      var oHead = document.getElementsByTagName('HEAD').item(0);
+      var oScript= document.createElement("script");
+      oScript.type = "text/javascript";
+      oScript.src="/service/zimlet/tk_barrydegraaff_zimbra_openpgp/openpgp.js";
+      oHead.appendChild( oScript);
+   }
+   //Key-press handler
+   tk_barrydegraaff_zimbra_openpgpKeyMap = new de_dieploegers_shortcutHandler('tk_barrydegraaff_zimbra_openpgp', tk_barrydegraaff_zimbra_openpgp.prototype.getKeyMapName);
 };
 
 /* This method gets called by the Zimlet framework when double-click is performed.
@@ -87,7 +98,7 @@ function(itemId) {
 /* doDrop handler for verify and decrypt messages
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.doDrop =
-function(zmObject) {
+function(zmObject) {  
    var msgObj = zmObject.srcObj;
    
    //if its a conversation i.e. "ZmConv" object, get the first loaded message "ZmMailMsg" object within that.

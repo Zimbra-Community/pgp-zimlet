@@ -22,7 +22,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses/. 
    </summary>
-   <include>openpgp.js</include>
+   <!--include>openpgp.js</include-->
    <resource>icon.png</resource>
    <include>tk_barrydegraaff_zimbra_openpgp.js</include>
    <include>de_dieploegers_shortcutHandler.js</include>
