@@ -21,6 +21,21 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 //Constructor
 tk_barrydegraaff_zimbra_openpgp = function() {
    this.privateKeyCache='';
+
+   //Internet Explorer detect: http://www.pinlady.net/PluginDetect/IE/
+   // Try to force this property to be a string. 
+   var tmp = document.documentMode, e, isIE;
+   try{document.documentMode = "";}
+   catch(e){ };   
+   // If document.documentMode is a number, then it is a read-only property, and so 
+   // we have IE 8+.
+   // Otherwise, if conditional compilation works, then we have IE < 11.
+   // Otherwise, we have a non-IE browser. 
+   this.isIE = typeof document.documentMode == "number" || eval("/*@cc_on!@*/!1");   
+   // Switch back the value to be unobtrusive for non-IE browsers. 
+   try{document.documentMode = tmp;}
+   catch(e){ };
+
 };
 
 //Required by Zimbra
@@ -34,8 +49,16 @@ function() {
 };
 
 //Required by Zimbra
-tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {   
-   if (navigator.appName == "Microsoft Internet Explorer") {
+tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
+   /* When escape key is pressed, dwt dialog does not get cleared, and entered data remains in the browser memory
+   * therefore we flush it with reload */
+   window.document.onkeydown = function (e) {
+   if (!e) e = event;
+   if (e.keyCode == 27)
+      location.reload();
+   }
+      
+   if (this.isIE) {
       return;
    }
    else
@@ -43,11 +66,9 @@ tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
       var oHead = document.getElementsByTagName('HEAD').item(0);
       var oScript= document.createElement("script");
       oScript.type = "text/javascript";
-      oScript.src="/service/zimlet/tk_barrydegraaff_zimbra_openpgp/openpgp.js";
+      oScript.src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.js";
       oHead.appendChild( oScript);
    }
-   //Key-press handler
-   tk_barrydegraaff_zimbra_openpgpKeyMap = new de_dieploegers_shortcutHandler('tk_barrydegraaff_zimbra_openpgp', tk_barrydegraaff_zimbra_openpgp.prototype.getKeyMapName);
 };
 
 /* This method gets called by the Zimlet framework when double-click is performed.
@@ -56,21 +77,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.doubleClicked =
 function() {
 	this.displayDialog(3, "Manage public keys", null);
 };
-
-/* When escape key is pressed, dwt dialog does not get cleared, and entered data remains in the browser memory
- * therefore we flush it with reload */
-tk_barrydegraaff_zimbra_openpgp.prototype.getKeyMapName = function (actioncode) {
-   switch(actioncode) {
-      case 'Cancel':
-         try {
-            if(document.getElementsByClassName('DwtDialog')[0].className = 'DwtDialog')
-            {
-               location.reload();
-            };         
-         } catch (err) { }
-         break;
-   }      
-}
 
 /* Context menu handler
  * */
@@ -90,7 +96,7 @@ function(itemId) {
       this.displayDialog(5, "Generate new key pair", null);
 		break;
 	case "about":
-      this.displayDialog(2, "About OpenPGP", '<h1><span style="font-family: sans-serif;">Zimbra OpenPGP Zimlet ' + this._zimletContext.version +'</span></h1><ul> <li><a href="https://github.com/barrydegraaff/pgp-zimlet"><span style="font-family: sans-serif;">https://github.com/barrydegraaff/pgp-zimlet</span></a></li> <li><a href="https://www.indiegogo.com/projects/zimbra-openpgp-zimlet"><span style="font-family: sans-serif;"></span><span style="font-family: sans-serif;">https://www.indiegogo.com/projects/zimbra-openpgp-zimlet</span></a><br style="font-family: sans-serif;"> </li> </ul> <span style="font-family: sans-serif;">Copyright (C) 2014&nbsp; Barry de Graaff </span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">Bugs and feedback: <a href="https://github.com/barrydegraaff/pgp-zimlet/issues">https://github.com/barrydegraaff/pgp-zimlet/issues</a></span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif; font-weight: bold;">Thank you contributors</span><span style="font-weight: bold;">!</span><br> <ul> <li> <a href="http://www.oneCentral.nl"><span style="font-family: sans-serif;">oneCentral.nl</span></a></li> <li><span style="font-family: sans-serif;">profluid</span></li> <li><span style="font-family: sans-serif;">a.werner</span></li> <li><span style="font-family: sans-serif;">Igor Galić</span><br> <span style="font-family: sans-serif;"></span></li> <li><span style="font-family: sans-serif;">moisesber</span></li> <li><span style="font-family: sans-serif;">Brent Dalley</span></li> </ul> <span style="font-family: sans-serif; font-weight: bold;">Special thanks to the people at the <a href="http://openpgpjs.org/">OpenPGP.js</a> project</span><br> <br> <span style="font-family: sans-serif;">and <a href="https://raw.githubusercontent.com/dploeger/attic/master/de_dieploegers_shortcut/de_dieploegers_shortcutHandler.js">Dennis Ploeger</a>.</span><br> <br> <span style="font-family: sans-serif;">This program is free software: you can redistribute it and/or modify</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">it under the terms of the GNU General Public License as published by</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">the Free Software Foundation, either version 3 of the License, or</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">(at your option) any later version.</span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">This program is distributed in the hope that it will be useful,</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">but WITHOUT ANY WARRANTY; without even the implied warranty of</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&nbsp; See the</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">GNU General Public License for more details.</span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">You should have received a copy of the GNU General Public License</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">along with this program.&nbsp; If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</span><br> <br>');
+      this.displayDialog(2, "About OpenPGP", '<h1><span style="font-family: sans-serif;">Zimbra OpenPGP Zimlet ' + this._zimletContext.version + '</span></h1>Running in Internet Explorer: ' + this.isIE + '<ul> <li><a href="https://github.com/barrydegraaff/pgp-zimlet"><span style="font-family: sans-serif;">https://github.com/barrydegraaff/pgp-zimlet</span></a></li> <li><a href="https://www.indiegogo.com/projects/zimbra-openpgp-zimlet"><span style="font-family: sans-serif;"></span><span style="font-family: sans-serif;">https://www.indiegogo.com/projects/zimbra-openpgp-zimlet</span></a><br style="font-family: sans-serif;"> </li> </ul> <span style="font-family: sans-serif;">Copyright (C) 2014&nbsp; Barry de Graaff </span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">Bugs and feedback: <a href="https://github.com/barrydegraaff/pgp-zimlet/issues">https://github.com/barrydegraaff/pgp-zimlet/issues</a></span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif; font-weight: bold;">Thank you contributors</span><span style="font-weight: bold;">!</span><br> <ul> <li> <a href="http://www.oneCentral.nl"><span style="font-family: sans-serif;">oneCentral.nl</span></a></li> <li><span style="font-family: sans-serif;">profluid</span></li> <li><span style="font-family: sans-serif;">a.werner</span></li> <li><span style="font-family: sans-serif;">Igor Galić</span><br> <span style="font-family: sans-serif;"></span></li> <li><span style="font-family: sans-serif;">moisesber</span></li> <li><span style="font-family: sans-serif;">Brent Dalley</span></li> </ul> <span style="font-family: sans-serif; font-weight: bold;">Special thanks to the people at the <a href="http://openpgpjs.org/">OpenPGP.js</a> project</span><br> <br> <span style="font-family: sans-serif;">and <a href="https://raw.githubusercontent.com/dploeger/attic/master/de_dieploegers_shortcut/de_dieploegers_shortcutHandler.js">Dennis Ploeger</a>.</span><br> <br> <span style="font-family: sans-serif;">This program is free software: you can redistribute it and/or modify</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">it under the terms of the GNU General Public License as published by</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">the Free Software Foundation, either version 3 of the License, or</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">(at your option) any later version.</span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">This program is distributed in the hope that it will be useful,</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">but WITHOUT ANY WARRANTY; without even the implied warranty of</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&nbsp; See the</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">GNU General Public License for more details.</span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">You should have received a copy of the GNU General Public License</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">along with this program.&nbsp; If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</span><br> <br>');
 		break;
    }
 };
@@ -109,23 +115,34 @@ function(zmObject) {
    var clearSignedRegEx = new RegExp('[\-]*BEGIN PGP SIGNATURE[\-]*');
    var pgpMessageRegEx = new RegExp('[\-]*BEGIN PGP MESSAGE[\-]*');
    var msg = zmObject.body;
-   
-   if (msg.match(clearSignedRegEx)) {
-      try {
-         var message = openpgp.cleartext.readArmored(msg);
-      }
-      catch(err) {  
-         this.status("Could not read armored message!", ZmStatusView.LEVEL_CRITICAL);
+      
+   if(this.isIE) {
+      if (msg.match(clearSignedRegEx)) {
+         this.verify_ie(msg);  
+      }   
+      else {
+         this.status("No PGP message detected.", ZmStatusView.LEVEL_WARNING);
          return;
-      }  
-      this.verify(message);  
+      }
    }
-   else if (msg.match(pgpMessageRegEx)) {
-      this.displayDialog(1, "Please provide private key and passphrase for decryption", msg);
-   }   
-   else {
-      this.status("No PGP message detected.", ZmStatusView.LEVEL_WARNING);
-      return;
+   else {      
+      if (msg.match(clearSignedRegEx)) {
+         try {
+            var message = openpgp.cleartext.readArmored(msg);
+         }
+         catch(err) {  
+            this.status("Could not read armored message!", ZmStatusView.LEVEL_CRITICAL);
+            return;
+         }  
+         this.verify(message);  
+      }
+      else if (msg.match(pgpMessageRegEx)) {
+         this.displayDialog(1, "Please provide private key and passphrase for decryption", msg);
+      }   
+      else {
+         this.status("No PGP message detected.", ZmStatusView.LEVEL_WARNING);
+         return;
+      }
    }
 };
 
@@ -206,6 +223,63 @@ tk_barrydegraaff_zimbra_openpgp.prototype.do_verify = function(message, keyObj) 
       return 0;
    } 
 };
+
+/* verify method for Internet Explorer 11, will post to jsp page that does verify in document mode edge.
+ * */
+tk_barrydegraaff_zimbra_openpgp.prototype.verify_ie = function(message) {
+   var publicKeys1 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys2 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys3 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys3").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys4 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys4").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys5 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys5").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys6 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys6").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys7 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys7").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys8 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys8").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys9 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys9").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys10 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys10").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys11 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys11").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys12 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys12").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys13 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys13").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys14 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys14").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys15 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys15").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys16 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys16").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys17 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys17").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys18 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys18").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys19 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys19").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys20 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys20").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys21 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys21").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys22 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys22").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys23 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys23").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys24 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys24").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys25 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys25").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys26 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys26").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys27 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys27").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys28 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys28").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys29 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var publicKeys30 = this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value + '<tk_barrydegraaff_zimbra_openpgp>';
+   var combinedPublicKeys = [publicKeys1, publicKeys2, publicKeys3, publicKeys4, publicKeys5, publicKeys6, publicKeys7, publicKeys8, publicKeys9, publicKeys10, publicKeys11, publicKeys12, publicKeys13, publicKeys14, publicKeys15, publicKeys16, publicKeys17, publicKeys18, publicKeys19, publicKeys20, publicKeys21, publicKeys22, publicKeys23, publicKeys24, publicKeys25, publicKeys26, publicKeys27, publicKeys28, publicKeys29, publicKeys30];
+
+	// Create form object to post to jsp
+	var form = document.createElement("form");
+	form.setAttribute("method", "POST");
+   form.setAttribute("target", "_BLANK");
+	form.setAttribute("action", "/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_verify_ie.jsp");
+
+   var hiddenField = document.createElement("input");	
+   hiddenField.setAttribute("type", "hidden"); 
+   hiddenField.setAttribute("name", "message");
+   hiddenField.setAttribute("value", message);
+   form.appendChild(hiddenField); 
+
+   var hiddenField = document.createElement("input");	
+   hiddenField.setAttribute("type", "hidden"); 
+   hiddenField.setAttribute("name", "publicKeys");
+   hiddenField.setAttribute("value", combinedPublicKeys);
+   form.appendChild(hiddenField); 	
+
+	document.body.appendChild(form); // inject the form object into the body section
+	form.submit();
+}      
 
 /* status method show a Zimbra status message
  * */

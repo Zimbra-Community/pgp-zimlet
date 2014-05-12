@@ -1,4 +1,4 @@
-<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="0.6" description="Zimbra OpenPGP">
+<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="0.7" description="Zimbra OpenPGP">
    <summary>
 Zimbra OpenPGP Zimlet DEVELOPMENT VERSION NOT FOR PRODUCTION USE!
 
@@ -22,10 +22,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses/. 
    </summary>
-   <!--include>openpgp.js</include-->
    <resource>icon.png</resource>
    <include>tk_barrydegraaff_zimbra_openpgp.js</include>
-   <include>de_dieploegers_shortcutHandler.js</include>
    <handlerObject>tk_barrydegraaff_zimbra_openpgp</handlerObject>
    <includeCSS>tk_barrydegraaff_zimbra_openpgp.css</includeCSS>
    <zimletPanelItem label="OpenPGP" icon="tk_barrydegraaff_zimbra_openpgp-panelIcon">
