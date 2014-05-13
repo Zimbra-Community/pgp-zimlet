@@ -114,7 +114,10 @@ function(zmObject) {
    if(this.isIE) {
       if (msg.match(clearSignedRegEx)) {
          this.verify_ie(msg);  
-      }   
+      }
+      else if (msg.match(pgpMessageRegEx)) {
+         this.displayDialog(1, "Please provide private key and passphrase for decryption", msg);
+      }    
       else {
          this.status("No PGP message detected.", ZmStatusView.LEVEL_WARNING);
          return;
@@ -310,7 +313,12 @@ function(id, title, message) {
       "</td></tr></table>";	
       view.getHtmlElement().innerHTML = html;
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );      
-      this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecrypt)); 
+      if(this.isIE) {
+         this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecrypt_ie)); 
+      } 
+      else {
+         this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecrypt)); 
+      }   
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn)); 
       break;
    case 2:
@@ -460,6 +468,47 @@ function() {
       this._dialog.popdown();
       this.displayDialog(2,'Decrypted result','<textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:340px;">'+decrypted+'</textarea>');
    }
+};
+
+/* This method is called when the dialog "OK" button is clicked after private key has been entered for Internet Explorer
+ */
+tk_barrydegraaff_zimbra_openpgp.prototype.okBtnDecrypt_ie =
+function() {
+	var privateKeyInput = document.getElementById("privateKeyInput").value;
+   this.privateKeyCache = privateKeyInput;
+   var passphraseInput = document.getElementById("passphraseInput").value;
+   var message = document.getElementById("message").value;
+    
+   // What is the DWT method to destroy this._dialog? This only clears its contents.
+   this._dialog.clearContent();
+   this._dialog.popdown();
+
+	// Create form object to post to jsp
+	var form = document.createElement("form");
+	form.setAttribute("method", "POST");
+   form.setAttribute("target", "_BLANK");
+	form.setAttribute("action", "/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_decrypt_ie.jsp");
+
+   var hiddenField = document.createElement("input");	
+   hiddenField.setAttribute("type", "hidden"); 
+   hiddenField.setAttribute("name", "message");
+   hiddenField.setAttribute("value", message);
+   form.appendChild(hiddenField); 
+
+   var hiddenField = document.createElement("input");	
+   hiddenField.setAttribute("type", "hidden"); 
+   hiddenField.setAttribute("name", "privateKey");
+   hiddenField.setAttribute("value", privateKeyInput);
+   form.appendChild(hiddenField); 
+
+   var hiddenField = document.createElement("input");	
+   hiddenField.setAttribute("type", "hidden"); 
+   hiddenField.setAttribute("name", "passphrase");
+   hiddenField.setAttribute("value", passphraseInput);
+   form.appendChild(hiddenField); 	
+
+	document.body.appendChild(form); // inject the form object into the body section
+	form.submit();   
 };
 
 /* This method is called when the dialog "OK" button is clicked after public keys have been maintained
