@@ -16,14 +16,18 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses/. 
+
+Zimbra caches jsp files that will persist until you issue:
+zmmailboxdctl restart
+Normal cache flush does NOT work 
 */
 %><!DOCTYPE html>
 <html><head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title>OpenPGP.js - Sign test for Zimbra OpenPGP Zimlet</title>
+<title>Zimbra OpenPGP Zimlet</title>
 <script src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.js"></script>
 </head>
-<body>
+<body style="font-family:sans-serif">
 <textarea style="display:none" readonly id="message" rows="20" cols="100"><%= request.getParameter("message")%></textarea>
 <textarea style="display:none" readonly id="publicKeys" rows="20" cols="100"><%= request.getParameter("publicKeys")%></textarea>
 
@@ -48,10 +52,12 @@ for (index = 0; index < combinedPublicKeys.length; ++index) {
 };
 
 if(result > 0) {
-   document.write("Got a good signature.");
+   document.write("<b>Got a good signature.</b>");
+   document.body.style.backgroundColor="#00ff00";
 }
 else {
-   document.write("Got a BAD signature.");
+   document.write("<b>Got a BAD signature.</b>");
+   document.body.style.backgroundColor="#ff0000";
 };
 
 /* do_verify method calls openpgp.verifyClearSignedMessage, returns boolean 1 for good signature or 0 for bad signature
@@ -75,6 +81,6 @@ function do_verify (message, keyObj) {
 };
 
 </script>   
-<a href="javascript:window.close()">[Close window]</a>
+<br><br><small>Tip: CTRL+W to close this tab.</small>
 </body>
 </html>

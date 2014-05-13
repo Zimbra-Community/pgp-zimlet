@@ -22,33 +22,27 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 tk_barrydegraaff_zimbra_openpgp = function() {
    this.privateKeyCache='';
 
-   //Internet Explorer detect: http://www.pinlady.net/PluginDetect/IE/
-   // Try to force this property to be a string. 
+   /* Internet Explorer detect: http://www.pinlady.net/PluginDetect/IE/
+    * Make this Zimlet know if we are running in IE
+    */
    var tmp = document.documentMode, e, isIE;
    try{document.documentMode = "";}
    catch(e){ };   
-   // If document.documentMode is a number, then it is a read-only property, and so 
-   // we have IE 8+.
-   // Otherwise, if conditional compilation works, then we have IE < 11.
-   // Otherwise, we have a non-IE browser. 
    this.isIE = typeof document.documentMode == "number" || eval("/*@cc_on!@*/!1");   
-   // Switch back the value to be unobtrusive for non-IE browsers. 
    try{document.documentMode = tmp;}
    catch(e){ };
-
 };
 
-//Required by Zimbra
 tk_barrydegraaff_zimbra_openpgp.prototype = new ZmZimletBase;
 tk_barrydegraaff_zimbra_openpgp.prototype.constructor = tk_barrydegraaff_zimbra_openpgp;
 
-//Required by Zimbra
 tk_barrydegraaff_zimbra_openpgp.prototype.toString =
 function() {
    return "tk_barrydegraaff_zimbra_openpgp";
 };
 
-//Required by Zimbra
+/* This method gets called when Zimbra Zimlet framework initializes
+ */
 tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
    /* When escape key is pressed, dwt dialog does not get cleared, and entered data remains in the browser memory
    * therefore we flush it with reload */
@@ -57,7 +51,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
    if (e.keyCode == 27)
       location.reload();
    }
-      
+
+   // Only load openpgp.js for browsers <> Internet Explorer
    if (this.isIE) {
       return;
    }
@@ -96,7 +91,7 @@ function(itemId) {
       this.displayDialog(5, "Generate new key pair", null);
 		break;
 	case "about":
-      this.displayDialog(2, "About OpenPGP", '<h1><span style="font-family: sans-serif;">Zimbra OpenPGP Zimlet ' + this._zimletContext.version + '</span></h1>Running in Internet Explorer: ' + this.isIE + '<ul> <li><a href="https://github.com/barrydegraaff/pgp-zimlet"><span style="font-family: sans-serif;">https://github.com/barrydegraaff/pgp-zimlet</span></a></li> <li><a href="https://www.indiegogo.com/projects/zimbra-openpgp-zimlet"><span style="font-family: sans-serif;"></span><span style="font-family: sans-serif;">https://www.indiegogo.com/projects/zimbra-openpgp-zimlet</span></a><br style="font-family: sans-serif;"> </li> </ul> <span style="font-family: sans-serif;">Copyright (C) 2014&nbsp; Barry de Graaff </span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">Bugs and feedback: <a href="https://github.com/barrydegraaff/pgp-zimlet/issues">https://github.com/barrydegraaff/pgp-zimlet/issues</a></span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif; font-weight: bold;">Thank you contributors</span><span style="font-weight: bold;">!</span><br> <ul> <li> <a href="http://www.oneCentral.nl"><span style="font-family: sans-serif;">oneCentral.nl</span></a></li> <li><span style="font-family: sans-serif;">profluid</span></li> <li><span style="font-family: sans-serif;">a.werner</span></li> <li><span style="font-family: sans-serif;">Igor Galić</span><br> <span style="font-family: sans-serif;"></span></li> <li><span style="font-family: sans-serif;">moisesber</span></li> <li><span style="font-family: sans-serif;">Brent Dalley</span></li> </ul> <span style="font-family: sans-serif; font-weight: bold;">Special thanks to the people at the <a href="http://openpgpjs.org/">OpenPGP.js</a> project</span><br> <br> <span style="font-family: sans-serif;">and <a href="https://raw.githubusercontent.com/dploeger/attic/master/de_dieploegers_shortcut/de_dieploegers_shortcutHandler.js">Dennis Ploeger</a>.</span><br> <br> <span style="font-family: sans-serif;">This program is free software: you can redistribute it and/or modify</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">it under the terms of the GNU General Public License as published by</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">the Free Software Foundation, either version 3 of the License, or</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">(at your option) any later version.</span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">This program is distributed in the hope that it will be useful,</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">but WITHOUT ANY WARRANTY; without even the implied warranty of</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&nbsp; See the</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">GNU General Public License for more details.</span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">You should have received a copy of the GNU General Public License</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">along with this program.&nbsp; If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</span><br> <br>');
+      this.displayDialog(2, "About OpenPGP", '<h1><span style="font-family: sans-serif;">Zimbra OpenPGP Zimlet ' + this._zimletContext.version + '</span></h1>Running in Internet Explorer: ' + this.isIE + '<ul> <li><a href="https://github.com/barrydegraaff/pgp-zimlet"><span style="font-family: sans-serif;">https://github.com/barrydegraaff/pgp-zimlet</span></a></li> <li><a href="https://www.indiegogo.com/projects/zimbra-openpgp-zimlet"><span style="font-family: sans-serif;"></span><span style="font-family: sans-serif;">https://www.indiegogo.com/projects/zimbra-openpgp-zimlet</span></a><br style="font-family: sans-serif;"> </li> </ul> <span style="font-family: sans-serif;">Copyright (C) 2014&nbsp; Barry de Graaff </span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">Bugs and feedback: <a href="https://github.com/barrydegraaff/pgp-zimlet/issues">https://github.com/barrydegraaff/pgp-zimlet/issues</a></span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif; font-weight: bold;">Thank you contributors</span><span style="font-weight: bold;">!</span><br> <ul> <li> <a href="http://www.oneCentral.nl"><span style="font-family: sans-serif;">oneCentral.nl</span></a></li> <li><span style="font-family: sans-serif;">profluid</span></li> <li><span style="font-family: sans-serif;">a.werner</span></li> <li><span style="font-family: sans-serif;">Igor Galić</span><br> <span style="font-family: sans-serif;"></span></li> <li><span style="font-family: sans-serif;">moisesber</span></li> <li><span style="font-family: sans-serif;">Brent Dalley</span></li> </ul> <span style="font-family: sans-serif; font-weight: bold;">Special thanks to the people at the <a href="http://openpgpjs.org/">OpenPGP.js</a> project<br> <br> and <a href="http://www.hivos.org">Hivos.org</a></span><br> <br> <span style="font-family: sans-serif;">This program is free software: you can redistribute it and/or modify</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">it under the terms of the GNU General Public License as published by</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">the Free Software Foundation, either version 3 of the License, or</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">(at your option) any later version.</span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">This program is distributed in the hope that it will be useful,</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">but WITHOUT ANY WARRANTY; without even the implied warranty of</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&nbsp; See the</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">GNU General Public License for more details.</span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">You should have received a copy of the GNU General Public License</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">along with this program.&nbsp; If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</span><br> <br>');
 		break;
    }
 };
@@ -279,7 +274,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.verify_ie = function(message) {
 
 	document.body.appendChild(form); // inject the form object into the body section
 	form.submit();
-}      
+}
 
 /* status method show a Zimbra status message
  * */
@@ -292,7 +287,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.status = function(text, type) {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.displayDialog = 
 function(id, title, message) {
-		
 	var view = new DwtComposite(this.getShell());
 	view.getHtmlElement().style.overflow = "auto";
 
