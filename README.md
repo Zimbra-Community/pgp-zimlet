@@ -4,9 +4,11 @@ pgp-zimlet
 Demo video: https://drive.google.com/file/d/0B_lMZlQY3S2lNXJfUjlrMU1faXM/edit?usp=sharing
 
 Adding PGP support to Zimbra Collaboration Suite, currently tested on:
-- Windows Internet Explorer 10, 11, Google Chrome, Chromium, Firefox
+- Windows Internet Explorer 11, Google Chrome, Chromium, Firefox
 - Linux, Google Chrome, Chromium, Firefox, Iceweasel
 - OSX, Safari
+
+Internet Explorer 10 only supports message verification.
 
 This file is part of the Zimbra OpenPGP Zimlet project.
 Copyright (C) 2014  Barry de Graaff
