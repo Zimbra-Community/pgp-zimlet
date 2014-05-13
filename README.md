@@ -55,6 +55,7 @@ Sometimes people generate public keys that are to long for Zimba to store in zim
 Saving long pubkeys will trow an warning message, but the key is saved correctly.
 
 To resolve this you can:
+
 A - Ask for a shorter pubkey
 
 B - Ignore the message
@@ -78,3 +79,24 @@ If you receive a large encrypted message and Zimbra displays "This message is to
 immediately drop your message in the Zimlet. You have to click "View entire message" and drop it onto the Zimlet
 again after a minute or so. If you are in a hurry you can copy paste the message text to the text input field in 
 the decrypt dialog.
+
+DEALING WITH LARGE ENCRYPTED MESSAGES IN INTERNET EXPLORER
+
+All the above and you must change:
+[root@myzimbra ~]# nano /opt/zimbra/jetty-distribution-[buildnumber here]/etc/jetty.xml
+[root@myzimbra ~]# nano /opt/zimbra/jetty-distribution-[buildnumber here]/etc/jetty.xml.in
+
+And add:
+
+ <Call name="setAttribute">
+    <Arg>org.eclipse.jetty.server.Request.maxFormContentSize</Arg>
+    <Arg>2000000</Arg>
+  </Call>
+  
+Under: 
+
+<Configure id="Server" class="org.eclipse.jetty.server.Server">
+
+Then issue: zmmailboxdctl restart
+
+
