@@ -8,8 +8,6 @@ Adding PGP support to Zimbra Collaboration Suite, currently tested on:
 - Linux, Google Chrome, Chromium, Firefox, Iceweasel
 - OSX, Safari
 
-Internet Explorer 10 only supports message verification.
-
 This file is part of the Zimbra OpenPGP Zimlet project.
 Copyright (C) 2014  Barry de Graaff
 
@@ -31,8 +29,6 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 ========================================================================
 
 Zimbra OpenPGP Zimlet
-
-INSTALL INSTRUCTION --- THIS IS A DEVELOPMENT - ALPHA VERSION
 
 su zimbra
 
