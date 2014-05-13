@@ -398,9 +398,9 @@ function(id, title, message) {
       view.setSize("600", "100");
       html = "<table><tr><td colspan='2'>" +
       "Please enter User ID (example: Firstname Lastname &lt;your@email.com&gt;) and passphrase for new key pair.<br><br>" +
-      "</td></tr><tr><td>" +
+      "</td></tr><tr><td style=\"width:100px;\">" +
       "User ID:" +
-      "</td><td>" +
+      "</td><td style=\"width:500px\">" +
       "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='uid' value=''>" +
       "</td></tr><tr><td>" +
       "Passphrase:" +
@@ -409,7 +409,12 @@ function(id, title, message) {
       "</td></tr></table>";	
       view.getHtmlElement().innerHTML = html;
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );      
-      this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnKeyPair)); 
+      if(this.isIE) {
+         this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnKeyPair_ie)); 
+      }
+      else {
+         this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnKeyPair));          
+      }   
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn)); 
       break;   
    case 6:
@@ -646,7 +651,7 @@ function() {
 	form.submit();   
 };
 
-/* This method is called when the dialog "OK" button is clicked after private key has been entered.
+/* This method is called when the dialog "OK" button is clicked for key pair generation.
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnKeyPair =
 function() {
@@ -664,6 +669,68 @@ function() {
          
          this.displayDialog(2,'Your new key pair','Please make sure to store this information in a safe place:<br><br>Passphrase ' + passphrase + ' for ' + userid + '<br><pre>'+key.privateKeyArmored+'</pre><br><pre>'+key.publicKeyArmored+'</pre>');      
       }
+   }
+   else {
+      this.status("You must provide a user ID and passphrase", ZmStatusView.LEVEL_WARNING);
+   }
+};
+
+/* This method is called when the dialog "OK" button is clicked for key pair generation.
+ */
+tk_barrydegraaff_zimbra_openpgp.prototype.okBtnKeyPair =
+function() {
+	var userid = document.getElementById("uid").value;
+   var passphrase = document.getElementById("passphraseInput").value;
+   
+   if ((userid) && (passphrase)) {
+      var key = openpgp.generateKeyPair(openpgp.enums.publicKey.rsa_encrypt_sign, 512, userid, passphrase);
+   
+      if((key.privateKeyArmored) && (key.publicKeyArmored))
+      {
+         // What is the DWT method to destroy this._dialog? This only clears its contents.
+         this._dialog.clearContent();
+         this._dialog.popdown();
+         
+         this.displayDialog(2,'Your new key pair','Please make sure to store this information in a safe place:<br><br>Passphrase ' + passphrase + ' for ' + userid + '<br><pre>'+key.privateKeyArmored+'</pre><br><pre>'+key.publicKeyArmored+'</pre>');      
+      }
+   }
+   else {
+      this.status("You must provide a user ID and passphrase", ZmStatusView.LEVEL_WARNING);
+   }
+};
+
+/* This method is called when the dialog "OK" button is clicked for key pair generation for Internet Explorer.
+ */
+tk_barrydegraaff_zimbra_openpgp.prototype.okBtnKeyPair_ie =
+function() {
+	var userid = document.getElementById("uid").value;
+   var passphrase = document.getElementById("passphraseInput").value;
+   
+   if ((userid) && (passphrase)) {   
+      // What is the DWT method to destroy this._dialog? This only clears its contents.
+      this._dialog.clearContent();
+      this._dialog.popdown();
+   
+      // Create form object to post to jsp
+      var form = document.createElement("form");
+      form.setAttribute("method", "POST");
+      form.setAttribute("target", "_BLANK");
+      form.setAttribute("action", "/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_keypair_ie.jsp");
+     
+      var hiddenField = document.createElement("input");	
+      hiddenField.setAttribute("type", "hidden"); 
+      hiddenField.setAttribute("name", "userid");
+      hiddenField.setAttribute("value", userid);
+      form.appendChild(hiddenField); 
+   
+      var hiddenField = document.createElement("input");	
+      hiddenField.setAttribute("type", "hidden"); 
+      hiddenField.setAttribute("name", "passphrase");
+      hiddenField.setAttribute("value", passphrase);
+      form.appendChild(hiddenField); 	
+   
+      document.body.appendChild(form); // inject the form object into the body section
+      form.submit();   
    }
    else {
       this.status("You must provide a user ID and passphrase", ZmStatusView.LEVEL_WARNING);
