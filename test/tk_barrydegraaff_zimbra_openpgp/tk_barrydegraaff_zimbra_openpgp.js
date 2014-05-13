@@ -672,31 +672,7 @@ function() {
          this._dialog.clearContent();
          this._dialog.popdown();
          
-         this.displayDialog(2,'Your new key pair','Please make sure to store this information in a safe place:<br><br>Passphrase ' + passphrase + ' for ' + userid + '<br><pre>'+key.privateKeyArmored+'</pre><br><pre>'+key.publicKeyArmored+'</pre>');      
-      }
-   }
-   else {
-      this.status("You must provide a user ID and passphrase", ZmStatusView.LEVEL_WARNING);
-   }
-};
-
-/* This method is called when the dialog "OK" button is clicked for key pair generation.
- */
-tk_barrydegraaff_zimbra_openpgp.prototype.okBtnKeyPair =
-function() {
-	var userid = document.getElementById("uid").value;
-   var passphrase = document.getElementById("passphraseInput").value;
-   
-   if ((userid) && (passphrase)) {
-      var key = openpgp.generateKeyPair(openpgp.enums.publicKey.rsa_encrypt_sign, 512, userid, passphrase);
-   
-      if((key.privateKeyArmored) && (key.publicKeyArmored))
-      {
-         // What is the DWT method to destroy this._dialog? This only clears its contents.
-         this._dialog.clearContent();
-         this._dialog.popdown();
-         
-         this.displayDialog(2,'Your new key pair','Please make sure to store this information in a safe place:<br><br>Passphrase ' + passphrase + ' for ' + userid + '<br><pre>'+key.privateKeyArmored+'</pre><br><pre>'+key.publicKeyArmored+'</pre>');      
+         this.displayDialog(2,'Your new key pair','Please make sure to store this information in a safe place:<br><br><textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;">Passphrase ' + passphrase + ' for ' + userid + '\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored+'</textarea>');      
       }
    }
    else {
