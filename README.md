@@ -42,12 +42,6 @@ wget https://github.com/barrydegraaff/pgp-zimlet/raw/master/test/tk_barrydegraaf
 
 zmzimletctl deploy tk_barrydegraaff_zimbra_openpgp.zip
 
-If you have a LOT of Internet Explorer users, you can disable this zimlet via COS:
-
-https://github.com/barrydegraaff/pgp-zimlet/blob/master/docu/zimlet-cos-for-internet-explorer.png
-
-And then only enable it on a per-user basis.
-
 ========================================================================
 
 Known issues
