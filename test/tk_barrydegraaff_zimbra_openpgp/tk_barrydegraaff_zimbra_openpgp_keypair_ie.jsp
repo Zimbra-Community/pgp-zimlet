@@ -27,7 +27,7 @@ Normal cache flush does NOT work
 <title>Zimbra OpenPGP Zimlet</title>
 <script src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.js"></script>
 </head>
-<body style="font-family:sans-serif"><b>New key pair:</b>
+<body style="font-family:sans-serif"><b>New key pair</b>
 <textarea style="display:none" readonly id="userid" rows="20" cols="100"><%= request.getParameter("userid")%></textarea>
 <textarea style="display:none" readonly id="passphrase" rows="20" cols="100"><%= request.getParameter("passphrase")%></textarea>
 <script type="text/javascript">   

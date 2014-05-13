@@ -86,9 +86,11 @@ the decrypt dialog.
 
 DEALING WITH LARGE ENCRYPTED MESSAGES IN INTERNET EXPLORER
 
-All the above and you must change:
-[root@myzimbra ~]# nano /opt/zimbra/jetty-distribution-[buildnumber here]/etc/jetty.xml
-[root@myzimbra ~]# nano /opt/zimbra/jetty-distribution-[buildnumber here]/etc/jetty.xml.in
+All the above and you must change, as root:
+
+nano /opt/zimbra/jetty-distribution-[buildnumber here]/etc/jetty.xml
+
+nano /opt/zimbra/jetty-distribution-[buildnumber here]/etc/jetty.xml.in
 
 And add:
 
