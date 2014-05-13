@@ -386,7 +386,12 @@ function(id, title, message) {
       "</td></tr></table>";	
       view.getHtmlElement().innerHTML = html;
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );      
-      this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnSign)); 
+      if(this.isIE) {
+         this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnSign_ie)); 
+      }
+      else {
+         this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnSign)); 
+      }   
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn)); 
       break; 
    case 5:
@@ -550,7 +555,7 @@ function() {
    this._dialog.popdown();
 };
 
-/* This method is called when the dialog "OK" button is clicked after private key has been entered.
+/* This method is called for signing messages
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnSign =
 function() {
@@ -598,6 +603,47 @@ function() {
          composeController.doAction(params); // opens asynchronously the window.
       }      
    }
+};
+
+/* This method is called for signing messages in Internet Explorer.
+ */
+tk_barrydegraaff_zimbra_openpgp.prototype.okBtnSign_ie =
+function() {
+	var privateKeyInput = document.getElementById("privateKeyInput").value;
+   this.privateKeyCache = privateKeyInput;
+   var passphraseInput = document.getElementById("passphraseInput").value;
+   var message = document.getElementById("message").value;
+    
+   // What is the DWT method to destroy this._dialog? This only clears its contents.
+   this._dialog.clearContent();
+   this._dialog.popdown();
+
+	// Create form object to post to jsp
+	var form = document.createElement("form");
+	form.setAttribute("method", "POST");
+   form.setAttribute("target", "_BLANK");
+	form.setAttribute("action", "/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_sign_ie.jsp");
+
+   var hiddenField = document.createElement("input");	
+   hiddenField.setAttribute("type", "hidden"); 
+   hiddenField.setAttribute("name", "message");
+   hiddenField.setAttribute("value", message);
+   form.appendChild(hiddenField); 
+
+   var hiddenField = document.createElement("input");	
+   hiddenField.setAttribute("type", "hidden"); 
+   hiddenField.setAttribute("name", "privateKey");
+   hiddenField.setAttribute("value", privateKeyInput);
+   form.appendChild(hiddenField); 
+
+   var hiddenField = document.createElement("input");	
+   hiddenField.setAttribute("type", "hidden"); 
+   hiddenField.setAttribute("name", "passphrase");
+   hiddenField.setAttribute("value", passphraseInput);
+   form.appendChild(hiddenField); 	
+
+	document.body.appendChild(form); // inject the form object into the body section
+	form.submit();   
 };
 
 /* This method is called when the dialog "OK" button is clicked after private key has been entered.
