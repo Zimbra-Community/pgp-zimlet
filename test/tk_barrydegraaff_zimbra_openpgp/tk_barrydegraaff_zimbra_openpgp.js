@@ -45,12 +45,18 @@ function() {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
    /* When escape key is pressed, dwt dialog does not get cleared, and entered data remains in the browser memory
-   * therefore we flush it with reload */
-   window.document.onkeydown = function (e) {
-   if (!e) e = event;
-   if (e.keyCode == 27)
-      location.reload();
-   }
+   * therefore we flush it with reload 
+   * Redefine window.onkeydown, so all dwt shortcuts still work, but capture ESC key before dwt does */
+   window.document.onkeydown = (function(e) {
+      var cached_function = window.document.onkeydown;      
+      return function(e) {
+         if (!e) e = event;
+         if (e.keyCode == 27) {   
+            location.reload();
+         }
+         cached_function.apply(this, arguments); // use .apply() to call it
+      };
+   }());
 
    // Only load openpgp.js for browsers <> Internet Explorer
    if (this.isIE) {
