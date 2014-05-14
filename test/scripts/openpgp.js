@@ -1503,7 +1503,7 @@ module.exports = {
 
   show_version: true,
   show_comment: true,
-  versionstring: "OpenPGP.js v0.5.1",
+  versionstring: "OpenPGP.js v0.6.0",
   commentstring: "http://openpgpjs.org",
 
   keyserver: "keyserver.linux.it", // "pgp.mit.edu:11371"
@@ -1574,9 +1574,10 @@ module.exports = {
     var FRE = new Uint8Array(block_size);
 
     prefixrandom = prefixrandom + prefixrandom.charAt(block_size - 2) + prefixrandom.charAt(block_size - 1);
-    util.print_debug("prefixrandom:" + util.hexstrdump(prefixrandom));
-    var ciphertext = '';
-    var i, n;
+    var ciphertext = new Uint8Array(plaintext.length + 2 + block_size * 2);
+    var i, n, begin;
+    var offset = resync ? 0 : 2;
+
     // 1.  The feedback register (FR) is set to the IV, which is all zeros.
     for (i = 0; i < block_size; i++) {
       FR[i] = 0;
@@ -1589,13 +1590,11 @@ module.exports = {
     //     the plaintext to produce C[1] through C[BS], the first BS octets
     //     of ciphertext.
     for (i = 0; i < block_size; i++) {
-      ciphertext += String.fromCharCode(FRE[i] ^ prefixrandom.charCodeAt(i));
+      ciphertext[i] = FRE[i] ^ prefixrandom.charCodeAt(i);
     }
 
     // 4.  FR is loaded with C[1] through C[BS].
-    for (i = 0; i < block_size; i++) {
-      FR[i] = ciphertext.charCodeAt(i);
-    }
+    FR.set(ciphertext.subarray(0, block_size));
 
     // 5.  FR is encrypted to produce FRE, the encryption of the first BS
     //     octets of ciphertext.
@@ -1604,82 +1603,44 @@ module.exports = {
     // 6.  The left two octets of FRE get xored with the next two octets of
     //     data that were prefixed to the plaintext.  This produces C[BS+1]
     //     and C[BS+2], the next two octets of ciphertext.
-    ciphertext += String.fromCharCode(FRE[0] ^ prefixrandom.charCodeAt(block_size));
-    ciphertext += String.fromCharCode(FRE[1] ^ prefixrandom.charCodeAt(block_size + 1));
+    ciphertext[block_size] = FRE[0] ^ prefixrandom.charCodeAt(block_size);
+    ciphertext[block_size + 1] = FRE[1] ^ prefixrandom.charCodeAt(block_size + 1);
 
     if (resync) {
-      // 7.  (The resync step) FR is loaded with C3-C10.
-      for (i = 0; i < block_size; i++) {
-        FR[i] = ciphertext.charCodeAt(i + 2);
-      }
+      // 7.  (The resync step) FR is loaded with C[3] through C[BS+2].
+      FR.set(ciphertext.subarray(2, block_size + 2));
     } else {
-      for (i = 0; i < block_size; i++) {
-        FR[i] = ciphertext.charCodeAt(i);
-      }
+      FR.set(ciphertext.subarray(0, block_size));
     }
     // 8.  FR is encrypted to produce FRE.
     FRE = cipherfn.encrypt(FR);
 
-    if (resync) {
-      // 9.  FRE is xored with the first 8 octets of the given plaintext, now
-      //     that we have finished encrypting the 10 octets of prefixed data.
-      //     This produces C11-C18, the next 8 octets of ciphertext.
+    // 9.  FRE is xored with the first BS octets of the given plaintext, now
+    //     that we have finished encrypting the BS+2 octets of prefixed
+    //     data.  This produces C[BS+3] through C[BS+(BS+2)], the next BS
+    //     octets of ciphertext.
+    for (i = 0; i < block_size; i++) {
+      ciphertext[block_size + 2 + i] = FRE[i + offset] ^ plaintext.charCodeAt(i);
+    }
+    for (n = block_size; n < plaintext.length + offset; n += block_size) {
+      // 10. FR is loaded with C[BS+3] to C[BS + (BS+2)] (which is C11-C18 for
+      // an 8-octet block).
+      begin = n + 2 - offset;
+      FR.set(ciphertext.subarray(begin, begin + block_size));
+
+      // 11. FR is encrypted to produce FRE.
+      FRE = cipherfn.encrypt(FR);
+
+      // 12. FRE is xored with the next BS octets of plaintext, to produce
+      // the next BS octets of ciphertext.  These are loaded into FR, and
+      // the process is repeated until the plaintext is used up.
       for (i = 0; i < block_size; i++) {
-        ciphertext += String.fromCharCode(FRE[i] ^ plaintext.charCodeAt(i));
+        ciphertext[block_size + begin + i] = FRE[i] ^ plaintext.charCodeAt(n + i - offset);
       }
-      for (n = block_size + 2; n < plaintext.length; n += block_size) {
-        // 10. FR is loaded with C11-C18
-        for (i = 0; i < block_size; i++) {
-          FR[i] = ciphertext.charCodeAt(n + i);
-        }
-
-        // 11. FR is encrypted to produce FRE.
-        FRE = cipherfn.encrypt(FR);
-
-        // 12. FRE is xored with the next 8 octets of plaintext, to produce the
-        // next 8 octets of ciphertext.  These are loaded into FR and the
-        // process is repeated until the plaintext is used up.
-        for (i = 0; i < block_size; i++) {
-          ciphertext += String.fromCharCode(FRE[i] ^ plaintext.charCodeAt((n - 2) + i));
-        }
-      }
-    } else {
-      plaintext = "  " + plaintext;
-      // 9.  FRE is xored with the first 8 octets of the given plaintext, now
-      //     that we have finished encrypting the 10 octets of prefixed data.
-      //     This produces C11-C18, the next 8 octets of ciphertext.
-      for (i = 2; i < block_size; i++) {
-        ciphertext += String.fromCharCode(FRE[i] ^ plaintext.charCodeAt(i));
-      }
-
-      var tempCiphertext = ciphertext.substring(0, 2 * block_size);
-      var tempCiphertextString = ciphertext.substring(block_size);
-      var tempCiphertextBlock;
-      for (n = block_size; n < plaintext.length; n += block_size) {
-        // 10. FR is loaded with C11-C18
-        for (i = 0; i < block_size; i++) {
-          FR[i] = tempCiphertextString.charCodeAt(i);
-        }
-        tempCiphertextString = '';
-
-        // 11. FR is encrypted to produce FRE.
-        FRE = cipherfn.encrypt(FR);
-
-        // 12. FRE is xored with the next 8 octets of plaintext, to produce the
-        //     next 8 octets of ciphertext.  These are loaded into FR and the
-        //     process is repeated until the plaintext is used up.
-        for (i = 0; i < block_size; i++) {
-          tempCiphertextBlock = String.fromCharCode(FRE[i] ^ plaintext.charCodeAt(n + i));
-          tempCiphertext += tempCiphertextBlock;
-          tempCiphertextString += tempCiphertextBlock;
-        }
-      }
-      ciphertext = tempCiphertext;
     }
 
-    ciphertext = ciphertext.substring(0, plaintext.length + 2 + block_size);
-
-    return ciphertext;
+    ciphertext = ciphertext.subarray(0, plaintext.length + 2 + block_size);
+    return util.Uint8Array2str(ciphertext);
   },
 
   /**
@@ -1755,9 +1716,9 @@ module.exports = {
     ablock = cipherfn.encrypt(ablock);
 
     // test check octets
-    if (iblock[block_size - 2] != (ablock[0] ^ ciphertext.charCodeAt(block_size)) || iblock[block_size - 1] != (ablock[
-      1] ^ ciphertext.charCodeAt(block_size + 1))) {
-      throw new Error('Invalid data.');
+    if (iblock[block_size - 2] != (ablock[0] ^ ciphertext.charCodeAt(block_size)) ||
+        iblock[block_size - 1] != (ablock[1] ^ ciphertext.charCodeAt(block_size + 1))) {
+      throw new Error('CFB decrypt: invalid key');
     }
 
     /*  RFC4880: Tag 18 and Resync:
@@ -4183,7 +4144,7 @@ var util = require('../../util.js');
 // added by Recurity Labs
 
 function TFencrypt(block, key) {
-  var block_copy = [].concat(block);
+  var block_copy = toArray(block);
   var tf = createTwofish();
   tf.open(util.str2bin(key), 0);
   var result = tf.encrypt(block_copy, 0);
@@ -4196,8 +4157,17 @@ function TF(key) {
   this.tf.open(util.str2bin(key), 0);
 
   this.encrypt = function(block) {
-    return this.tf.encrypt([].concat(block), 0);
+    return this.tf.encrypt(toArray(block), 0);
   };
+}
+
+function toArray(typedArray) {
+  // Array.apply([], typedArray) does not work in PhantomJS 1.9
+  var result = [];
+  for (var i = 0; i < typedArray.length; i++) {
+    result[i] = typedArray[i];
+  }
+  return result;
 }
 
 
@@ -11369,24 +11339,36 @@ function getExpirationTime(keyPacket, selfCertificate) {
  * @return {{user: Array<module:packet/User>, selfCertificate: Array<module:packet/signature>}|null} The primary user and the self signature
  */
 Key.prototype.getPrimaryUser = function() {
-  var user = null;
-  var userSelfCert;
+  var primUser = [];
   for (var i = 0; i < this.users.length; i++) {
-    if (!this.users[i].userId) {
+    if (!this.users[i].userId || !this.users[i].selfCertifications) {
       continue;
     }
-    var selfCert = this.users[i].getValidSelfCertificate(this.primaryKey);
-    if (!selfCert) {
-      continue;
-    }
-    if (!user ||
-        (!userSelfCert.isPrimaryUserID || selfCert.isPrimaryUserID) &&
-        userSelfCert.created > selfCert.created) {
-      user = this.users[i];
-      userSelfCert = selfCert;
+    for (var j = 0; j < this.users[i].selfCertifications.length; j++) {
+      primUser.push({user: this.users[i], selfCertificate: this.users[i].selfCertifications[j]});
     }
   }
-  return user ? {user: user, selfCertificate: userSelfCert} : null;
+  // sort by primary user flag and signature creation time
+  primUser = primUser.sort(function(a, b) {
+    if (a.isPrimaryUserID > b.isPrimaryUserID) {
+      return -1;
+    } else if (a.isPrimaryUserID < b.isPrimaryUserID) {
+      return 1;
+    } else if (a.created > b.created) {
+      return -1;
+    } else if (a.created < b.created) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+  // return first valid
+  for (var i = 0; i < primUser.length; i++) {
+    if (primUser[i].user.isValidSelfCertificate(this.primaryKey, primUser[i].selfCertificate)) {
+      return primUser[i];
+    }
+  }
+  return null;
 };
 
 /**
@@ -11547,24 +11529,36 @@ User.prototype.getValidSelfCertificate = function(primaryKey) {
   if (!this.selfCertifications) {
     return null;
   }
-  var validCert = [];
-  for (var i = 0; i < this.selfCertifications.length; i++) {
-    if (this.isRevoked(this.selfCertifications[i], primaryKey)) {
-      continue;
-    }
-    if (!this.selfCertifications[i].isExpired() &&
-       (this.selfCertifications[i].verified || 
-        this.selfCertifications[i].verify(primaryKey, {userid: this.userId || this.userAttribute, key: primaryKey}))) {
-      validCert.push(this.selfCertifications[i]);
-    }
-  }
   // most recent first
-  validCert = validCert.sort(function(a, b) {
+  var validCert = this.selfCertifications.sort(function(a, b) {
     a = a.created;
     b = b.created;
     return a>b ? -1 : a<b ? 1 : 0;
   });
-  return validCert[0];
+  for (var i = 0; i < validCert.length; i++) {
+    if (this.isValidSelfCertificate(primaryKey, validCert[i])) {
+      return validCert[i];
+    }
+  }
+  return null;
+};
+
+/**
+ * Returns true if the self certificate is valid
+ * @param  {module:packet/secret_key|module:packet/public_key}  primaryKey      The primary key packet
+ * @param  {module:packet/signature}  selfCertificate A self certificate of this user
+ * @return {Boolean}
+ */
+User.prototype.isValidSelfCertificate = function(primaryKey, selfCertificate) {
+  if (this.isRevoked(selfCertificate, primaryKey)) {
+    return false;
+  }
+  if (!selfCertificate.isExpired() &&
+     (selfCertificate.verified ||
+      selfCertificate.verify(primaryKey, {userid: this.userId || this.userAttribute, key: primaryKey}))) {
+    return true;
+  }
+  return false;
 };
 
 /**
@@ -11712,15 +11706,22 @@ SubKey.prototype.getExpirationTime = function() {
  * @param  {module:packet/signature} primaryKey primary key used for validation
  */
 SubKey.prototype.update = function(subKey, primaryKey) {
-  if (this.verify(primaryKey) === enums.keyStatus.invalid) {
+  if (subKey.verify(primaryKey) === enums.keyStatus.invalid) {
     return;
   }
   if (this.subKey.getFingerprint() !== subKey.subKey.getFingerprint()) {
     throw new Error('SubKey update method: fingerprints of subkeys not equal');
   }
+  // key packet
   if (this.subKey.tag === enums.packet.publicSubkey &&
       subKey.subKey.tag === enums.packet.secretSubkey) {
     this.subKey = subKey.subKey;
+  }
+  // binding signature
+  if (!this.bindingSignature && subKey.bindingSignature &&
+     (subKey.bindingSignature.verified ||
+      subKey.bindingSignature.verify(primaryKey, {key: primaryKey, bind: this.subKey}))) {
+    this.bindingSignature = subKey.bindingSignature;
   }
   // revocation signature
   if (!this.revocationSignature && subKey.revocationSignature && !subKey.revocationSignature.isExpired() &&
@@ -11770,36 +11771,41 @@ function readArmored(armoredText) {
 /**
  * Generates a new OpenPGP key. Currently only supports RSA keys.
  * Primary and subkey will be of same type.
- * @param {module:enums.publicKey} keyType    to indicate what type of key to make.
+ * @param {module:enums.publicKey} [options.keyType=module:enums.publicKey.rsa_encrypt_sign]    to indicate what type of key to make.
  *                             RSA is 1. See {@link http://tools.ietf.org/html/rfc4880#section-9.1}
- * @param {Integer} numBits    number of bits for the key creation.
- * @param {String}  userId     assumes already in form of "User Name <username@email.com>"
- * @param {String}  passphrase The passphrase used to encrypt the resulting private key
+ * @param {Integer} options.numBits    number of bits for the key creation.
+ * @param {String}  options.userId     assumes already in form of "User Name <username@email.com>"
+ * @param {String}  options.passphrase The passphrase used to encrypt the resulting private key
+ * @param {Boolean} [options.unlocked=false]    The secret part of the generated key is unlocked
  * @return {module:key~Key}
  * @static
  */
-function generate(keyType, numBits, userId, passphrase) {
+function generate(options) {
+  options.keyType = options.keyType || enums.publicKey.rsa_encrypt_sign;
   // RSA Encrypt-Only and RSA Sign-Only are deprecated and SHOULD NOT be generated
-  if (keyType !== enums.publicKey.rsa_encrypt_sign) {
+  if (options.keyType !== enums.publicKey.rsa_encrypt_sign) {
     throw new Error('Only RSA Encrypt or Sign supported');
+  }
+  if (!options.passphrase) {
+    throw new Error('Parameter options.passphrase required');
   }
 
   var packetlist = new packet.List();
 
   var secretKeyPacket = new packet.SecretKey();
-  secretKeyPacket.algorithm = enums.read(enums.publicKey, keyType);
-  secretKeyPacket.generate(numBits);
-  secretKeyPacket.encrypt(passphrase);
+  secretKeyPacket.algorithm = enums.read(enums.publicKey, options.keyType);
+  secretKeyPacket.generate(options.numBits);
+  secretKeyPacket.encrypt(options.passphrase);
 
   var userIdPacket = new packet.Userid();
-  userIdPacket.read(userId);
+  userIdPacket.read(options.userId);
 
   var dataToSign = {};
   dataToSign.userid = userIdPacket;
   dataToSign.key = secretKeyPacket;
   var signaturePacket = new packet.Signature();
   signaturePacket.signatureType = enums.signature.cert_generic;
-  signaturePacket.publicKeyAlgorithm = keyType;
+  signaturePacket.publicKeyAlgorithm = options.keyType;
   signaturePacket.hashAlgorithm = config.prefer_hash_algorithm;
   signaturePacket.keyFlags = [enums.keyFlags.certify_keys | enums.keyFlags.sign_data];
   signaturePacket.preferredSymmetricAlgorithms = [];
@@ -11822,16 +11828,16 @@ function generate(keyType, numBits, userId, passphrase) {
   signaturePacket.sign(secretKeyPacket, dataToSign);
 
   var secretSubkeyPacket = new packet.SecretSubkey();
-  secretSubkeyPacket.algorithm = enums.read(enums.publicKey, keyType);
-  secretSubkeyPacket.generate(numBits);
-  secretSubkeyPacket.encrypt(passphrase);
+  secretSubkeyPacket.algorithm = enums.read(enums.publicKey, options.keyType);
+  secretSubkeyPacket.generate(options.numBits);
+  secretSubkeyPacket.encrypt(options.passphrase);
 
   dataToSign = {};
   dataToSign.key = secretKeyPacket;
   dataToSign.bind = secretSubkeyPacket;
   var subkeySignaturePacket = new packet.Signature();
   subkeySignaturePacket.signatureType = enums.signature.subkey_binding;
-  subkeySignaturePacket.publicKeyAlgorithm = keyType;
+  subkeySignaturePacket.publicKeyAlgorithm = options.keyType;
   subkeySignaturePacket.hashAlgorithm = config.prefer_hash_algorithm;
   subkeySignaturePacket.keyFlags = [enums.keyFlags.encrypt_communication | enums.keyFlags.encrypt_storage];
   subkeySignaturePacket.sign(secretKeyPacket, dataToSign);
@@ -11841,6 +11847,11 @@ function generate(keyType, numBits, userId, passphrase) {
   packetlist.push(signaturePacket);
   packetlist.push(secretSubkeyPacket);
   packetlist.push(subkeySignaturePacket);
+
+  if (!options.unlocked) {
+    secretKeyPacket.clearPrivateMPIs();
+    secretSubkeyPacket.clearPrivateMPIs();
+  }
 
   return new Key(packetlist);
 }
@@ -12742,24 +12753,25 @@ function verifyClearSignedMessage(publicKeys, msg, callback) {
 /**
  * Generates a new OpenPGP key pair. Currently only supports RSA keys.
  * Primary and subkey will be of same type.
- * @param {module:enums.publicKey} keyType    to indicate what type of key to make.
+ * @param {module:enums.publicKey} [options.keyType=module:enums.publicKey.rsa_encrypt_sign]    to indicate what type of key to make.
  *                             RSA is 1. See {@link http://tools.ietf.org/html/rfc4880#section-9.1}
- * @param {Integer} numBits    number of bits for the key creation. (should be 1024+, generally)
- * @param {String}  userId     assumes already in form of "User Name <username@email.com>"
- * @param {String}  passphrase The passphrase used to encrypt the resulting private key
+ * @param {Integer} options.numBits    number of bits for the key creation. (should be 1024+, generally)
+ * @param {String}  options.userId     assumes already in form of "User Name <username@email.com>"
+ * @param {String}  options.passphrase The passphrase used to encrypt the resulting private key
+ * @param {Boolean} [options.unlocked=false]    The secret part of the generated key is unlocked
  * @param  {function} callback (optional) callback(error, result) for async style
  * @return {Object} {key: module:key~Key, privateKeyArmored: String, publicKeyArmored: String}
  * @static
  */
-function generateKeyPair(keyType, numBits, userId, passphrase, callback) {
+function generateKeyPair(options, callback) {
   if (useWorker(callback)) {
-    asyncProxy.generateKeyPair(keyType, numBits, userId, passphrase, callback);
+    asyncProxy.generateKeyPair(options, callback);
     return;
   }
 
   return execute(function() {
     var result = {};
-    var newKey = key.generate(keyType, numBits, userId, passphrase);
+    var newKey = key.generate(options);
     result.key = newKey;
     result.privateKeyArmored = newKey.armor();
     result.publicKeyArmored = newKey.toPublic().armor();
@@ -14522,7 +14534,6 @@ SecretKey.prototype.encrypt = function (passphrase) {
     blockLen = crypto.cipher[symmetric].blockSize,
     iv = crypto.random.getRandomBytes(blockLen);
 
-
   this.encrypted = '';
   this.encrypted += String.fromCharCode(254);
   this.encrypted += String.fromCharCode(enums.write(enums.symmetric, symmetric));
@@ -14595,8 +14606,9 @@ SecretKey.prototype.decrypt = function (passphrase) {
     'mod';
 
   var parsedMPI = parse_cleartext_mpi(hash, cleartext, this.algorithm);
-  if (parsedMPI instanceof Error)
+  if (parsedMPI instanceof Error) {
     return false;
+  }
   this.mpi = this.mpi.concat(parsedMPI);
   this.isDecrypted = true;
   return true;
@@ -14605,6 +14617,14 @@ SecretKey.prototype.decrypt = function (passphrase) {
 SecretKey.prototype.generate = function (bits) {
   this.mpi = crypto.generateMpi(this.algorithm, bits);
   this.isDecrypted = true;
+};
+
+/**
+ * Clear private MPIs, return to initial state
+ */
+SecretKey.prototype.clearPrivateMPIs = function () {
+  this.mpi = this.mpi.slice(0, crypto.getPublicMpiCount(this.algorithm));
+  this.isDecrypted = false;
 };
 
 },{"../crypto":19,"../enums.js":30,"../type/mpi.js":59,"../type/s2k.js":60,"../util.js":61,"./public_key.js":46}],50:[function(require,module,exports){
@@ -16392,20 +16412,10 @@ module.exports = {
    */
   bin2str: function (bin) {
     var result = [];
-
     for (var i = 0; i < bin.length; i++) {
-      result.push(String.fromCharCode(bin[i]));
+      result[i] = String.fromCharCode(bin[i]);
     }
-
     return result.join('');
-  },
-
-  _str2bin: function (str, result) {
-    for (var i = 0; i < str.length; i++) {
-      result[i] = str.charCodeAt(i);
-    }
-
-    return result;
   },
 
   /**
@@ -16414,7 +16424,11 @@ module.exports = {
    * @return {Array<Integer>} An array of (binary) integers
    */
   str2bin: function (str) {
-    return this._str2bin(str, new Array(str.length));
+    var result = [];
+    for (var i = 0; i < str.length; i++) {
+      result[i] = str.charCodeAt(i);
+    }
+    return result;
   },
 
 
@@ -16424,7 +16438,11 @@ module.exports = {
    * @return {Uint8Array} The array of (binary) integers
    */
   str2Uint8Array: function (str) {
-    return this._str2bin(str, new Uint8Array(new ArrayBuffer(str.length)));
+    var result = new Uint8Array(str.length);
+    for (var i = 0; i < str.length; i++) {
+      result[i] = str.charCodeAt(i);
+    }
+    return result;
   },
 
   /**
@@ -16435,7 +16453,11 @@ module.exports = {
    * @return {String} String representation of the array
    */
   Uint8Array2str: function (bin) {
-    return this.bin2str(bin);
+    var result = '';
+    for (var i = 0; i < bin.length; i++) {
+      result += String.fromCharCode(bin[i]);
+    }
+    return result;
   },
 
   /**
@@ -16776,13 +16798,10 @@ AsyncProxy.prototype.verifyClearSignedMessage = function(publicKeys, message, ca
  * @param {String}  passphrase The passphrase used to encrypt the resulting private key
  * @param {Function} callback receives object with key and public and private armored texts
  */
-AsyncProxy.prototype.generateKeyPair = function(keyType, numBits, userId, passphrase, callback) {
+AsyncProxy.prototype.generateKeyPair = function(options, callback) {
   this.worker.postMessage({
     event: 'generate-key-pair', 
-    keyType: keyType, 
-    numBits: numBits, 
-    userId: userId, 
-    passphrase: passphrase
+    options: options
   });
   this.tasks.push(function(err, data) {
     if (data) {

@@ -664,7 +664,8 @@ function() {
    var passphrase = document.getElementById("passphraseInput").value;
    
    if ((userid) && (passphrase)) {
-      var key = openpgp.generateKeyPair(openpgp.enums.publicKey.rsa_encrypt_sign, 512, userid, passphrase);
+      //var key = openpgp.generateKeyPair(openpgp.enums.publicKey.rsa_encrypt_sign, 512, userid, passphrase);
+      var key = openpgp.generateKeyPair({numBits: 512, userId: userid, passphrase: passphrase});
    
       if((key.privateKeyArmored) && (key.publicKeyArmored))
       {
