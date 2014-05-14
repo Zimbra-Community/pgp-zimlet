@@ -27,7 +27,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
    <handlerObject>tk_barrydegraaff_zimbra_openpgp</handlerObject>
    <includeCSS>tk_barrydegraaff_zimbra_openpgp.css</includeCSS>
    <zimletPanelItem label="OpenPGP" icon="tk_barrydegraaff_zimbra_openpgp-panelIcon">
-      <toolTipText>Double-click to manage PGP keys or drag-drop a message to verify/decrypt.</toolTipText>
+      <toolTipText>Drag-drop a message to verify/decrypt or right click for menu.</toolTipText>
       <dragSource type="ZmConv" />
 		<dragSource type="ZmMailMsg" />
       <contextMenu>
