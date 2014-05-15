@@ -31,6 +31,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 ### Zimbra OpenPGP Zimlet
 
 To install:
+
     su zimbra
     cd /tmp
     rm tk_barrydegraaff_zimbra_openpgp*
@@ -54,7 +55,8 @@ B - Ignore the message
 
 C - Edit zimbra-attrs.xml (at your own risk) !MIGRATION?! like this:
 
-    As root:
+As root:
+
     nano /opt/zimbra/conf/attrs/zimbra-attrs.xml
     Find the line: 
     name="zimbraZimletUserProperties" type="cstring" max="5120"
@@ -62,6 +64,7 @@ C - Edit zimbra-attrs.xml (at your own risk) !MIGRATION?! like this:
     name="zimbraZimletUserProperties" type="cstring" max="15120"
    
 As zimbra:
+
     zmcontrol restart
 
 
@@ -90,4 +93,6 @@ Under:
 
     <Configure id="Server" class="org.eclipse.jetty.server.Server">
 
-Then issue: zmmailboxdctl restart
+Then issue: 
+
+    zmmailboxdctl restart
