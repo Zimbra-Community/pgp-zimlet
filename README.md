@@ -28,23 +28,19 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 
 ========================================================================
 
-Zimbra OpenPGP Zimlet
+### Zimbra OpenPGP Zimlet
 
-su zimbra
-
-cd /tmp
-
-rm tk_barrydegraaff_zimbra_openpgp*
-
-wget https://github.com/barrydegraaff/pgp-zimlet/raw/master/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.zip
-
-zmzimletctl deploy tk_barrydegraaff_zimbra_openpgp.zip
+    su zimbra
+    cd /tmp
+    rm tk_barrydegraaff_zimbra_openpgp*
+    wget https://github.com/barrydegraaff/pgp-zimlet/raw/master/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.zip
+    zmzimletctl deploy tk_barrydegraaff_zimbra_openpgp.zip
 
 ========================================================================
 
-Known issues
+### Known issues
 
-DEALING WITH PUBLIC KEYS LONGER THAN 5120 CHARS
+### DEALING WITH PUBLIC KEYS LONGER THAN 5120 CHARS
 
 Sometimes people generate public keys that are to long for Zimba to store in zimbraZimletUserProperties.
 
@@ -58,43 +54,40 @@ B - Ignore the message
 
 C - Edit zimbra-attrs.xml (at your own risk) !MIGRATION?! like this:
 
-   As root:
-   nano /opt/zimbra/conf/attrs/zimbra-attrs.xml
-   Find the line: 
-   name="zimbraZimletUserProperties" type="cstring" max="5120"
-   and change it to
-   name="zimbraZimletUserProperties" type="cstring" max="15120"
+    As root:
+    nano /opt/zimbra/conf/attrs/zimbra-attrs.xml
+    Find the line: 
+    name="zimbraZimletUserProperties" type="cstring" max="5120"
+    and change it to
+    name="zimbraZimletUserProperties" type="cstring" max="15120"
    
-   As zimbra:
-   zmcontrol restart
+As zimbra:
+    zmcontrol restart
 
 
-DEALING WITH LARGE ENCRYPTED MESSAGES 
+### DEALING WITH LARGE ENCRYPTED MESSAGES 
 
 If you receive a large encrypted message and Zimbra displays "This message is too large to display properly." You cannot
 immediately drop your message in the Zimlet. You have to click "View entire message" and drop it onto the Zimlet
 again after a minute or so. If you are in a hurry you can copy paste the message text to the text input field in 
 the decrypt dialog.
 
-DEALING WITH LARGE ENCRYPTED MESSAGES IN INTERNET EXPLORER
+### DEALING WITH LARGE ENCRYPTED MESSAGES IN INTERNET EXPLORER
 
 All the above and you must change, as root:
 
-nano /opt/zimbra/jetty-distribution-[buildnumber here]/etc/jetty.xml
-
-nano /opt/zimbra/jetty-distribution-[buildnumber here]/etc/jetty.xml.in
+    nano /opt/zimbra/jetty-distribution-[buildnumber here]/etc/jetty.xml
+    nano /opt/zimbra/jetty-distribution-[buildnumber here]/etc/jetty.xml.in
 
 And add:
 
- <Call name="setAttribute">
-    <Arg>org.eclipse.jetty.server.Request.maxFormContentSize</Arg>
-    <Arg>2000000</Arg>
-  </Call>
+    <Call name="setAttribute">
+        <Arg>org.eclipse.jetty.server.Request.maxFormContentSize</Arg>
+        <Arg>2000000</Arg>
+    </Call>
   
 Under: 
 
-<Configure id="Server" class="org.eclipse.jetty.server.Server">
+    <Configure id="Server" class="org.eclipse.jetty.server.Server">
 
 Then issue: zmmailboxdctl restart
-
-
