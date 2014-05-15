@@ -1,6 +1,6 @@
-<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="0.10" description="Zimbra OpenPGP">
+<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="0.11" description="Zimbra OpenPGP">
    <summary>
-Zimbra OpenPGP Zimlet DEVELOPMENT VERSION NOT FOR PRODUCTION USE!
+Zimbra OpenPGP Zimlet
 
    https://github.com/barrydegraaff/pgp-zimlet
    https://www.indiegogo.com/projects/zimbra-openpgp-zimlet

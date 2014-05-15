@@ -36,7 +36,7 @@ cd /tmp
 
 rm tk_barrydegraaff_zimbra_openpgp*
 
-wget https://github.com/barrydegraaff/pgp-zimlet/raw/master/test/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.zip
+wget https://github.com/barrydegraaff/pgp-zimlet/raw/master/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.zip
 
 zmzimletctl deploy tk_barrydegraaff_zimbra_openpgp.zip
 
