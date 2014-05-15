@@ -30,6 +30,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 
 ### Zimbra OpenPGP Zimlet
 
+To install:
     su zimbra
     cd /tmp
     rm tk_barrydegraaff_zimbra_openpgp*
@@ -42,8 +43,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 
 ### DEALING WITH PUBLIC KEYS LONGER THAN 5120 CHARS
 
-Sometimes people generate public keys that are to long for Zimba to store in zimbraZimletUserProperties.
-
+Sometimes people generate public keys that are to long for Zimba to store in zimbraZimletUserProperties. 
 Saving long pubkeys will trow an warning message, but the key is saved correctly.
 
 To resolve this you can:
