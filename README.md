@@ -34,12 +34,15 @@ But the content of the dialog remains in the page source.)
 
 With zimlet deployed:
 
-Login to Zimbra, press Esc => page reloads
+Login to Zimbra: press Esc => page reloads
+
 Compose new message, press Esc => page reloads
+
 
 Without zimlet deployed:
 
 Login to Zimbra, press Esc => nothing
+
 Compose new message, press Esc => New message tab closes
 
 ========================================================================
