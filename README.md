@@ -26,6 +26,24 @@ To install:
 
 ========================================================================
 
+### Esc keyboard shortcut 
+
+This Zimlet redefines the behavior of the Escape key. This is done for security reasons. 
+(Normally when a user hits the Escape key in a dialog, the dialogs gets removed from display,
+But the content of the dialog remains in the page source.)
+
+With zimlet deployed:
+
+Login to Zimbra, press Esc => page reloads
+Compose new message, press Esc => page reloads
+
+Without zimlet deployed:
+
+Login to Zimbra, press Esc => nothing
+Compose new message, press Esc => New message tab closes
+
+========================================================================
+
 ### Known issues
 
 ### DEALING WITH PUBLIC KEYS LONGER THAN 5120 CHARS
