@@ -8,6 +8,8 @@ Adding PGP support to Zimbra Collaboration Suite, currently tested on:
 - Linux: Google Chrome, Chromium, Firefox, Iceweasel
 - OSX: Safari
 
+This Zimlet is developed for and tested with Zimbra version 8.0.7.
+
 This file is part of the Zimbra OpenPGP Zimlet project.
 Copyright (C) 2014  Barry de Graaff
 
@@ -44,8 +46,8 @@ To install:
 
 ### DEALING WITH PUBLIC KEYS LONGER THAN 5120 CHARS
 
-Sometimes people generate public keys that are to long for Zimba to store in zimbraZimletUserProperties. 
-Saving long pubkeys will trow an warning message, but the key is saved correctly.
+Sometimes people generate public keys that are too long for Zimba to store in zimbraZimletUserProperties. 
+Saving long pubkeys will trow a warning message, but the key is saved correctly.
 
 To resolve this you can:
 
