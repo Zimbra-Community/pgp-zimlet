@@ -30,16 +30,18 @@ Normal cache flush does NOT work
 <body style="font-family:sans-serif"><b>New key pair</b>
 <textarea style="display:none" readonly id="userid" rows="20" cols="100"><%= request.getParameter("userid")%></textarea>
 <textarea style="display:none" readonly id="passphrase" rows="20" cols="100"><%= request.getParameter("passphrase")%></textarea>
+<input style="display:none" readonly id="keyLength" value="<%= request.getParameter("keyLength")%>">
 <script type="text/javascript">   
 var openpgp = window.openpgp;
 
 try {
    var passphrase = document.getElementById('passphrase').value;
    var userid = document.getElementById('userid').value;
+   var keyLength = document.getElementById("keyLength").value;
    //var key = openpgp.generateKeyPair(openpgp.enums.publicKey.rsa_encrypt_sign, 512, userid, passphrase);
-   var key = openpgp.generateKeyPair({numBits: 512, userId: userid, passphrase: passphrase});
+   var key = openpgp.generateKeyPair({numBits: keyLength, userId: userid, passphrase: passphrase});
    
-   document.write('<br><br>Please make sure to store this information in a safe place:<br><textarea rows="20" cols="100">Passphrase ' + passphrase + ' for ' + userid + '\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored+'</textarea>');    
+   document.write('<br><br>Please make sure to store this information in a safe place:<br><textarea rows="20" cols="100">Passphrase ' + passphrase + ' for ' + userid + '\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored+'\r\n\r\nKey length: '+keyLength+' bits</textarea>');    
 }
 catch (err) {
    document.write('<pre>Could not generate key pair.</pre>');

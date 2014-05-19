@@ -406,7 +406,7 @@ function(id, title, message) {
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn)); 
       break; 
    case 5:
-      view.setSize("600", "100");
+      view.setSize("600", "160");
       html = "<table><tr><td colspan='2'>" +
       "Please enter User ID (example: Firstname Lastname &lt;your@email.com&gt;) and passphrase for new key pair.<br><br>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
@@ -417,6 +417,12 @@ function(id, title, message) {
       "Passphrase:" +
       "</td><td>" +
       "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value=''>" +
+      "</td></tr><tr><td style=\"width:100px;\">" +
+      "Key length:" +
+      "</td><td style=\"width:500px\">" +
+      "<select class=\"barrydegraaff_zimbra_openpgp-input\" id=\"keyLength\" name=\"keyLength\"><option value=\"512\">512</option><option selected=\"selected\" value=\"1024\">1024</option><option value=\"2048\">2048</option><option value=\"4096\">4096</option></select>" +
+      "</td></tr><tr><td colspan='2'>" +
+      "<br>Higher key length is better security, but slower. If you have trouble generating a key pair choose a lower key length or use an external program.<br><br>" +
       "</td></tr></table>";	
       view.getHtmlElement().innerHTML = html;
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );      
@@ -667,11 +673,12 @@ function() {
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnKeyPair =
 function() {
 	var userid = document.getElementById("uid").value;
+   var keyLength = document.getElementById("keyLength").value;
    var passphrase = document.getElementById("passphraseInput").value;
    
    if ((userid) && (passphrase)) {
       //var key = openpgp.generateKeyPair(openpgp.enums.publicKey.rsa_encrypt_sign, 512, userid, passphrase);
-      var key = openpgp.generateKeyPair({numBits: 512, userId: userid, passphrase: passphrase});
+      var key = openpgp.generateKeyPair({numBits: keyLength, userId: userid, passphrase: passphrase});
    
       if((key.privateKeyArmored) && (key.publicKeyArmored))
       {
@@ -679,7 +686,7 @@ function() {
          this._dialog.clearContent();
          this._dialog.popdown();
          
-         this.displayDialog(2,'Your new key pair','Please make sure to store this information in a safe place:<br><br><textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;">Passphrase ' + passphrase + ' for ' + userid + '\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored+'</textarea>');      
+         this.displayDialog(2,'Your new key pair','Please make sure to store this information in a safe place:<br><br><textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;">Passphrase ' + passphrase + ' for ' + userid + '\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored+'\r\n\r\nKey length: '+keyLength+' bits</textarea>');      
       }
    }
    else {
@@ -693,6 +700,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.okBtnKeyPair_ie =
 function() {
 	var userid = document.getElementById("uid").value;
    var passphrase = document.getElementById("passphraseInput").value;
+   var keyLength = document.getElementById("keyLength").value;
    
    if ((userid) && (passphrase)) {   
       // What is the DWT method to destroy this._dialog? This only clears its contents.
@@ -711,6 +719,12 @@ function() {
       hiddenField.setAttribute("value", userid);
       form.appendChild(hiddenField); 
    
+      var hiddenField = document.createElement("input");	
+      hiddenField.setAttribute("type", "hidden"); 
+      hiddenField.setAttribute("name", "keyLength");
+      hiddenField.setAttribute("value", keyLength);
+      form.appendChild(hiddenField); 	
+
       var hiddenField = document.createElement("input");	
       hiddenField.setAttribute("type", "hidden"); 
       hiddenField.setAttribute("name", "passphrase");
