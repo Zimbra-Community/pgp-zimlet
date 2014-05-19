@@ -1,4 +1,4 @@
-pgp-zimlet
+Zimbra OpenPGP Zimlet
 ==========
 
 Demo video: https://drive.google.com/file/d/0B_lMZlQY3S2lNXJfUjlrMU1faXM/edit?usp=sharing
@@ -14,9 +14,7 @@ Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues
 
 ========================================================================
 
-### Zimbra OpenPGP Zimlet
-
-To install:
+### Installing
 
     su zimbra
     cd /tmp
@@ -24,13 +22,17 @@ To install:
     wget https://github.com/barrydegraaff/pgp-zimlet/raw/master/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.zip
     zmzimletctl deploy tk_barrydegraaff_zimbra_openpgp.zip
 
+Please be warned, if you undeploy this Zimlet after some time Zimbra will truncate your users preferences (public keys) of this Zimlet.
+
+For debugging in production I recommend to disable the Zimlet via user preferences or via COS.
+
 ========================================================================
 
 ### Esc keyboard shortcut 
 
 This Zimlet redefines the behavior of the Escape key. This is done for security reasons. 
 (Normally when a user hits the Escape key in a dialog, the dialogs gets removed from display,
-But the content of the dialog remains in the page source.)
+but the content of the dialog remains in the page source.)
 
 With zimlet deployed:
 
