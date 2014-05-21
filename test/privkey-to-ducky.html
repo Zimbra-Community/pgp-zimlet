@@ -1,71 +1,64 @@
-<html>
-<head></head>
-<body>
-
-<textarea id="key" cols="70" rows="20">
------BEGIN PGP PRIVATE KEY BLOCK-----
-Version: OpenPGP.js v0.6.0
-Comment: http://openpgpjs.org
-
-xcFGBFN7mhYBBACcK57zuyGH8NgIU0oUuL/3Qpc0bPURiVZGY6UfmQKQsHoB
-BY2Bk7t2LDnfYPOMp61aaYWQgjqHiL+Z2KDHvr4EzGACXbPkh9buqUXLYRjk
-4B1IcC06CkGJmWWVrR50wP1+cTK2NnVcC26msExfxpupmGseIxJ1IqMDL91t
-hLnZ3QARAQAB/gkDCCiNdLRQ2a0vYB6fSHduYmUu+x+Bt5tpTWbe9cjplatR
-bRVX438aYae9nMWKN/Epi1uiBUmwO3I6n96MXT9oxrR87FWpwng+k+S9Typo
-R5jWreuYI5UcsknfPRXccHlezbSgvxk0XhnnEC9IF5Urgjub6sGcK5zrhgKJ
-RUiQhQzYs2vI6aLiO3Tn/2kXLSQO1W/aclsxLlXlP2XRmRaRm6FhBLZqlT6Q
-VKMyo/XX8/HM/iB5zrC80+OPkfXcN+GaCDEae02jDWtvIIEbNmj/PJLFNtSD
-cePd9PFoqumdlUQNamHb9MQXr5rOP2fpwRFw3mMgkguCvzthLoVoWJSPiDmS
-AO1epMinBVDdx1eJMAcA1qurDX0f5bsIVDkS3kMuAXVd88yibNoQb41HYUIQ
-4/SusomrDkuc0HforS22fHn+c+4B6pMlyQeYKbg5OSzEOraBp90uHUfW1c2m
-0EeyyVRSeccMe8UUNFjdgK+FL/dSG5M0A7nNDmJhcnJ5IGR1Y2t0ZXN0wrIE
-EAEIACYFAlN7mh0GCwkIBwMCCRDQMfZrqO4IcgQVCAIKAxYCAQIbAwIeAQAA
-Z74D/jzwebtARb27/s2VnqVF4aTPyGpjsTyHAEewbeoMqKzbEeXe9lQrJ/nQ
-5qqcpczb/XRGLV8cIGyYRJcm9Ue1shmVeXxEt+qeD+I3tSQZcHyjs9WVhazw
-wo84QBFDIy+HovA+MmhjhurD7kL80l/uYmjFkslEKccQLwCwOlr7vB34x8FG
-BFN7mh4BBACHcheCd0ZJM5kfZ5jKSf6hvkaWHY88YjL3BYLDzsyWFO4FhVnA
-EQmzoHbM2sUeA/aPFyaidRsvcWprkjSxjF6kqWOlK1lk1pt+HuYCXKNRcz7Q
-oioVeqFB2h9v9YduCqEkKOsSbwDkUMCEpvApbVZ+07wutkaei941nEtlBEuf
-NwARAQAB/gkDCBnFMQ0dC2iIYECo2DsbCEQmC98RXzKiand7KUukpNpCPYfB
-W3vM8BTsvyKr7EeKBnS2fZtXpQp6z42W1SWIxnX8onBwqyqYbgHwz3uHMiMe
-1penYoTf8HFnyJwGyW4cFJH4kJOyZJDbef9r8z+G7tfQzZKevDlYBVZ6IWUq
-ZIuOJxEG/aScLbAVA+exwNriFfQf7yJ7UB3/M5gbNputZ4mnjLG3D6ec7/AR
-q2gvQbdCZN5jx34X3WVVi2Jv6AyN/0w79D3bPXZ4jFEvAUI2AvGFSZGdl9PC
-zBwyG1u/NO/HIg4KTJZG5PCWHUjV7WC1MSgrj28jofhsAe0aPWMC9xB4mBBG
-fjHXlO9MlqyQDWd3brkx+YefTRQgkAQRLHjXJKFm0LANjboQX008vukDUuCZ
-9O6xEd4y5ioBXYv0yKnNCQfD6e16HNZWDk+ouE8Q2Qw6o9/FYy8aJs3O64HV
-72mf+E6OBGS+feZEN2p9JIBSEzyYURrCnwQYAQgAEwUCU3uaHgkQ0DH2a6ju
-CHICGwwAADsKBACADphQhmLjkhkKOWPjv4VI8VC5spyu7l81H056rSbToycl
-FMlJDCIMfr0D71SAbPy3orrbfxQoS+C6H7oOD6i1f0rrSEgQCKIt2EeGPq0m
-jYlisH038dRuhN+ZBss1yfLkPGRchqG4kki5VMa3tSEc3uH9+SsMZQlzEJMa
-f0sAFg==
-=XWLU
------END PGP PRIVATE KEY BLOCK-----
-</textarea>
-
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Zimbra OpenPGP Zimlet</title>
+<script src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.js"></script>
+</head>
+<body style="font-family:sans-serif">
+<h1>Private key to Duck script converter</h1>
+<p>
+This page helps you to convert your pgp/gpg private key block to Duck script. This allows you to use a <a href="http://usbrubberducky.com/">USB Rubber Ducky</a> device for private key storage.
+</p>
+<textarea id="key" cols="70" rows="20"></textarea>
+<textarea id="result" cols="70" rows="20"></textarea>
+<br>
+<button onclick="createDuckScript()">Create duck script</button>
 <script type="text/javascript">
-var key = document.getElementById('key').value;
-//var chunks = key.match(/.{1,8}/g);
-var chunks = key.split(/\r?\n/);
-console.log(chunks);
 
-document.write('<textarea cols="70" rows="20">');
-document.write("DEFAULTDELAY 3\r\n");
-document.write("DELAY 2000\r\n");
-for (var i in chunks) {
-
-   //document.write('STRING ' + chunks[i] + "\r\n");
-   var smchunks = chunks[i].match(/.{1,1}/g);
-   for (var i in smchunks) {
-      document.write('STRING ' + smchunks[i] + "\r\n");
+function createDuckScript()
+{
+   var key = document.getElementById('key').value;
+   var chunks = key.split(/\r?\n/);
+   var result = "";
+   result = result + "DEFAULTDELAY 3\r\n";
+   result = result + "DELAY 2000\r\n";
+   for (var i in chunks) {
+      var smchunks = chunks[i].match(/.{1,1}/g);
+      for (var i in smchunks) {
+         result = result + 'STRING ' + smchunks[i] + "\r\n";
+      }
+      result = result + "ENTER\r\n";
+   
    }
-   document.write("ENTER\r\n");
-
+   document.getElementById('result').value = result;
 }
 
-document.write('</textarea>');
-
 </script>
+<p>
+Copy/paste the duck script to a <a href="http://www.ducktoolkit.com/Encoder.jsp">Duck Encoder</a>. <br>
+Download the .bin file and place it on the SD card on your Duck.<br>
+<br>
+If you are having trouble using the Duck as private key storage. Try increasing DEFAULTDELAY and DELAY.<br>
+</p>
 
+<pre>
+This file is part of the Zimbra OpenPGP Zimlet project.
+Copyright (C) 2014  Barry de Graaff
 
+Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see http://www.gnu.org/licenses/. 
+</pre>
 </body>
+</html>
