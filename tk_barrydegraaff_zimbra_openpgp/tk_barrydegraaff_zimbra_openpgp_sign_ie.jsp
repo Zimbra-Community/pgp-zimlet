@@ -34,17 +34,33 @@ Normal cache flush does NOT work
 <script type="text/javascript">   
 var openpgp = window.openpgp;
 
-try {
+function sign () {   
    var passphrase = document.getElementById('passphrase').value;
-   var privKeys = openpgp.key.readArmored(document.getElementById('privateKey').value);
-   var privKey = privKeys.keys[0];
-   var success = privKey.decrypt(passphrase);   
-   var signed = openpgp.signClearMessage(privKeys.keys, document.getElementById('message').value);
-   document.write('<br><br>Please copy/paste the result to a new E-mail message:<br><textarea rows="20" cols="100">'+signed+'</textarea>');    
+   
+   try {
+      var privKeys = openpgp.key.readArmored(document.getElementById('privateKey').value);
+      var privKey = privKeys.keys[0];
+      var success = privKey.decrypt(passphrase);   
+   }
+   catch (err) {
+      document.write('<br><br>Could not parse private key! Returning original message:<br><textarea rows="20" cols="100">'+document.getElementById('message').value+'</textarea>');
+      return;
+   }
+   if (success) {  
+      try {
+         var signed = openpgp.signClearMessage(privKeys.keys, document.getElementById('message').value);
+         document.write('<br><br>Please copy/paste the result to a new E-mail message:<br><textarea rows="20" cols="100">'+signed+'</textarea>');    
+      }
+      catch (err)
+      {
+         document.write('<br><br>Sign failed! Returning original message:<br><textarea rows="20" cols="100">'+document.getElementById('message').value+'</textarea>');
+      }
+   }
+   else {
+      document.write('<br><br>Wrong passphrase! Returning original message:<br><textarea rows="20" cols="100">'+document.getElementById('message').value+'</textarea>');
+   }
 }
-catch (err) {
-   document.write('<pre>Could not sign message, password incorrect?</pre>');
-}
+sign();
 </script>   
 <br><br><small>Tip: CTRL+W to close this tab.</small>
 </body>

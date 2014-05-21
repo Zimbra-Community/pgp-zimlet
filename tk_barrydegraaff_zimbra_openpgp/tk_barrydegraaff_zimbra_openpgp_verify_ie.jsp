@@ -36,8 +36,10 @@ var openpgp = window.openpgp;
 var publicKeys = document.getElementById('publicKeys').value;
 var combinedPublicKeys = publicKeys.split("<tk_barrydegraaff_zimbra_openpgp>");
 try {
-var message = openpgp.cleartext.readArmored(document.getElementById('message').value);
-} catch (err) { }
+   var message = openpgp.cleartext.readArmored(document.getElementById('message').value);
+} catch (err) { 
+   document.write("<b>Could not parse your trusted public keys!</b><br>");
+}
 
 var result = 0;
 var index;
