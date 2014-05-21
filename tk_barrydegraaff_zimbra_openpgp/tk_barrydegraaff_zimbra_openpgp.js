@@ -341,7 +341,7 @@ function(id, title, message) {
    case 3:
       view.setSize("600", "500");
       html = "<table><tr><td colspan='2'>" +
-      "Copy-paste ASCII armored public keys you trust here. <br><br>You can put human readable comments before each key as long as you start on a new line for your public key.<br><br>" +
+      "Copy-paste ASCII armored public keys you trust here. <br><br>You can put human readable comments before each key as long as you start on a new line for your public key.<br>Please be patient after hitting the OK button, saving takes some time.<br><br>" +
       "</td></tr><tr><td style=\"width:100px\">Public Key 1:</td><td style=\"width:500px\"><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput1'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value + "</textarea></td></tr>" +
       "<tr><td>Public Key 2:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput2'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value + "</textarea></td></tr>" +
       "<tr><td>Public Key 3:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput3'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys3").value + "</textarea></td></tr>" +
@@ -422,7 +422,7 @@ function(id, title, message) {
       "</td><td style=\"width:500px\">" +
       "<select class=\"barrydegraaff_zimbra_openpgp-input\" id=\"keyLength\" name=\"keyLength\"><option value=\"512\">512</option><option selected=\"selected\" value=\"1024\">1024</option><option value=\"2048\">2048</option><option value=\"4096\">4096</option></select>" +
       "</td></tr><tr><td colspan='2'>" +
-      "<br>Higher key length is better security, but slower. If you have trouble generating a key pair choose a lower key length or use an external program.<br><br>" +
+      "<br>Higher key length is better security, but slower. If you have trouble generating a key pair choose a lower key length or use an external program. Please be patient after hitting the OK button, generating can take some time.<br><br>" +
       "</td></tr></table>";	
       view.getHtmlElement().innerHTML = html;
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );      
@@ -471,6 +471,7 @@ function() {
    }
    catch (err) {
       tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not parse private key!", ZmStatusView.LEVEL_WARNING);
+      return;
    }   
    
    if (success) {
@@ -484,7 +485,7 @@ function() {
       }
    }
    else {
-      tk_barrydegraaff_zimbra_openpgp.prototype.status("Wrong password!", ZmStatusView.LEVEL_WARNING);
+      tk_barrydegraaff_zimbra_openpgp.prototype.status("Wrong passphrase!", ZmStatusView.LEVEL_WARNING);
    }
    
 
@@ -593,6 +594,7 @@ function() {
    }
    catch (err) {
       tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not parse private key!", ZmStatusView.LEVEL_WARNING);
+      return;
    }
 
    if (success) {
@@ -605,7 +607,7 @@ function() {
       }
    }
    else {
-      tk_barrydegraaff_zimbra_openpgp.prototype.status("Wrong password!", ZmStatusView.LEVEL_WARNING);
+      tk_barrydegraaff_zimbra_openpgp.prototype.status("Wrong passphrase!", ZmStatusView.LEVEL_WARNING);
    }
 
    if(signed)
