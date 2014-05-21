@@ -1,0 +1,71 @@
+<html>
+<head></head>
+<body>
+
+<textarea id="key" cols="70" rows="20">
+-----BEGIN PGP PRIVATE KEY BLOCK-----
+Version: OpenPGP.js v0.6.0
+Comment: http://openpgpjs.org
+
+xcFGBFN7mhYBBACcK57zuyGH8NgIU0oUuL/3Qpc0bPURiVZGY6UfmQKQsHoB
+BY2Bk7t2LDnfYPOMp61aaYWQgjqHiL+Z2KDHvr4EzGACXbPkh9buqUXLYRjk
+4B1IcC06CkGJmWWVrR50wP1+cTK2NnVcC26msExfxpupmGseIxJ1IqMDL91t
+hLnZ3QARAQAB/gkDCCiNdLRQ2a0vYB6fSHduYmUu+x+Bt5tpTWbe9cjplatR
+bRVX438aYae9nMWKN/Epi1uiBUmwO3I6n96MXT9oxrR87FWpwng+k+S9Typo
+R5jWreuYI5UcsknfPRXccHlezbSgvxk0XhnnEC9IF5Urgjub6sGcK5zrhgKJ
+RUiQhQzYs2vI6aLiO3Tn/2kXLSQO1W/aclsxLlXlP2XRmRaRm6FhBLZqlT6Q
+VKMyo/XX8/HM/iB5zrC80+OPkfXcN+GaCDEae02jDWtvIIEbNmj/PJLFNtSD
+cePd9PFoqumdlUQNamHb9MQXr5rOP2fpwRFw3mMgkguCvzthLoVoWJSPiDmS
+AO1epMinBVDdx1eJMAcA1qurDX0f5bsIVDkS3kMuAXVd88yibNoQb41HYUIQ
+4/SusomrDkuc0HforS22fHn+c+4B6pMlyQeYKbg5OSzEOraBp90uHUfW1c2m
+0EeyyVRSeccMe8UUNFjdgK+FL/dSG5M0A7nNDmJhcnJ5IGR1Y2t0ZXN0wrIE
+EAEIACYFAlN7mh0GCwkIBwMCCRDQMfZrqO4IcgQVCAIKAxYCAQIbAwIeAQAA
+Z74D/jzwebtARb27/s2VnqVF4aTPyGpjsTyHAEewbeoMqKzbEeXe9lQrJ/nQ
+5qqcpczb/XRGLV8cIGyYRJcm9Ue1shmVeXxEt+qeD+I3tSQZcHyjs9WVhazw
+wo84QBFDIy+HovA+MmhjhurD7kL80l/uYmjFkslEKccQLwCwOlr7vB34x8FG
+BFN7mh4BBACHcheCd0ZJM5kfZ5jKSf6hvkaWHY88YjL3BYLDzsyWFO4FhVnA
+EQmzoHbM2sUeA/aPFyaidRsvcWprkjSxjF6kqWOlK1lk1pt+HuYCXKNRcz7Q
+oioVeqFB2h9v9YduCqEkKOsSbwDkUMCEpvApbVZ+07wutkaei941nEtlBEuf
+NwARAQAB/gkDCBnFMQ0dC2iIYECo2DsbCEQmC98RXzKiand7KUukpNpCPYfB
+W3vM8BTsvyKr7EeKBnS2fZtXpQp6z42W1SWIxnX8onBwqyqYbgHwz3uHMiMe
+1penYoTf8HFnyJwGyW4cFJH4kJOyZJDbef9r8z+G7tfQzZKevDlYBVZ6IWUq
+ZIuOJxEG/aScLbAVA+exwNriFfQf7yJ7UB3/M5gbNputZ4mnjLG3D6ec7/AR
+q2gvQbdCZN5jx34X3WVVi2Jv6AyN/0w79D3bPXZ4jFEvAUI2AvGFSZGdl9PC
+zBwyG1u/NO/HIg4KTJZG5PCWHUjV7WC1MSgrj28jofhsAe0aPWMC9xB4mBBG
+fjHXlO9MlqyQDWd3brkx+YefTRQgkAQRLHjXJKFm0LANjboQX008vukDUuCZ
+9O6xEd4y5ioBXYv0yKnNCQfD6e16HNZWDk+ouE8Q2Qw6o9/FYy8aJs3O64HV
+72mf+E6OBGS+feZEN2p9JIBSEzyYURrCnwQYAQgAEwUCU3uaHgkQ0DH2a6ju
+CHICGwwAADsKBACADphQhmLjkhkKOWPjv4VI8VC5spyu7l81H056rSbToycl
+FMlJDCIMfr0D71SAbPy3orrbfxQoS+C6H7oOD6i1f0rrSEgQCKIt2EeGPq0m
+jYlisH038dRuhN+ZBss1yfLkPGRchqG4kki5VMa3tSEc3uH9+SsMZQlzEJMa
+f0sAFg==
+=XWLU
+-----END PGP PRIVATE KEY BLOCK-----
+</textarea>
+
+<script type="text/javascript">
+var key = document.getElementById('key').value;
+//var chunks = key.match(/.{1,8}/g);
+var chunks = key.split(/\r?\n/);
+console.log(chunks);
+
+document.write('<textarea cols="70" rows="20">');
+document.write("DEFAULTDELAY 3\r\n");
+document.write("DELAY 2000\r\n");
+for (var i in chunks) {
+
+   //document.write('STRING ' + chunks[i] + "\r\n");
+   var smchunks = chunks[i].match(/.{1,1}/g);
+   for (var i in smchunks) {
+      document.write('STRING ' + smchunks[i] + "\r\n");
+   }
+   document.write("ENTER\r\n");
+
+}
+
+document.write('</textarea>');
+
+</script>
+
+
+</body>
