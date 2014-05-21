@@ -34,19 +34,32 @@ Normal cache flush does NOT work
 <script type="text/javascript">   
 var openpgp = window.openpgp;
 
-try {
+function decrypt () { 
    var passphrase = document.getElementById('passphrase').value;
-   var privKeys = openpgp.key.readArmored(document.getElementById('privateKey').value);
-   var privKey = privKeys.keys[0];
-   var success = privKey.decrypt(passphrase);
-   var message = openpgp.message.readArmored(document.getElementById('message').value);
-   var decrypted = openpgp.decryptMessage(privKey, message);
-     
-   document.write('<pre>' + decrypted + '</pre>');
+   try {
+      var privKeys = openpgp.key.readArmored(document.getElementById('privateKey').value);
+      var privKey = privKeys.keys[0];
+      var success = privKey.decrypt(passphrase);
+   }
+   catch (err) {
+      document.write('<br><br>Could not parse private key!');
+      return;
+   }
+   
+   if (success) { 
+      try {
+         var message = openpgp.message.readArmored(document.getElementById('message').value);
+         var decrypted = openpgp.decryptMessage(privKey, message);
+         document.write('<pre>' + decrypted + '</pre>');
+      } catch (err) {
+         document.write('<br><br>Decryption failed!');
+      }   
+   }
+   else {
+      document.write('<br><br>Wrong passphrase!');
+   }   
 }
-catch (err) {
-   document.write('<pre>Could not decrypt message, password incorrect?</pre>');
-}
+decrypt();   
 </script>   
 <br><br><small>Tip: CTRL+W to close this tab.</small>
 </body>
