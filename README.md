@@ -1,6 +1,8 @@
 Zimbra OpenPGP Zimlet
 ==========
 
+*** Code freeze to support Internationalization work. Will accepts pull requests 29th of May ***
+
 Demo video: https://drive.google.com/file/d/0B_lMZlQY3S2lNXJfUjlrMU1faXM/edit?usp=sharing
 
 Adding PGP support to Zimbra Collaboration Suite, currently tested on:
