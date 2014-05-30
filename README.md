@@ -20,7 +20,7 @@ Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues
     cd /tmp
     rm tk_barrydegraaff_zimbra_openpgp*
     For stable version (1.0.0):
-    https://github.com/barrydegraaff/pgp-zimlet/raw/90e740f2bb51b29236cd48912fa691596959be74/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.zip
+    wget https://github.com/barrydegraaff/pgp-zimlet/raw/90e740f2bb51b29236cd48912fa691596959be74/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.zip
     
     For development version:
     wget https://github.com/barrydegraaff/pgp-zimlet/raw/master/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.zip
