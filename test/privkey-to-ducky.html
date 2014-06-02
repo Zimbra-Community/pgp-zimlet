@@ -8,8 +8,9 @@
 <p>
 This page helps you to convert your pgp/gpg private key block to Duck script. This allows you to use a <a href="http://usbrubberducky.com/">USB Rubber Ducky</a> device for private key storage.
 </p>
-<textarea id="key" cols="70" rows="20"></textarea>
-<textarea id="result" cols="70" rows="20"></textarea>
+<textarea id="key" cols="70" rows="20" title="Private Key here"></textarea>
+<textarea id="result" cols="70" rows="20" title="Result here"></textarea><br>
+Preset:<select id="preset"><option value="fast">fast</option><option value="slow">slow</option></select> 
 <br>
 <button onclick="createDuckScript()">Create duck script</button>
 <script type="text/javascript">
@@ -19,14 +20,31 @@ function createDuckScript()
    var key = document.getElementById('key').value;
    var chunks = key.split(/\r?\n/);
    var result = "";
-   result = result + "DEFAULTDELAY 3\r\n";
-   result = result + "DELAY 2000\r\n";
+
+   if(document.getElementById('preset').value == 'slow')
+   {
+      result = result + "DEFAULTDELAY 3\r\n";
+      result = result + "DELAY 2000\r\n";
+   }
+   else
+   {
+      result = result + "DELAY 500\r\n";
+   }   
+
    for (var i in chunks) {
-      var smchunks = chunks[i].match(/.{1,1}/g);
-      for (var i in smchunks) {
-         result = result + 'STRING ' + smchunks[i] + "\r\n";
+      if(document.getElementById('preset').value == 'slow')
+      {
+         var smchunks = chunks[i].match(/.{1,1}/g);
+         for (var i in smchunks) {
+            result = result + 'STRING ' + smchunks[i] + "\r\n";
+         }
+         result = result + "ENTER\r\n";
       }
-      result = result + "ENTER\r\n";
+      else
+      {
+         result = result + 'STRING ' + chunks[i] + "\r\n";
+         result = result + "ENTER\r\n";
+      }   
    
    }
    document.getElementById('result').value = result;
@@ -37,7 +55,7 @@ function createDuckScript()
 Copy/paste the duck script to a <a href="http://www.ducktoolkit.com/Encoder.jsp">Duck Encoder</a>. <br>
 Download the .bin file and place it on the SD card on your Duck.<br>
 <br>
-If you are having trouble using the Duck as private key storage. Try increasing DEFAULTDELAY and DELAY.<br>
+If you are having trouble using the Duck as private key storage. Set the preset to SLOW, still having problems? Try increasing DEFAULTDELAY and DELAY.<br>
 </p>
 
 <pre>
