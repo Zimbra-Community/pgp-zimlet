@@ -1,6 +1,11 @@
 Zimbra OpenPGP Zimlet
 ==========
 
+Now accepting donations for the continued development of this Zimlet please see:
+
+https://www.indiegogo.com/projects/zimbra-openpgp-zimlet-stage-2
+
+
 Demo video: https://drive.google.com/file/d/0B_lMZlQY3S2lNXJfUjlrMU1faXM/edit?usp=sharing
 
 Adding PGP support to Zimbra Collaboration Suite, currently tested on:
