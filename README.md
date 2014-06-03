@@ -26,7 +26,7 @@ Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues
     rm tk_barrydegraaff_zimbra_openpgp*
     For stable version (1.0.0):
     wget https://github.com/barrydegraaff/pgp-zimlet/raw/90e740f2bb51b29236cd48912fa691596959be74/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.zip
-    
+
     For development version:
     wget https://github.com/barrydegraaff/pgp-zimlet/raw/master/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.zip
     zmzimletctl deploy tk_barrydegraaff_zimbra_openpgp.zip
@@ -37,9 +37,9 @@ For debugging in production I recommend to disable the Zimlet via user preferenc
 
 ========================================================================
 
-### Esc keyboard shortcut 
+### Esc keyboard shortcut
 
-This Zimlet redefines the behavior of the Escape key. This is done for security reasons. 
+This Zimlet redefines the behavior of the Escape key. This is done for security reasons.
 (Normally when a user hits the Escape key in a dialog, the dialogs gets removed from display,
 but the content of the dialog remains in the page source.)
 
@@ -62,7 +62,7 @@ Compose new message, press Esc => New message tab closes
 
 ### DEALING WITH PUBLIC KEYS LONGER THAN 5120 CHARS
 
-Sometimes people generate public keys that are too long for Zimba to store in zimbraZimletUserProperties. 
+Sometimes people generate public keys that are too long for Zimba to store in zimbraZimletUserProperties.
 Saving long pubkeys will trow a warning message, but the key is saved correctly.
 
 To resolve this you can:
@@ -76,21 +76,21 @@ C - Edit zimbra-attrs.xml (at your own risk) !MIGRATION?! like this:
 As root:
 
     nano /opt/zimbra/conf/attrs/zimbra-attrs.xml
-    Find the line: 
+    Find the line:
     name="zimbraZimletUserProperties" type="cstring" max="5120"
     and change it to
     name="zimbraZimletUserProperties" type="cstring" max="15120"
-   
+
 As zimbra:
 
     zmcontrol restart
 
 
-### DEALING WITH LARGE ENCRYPTED MESSAGES 
+### DEALING WITH LARGE ENCRYPTED MESSAGES
 
 If you receive a large encrypted message and Zimbra displays "This message is too large to display properly." You cannot
 immediately drop your message in the Zimlet. You have to click "View entire message" and drop it onto the Zimlet
-again after a minute or so. If you are in a hurry you can copy paste the message text to the text input field in 
+again after a minute or so. If you are in a hurry you can copy paste the message text to the text input field in
 the decrypt dialog.
 
 ### DEALING WITH LARGE ENCRYPTED MESSAGES IN INTERNET EXPLORER
@@ -106,12 +106,12 @@ And add:
         <Arg>org.eclipse.jetty.server.Request.maxFormContentSize</Arg>
         <Arg>2000000</Arg>
     </Call>
-  
-Under: 
+
+Under:
 
     <Configure id="Server" class="org.eclipse.jetty.server.Server">
 
-Then issue: 
+Then issue:
 
     zmmailboxdctl restart
 
@@ -132,4 +132,4 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see http://www.gnu.org/licenses/. 
+along with this program.  If not, see http://www.gnu.org/licenses/.

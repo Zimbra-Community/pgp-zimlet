@@ -23,7 +23,7 @@ rymF5oqaGHmh0ZjVwgzlS/XpYBwmXWHSlPtX7uxhFuXGasx8OuHRRrgvlvZv
 TfC3Vb/cdzjgMe2ohn4gXyc=
 =+1To
 -----END PGP SIGNATURE-----</textarea>
-<script type="text/javascript">   
+<script type="text/javascript">
 var openpgp = window.openpgp;
 var mPubKey = '-----BEGIN PGP PUBLIC KEY BLOCK-----\n' +
 'Version: GnuPG v1\n' +
@@ -132,7 +132,7 @@ var success = privKey.decrypt(passphrase);
 var message = openpgp.cleartext.readArmored(document.getElementById('message').value);
 
 var verified = openpgp.verifyClearSignedMessage(publicKeys.keys, message);
-  
+
 console.log("my object: %o", verified);
 
 if(verified.signatures[0].valid==true)
@@ -144,7 +144,7 @@ else
    document.write('<pre>SIGNATURE FAILED!'+verified.signatures[0].valid+'</pre>');
 }
 
-        
+
 </script>
 <pre>
 This file is part of the Zimbra OpenPGP Zimlet project.
@@ -163,7 +163,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see http://www.gnu.org/licenses/.   
-</pre>    
+along with this program.  If not, see http://www.gnu.org/licenses/.
+</pre>
 </body>
 </html>

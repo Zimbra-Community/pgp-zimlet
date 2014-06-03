@@ -15,11 +15,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see http://www.gnu.org/licenses/. 
+along with this program.  If not, see http://www.gnu.org/licenses/.
 
 Zimbra caches jsp files that will persist until you issue:
 zmmailboxdctl restart
-Normal cache flush does NOT work 
+Normal cache flush does NOT work
 */
 %><!DOCTYPE html>
 <html><head>
@@ -31,13 +31,13 @@ Normal cache flush does NOT work
 <textarea style="display:none" readonly id="message" rows="20" cols="100"><%= request.getParameter("message")%></textarea>
 <textarea style="display:none" readonly id="publicKeys" rows="20" cols="100"><%= request.getParameter("publicKeys")%></textarea>
 
-<script type="text/javascript">   
+<script type="text/javascript">
 var openpgp = window.openpgp;
 var publicKeys = document.getElementById('publicKeys').value;
 var combinedPublicKeys = publicKeys.split("<tk_barrydegraaff_zimbra_openpgp>");
 try {
    var message = openpgp.cleartext.readArmored(document.getElementById('message').value);
-} catch (err) { 
+} catch (err) {
    document.write("<b>Could not parse your trusted public keys!</b><br>");
 }
 
@@ -77,12 +77,12 @@ function do_verify (message, keyObj) {
          return 1;
       }
    }
-   catch(err) {  
+   catch(err) {
       return 0;
-   } 
+   }
 };
 
-</script>   
+</script>
 <br><br><small>Tip: CTRL+W to close this tab.</small>
 </body>
 </html>

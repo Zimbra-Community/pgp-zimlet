@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>OpenPGP.js - Sign test for Zimbra OpenPGP Zimlet</h1>
-<script type="text/javascript">   
+<script type="text/javascript">
 var openpgp = window.openpgp;
 var mPubKey = '-----BEGIN PGP PUBLIC KEY BLOCK-----\n' +
 'Version: GnuPG v1\n' +
@@ -114,8 +114,8 @@ var success = privKey.decrypt(passphrase);
 
 var signed = openpgp.signClearMessage(privKeys.keys, 'This is a signed message');
 
-document.write('<pre>'+signed+'</pre>');      
-        
+document.write('<pre>'+signed+'</pre>');
+
 </script>
 <pre>
 This file is part of the Zimbra OpenPGP Zimlet project.
@@ -134,7 +134,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see http://www.gnu.org/licenses/.   
-</pre>    
+along with this program.  If not, see http://www.gnu.org/licenses/.
+</pre>
 </body>
 </html>

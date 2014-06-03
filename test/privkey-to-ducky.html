@@ -10,7 +10,7 @@ This page helps you to convert your pgp/gpg private key block to Duck script. Th
 </p>
 <textarea id="key" cols="70" rows="20" title="Private Key here"></textarea>
 <textarea id="result" cols="70" rows="20" title="Result here"></textarea><br>
-Preset:<select id="preset"><option value="fast">fast</option><option value="slow">slow</option></select> 
+Preset:<select id="preset"><option value="fast">fast</option><option value="slow">slow</option></select>
 <br>
 <button onclick="createDuckScript()">Create duck script</button>
 <script type="text/javascript">
@@ -29,7 +29,7 @@ function createDuckScript()
    else
    {
       result = result + "DELAY 500\r\n";
-   }   
+   }
 
    for (var i in chunks) {
       if(document.getElementById('preset').value == 'slow')
@@ -44,8 +44,8 @@ function createDuckScript()
       {
          result = result + 'STRING ' + chunks[i] + "\r\n";
          result = result + "ENTER\r\n";
-      }   
-   
+      }
+
    }
    document.getElementById('result').value = result;
 }
@@ -56,7 +56,7 @@ Copy/paste the duck script to a <a href="http://www.ducktoolkit.com/Encoder.jsp"
 Don't want to copy a real private key to an online service? Use <a href="https://github.com/hak5darren/USB-Rubber-Ducky/downloads">duckencode.jar</a>:<br>
 </p>
 <pre>
-java -jar duckencode.jar -i duckscript.txt 
+java -jar duckencode.jar -i duckscript.txt
 </pre>
 <p>
 Download the .bin file and place it on the SD card on your Duck.<br>
@@ -81,7 +81,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see http://www.gnu.org/licenses/. 
+along with this program.  If not, see http://www.gnu.org/licenses/.
 </pre>
 </body>
 </html>

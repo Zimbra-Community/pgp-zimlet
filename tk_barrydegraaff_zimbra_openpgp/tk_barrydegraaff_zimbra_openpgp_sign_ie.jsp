@@ -15,11 +15,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see http://www.gnu.org/licenses/. 
+along with this program.  If not, see http://www.gnu.org/licenses/.
 
 Zimbra caches jsp files that will persist until you issue:
 zmmailboxdctl restart
-Normal cache flush does NOT work 
+Normal cache flush does NOT work
 */
 %><!DOCTYPE html>
 <html><head>
@@ -31,25 +31,25 @@ Normal cache flush does NOT work
 <textarea style="display:none" readonly id="message" rows="20" cols="100"><%= request.getParameter("message")%></textarea>
 <textarea style="display:none" readonly id="privateKey" rows="20" cols="100"><%= request.getParameter("privateKey")%></textarea>
 <textarea style="display:none" readonly id="passphrase" rows="20" cols="100"><%= request.getParameter("passphrase")%></textarea>
-<script type="text/javascript">   
+<script type="text/javascript">
 var openpgp = window.openpgp;
 
-function sign () {   
+function sign () {
    var passphrase = document.getElementById('passphrase').value;
-   
+
    try {
       var privKeys = openpgp.key.readArmored(document.getElementById('privateKey').value);
       var privKey = privKeys.keys[0];
-      var success = privKey.decrypt(passphrase);   
+      var success = privKey.decrypt(passphrase);
    }
    catch (err) {
       document.write('<br><br>Could not parse private key! Returning original message:<br><textarea rows="20" cols="100">'+document.getElementById('message').value+'</textarea>');
       return;
    }
-   if (success) {  
+   if (success) {
       try {
          var signed = openpgp.signClearMessage(privKeys.keys, document.getElementById('message').value);
-         document.write('<br><br>Please copy/paste the result to a new E-mail message:<br><textarea rows="20" cols="100">'+signed+'</textarea>');    
+         document.write('<br><br>Please copy/paste the result to a new E-mail message:<br><textarea rows="20" cols="100">'+signed+'</textarea>');
       }
       catch (err)
       {
@@ -61,7 +61,7 @@ function sign () {
    }
 }
 sign();
-</script>   
+</script>
 <br><br><small>Tip: CTRL+W to close this tab.</small>
 </body>
 </html>
