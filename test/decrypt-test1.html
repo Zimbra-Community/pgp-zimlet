@@ -20,7 +20,7 @@ tdJFATj2xSUpRwozbqZ4c1jjlx8IpDgurdimWUaTAe6zIsA75bon+I/QDN0l
 hmXmVKLcM/n48lrEt/dDFkWciRF6kFfIzR59
 =nCKf
 -----END PGP MESSAGE-----</textarea>
-<script type="text/javascript">   
+<script type="text/javascript">
 var openpgp = window.openpgp;
 var mPubKey = '-----BEGIN PGP PUBLIC KEY BLOCK-----\n' +
 'Version: GnuPG v1\n' +
@@ -128,10 +128,10 @@ var success = privKey.decrypt(passphrase);
 
 var message = openpgp.message.readArmored(document.getElementById('message').value);
 var decrypted = openpgp.decryptMessage(privKey, message);
-  
+
 console.log("my object: %o", decrypted);
 document.write('<pre>' + decrypted + '</pre>');
-      
+
 </script>
 <pre>
 This file is part of the Zimbra OpenPGP Zimlet project.
@@ -150,7 +150,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see http://www.gnu.org/licenses/.   
-</pre>    
+along with this program.  If not, see http://www.gnu.org/licenses/.
+</pre>
 </body>
 </html>

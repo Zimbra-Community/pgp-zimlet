@@ -1,17 +1,17 @@
 !function(e){"object"==typeof exports?module.exports=e():"function"==typeof define&&define.amd?define(e):"undefined"!=typeof window?window.openpgp=e():"undefined"!=typeof global?global.openpgp=e():"undefined"!=typeof self&&(self.openpgp=e())}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -217,13 +217,13 @@ JXG.decompress = function(str) {
         Peter Wilfahrt
 
     This file is part of JSXGraph.
-    
+
     Dual licensed under the Apache License Version 2.0, or LGPL Version 3 licenses.
 
     You should have received a copy of the GNU Lesser General Public License
     along with JSXCompressor.  If not, see <http://www.gnu.org/licenses/>.
-    
-    You should have received a copy of the Apache License along with JSXCompressor.  
+
+    You should have received a copy of the Apache License along with JSXCompressor.
     If not, see <http://www.apache.org/licenses/>.
 
 */
@@ -235,7 +235,7 @@ JXG.decompress = function(str) {
  * It is used for reading GEONExT, Geogebra and Intergeo files.
  *
  * Only Huffman codes are decoded in gunzip.
- * The code is based on the source code for gunzip.c by Pasi Ojala 
+ * The code is based on the source code for gunzip.c by Pasi Ojala
  * {@link http://www.cs.tut.fi/~albert/Dev/gunzip/gunzip.c}
  * {@link http://www.cs.tut.fi/~albert}
  */
@@ -591,7 +591,7 @@ JXG.Util.Unzip = function(barray) {
       if (type === 0) {
         var blockLen, cSum;
 
-        // Stored 
+        // Stored
         byteAlign();
         blockLen = readByte();
         blockLen |= (readByte() << 8);
@@ -622,7 +622,7 @@ JXG.Util.Unzip = function(barray) {
                 144    110010000    400
                 :    :       :
                 255    111111111    511
-    
+
                 Note the bit order!
                 */
 
@@ -674,7 +674,7 @@ JXG.Util.Unzip = function(barray) {
         var n, literalCodes, distCodes, lenCodes;
         var ll = new Array(288 + 32); // "static" just to preserve stack
 
-        // Dynamic Huffman tables 
+        // Dynamic Huffman tables
 
         literalCodes = 257 + readBits(5);
         distCodes = 1 + readBits(5);
@@ -725,7 +725,7 @@ JXG.Util.Unzip = function(barray) {
             document.write("<br>" + z + " i:" + i + " decode: " + j + "    bits " + bits + "<br>");
           if (j < 16) { // length of code in bits (0..15)
             ll[i++] = j;
-          } else if (j == 16) { // repeat last length 3 to 6 times 
+          } else if (j == 16) { // repeat last length 3 to 6 times
             var l;
             j = 3 + readBits(2);
             if (i + j > n) {
@@ -739,7 +739,7 @@ JXG.Util.Unzip = function(barray) {
           } else {
             if (j == 17) { // 3 to 10 zero length codes
               j = 3 + readBits(3);
-            } else { // j == 18: 11 to 138 zero length codes 
+            } else { // j == 18: 11 to 138 zero length codes
               j = 11 + readBits(7);
             }
             if (i + j > n) {
@@ -859,7 +859,7 @@ JXG.Util.Unzip = function(barray) {
 		document.write(bA[i]+" ");
 		if ((i+1)%16==0)
 			document.write("<br>");
-	}	
+	}
 	*/
     //alert(bA);
     nextFile();
@@ -1520,7 +1520,7 @@ module.exports = {
 module.exports = require('./config.js');
 
 },{"./config.js":3}],5:[function(require,module,exports){
-// Modified by Recurity Labs GmbH 
+// Modified by Recurity Labs GmbH
 
 // modified version of http://www.hanewin.net/encrypt/PGdecode.js:
 
@@ -1528,10 +1528,10 @@ module.exports = require('./config.js');
  * Copyright 2005-2006 Herbert Hanewinkel, www.haneWIN.de
  * version 2.0, check www.haneWIN.de for the latest version
 
- * This software is provided as-is, without express or implied warranty.  
+ * This software is provided as-is, without express or implied warranty.
  * Permission to use, copy, modify, distribute or sell this software, with or
  * without fee, for any purpose and by any individual or organization, is hereby
- * granted, provided that the above copyright notice and this paragraph appear 
+ * granted, provided that the above copyright notice and this paragraph appear
  * in all copies. Distribution as a part of an application or binary must
  * include the above copyright notice in the documentation and/or other
  * materials provided with the application or distribution.
@@ -1551,9 +1551,9 @@ var util = require('../util.js'),
 module.exports = {
 
   /**
-   * This function encrypts a given with the specified prefixrandom 
+   * This function encrypts a given with the specified prefixrandom
    * using the specified blockcipher to encrypt a message
-   * @param {String} prefixrandom random bytes of block_size length provided 
+   * @param {String} prefixrandom random bytes of block_size length provided
    *  as a string to be used in prefixing the data
    * @param {String} cipherfn the algorithm cipher class to encrypt
    *  data in one block_size encryption, {@link module:crypto/cipher}.
@@ -1561,8 +1561,8 @@ module.exports = {
    * @param {String} key binary string representation of key to be used to encrypt the plaintext.
    * This will be passed to the cipherfn
    * @param {Boolean} resync a boolean value specifying if a resync of the
-   *  IV should be used or not. The encrypteddatapacket uses the 
-   *  "old" style with a resync. Encryption within an 
+   *  IV should be used or not. The encrypteddatapacket uses the
+   *  "old" style with a resync. Encryption within an
    *  encryptedintegrityprotecteddata packet is not resyncing the IV.
    * @return {String} a string with the encrypted data
    */
@@ -1687,8 +1687,8 @@ module.exports = {
    * This will be passed to the cipherfn
    * @param {String} ciphertext to be decrypted provided as a string
    * @param {Boolean} resync a boolean value specifying if a resync of the
-   *  IV should be used or not. The encrypteddatapacket uses the 
-   *  "old" style with a resync. Decryption within an 
+   *  IV should be used or not. The encrypteddatapacket uses the
+   *  "old" style with a resync. Decryption within an
    *  encryptedintegrityprotecteddata packet is not resyncing the IV.
    * @return {String} a string with the plaintext data
    */
@@ -1818,10 +1818,10 @@ module.exports = {
  * Copyright 2005 Herbert Hanewinkel, www.haneWIN.de
  * version 1.1, check www.haneWIN.de for the latest version
 
- * This software is provided as-is, without express or implied warranty.  
+ * This software is provided as-is, without express or implied warranty.
  * Permission to use, copy, modify, distribute or sell this software, with or
  * without fee, for any purpose and by any individual or organization, is hereby
- * granted, provided that the above copyright notice and this paragraph appear 
+ * granted, provided that the above copyright notice and this paragraph appear
  * in all copies. Distribution as a part of an application or binary must
  * include the above copyright notice in the documentation and/or other
  * materials provided with the application or distribution.
@@ -2333,8 +2333,8 @@ for (var i in types) {
 }
 
 },{"../../util.js":61}],7:[function(require,module,exports){
-/* Modified by Recurity Labs GmbH 
- * 
+/* Modified by Recurity Labs GmbH
+ *
  * Originally written by nklein software (nklein.com)
  */
 
@@ -2342,7 +2342,7 @@ for (var i in types) {
  *  @module crypto/cipher/blowfish
  */
 
-/* 
+/*
  * Javascript implementation based on Bruce Schneier's reference implementation.
  *
  *
@@ -3516,7 +3516,7 @@ function des(keys, message, encrypt, mode, iv, padding) {
     for (j = 0; j < iterations; j += 3) {
       endloop = looping[j + 1];
       loopinc = looping[j + 2];
-      //now go through and perform the encryption or decryption  
+      //now go through and perform the encryption or decryption
       for (i = looping[j]; i != endloop; i += loopinc) { //for efficiency
         right1 = right ^ keys[i];
         right2 = ((right >>> 4) | (right << 28)) ^ keys[i + 1];
@@ -3679,7 +3679,7 @@ function des_createKeys(key) {
 
       //now apply PC-2, in such a way that E is easier when encrypting or decrypting
       //this conversion will look like PC-2 except only the last 6 bits of each byte are used
-      //rather than 48 consecutive bits and the order of lines will be according to 
+      //rather than 48 consecutive bits and the order of lines will be according to
       //how the S selection functions will be applied: S2, S4, S6, S8, S1, S3, S5, S7
       lefttemp = pc2bytes0[left >>> 28] | pc2bytes1[(left >>> 24) & 0xf] | pc2bytes2[(left >>> 20) & 0xf] | pc2bytes3[(
         left >>> 16) & 0xf] | pc2bytes4[(left >>> 12) & 0xf] | pc2bytes5[(left >>> 8) & 0xf] | pc2bytes6[(left >>> 4) &
@@ -3805,8 +3805,8 @@ for (var i in aes) {
 }
 
 },{"./aes.js":6,"./blowfish.js":7,"./cast5.js":8,"./des.js":9,"./twofish.js":11}],11:[function(require,module,exports){
-/* Modified by Recurity Labs GmbH 
- * 
+/* Modified by Recurity Labs GmbH
+ *
  * Cipher.js
  * A block-cipher algorithm implementation on JavaScript
  * See Cipher.readme.txt for further information.
@@ -3817,10 +3817,10 @@ for (var i in aes) {
  * ACKNOWLEDGMENT
  *
  *     The main subroutines are written by Michiel van Everdingen.
- * 
+ *
  *     Michiel van Everdingen
  *     http://home.versatel.nl/MAvanEverdingen/index.html
- * 
+ *
  *     All rights for these routines are reserved to Michiel van Everdingen.
  *
  */
@@ -4178,20 +4178,20 @@ module.exports.blockSize = TF.prototype.blockSize = 16;
 },{"../../util.js":61}],12:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 // The GPG4Browsers crypto interface
 
@@ -4210,12 +4210,12 @@ var random = require('./random.js'),
 
 module.exports = {
   /**
-   * Encrypts data using the specified public key multiprecision integers 
+   * Encrypts data using the specified public key multiprecision integers
    * and the specified algorithm.
    * @param {module:enums.publicKey} algo Algorithm to be used (See {@link http://tools.ietf.org/html/rfc4880#section-9.1|RFC 4880 9.1})
    * @param {Array<module:type/mpi>} publicMPIs Algorithm dependent multiprecision integers
    * @param {module:type/mpi} data Data to be encrypted as MPI
-   * @return {Array<module:type/mpi>} if RSA an module:type/mpi; 
+   * @return {Array<module:type/mpi>} if RSA an module:type/mpi;
    * if elgamal encryption an array of two module:type/mpi is returned; otherwise null
    */
   publicKeyEncrypt: function(algo, publicMPIs, data) {
@@ -4254,9 +4254,9 @@ module.exports = {
    * Decrypts data using the specified public key multiprecision integers of the private key,
    * the specified secretMPIs of the private key and the specified algorithm.
    * @param {module:enums.publicKey} algo Algorithm to be used (See {@link http://tools.ietf.org/html/rfc4880#section-9.1|RFC 4880 9.1})
-   * @param {Array<module:type/mpi>} publicMPIs Algorithm dependent multiprecision integers 
+   * @param {Array<module:type/mpi>} publicMPIs Algorithm dependent multiprecision integers
    * of the public key part of the private key
-   * @param {Array<module:type/mpi>} secretMPIs Algorithm dependent multiprecision integers 
+   * @param {Array<module:type/mpi>} secretMPIs Algorithm dependent multiprecision integers
    * of the private key used
    * @param {module:type/mpi} data Data to be encrypted as MPI
    * @return {module:type/mpi} returns a big integer containing the decrypted data; otherwise null
@@ -6147,7 +6147,7 @@ function RMDstring(message) {
 module.exports = RMDstring;
 
 },{}],18:[function(require,module,exports){
-/* A JavaScript implementation of the SHA family of hashes, as defined in FIPS 
+/* A JavaScript implementation of the SHA family of hashes, as defined in FIPS
  * PUB 180-2 as well as the corresponding HMAC implementation as defined in
  * FIPS PUB 198a
  *
@@ -6159,7 +6159,7 @@ module.exports = RMDstring;
  */
 
 /* Modified by Recurity Labs GmbH
- * 
+ *
  * This code has been slightly modified direct string output:
  * - bin2bstr has been added
  * - following wrappers of this library have been added:
@@ -6816,7 +6816,7 @@ var jsSHA = (function() {
         gamma0, gamma1, sigma0, sigma1, ch, maj, Int, K, W = [],
         appendedMessageLength;
 
-      /* Set up the various function handles and variable for the specific 
+      /* Set up the various function handles and variable for the specific
        * variant */
       if (variant === "SHA-224" || variant === "SHA-256") {
         /* 32-bit variant */
@@ -7303,17 +7303,17 @@ for (var i in crypto)
 },{"./cfb.js":5,"./cipher":10,"./crypto.js":12,"./hash":15,"./pkcs1.js":20,"./public_key":23,"./random.js":26,"./signature.js":27}],20:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -7476,17 +7476,17 @@ module.exports = {
 },{"../util.js":61,"./crypto.js":12,"./hash":15,"./public_key/jsbn.js":24,"./random.js":26}],21:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -7521,7 +7521,7 @@ function DSA() {
     // FIPS-186-4, section 4.6:
     // The values of r and s shall be checked to determine if r = 0 or s = 0.
     // If either r = 0 or s = 0, a new value of k shall be generated, and the
-    // signature shall be recalculated. It is extremely unlikely that r = 0 
+    // signature shall be recalculated. It is extremely unlikely that r = 0
     // or s = 0 if signatures are generated properly.
     var k, s1, s2;
     while (true) {
@@ -7594,7 +7594,7 @@ function DSA() {
   /*
 	 * unused code. This can be used as a start to write a key generator
 	 * function.
-	
+
   function generateKey(bitcount) {
     var qi = new BigInteger(bitcount, primeCenterie);
     var pi = generateP(q, 512);
@@ -7620,7 +7620,7 @@ function DSA() {
     } while (!pTemp.isProbablePrime(primeCenterie) || pTemp.bitLength() != l);
     return pTemp;
   }
-	
+
   function generateG(p, q, bitlength, randomfn) {
     var aux = p.subtract(BigInteger.ONE);
     var pow = aux.divide(q);
@@ -7660,17 +7660,17 @@ module.exports = DSA;
 },{"../../config":4,"../../util.js":61,"../hash":15,"../random.js":26,"./jsbn.js":24}],22:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -7736,11 +7736,11 @@ module.exports = {
 
 },{"./dsa.js":21,"./elgamal.js":22,"./rsa.js":25}],24:[function(require,module,exports){
 /*
- * Copyright (c) 2003-2005  Tom Wu (tjw@cs.Stanford.EDU) 
+ * Copyright (c) 2003-2005  Tom Wu (tjw@cs.Stanford.EDU)
  * All Rights Reserved.
  *
- * Modified by Recurity Labs GmbH 
- * 
+ * Modified by Recurity Labs GmbH
+ *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -7752,9 +7752,9 @@ module.exports = {
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
  *
  * IN NO EVENT SHALL TOM WU BE LIABLE FOR ANY SPECIAL, INCIDENTAL,
  * INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER
@@ -7850,7 +7850,7 @@ function am3(i, x, w, j, c, n) {
   }
   return c;
 }
-/*if(j_lm && (navigator != undefined && 
+/*if(j_lm && (navigator != undefined &&
 	navigator.appName == "Microsoft Internet Explorer")) {
   BigInteger.prototype.am = am2;
   dbits = 30;
@@ -8490,7 +8490,7 @@ module.exports = BigInteger;
 
 
 /*
- * Copyright (c) 2003-2005  Tom Wu (tjw@cs.Stanford.EDU) 
+ * Copyright (c) 2003-2005  Tom Wu (tjw@cs.Stanford.EDU)
  * All Rights Reserved.
  *
  * Modified by Recurity Labs GmbH
@@ -8506,9 +8506,9 @@ module.exports = BigInteger;
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
  *
  * IN NO EVENT SHALL TOM WU BE LIABLE FOR ANY SPECIAL, INCIDENTAL,
  * INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER
@@ -9450,17 +9450,17 @@ BigInteger.prototype.square = bnSquare;
 },{"../../util.js":61,"./jsbn.js":24}],25:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -9633,20 +9633,20 @@ module.exports = RSA;
 },{"../../config":4,"../../util.js":61,"../random.js":26,"./jsbn.js":24}],26:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 // The GPG4Browsers crypto interface
 
@@ -9838,11 +9838,11 @@ var publicKey = require('./public_key'),
 
 module.exports = {
   /**
-   * 
+   *
    * @param {module:enums.publicKey} algo public Key algorithm
    * @param {module:enums.hash} hash_algo Hash algorithm
    * @param {Array<module:type/mpi>} msg_MPIs Signature multiprecision integers
-   * @param {Array<module:type/mpi>} publickey_MPIs Public key multiprecision integers 
+   * @param {Array<module:type/mpi>} publickey_MPIs Public key multiprecision integers
    * @param {String} data Data on where the signature was computed on.
    * @return {Boolean} true if signature (sig_data was equal to data over hash)
    */
@@ -9850,7 +9850,7 @@ module.exports = {
 
     switch (algo) {
       case 1:
-        // RSA (Encrypt or Sign) [HAC]  
+        // RSA (Encrypt or Sign) [HAC]
       case 2:
         // RSA Encrypt-Only [HAC]
       case 3:
@@ -9887,9 +9887,9 @@ module.exports = {
    * Create a signature on data using the specified algorithm
    * @param {module:enums.hash} hash_algo hash Algorithm to use (See {@link http://tools.ietf.org/html/rfc4880#section-9.4|RFC 4880 9.4})
    * @param {module:enums.publicKey} algo Asymmetric cipher algorithm to use (See {@link http://tools.ietf.org/html/rfc4880#section-9.1|RFC 4880 9.1})
-   * @param {Array<module:type/mpi>} publicMPIs Public key multiprecision integers 
-   * of the private key 
-   * @param {Array<module:type/mpi>} secretMPIs Private key multiprecision 
+   * @param {Array<module:type/mpi>} publicMPIs Public key multiprecision integers
+   * of the private key
+   * @param {Array<module:type/mpi>} secretMPIs Private key multiprecision
    * integers which is used to sign the data
    * @param {String} data Data to be signed
    * @return {Array<module:type/mpi>}
@@ -9900,7 +9900,7 @@ module.exports = {
 
     switch (algo) {
       case 1:
-        // RSA (Encrypt or Sign) [HAC]  
+        // RSA (Encrypt or Sign) [HAC]
       case 2:
         // RSA Encrypt-Only [HAC]
       case 3:
@@ -10349,10 +10349,10 @@ module.exports = {
  * Copyright 2005 Herbert Hanewinkel, www.haneWIN.de
  * version 1.0, check www.haneWIN.de for the latest version
  *
- * This software is provided as-is, without express or implied warranty.  
+ * This software is provided as-is, without express or implied warranty.
  * Permission to use, copy, modify, distribute or sell this software, with or
  * without fee, for any purpose and by any individual or organization, is hereby
- * granted, provided that the above copyright notice and this paragraph appear 
+ * granted, provided that the above copyright notice and this paragraph appear
  * in all copies. Distribution as a part of an application or binary must
  * include the above copyright notice in the documentation and/or other materials
  * provided with the application or distribution.
@@ -10843,17 +10843,17 @@ module.exports.AsyncProxy = require('./worker/async_proxy.js');
 },{"./cleartext.js":1,"./config/config.js":3,"./crypto":19,"./encoding/armor.js":28,"./enums.js":30,"./key.js":32,"./keyring":33,"./message.js":36,"./openpgp.js":37,"./packet":40,"./type/keyid.js":58,"./type/mpi.js":59,"./type/s2k.js":60,"./util.js":61,"./worker/async_proxy.js":62}],32:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -10991,22 +10991,22 @@ Key.prototype.toPacketlist = function() {
   if (this.subKeys) {
     for (i = 0; i < this.subKeys.length; i++) {
       packetlist.concat(this.subKeys[i].toPacketlist());
-    } 
+    }
   }
   return packetlist;
 };
 
-/** 
+/**
  * Returns the primary key packet (secret or public)
- * @returns {(module:packet/secret_key|module:packet/public_key|null)} 
+ * @returns {(module:packet/secret_key|module:packet/public_key|null)}
  */
 Key.prototype.getKeyPacket = function() {
   return this.primaryKey;
 };
 
-/** 
+/**
  * Returns all the private and public subkey packets
- * @returns {Array<(module:packet/public_subkey|module:packet/secret_subkey)>} 
+ * @returns {Array<(module:packet/public_subkey|module:packet/secret_subkey)>}
  */
 Key.prototype.getSubkeyPackets = function() {
   var subKeys = [];
@@ -11018,17 +11018,17 @@ Key.prototype.getSubkeyPackets = function() {
   return subKeys;
 };
 
-/** 
+/**
  * Returns all the private and public key and subkey packets
- * @returns {Array<(module:packet/public_subkey|module:packet/secret_subkey|module:packet/secret_key|module:packet/public_key)>} 
+ * @returns {Array<(module:packet/public_subkey|module:packet/secret_subkey|module:packet/secret_key|module:packet/public_key)>}
  */
 Key.prototype.getAllKeyPackets = function() {
   return [this.getKeyPacket()].concat(this.getSubkeyPackets());
 };
 
-/** 
+/**
  * Returns key IDs of all key packets
- * @returns {Array<module:type/keyid>} 
+ * @returns {Array<module:type/keyid>}
  */
 Key.prototype.getKeyIds = function() {
   var keyIds = [];
@@ -11041,7 +11041,7 @@ Key.prototype.getKeyIds = function() {
 
 function findKey(keys, keyIds) {
   for (var i = 0; i < keys.length; i++) {
-    var keyId = keys[i].getKeyId(); 
+    var keyId = keys[i].getKeyId();
     for (var j = 0; j < keyIds.length; j++) {
       if (keyId.equals(keyIds[j])) {
         return keys[i];
@@ -11053,15 +11053,15 @@ function findKey(keys, keyIds) {
 
 /**
  * Returns first public key packet for given array of key IDs
- * @param  {Array<module:type/keyid>} keyIds 
+ * @param  {Array<module:type/keyid>} keyIds
  * @return {(module:packet/public_subkey|module:packet/public_key|null)}
  */
 Key.prototype.getPublicKeyPacket = function(keyIds) {
   if (this.primaryKey.tag == enums.packet.publicKey) {
-    return findKey(this.getAllKeyPackets(), keyIds);  
+    return findKey(this.getAllKeyPackets(), keyIds);
   } else {
     return null;
-  }  
+  }
 };
 
 /**
@@ -11071,7 +11071,7 @@ Key.prototype.getPublicKeyPacket = function(keyIds) {
  */
 Key.prototype.getPrivateKeyPacket = function(keyIds) {
   if (this.primaryKey.tag == enums.packet.secretKey) {
-    return findKey(this.getAllKeyPackets(), keyIds);  
+    return findKey(this.getAllKeyPackets(), keyIds);
   } else {
     return null;
   }
@@ -11154,7 +11154,7 @@ Key.prototype.getSigningKeyPacket = function() {
     throw new Error('Need private key for signing');
   }
   var primaryUser = this.getPrimaryUser();
-  if (primaryUser && 
+  if (primaryUser &&
       isValidSigningKeyPacket(this.primaryKey, primaryUser.selfCertificate)) {
     return this.primaryKey;
   }
@@ -11212,7 +11212,7 @@ Key.prototype.getEncryptionKeyPacket = function() {
   }
   // if no valid subkey for encryption, evaluate primary key
   var primaryUser = this.getPrimaryUser();
-  if (primaryUser && 
+  if (primaryUser &&
       isValidEncryptionKeyPacket(this.primaryKey, primaryUser.selfCertificate)) {
     return this.primaryKey;
   }
@@ -11221,7 +11221,7 @@ Key.prototype.getEncryptionKeyPacket = function() {
 
 /**
  * Decrypts all secret key and subkey packets
- * @param  {String} passphrase 
+ * @param  {String} passphrase
  * @return {Boolean} true if all key and subkey packets decrypted successfully
  */
 Key.prototype.decrypt = function(passphrase) {
@@ -11240,14 +11240,14 @@ Key.prototype.decrypt = function(passphrase) {
 /**
  * Decrypts specific key packets by key ID
  * @param  {Array<module:type/keyid>} keyIds
- * @param  {String} passphrase 
+ * @param  {String} passphrase
  * @return {Boolean} true if all key packets decrypted successfully
  */
 Key.prototype.decryptKeyPacket = function(keyIds, passphrase) {
   if (this.isPrivate()) {
     var keys = this.getAllKeyPackets();
     for (var i = 0; i < keys.length; i++) {
-      var keyId = keys[i].getKeyId(); 
+      var keyId = keys[i].getKeyId();
       for (var j = 0; j < keyIds.length; j++) {
         if (keyId.equals(keyIds[j])) {
           var success = keys[i].decrypt(passphrase);
@@ -11268,8 +11268,8 @@ Key.prototype.decryptKeyPacket = function(keyIds, passphrase) {
  */
 Key.prototype.verifyPrimaryKey = function() {
   // check revocation signature
-  if (this.revocationSignature && !this.revocationSignature.isExpired() && 
-     (this.revocationSignature.verified || 
+  if (this.revocationSignature && !this.revocationSignature.isExpired() &&
+     (this.revocationSignature.verified ||
       this.revocationSignature.verify(this.primaryKey, {key: this.primaryKey}))) {
     return enums.keyStatus.revoked;
   }
@@ -11511,8 +11511,8 @@ User.prototype.isRevoked = function(certificate, primaryKey) {
     var that = this;
     return this.revocationCertifications.some(function(revCert) {
              return revCert.issuerKeyId.equals(certificate.issuerKeyId) &&
-                    !revCert.isExpired() && 
-                    (revCert.verified || 
+                    !revCert.isExpired() &&
+                    (revCert.verified ||
                      revCert.verify(primaryKey, {userid: that.userId || that.userAttribute, key: primaryKey}));
           });
   } else {
@@ -11565,7 +11565,7 @@ User.prototype.isValidSelfCertificate = function(primaryKey, selfCertificate) {
  * Verify User. Checks for existence of self signatures, revocation signatures
  * and validity of self signature
  * @param  {module:packet/secret_key|module:packet/public_key} primaryKey The primary key packet
- * @return {module:enums.keyStatus} status of user    
+ * @return {module:enums.keyStatus} status of user
  */
 User.prototype.verify = function(primaryKey) {
   if (!this.selfCertifications) {
@@ -11577,7 +11577,7 @@ User.prototype.verify = function(primaryKey) {
       status = enums.keyStatus.revoked;
       continue;
     }
-    if (!(this.selfCertifications[i].verified || 
+    if (!(this.selfCertifications[i].verified ||
         this.selfCertifications[i].verify(primaryKey, {userid: this.userId || this.userAttribute, key: primaryKey}))) {
       status = enums.keyStatus.invalid;
       continue;
@@ -11662,8 +11662,8 @@ SubKey.prototype.isValidSigningKey = function(primaryKey) {
  */
 SubKey.prototype.verify = function(primaryKey) {
   // check subkey revocation signature
-  if (this.revocationSignature && !this.revocationSignature.isExpired() && 
-     (this.revocationSignature.verified || 
+  if (this.revocationSignature && !this.revocationSignature.isExpired() &&
+     (this.revocationSignature.verified ||
       this.revocationSignature.verify(primaryKey, {key:primaryKey, bind: this.subKey}))) {
     return enums.keyStatus.revoked;
   }
@@ -11758,12 +11758,12 @@ function readArmored(armoredText) {
         result.keys.push(newKey);
       } catch (e) {
         result.err = result.err || [];
-        result.err.push(e); 
+        result.err.push(e);
       }
     }
   } catch (e) {
     result.err = result.err || [];
-    result.err.push(e); 
+    result.err.push(e);
   }
   return result;
 }
@@ -11905,17 +11905,17 @@ module.exports.localstore = require('./localstore.js');
 },{"./keyring.js":34,"./localstore.js":35}],34:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -12127,17 +12127,17 @@ KeyArray.prototype.removeForId = function (keyId) {
 },{"../enums.js":30,"../key.js":32,"../util.js":61,"./localstore.js":35}],35:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -12233,17 +12233,17 @@ function storeKeys(storage, itemname, keys) {
 },{"../config":4,"../key.js":32,"../util.js":61,"node-localstorage":false}],36:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -12316,7 +12316,7 @@ Message.prototype.getSigningKeyIds = function() {
 
 /**
  * Decrypt the message
- * @param {module:key~Key} privateKey private key with decrypted secret data           
+ * @param {module:key~Key} privateKey private key with decrypted secret data
  * @return {Array<module:message~Message>} new message with decrypted content
  */
 Message.prototype.decrypt = function(privateKey) {
@@ -12419,7 +12419,7 @@ Message.prototype.sign = function(privateKeys) {
 
   var literalDataPacket = this.packets.findPacket(enums.packet.literal);
   if (!literalDataPacket) throw new Error('No literal data packet to sign.');
-  
+
   var literalFormat = enums.write(enums.literal, literalDataPacket.format);
   var signatureType = literalFormat == enums.literal.binary ?
                       enums.signature.binary : enums.signature.text;
@@ -12439,7 +12439,7 @@ Message.prototype.sign = function(privateKeys) {
   }
 
   packetlist.push(literalDataPacket);
-  
+
   for (i = privateKeys.length - 1; i >= 0; i--) {
     var signaturePacket = new packet.Signature();
     signaturePacket.signatureType = signatureType;
@@ -12555,24 +12555,24 @@ exports.fromBinary = fromBinary;
 },{"./config":4,"./crypto":19,"./encoding/armor.js":28,"./enums.js":30,"./key.js":32,"./packet":40}],37:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 /**
- * @fileoverview The openpgp base module should provide all of the functionality 
- * to consume the openpgp.js library. All additional classes are documented 
+ * @fileoverview The openpgp base module should provide all of the functionality
+ * to consume the openpgp.js library. All additional classes are documented
  * for extending and developing on top of the base library.
  */
 
@@ -12915,17 +12915,17 @@ function packetClassFromTagName(tag) {
 },{"../enums.js":30,"./compressed.js":39,"./literal.js":41,"./marker.js":42,"./one_pass_signature.js":43,"./public_key.js":46,"./public_key_encrypted_session_key.js":47,"./public_subkey.js":48,"./secret_key.js":49,"./secret_subkey.js":50,"./signature.js":51,"./sym_encrypted_integrity_protected.js":52,"./sym_encrypted_session_key.js":53,"./symmetrically_encrypted.js":54,"./trust.js":55,"./user_attribute.js":56,"./userid.js":57}],39:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -13107,17 +13107,17 @@ for (var i in packets)
 },{"../enums.js":30,"./all_packets.js":38,"./packetlist.js":45}],41:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -13203,7 +13203,7 @@ Literal.prototype.setFilename = function (filename) {
 
 /**
  * Get the filename of the literal packet data
- * @returns {String} filename 
+ * @returns {String} filename
  */
 Literal.prototype.getFilename = function() {
   return this.filename;
@@ -13259,17 +13259,17 @@ Literal.prototype.write = function () {
 },{"../enums.js":30,"../util.js":61}],42:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -13322,17 +13322,17 @@ Marker.prototype.read = function (bytes) {
 },{"../enums.js":30}],43:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -13428,17 +13428,17 @@ OnePassSignature.prototype.postCloneTypeFix = function() {
 },{"../enums.js":30,"../type/keyid.js":58}],44:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -13479,7 +13479,7 @@ module.exports = {
   /**
    * Encodes a given integer of length to the openpgp length specifier to a
    * string
-   * 
+   *
    * @param {Integer} length The length to encode
    * @return {String} String with openpgp length representation
    */
@@ -13504,7 +13504,7 @@ module.exports = {
   /**
    * Writes a packet header version 4 with the given tag_type and length to a
    * string
-   * 
+   *
    * @param {Integer} tag_type Tag type
    * @param {Integer} length Length of the payload
    * @return {String} String of the header
@@ -13520,7 +13520,7 @@ module.exports = {
   /**
    * Writes a packet header Version 3 with the given tag_type and length to a
    * string
-   * 
+   *
    * @param {Integer} tag_type Tag type
    * @param {Integer} length Length of the payload
    * @return {String} String of the header
@@ -13542,7 +13542,7 @@ module.exports = {
 
   /**
    * Generic static Packet Parser function
-   * 
+   *
    * @param {String} input Input stream as string
    * @param {integer} position Position to start parsing
    * @param {integer} len Length of the input from position on
@@ -13605,11 +13605,11 @@ module.exports = {
           // 3 - The packet is of indeterminate length. The header is 1
           // octet long, and the implementation must determine how long
           // the packet is. If the packet is in a file, this means that
-          // the packet extends until the end of the file. In general, 
-          // an implementation SHOULD NOT use indeterminate-length 
-          // packets except where the end of the data will be clear 
-          // from the context, and even then it is better to use a 
-          // definite length, or a new format header. The new format 
+          // the packet extends until the end of the file. In general,
+          // an implementation SHOULD NOT use indeterminate-length
+          // packets except where the end of the data will be clear
+          // from the context, and even then it is better to use a
+          // definite length, or a new format header. The new format
           // headers described below have a mechanism for precisely
           // encoding data of indeterminate length.
           packet_length = len;
@@ -13890,17 +13890,17 @@ module.exports.fromStructuredClone = function(packetlistClone) {
 },{"../enums.js":30,"./all_packets.js":38,"./packet.js":44}],46:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -14116,17 +14116,17 @@ PublicKey.prototype.postCloneTypeFix = function() {
 },{"../crypto":19,"../enums.js":30,"../type/keyid.js":58,"../type/mpi.js":59,"../util.js":61}],47:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -14311,17 +14311,17 @@ PublicKeyEncryptedSessionKey.prototype.postCloneTypeFix = function() {
 },{"../crypto":19,"../enums.js":30,"../type/keyid.js":58,"../type/mpi.js":59,"../util.js":61}],48:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -14352,17 +14352,17 @@ PublicSubkey.prototype.constructor = PublicSubkey;
 },{"../enums.js":30,"./public_key.js":46}],49:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -14630,17 +14630,17 @@ SecretKey.prototype.clearPrivateMPIs = function () {
 },{"../crypto":19,"../enums.js":30,"../type/mpi.js":59,"../type/s2k.js":60,"../util.js":61,"./public_key.js":46}],50:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -14671,17 +14671,17 @@ SecretSubkey.prototype.constructor = SecretSubkey;
 },{"../enums.js":30,"./secret_key.js":49}],51:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -15332,17 +15332,17 @@ Signature.prototype.postCloneTypeFix = function() {
 },{"../crypto":19,"../enums.js":30,"../type/keyid.js":58,"../type/mpi.js":59,"../util.js":61,"./packet.js":44}],52:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -15460,17 +15460,17 @@ SymEncryptedIntegrityProtected.prototype.decrypt = function (sessionKeyAlgorithm
 },{"../crypto":19,"../enums.js":30,"../util.js":61}],53:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -15611,17 +15611,17 @@ SymEncryptedSessionKey.prototype.postCloneTypeFix = function() {
 },{"../crypto":19,"../enums.js":30,"../type/s2k.js":60}],54:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -15650,7 +15650,7 @@ var crypto = require('../crypto'),
 function SymmetricallyEncrypted() {
   this.tag = enums.packet.symmetricallyEncrypted;
   this.encrypted = null;
-  /** Decrypted packets contained within. 
+  /** Decrypted packets contained within.
    * @type {module:packet/packetlist} */
   this.packets =  null;
 }
@@ -15715,17 +15715,17 @@ Trust.prototype.read = function (bytes) {
 },{"../enums.js":30}],56:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -15810,17 +15810,17 @@ UserAttribute.prototype.equals = function(usrAttr) {
 },{"../enums.js":30,"../util.js":61,"./packet.js":44}],57:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -15850,7 +15850,7 @@ function Userid() {
   this.tag = enums.packet.userid;
   /** A string containing the user id. Usually in the form
    * John Doe <john@example.com>
-   * @type {String} 
+   * @type {String}
    */
   this.userid = '';
 }
@@ -15874,17 +15874,17 @@ Userid.prototype.write = function () {
 },{"../enums.js":30,"../util.js":61}],58:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -15949,24 +15949,24 @@ module.exports.fromClone = function (clone) {
 },{"../util.js":61}],59:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 // Hint: We hold our MPIs as an array of octets in big endian format preceeding a two
 // octet scalar: MPI: [a,b,c,d,e,f]
-// - MPI size: (a << 8) | b 
+// - MPI size: (a << 8) | b
 // - MPI = c | d << 8 | e << ((MPI.length -2)*8) | f ((MPI.length -2)*8)
 
 /**
@@ -16062,17 +16062,17 @@ module.exports.fromClone = function (clone) {
 },{"../crypto/public_key/jsbn.js":24,"../util.js":61}],60:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -16253,17 +16253,17 @@ module.exports.fromClone = function (clone) {
 },{"../crypto":19,"../enums.js":30,"../util.js":61}],61:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -16446,7 +16446,7 @@ module.exports = {
   },
 
   /**
-   * Convert a Uint8Array to a string. This currently functions 
+   * Convert a Uint8Array to a string. This currently functions
    * the same as bin2str.
    * @function module:util.Uint8Array2str
    * @param {Uint8Array} bin An array of (binary) integers to convert
@@ -16481,7 +16481,7 @@ module.exports = {
   },
 
   /**
-   * Helper function to print a debug message. Debug 
+   * Helper function to print a debug message. Debug
    * messages are only printed if
    * @link module:config/config.debug is set to true.
    * @param {String} str String of the debug message
@@ -16493,7 +16493,7 @@ module.exports = {
   },
 
   /**
-   * Helper function to print a debug message. Debug 
+   * Helper function to print a debug message. Debug
    * messages are only printed if
    * @link module:config/config.debug is set to true.
    * Different than print_debug because will call hexstrdump iff necessary.
@@ -16518,9 +16518,9 @@ module.exports = {
   /**
    * Shifting a string to n bits right
    * @param {String} value The string to shift
-   * @param {Integer} bitcount Amount of bits to shift (MUST be smaller 
+   * @param {Integer} bitcount Amount of bits to shift (MUST be smaller
    * than 9)
-   * @return {String} Resulting string. 
+   * @return {String} Resulting string.
    */
   shiftRight: function (value, bitcount) {
     var temp = util.str2bin(value);
@@ -16564,17 +16564,17 @@ module.exports = {
 },{"./config":4}],62:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-// 
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -16617,7 +16617,7 @@ function AsyncProxy(path) {
  * Message handling
  */
 AsyncProxy.prototype.onMessage = function(event) {
-  var msg = event.data; 
+  var msg = event.data;
   switch (msg.event) {
     case 'method-return':
       this.tasks.shift()(msg.err ? new Error(msg.err) : null, msg.data);
@@ -16669,7 +16669,7 @@ AsyncProxy.prototype.encryptMessage = function(keys, text, callback) {
     return key.toPacketlist();
   });
   this.worker.postMessage({
-    event: 'encrypt-message', 
+    event: 'encrypt-message',
     keys: keys,
     text: text
   });
@@ -16689,7 +16689,7 @@ AsyncProxy.prototype.signAndEncryptMessage = function(publicKeys, privateKey, te
   });
   privateKey = privateKey.toPacketlist();
   this.worker.postMessage({
-    event: 'sign-and-encrypt-message', 
+    event: 'sign-and-encrypt-message',
     publicKeys: publicKeys,
     privateKey: privateKey,
     text: text
@@ -16707,7 +16707,7 @@ AsyncProxy.prototype.signAndEncryptMessage = function(publicKeys, privateKey, te
 AsyncProxy.prototype.decryptMessage = function(privateKey, message, callback) {
   privateKey = privateKey.toPacketlist();
   this.worker.postMessage({
-    event: 'decrypt-message', 
+    event: 'decrypt-message',
     privateKey: privateKey,
     message: message
   });
@@ -16728,7 +16728,7 @@ AsyncProxy.prototype.decryptAndVerifyMessage = function(privateKey, publicKeys, 
     return key.toPacketlist();
   });
   this.worker.postMessage({
-    event: 'decrypt-and-verify-message', 
+    event: 'decrypt-and-verify-message',
     privateKey: privateKey,
     publicKeys: publicKeys,
     message: message
@@ -16755,7 +16755,7 @@ AsyncProxy.prototype.signClearMessage = function(privateKeys, text, callback) {
     return key.toPacketlist();
   });
   this.worker.postMessage({
-    event: 'sign-clear-message', 
+    event: 'sign-clear-message',
     privateKeys: privateKeys,
     text: text
   });
@@ -16773,7 +16773,7 @@ AsyncProxy.prototype.verifyClearSignedMessage = function(publicKeys, message, ca
     return key.toPacketlist();
   });
   this.worker.postMessage({
-    event: 'verify-clear-signed-message', 
+    event: 'verify-clear-signed-message',
     publicKeys: publicKeys,
     message: message
   });
@@ -16800,7 +16800,7 @@ AsyncProxy.prototype.verifyClearSignedMessage = function(publicKeys, message, ca
  */
 AsyncProxy.prototype.generateKeyPair = function(options, callback) {
   this.worker.postMessage({
-    event: 'generate-key-pair', 
+    event: 'generate-key-pair',
     options: options
   });
   this.tasks.push(function(err, data) {

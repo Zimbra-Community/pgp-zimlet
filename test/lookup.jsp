@@ -17,9 +17,9 @@ if (q != null) {
         } catch (IOException e) {
         }
         html = sbf.toString();
-            
+
 } else {
-    html = "parameter q not specified";       
+    html = "parameter q not specified";
 }
 %>
 <textarea rows="30" cols="100">

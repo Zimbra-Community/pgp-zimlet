@@ -5,7 +5,7 @@ Zimbra OpenPGP Zimlet
    https://github.com/barrydegraaff/pgp-zimlet
    https://www.indiegogo.com/projects/zimbra-openpgp-zimlet
 
-Copyright (C) 2014  Barry de Graaff 
+Copyright (C) 2014  Barry de Graaff
 
 Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues
 
@@ -20,7 +20,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see http://www.gnu.org/licenses/. 
+along with this program.  If not, see http://www.gnu.org/licenses/.
    </summary>
    <resource>icon.png</resource>
    <include>tk_barrydegraaff_zimbra_openpgp.js</include>
@@ -36,7 +36,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-pubkeys" label="Manage public keys" id="pubkeys" />
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-keypair" label="Generate key pair" id="keypair" />
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-about" label="About" id="about" />
-      </contextMenu>      
+      </contextMenu>
    </zimletPanelItem>
    <userProperties>
       <property type="string" label="Trusted public key 1" name="zimbra_openpgp_pubkeys1" rows="2"/>
