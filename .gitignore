@@ -1,0 +1,5 @@
+*.class
+*.deb
+/image
+*.jar
+zimlets.list
