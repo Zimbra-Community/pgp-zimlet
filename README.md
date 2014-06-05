@@ -33,6 +33,12 @@ For debugging in production I recommend to disable the Zimlet via user preferenc
 
 ========================================================================
 
+### Your private key is NOT stored on the server
+
+When you enter your private key in this Zimlet, it is NOT being send to the server and it is NOT stored on the server, as long as your server gets hacked.
+
+========================================================================
+
 ### Esc keyboard shortcut
 
 This Zimlet redefines the behavior of the Escape key. This is done for security reasons.
