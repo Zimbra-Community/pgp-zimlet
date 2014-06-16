@@ -71,9 +71,7 @@ To resolve this you can:
 
 A - Ask for a shorter pubkey
 
-B - Ignore the message
-
-C - Edit zimbra-attrs.xml (at your own risk) !MIGRATION?! like this:
+B - Edit zimbra-attrs.xml (at your own risk) !MIGRATION?! like this:
 
 As root:
 
