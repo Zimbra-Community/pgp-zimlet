@@ -121,6 +121,13 @@ function(zmObject) {
    var clearSignedRegEx = new RegExp('[\-]*BEGIN PGP SIGNATURE[\-]*');
    var pgpMessageRegEx = new RegExp('[\-]*BEGIN PGP MESSAGE[\-]*');
    var msg = zmObject.body;
+   
+   if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
+   {
+      console.log(zmObject);
+      console.log(msgObj);
+      console.log(msg);
+   }
 
    if(this.isIE) {
       if (msg.match(clearSignedRegEx)) {
