@@ -24,12 +24,21 @@ tk_barrydegraaff_zimbra_openpgp = function() {
    var ver = appCtxt.get(ZmSetting.CLIENT_VERSION);
    version = ver.split("_");
 
+   //Initialize workarounds for differences between Zimbra versions
    if(version[0].indexOf("8.5.") > -1)
    {
+      //Running Zimbra 8.5
+      //No IE work-around needed.      
       this.isIE = false;
+      
+      //Compose new message as text in 8.5
+      this.composeMode = Dwt.TEXT;
    }
    else
    {
+      //Running Zimbra 8.0
+      
+      //See if we run Internet Explorer, and if so, define isIE=true for work-arounds
       /* Internet Explorer detect: http://www.pinlady.net/PluginDetect/IE/
        * Make this Zimlet know if we are running in IE
        */
@@ -39,6 +48,9 @@ tk_barrydegraaff_zimbra_openpgp = function() {
       this.isIE = typeof document.documentMode == "number" || eval("/*@cc_on!@*/!1");
       try{document.documentMode = tmp;}
       catch(e){ };
+     
+      //Compose new message as text in 8.0
+      this.composeMode = DwtHtmlEditor.TEXT;
    }
 };
 
@@ -638,7 +650,7 @@ function() {
          var appCtxt = window.top.appCtxt;
          var zmApp = appCtxt.getApp();
          var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
-         var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
+         var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:this.composeMode,
          toOverride:null, subjOverride:null, extraBodyText:signed, callback:null}
          composeController.doAction(params); // opens asynchronously the window.
       }
@@ -839,7 +851,7 @@ function() {
          var appCtxt = window.top.appCtxt;
          var zmApp = appCtxt.getApp();
          var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
-         var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
+         var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:this.composeMode,
          toOverride:publicKey.keys[0].users[0].userId.userid, subjOverride:null, extraBodyText:pgpMessage, callback:null}
          composeController.doAction(params); // opens asynchronously the window.
       }
