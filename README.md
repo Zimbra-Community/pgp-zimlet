@@ -3,8 +3,7 @@ Zimbra OpenPGP Zimlet
 
 I am accepting donations for the continued development of this Zimlet:
 
-https://www.paypal.com/us/cgi-bin/webscr?cmd=_flow&SESSION=9-7NezA5PdIbv8Y-seoHFr4IFliLVK8tZymjmUq8W2Th0bSOCmWIiSQN36m&dispatch=5885d80a13c0db1f8e263663d3faee8d5402c249c5a2cfd4a145d37ec05e9a5e
-
+https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=info%40barrydegraaff%2etk&lc=US&item_name=Zimbra%20OpenPGP%20Zimlet&no_note=0&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 
 Demo video: https://drive.google.com/file/d/0B_lMZlQY3S2lNXJfUjlrMU1faXM/edit?usp=sharing
 
