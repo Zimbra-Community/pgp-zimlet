@@ -334,8 +334,8 @@ function(id, title, message) {
 
    switch(id) {
    case 1:
-      view.setSize("600", "180");
-      html = "<div style='width:600px; height: 180px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
+      view.setSize("650", "180");
+      html = "<div style='width:650px; height: 180px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
       "Please provide private key and passphrase for decryption. Your private key will remain in memory until you reload your browser.<br><br>" +
       "</td></tr><tr><td>" +
       "Private Key:" +
@@ -361,14 +361,14 @@ function(id, title, message) {
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 2:
-      view.setSize("600", "350");
-      view.getHtmlElement().innerHTML = "<div style='width:600px; height: 350px; overflow-x: hidden; overflow-y: scroll;'>"+message+"</div>";
+      view.setSize("650", "350");
+      view.getHtmlElement().innerHTML = "<div style='width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll;'>"+message+"</div>";
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.DISMISS_BUTTON] } );
       this._dialog.setButtonListener(DwtDialog.DISMISS_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 3:
-      view.setSize("600", "500");
-      html = "<div style='width:600px; height: 500px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
+      view.setSize("650", "500");
+      html = "<div style='width:650px; height: 500px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
       "Copy-paste ASCII armored public keys you trust here. <br><br>You can put human readable comments before each key as long as you start on a new line for your public key.<br>Please be patient after hitting the OK button, saving takes some time.<br><br>" +
       "</td></tr><tr><td style=\"width:100px\">Public Key 1:</td><td style=\"width:500px\"><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput1'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value + "</textarea></td></tr>" +
       "<tr><td>Public Key 2:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput2'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value + "</textarea></td></tr>" +
@@ -407,8 +407,8 @@ function(id, title, message) {
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 4:
-      view.setSize("600", "350");
-      html = "<div style='width:600px; height: 350px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
+      view.setSize("650", "350");
+      html = "<div style='width:650px; height: 350px; overflow-x: hidden; overflow-y: hidden;'><table><tr><td colspan='2'>" +
       "Please compose a message below to be signed with your private key. Your private key will remain in memory until you reload your browser.<br><br>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
       "Private Key:" +
@@ -434,8 +434,8 @@ function(id, title, message) {
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 5:
-      view.setSize("600", "160");
-      html = "<div style='width:600px; height: 160px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
+      view.setSize("650", "180");
+      html = "<div style='width:650px; height: 180px; overflow-x: hidden; overflow-y: hidden;'><table><tr><td colspan='2'>" +
       "Please enter User ID (example: Firstname Lastname &lt;your@email.com&gt;) and passphrase for new key pair.<br><br>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
       "User ID:" +
@@ -463,8 +463,8 @@ function(id, title, message) {
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 6:
-      view.setSize("600", "250");
-      html = "<div style='width:600px; height: 250; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
+      view.setSize("650", "250");
+      html = "<div style='width:650px; height: 250; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
       "Please compose a message below to be encrypted.<br><br>" +
       "</td></tr><tr><td>" +
       "Recipient:" +
