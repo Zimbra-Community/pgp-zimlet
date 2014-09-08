@@ -464,7 +464,7 @@ function(id, title, message) {
       break;
    case 6:
       view.setSize("650", "250");
-      html = "<div style='width:650px; height: 250; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
+      html = "<div style='width:650px; height: 250; overflow-x: hidden; overflow-y: hidden;'><table><tr><td colspan='2'>" +
       "Please compose a message below to be encrypted.<br><br>" +
       "</td></tr><tr><td>" +
       "Recipient:" +
