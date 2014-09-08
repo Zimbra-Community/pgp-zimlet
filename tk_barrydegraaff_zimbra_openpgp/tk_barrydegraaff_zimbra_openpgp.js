@@ -335,7 +335,7 @@ function(id, title, message) {
    switch(id) {
    case 1:
       view.setSize("600", "180");
-      html = "<table><tr><td colspan='2'>" +
+      html = "<div style='width:600px; height: 180px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
       "Please provide private key and passphrase for decryption. Your private key will remain in memory until you reload your browser.<br><br>" +
       "</td></tr><tr><td>" +
       "Private Key:" +
@@ -349,7 +349,7 @@ function(id, title, message) {
       "Message:" +
       "</td><td>" +
       "<textarea class=\"barrydegraaff_zimbra_openpgp-input\" id='message'>"+message+"</textarea>" +
-      "</td></tr></table>";
+      "</td></tr></table></div>";
       view.getHtmlElement().innerHTML = html;
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );
       if(this.isIE) {
@@ -362,13 +362,13 @@ function(id, title, message) {
       break;
    case 2:
       view.setSize("600", "350");
-      view.getHtmlElement().innerHTML = message;
+      view.getHtmlElement().innerHTML = "<div style='width:600px; height: 350px; overflow-x: hidden; overflow-y: scroll;'>"+message+"</div>";
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.DISMISS_BUTTON] } );
       this._dialog.setButtonListener(DwtDialog.DISMISS_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 3:
       view.setSize("600", "500");
-      html = "<table><tr><td colspan='2'>" +
+      html = "<div style='width:600px; height: 500px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
       "Copy-paste ASCII armored public keys you trust here. <br><br>You can put human readable comments before each key as long as you start on a new line for your public key.<br>Please be patient after hitting the OK button, saving takes some time.<br><br>" +
       "</td></tr><tr><td style=\"width:100px\">Public Key 1:</td><td style=\"width:500px\"><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput1'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value + "</textarea></td></tr>" +
       "<tr><td>Public Key 2:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput2'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value + "</textarea></td></tr>" +
@@ -400,7 +400,7 @@ function(id, title, message) {
       "<tr><td>Public Key 28:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput28'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys28").value + "</textarea></td></tr>" +
       "<tr><td>Public Key 29:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput29'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value + "</textarea></td></tr>" +
       "<tr><td>Public Key 30:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput30'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value + "</textarea></td></tr>" +
-      "</table>";
+      "</table></div>";
       view.getHtmlElement().innerHTML = html;
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnPubKeySave));
@@ -408,7 +408,7 @@ function(id, title, message) {
       break;
    case 4:
       view.setSize("600", "350");
-      html = "<table><tr><td colspan='2'>" +
+      html = "<div style='width:600px; height: 350px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
       "Please compose a message below to be signed with your private key. Your private key will remain in memory until you reload your browser.<br><br>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
       "Private Key:" +
@@ -422,7 +422,7 @@ function(id, title, message) {
       "Message:" +
       "</td><td>" +
       "<textarea class=\"barrydegraaff_zimbra_openpgp-msg\" id='message'></textarea>" +
-      "</td></tr></table>";
+      "</td></tr></table></div>";
       view.getHtmlElement().innerHTML = html;
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );
       if(this.isIE) {
@@ -435,7 +435,7 @@ function(id, title, message) {
       break;
    case 5:
       view.setSize("600", "160");
-      html = "<table><tr><td colspan='2'>" +
+      html = "<div style='width:600px; height: 160px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
       "Please enter User ID (example: Firstname Lastname &lt;your@email.com&gt;) and passphrase for new key pair.<br><br>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
       "User ID:" +
@@ -451,7 +451,7 @@ function(id, title, message) {
       "<select class=\"barrydegraaff_zimbra_openpgp-input\" id=\"keyLength\" name=\"keyLength\"><option value=\"512\">512</option><option selected=\"selected\" value=\"1024\">1024</option><option value=\"2048\">2048</option><option value=\"4096\">4096</option></select>" +
       "</td></tr><tr><td colspan='2'>" +
       "<br>Higher key length is better security, but slower. If you have trouble generating a key pair choose a lower key length or use an external program. Please be patient after hitting the OK button, generating can take some time.<br><br>" +
-      "</td></tr></table>";
+      "</td></tr></table></div>";
       view.getHtmlElement().innerHTML = html;
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );
       if(this.isIE) {
@@ -464,7 +464,7 @@ function(id, title, message) {
       break;
    case 6:
       view.setSize("600", "250");
-      html = "<table><tr><td colspan='2'>" +
+      html = "<div style='width:600px; height: 250; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
       "Please compose a message below to be encrypted.<br><br>" +
       "</td></tr><tr><td>" +
       "Recipient:" +
@@ -473,7 +473,7 @@ function(id, title, message) {
       "Message:" +
       "</td><td>" +
       "<textarea class=\"barrydegraaff_zimbra_openpgp-msg\" id='message'></textarea>" +
-      "</td></tr></table>";
+      "</td></tr></table></div>";
       view.getHtmlElement().innerHTML = html;
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnEncrypt));
