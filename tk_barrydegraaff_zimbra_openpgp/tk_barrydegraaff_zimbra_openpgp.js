@@ -408,7 +408,7 @@ function(id, title, message) {
       break;
    case 4:
       view.setSize("650", "350");
-      html = "<div style='width:650px; height: 350px; overflow-x: hidden; overflow-y: hidden;'><table><tr><td colspan='2'>" +
+      html = "<div style='width:650px; height: 350px; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
       "Please compose a message below to be signed with your private key. Your private key will remain in memory until you reload your browser.<br><br>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
       "Private Key:" +
@@ -435,8 +435,8 @@ function(id, title, message) {
       break;
    case 5:
       view.setSize("650", "180");
-      html = "<div style='width:650px; height: 180px; overflow-x: hidden; overflow-y: hidden;'><table><tr><td colspan='2'>" +
-      "Please enter User ID (example: Firstname Lastname &lt;your@email.com&gt;) and passphrase for new key pair.<br><br>" +
+      html = "<div style='width:650px; height: 180px; overflow-x: hidden; overflow-y: hidden;'><table style='width:650px;'><tr><td colspan='2'>" +
+      "Please enter User ID (example: Firstname Lastname &lt;your@email.com&gt;)<br>and passphrase for new key pair.<br><br>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
       "User ID:" +
       "</td><td style=\"width:500px\">" +
@@ -444,7 +444,7 @@ function(id, title, message) {
       "</td></tr><tr><td>" +
       "Passphrase:" +
       "</td><td>" +
-      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value=''>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' value=''>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
       "Key length:" +
       "</td><td style=\"width:500px\">" +
@@ -464,7 +464,7 @@ function(id, title, message) {
       break;
    case 6:
       view.setSize("650", "250");
-      html = "<div style='width:650px; height: 250; overflow-x: hidden; overflow-y: hidden;'><table><tr><td colspan='2'>" +
+      html = "<div style='width:650px; height: 250; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
       "Please compose a message below to be encrypted.<br><br>" +
       "</td></tr><tr><td>" +
       "Recipient:" +

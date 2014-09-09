@@ -53,17 +53,23 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
  overflow: hidden;
 }
 
-.barrydegraaff_zimbra_openpgp-input {   
-   width:500px;
+.barrydegraaff_zimbra_openpgp-input  {   
+   min-width:500px;
+   width:98%;
 }
 
 .barrydegraaff_zimbra_openpgp-input textarea{
    height:50px;
-   width:500px;
+   
 }
 
 .DwtDialog textarea{
-   width:500px;
+   width:98%;
+}
+
+#passphraseInput {
+   min-width:500px;
+   width:98%;
 }
 
 .barrydegraaff_zimbra_openpgp-msg {
@@ -71,4 +77,3 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
    width:500px;
    height: 200px;
 }
-
