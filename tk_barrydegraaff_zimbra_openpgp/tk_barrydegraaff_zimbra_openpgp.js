@@ -436,7 +436,7 @@ function(id, title, message) {
    case 5:
       view.setSize("650", "180");
       html = "<div style='width:650px; height: 180px; overflow-x: hidden; overflow-y: hidden;'><table style='width:650px;'><tr><td colspan='2'>" +
-      "Please enter User ID (example: Firstname Lastname &lt;your@email.com&gt;)<br>and passphrase for new key pair.<br><br>" +
+      "Please enter User ID (example: Firstname Lastname &lt;your@email.com&gt;) and passphrase for new key pair.<br><br>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
       "User ID:" +
       "</td><td style=\"width:500px\">" +
