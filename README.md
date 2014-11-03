@@ -13,6 +13,7 @@ Adding PGP support to Zimbra Collaboration Suite, currently tested on:
 - OSX: Safari
 
 This Zimlet is developed for and tested with Zimbra version 8.0.7 and 8.5.
+It is not available for use in Zimbra Desktop.
 
 Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues
 
