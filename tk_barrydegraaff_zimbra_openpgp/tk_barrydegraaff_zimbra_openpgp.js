@@ -335,6 +335,9 @@ function(id, title, message) {
    switch(id) {
    case 1:
       view.setSize("650", "180");
+      if (this.privateKeyCache == '') {
+         this.privateKeyCache = this.getUserPropertyInfo("zimbra_openpgp_privatekey").value;
+      }
       html = "<div style='width:650px; height: 180px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
       "Please provide private key and passphrase for decryption. Your private key will remain in memory until you reload your browser.<br><br>" +
       "</td></tr><tr><td>" +
@@ -344,7 +347,7 @@ function(id, title, message) {
       "</td></tr><tr><td>" +
       "Passphrase:" +
       "</td><td>" +
-      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value=''>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value='" + this.getUserPropertyInfo("zimbra_openpgp_privatepass").value + "'>" +
       "</td></tr><tr><td>" +
       "Message:" +
       "</td><td>" +
@@ -369,8 +372,11 @@ function(id, title, message) {
    case 3:
       view.setSize("650", "500");
       html = "<div style='width:650px; height: 500px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
-      "Copy-paste ASCII armored public keys you trust here. <br><br>You can put human readable comments before each key as long as you start on a new line for your public key.<br>Please be patient after hitting the OK button, saving takes some time.<br><br>" +
-      "</td></tr><tr><td style=\"width:100px\">Public Key 1:</td><td style=\"width:500px\"><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput1'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value + "</textarea></td></tr>" +
+      "Copy-paste ASCII armored keys here. <br><br>You can put human readable comments before each key as long as you start on a new line for your public key.<br>Please be patient after hitting the OK button, saving takes some time.<br><br>" +
+      "</td></tr>" +
+      "<tr><td style=\"width:100px\">Private Key:</td><td style=\"width:500px\"><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='privateKeyInput'/>" + this.getUserPropertyInfo("zimbra_openpgp_privatekey").value + "</textarea></td></tr>" +
+      "<tr><td>Private Key Passphrase:</td><td><input class=\"barrydegraaff_zimbra_openpgp-input\" id='privatePassInput' type='password' value='" + this.getUserPropertyInfo("zimbra_openpgp_privatepass").value + "'></td></tr>" +
+      "<tr><td>Public Key 1:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput1'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value + "</textarea></td></tr>" +
       "<tr><td>Public Key 2:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput2'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value + "</textarea></td></tr>" +
       "<tr><td>Public Key 3:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput3'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys3").value + "</textarea></td></tr>" +
       "<tr><td>Public Key 4:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput4'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys4").value + "</textarea></td></tr>" +
@@ -407,6 +413,9 @@ function(id, title, message) {
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 4:
+      if (this.privateKeyCache == '') {
+         this.privateKeyCache = this.getUserPropertyInfo("zimbra_openpgp_privatekey").value;
+      }
       view.setSize("650", "350");
       html = "<div style='width:650px; height: 350px; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
       "Please compose a message below to be signed with your private key. Your private key will remain in memory until you reload your browser.<br><br>" +
@@ -417,7 +426,7 @@ function(id, title, message) {
       "</td></tr><tr><td>" +
       "Passphrase:" +
       "</td><td>" +
-      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value=''>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value='" + this.getUserPropertyInfo("zimbra_openpgp_privatepass").value + "'>" +
       "</td></tr><tr><td>" +
       "Message:" +
       "</td><td>" +
@@ -444,7 +453,7 @@ function(id, title, message) {
       "</td></tr><tr><td>" +
       "Passphrase:" +
       "</td><td>" +
-      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' value=''>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' value='" + this.getUserPropertyInfo("zimbra_openpgp_privatepass").value + "'>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
       "Key length:" +
       "</td><td style=\"width:500px\">" +
@@ -487,7 +496,7 @@ function(id, title, message) {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnDecrypt =
 function() {
-	var privateKeyInput = document.getElementById("privateKeyInput").value;
+   var privateKeyInput = document.getElementById("privateKeyInput").value;
    this.privateKeyCache = privateKeyInput;
    var passphraseInput = document.getElementById("passphraseInput").value;
    var msg = document.getElementById("message").value;
@@ -501,28 +510,25 @@ function() {
       tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not parse private key!", ZmStatusView.LEVEL_WARNING);
       return;
    }
-
    if (success) {
-      try {
-         var message = openpgp.message.readArmored(msg);
-         var decrypted = openpgp.decryptMessage(privKey, message);
-      }
-      catch (err)
-      {
-         tk_barrydegraaff_zimbra_openpgp.prototype.status("Decryption failed!", ZmStatusView.LEVEL_WARNING);
-      }
+      var message = openpgp.message.readArmored(msg);
+      // There should be a cleaner way to do this than stashing 
+      // the parent in myWindow but I've not worked it out yet!
+      var myWindow = this;
+        openpgp.decryptMessage(privKey, message).then(
+           function(decrypted) {
+              myWindow._dialog.clearContent();
+              myWindow._dialog.popdown();
+              myWindow.displayDialog(2,'Decrypted result','<textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:340px;">'+decrypted+'</textarea>');
+           },
+           function(err) {
+              alert(err);
+              tk_barrydegraaff_zimbra_openpgp.prototype.status("Decryption failed!", ZmStatusView.LEVEL_WARNING);
+           }
+        );
    }
    else {
       tk_barrydegraaff_zimbra_openpgp.prototype.status("Wrong passphrase!", ZmStatusView.LEVEL_WARNING);
-   }
-
-
-   if(decrypted)
-   {
-	   // What is the DWT method to destroy this._dialog? This only clears its contents.
-      this._dialog.clearContent();
-      this._dialog.popdown();
-      this.displayDialog(2,'Decrypted result','<textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:340px;">'+decrypted+'</textarea>');
    }
 };
 
@@ -530,7 +536,7 @@ function() {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnDecrypt_ie =
 function() {
-	var privateKeyInput = document.getElementById("privateKeyInput").value;
+   var privateKeyInput = document.getElementById("privateKeyInput").value;
    this.privateKeyCache = privateKeyInput;
    var passphraseInput = document.getElementById("passphraseInput").value;
    var message = document.getElementById("message").value;
@@ -543,7 +549,7 @@ function() {
 	var form = document.createElement("form");
 	form.setAttribute("method", "POST");
    form.setAttribute("target", "_BLANK");
-	form.setAttribute("action", "/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_decrypt_ie.jsp");
+	form.setAttribute("action", "/service/zimlet/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_decrypt_ie.jsp");
 
    var hiddenField = document.createElement("input");
    hiddenField.setAttribute("type", "hidden");
@@ -571,6 +577,8 @@ function() {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnPubKeySave =
 function() {
+   this.setUserProperty("zimbra_openpgp_privatekey", document.getElementById("privateKeyInput").value, true);
+   this.setUserProperty("zimbra_openpgp_privatepass", document.getElementById("privatePassInput").value, true);
    this.setUserProperty("zimbra_openpgp_pubkeys1", document.getElementById("publicKeyInput1").value, true);
    this.setUserProperty("zimbra_openpgp_pubkeys2", document.getElementById("publicKeyInput2").value, true);
    this.setUserProperty("zimbra_openpgp_pubkeys3", document.getElementById("publicKeyInput3").value, true);
@@ -610,7 +618,7 @@ function() {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnSign =
 function() {
-	var privateKeyInput = document.getElementById("privateKeyInput").value;
+   var privateKeyInput = document.getElementById("privateKeyInput").value;
    this.privateKeyCache = privateKeyInput;
    var passphrase = document.getElementById("passphraseInput").value;
    var msg = document.getElementById("message").value;
@@ -661,7 +669,7 @@ function() {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnSign_ie =
 function() {
-	var privateKeyInput = document.getElementById("privateKeyInput").value;
+   var privateKeyInput = document.getElementById("privateKeyInput").value;
    this.privateKeyCache = privateKeyInput;
    var passphraseInput = document.getElementById("passphraseInput").value;
    var message = document.getElementById("message").value;
@@ -674,7 +682,7 @@ function() {
 	var form = document.createElement("form");
 	form.setAttribute("method", "POST");
    form.setAttribute("target", "_BLANK");
-	form.setAttribute("action", "/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_sign_ie.jsp");
+	form.setAttribute("action", "/service/zimlet/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_sign_ie.jsp");
 
    var hiddenField = document.createElement("input");
    hiddenField.setAttribute("type", "hidden");
@@ -741,7 +749,7 @@ function() {
       var form = document.createElement("form");
       form.setAttribute("method", "POST");
       form.setAttribute("target", "_BLANK");
-      form.setAttribute("action", "/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_keypair_ie.jsp");
+      form.setAttribute("action", "/service/zimlet/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_keypair_ie.jsp");
 
       var hiddenField = document.createElement("input");
       hiddenField.setAttribute("type", "hidden");
@@ -806,7 +814,7 @@ function() {
       var publicKeys30 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value);
       var combinedPublicKeys = [publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys,];
 
-      var result = '<select class="barrydegraaff_zimbra_openpgp-input" id="pubKeySelect">';
+      var result = '<select class="barrydegraaff_zimbra_openpgp-input" id="pubKeySelect" multiple>';
 
       combinedPublicKeys.forEach(function(entry) {
          if(entry[0]) {
@@ -828,34 +836,37 @@ function() {
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnEncrypt =
 function() {
-   var pubKeySelect = document.getElementById("pubKeySelect").value;
+   var pubKeySelect = document.getElementById("pubKeySelect");
    var msg = document.getElementById("message").value;
+   var pubKeys = [];
 
-   try {
-   var publicKey = openpgp.key.readArmored(pubKeySelect);
-   var pgpMessage = openpgp.encryptMessage(publicKey.keys, msg);
+   // Build Public Keys list from selected
+   for (k=0; k < pubKeySelect.selectedOptions.length ; k++) {
+      pubKeys= pubKeys.concat(openpgp.key.readArmored(pubKeySelect.selectedOptions.item(k).value).keys);
    }
-   catch (err) {
-      // This is probably never trown, as encryptMessage never fails
-      tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not encrypt message!", ZmStatusView.LEVEL_WARNING);
-   }
-   if(pgpMessage)
-   {
-      // What is the DWT method to destroy this._dialog? This only clears its contents.
-      this._dialog.clearContent();
-      this._dialog.popdown();
 
-      // Tries to open the compose view on its own.
-      var composeController = AjxDispatcher.run("GetComposeController");
-      if(composeController) {
-         var appCtxt = window.top.appCtxt;
-         var zmApp = appCtxt.getApp();
-         var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
-         var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:this.composeMode,
-         toOverride:publicKey.keys[0].users[0].userId.userid, subjOverride:null, extraBodyText:pgpMessage, callback:null}
-         composeController.doAction(params); // opens asynchronously the window.
-      }
-   }
+   // There should be a cleaner way to do this than stashing 
+   // the parent in myWindow but I've not worked it out yet!
+   var myWindow = this;
+   openpgp.encryptMessage(pubKeys, msg).then(
+      function(pgpMessage) {
+         myWindow._dialog.clearContent();
+         myWindow._dialog.popdown();
+         // Tries to open the compose view on its own.
+         var composeController = AjxDispatcher.run("GetComposeController");
+         if(composeController) {
+            var appCtxt = window.top.appCtxt;
+            var zmApp = appCtxt.getApp();
+            var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
+            var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:myWindow.composeMode,
+            toOverride:null, subjOverride:null, extraBodyText:pgpMessage, callback:null}
+            composeController.doAction(params); // opens asynchronously the window.
+         }
+      }, 
+      function(err) {
+         alert(err);
+         tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not encrypt message!", ZmStatusView.LEVEL_WARNING);
+      });
 };
 
 /* encrypt method for Internet Explorer 11, will post to jsp page that does encrypt in document mode edge.
@@ -897,7 +908,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.encrypt_ie = function(message) {
 	var form = document.createElement("form");
 	form.setAttribute("method", "POST");
    form.setAttribute("target", "_BLANK");
-	form.setAttribute("action", "/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_encrypt_ie.jsp");
+	form.setAttribute("action", "/service/zimlet/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_encrypt_ie.jsp");
 
    var hiddenField = document.createElement("input");
    hiddenField.setAttribute("type", "hidden");

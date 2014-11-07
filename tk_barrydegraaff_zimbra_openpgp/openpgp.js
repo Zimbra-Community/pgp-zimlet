@@ -1,17 +1,678 @@
 !function(e){"object"==typeof exports?module.exports=e():"function"==typeof define&&define.amd?define(e):"undefined"!=typeof window?window.openpgp=e():"undefined"!=typeof global?global.openpgp=e():"undefined"!=typeof self&&(self.openpgp=e())}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+// shim for using process in browser
+
+var process = module.exports = {};
+
+process.nextTick = (function () {
+    var canSetImmediate = typeof window !== 'undefined'
+    && window.setImmediate;
+    var canPost = typeof window !== 'undefined'
+    && window.postMessage && window.addEventListener
+    ;
+
+    if (canSetImmediate) {
+        return function (f) { return window.setImmediate(f) };
+    }
+
+    if (canPost) {
+        var queue = [];
+        window.addEventListener('message', function (ev) {
+            var source = ev.source;
+            if ((source === window || source === null) && ev.data === 'process-tick') {
+                ev.stopPropagation();
+                if (queue.length > 0) {
+                    var fn = queue.shift();
+                    fn();
+                }
+            }
+        }, true);
+
+        return function nextTick(fn) {
+            queue.push(fn);
+            window.postMessage('process-tick', '*');
+        };
+    }
+
+    return function nextTick(fn) {
+        setTimeout(fn, 0);
+    };
+})();
+
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+}
+
+// TODO(shtylman)
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+
+},{}],2:[function(require,module,exports){
+"use strict";
+var Promise = require("./promise/promise").Promise;
+var polyfill = require("./promise/polyfill").polyfill;
+exports.Promise = Promise;
+exports.polyfill = polyfill;
+},{"./promise/polyfill":6,"./promise/promise":7}],3:[function(require,module,exports){
+"use strict";
+/* global toString */
+
+var isArray = require("./utils").isArray;
+var isFunction = require("./utils").isFunction;
+
+/**
+  Returns a promise that is fulfilled when all the given promises have been
+  fulfilled, or rejected if any of them become rejected. The return promise
+  is fulfilled with an array that gives all the values in the order they were
+  passed in the `promises` array argument.
+
+  Example:
+
+  ```javascript
+  var promise1 = RSVP.resolve(1);
+  var promise2 = RSVP.resolve(2);
+  var promise3 = RSVP.resolve(3);
+  var promises = [ promise1, promise2, promise3 ];
+
+  RSVP.all(promises).then(function(array){
+    // The array here would be [ 1, 2, 3 ];
+  });
+  ```
+
+  If any of the `promises` given to `RSVP.all` are rejected, the first promise
+  that is rejected will be given as an argument to the returned promises's
+  rejection handler. For example:
+
+  Example:
+
+  ```javascript
+  var promise1 = RSVP.resolve(1);
+  var promise2 = RSVP.reject(new Error("2"));
+  var promise3 = RSVP.reject(new Error("3"));
+  var promises = [ promise1, promise2, promise3 ];
+
+  RSVP.all(promises).then(function(array){
+    // Code here never runs because there are rejected promises!
+  }, function(error) {
+    // error.message === "2"
+  });
+  ```
+
+  @method all
+  @for RSVP
+  @param {Array} promises
+  @param {String} label
+  @return {Promise} promise that is fulfilled when all `promises` have been
+  fulfilled, or rejected if any of them become rejected.
+*/
+function all(promises) {
+  /*jshint validthis:true */
+  var Promise = this;
+
+  if (!isArray(promises)) {
+    throw new TypeError('You must pass an array to all.');
+  }
+
+  return new Promise(function(resolve, reject) {
+    var results = [], remaining = promises.length,
+    promise;
+
+    if (remaining === 0) {
+      resolve([]);
+    }
+
+    function resolver(index) {
+      return function(value) {
+        resolveAll(index, value);
+      };
+    }
+
+    function resolveAll(index, value) {
+      results[index] = value;
+      if (--remaining === 0) {
+        resolve(results);
+      }
+    }
+
+    for (var i = 0; i < promises.length; i++) {
+      promise = promises[i];
+
+      if (promise && isFunction(promise.then)) {
+        promise.then(resolver(i), reject);
+      } else {
+        resolveAll(i, promise);
+      }
+    }
+  });
+}
+
+exports.all = all;
+},{"./utils":11}],4:[function(require,module,exports){
+var process=require("__browserify_process"),global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};"use strict";
+var browserGlobal = (typeof window !== 'undefined') ? window : {};
+var BrowserMutationObserver = browserGlobal.MutationObserver || browserGlobal.WebKitMutationObserver;
+var local = (typeof global !== 'undefined') ? global : (this === undefined? window:this);
+
+// node
+function useNextTick() {
+  return function() {
+    process.nextTick(flush);
+  };
+}
+
+function useMutationObserver() {
+  var iterations = 0;
+  var observer = new BrowserMutationObserver(flush);
+  var node = document.createTextNode('');
+  observer.observe(node, { characterData: true });
+
+  return function() {
+    node.data = (iterations = ++iterations % 2);
+  };
+}
+
+function useSetTimeout() {
+  return function() {
+    local.setTimeout(flush, 1);
+  };
+}
+
+var queue = [];
+function flush() {
+  for (var i = 0; i < queue.length; i++) {
+    var tuple = queue[i];
+    var callback = tuple[0], arg = tuple[1];
+    callback(arg);
+  }
+  queue = [];
+}
+
+var scheduleFlush;
+
+// Decide what async method to use to triggering processing of queued callbacks:
+if (typeof process !== 'undefined' && {}.toString.call(process) === '[object process]') {
+  scheduleFlush = useNextTick();
+} else if (BrowserMutationObserver) {
+  scheduleFlush = useMutationObserver();
+} else {
+  scheduleFlush = useSetTimeout();
+}
+
+function asap(callback, arg) {
+  var length = queue.push([callback, arg]);
+  if (length === 1) {
+    // If length is 1, that means that we need to schedule an async flush.
+    // If additional callbacks are queued before the queue is flushed, they
+    // will be processed by this flush that we are scheduling.
+    scheduleFlush();
+  }
+}
+
+exports.asap = asap;
+},{"__browserify_process":1}],5:[function(require,module,exports){
+"use strict";
+var config = {
+  instrument: false
+};
+
+function configure(name, value) {
+  if (arguments.length === 2) {
+    config[name] = value;
+  } else {
+    return config[name];
+  }
+}
+
+exports.config = config;
+exports.configure = configure;
+},{}],6:[function(require,module,exports){
+var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};"use strict";
+/*global self*/
+var RSVPPromise = require("./promise").Promise;
+var isFunction = require("./utils").isFunction;
+
+function polyfill() {
+  var local;
+
+  if (typeof global !== 'undefined') {
+    local = global;
+  } else if (typeof window !== 'undefined' && window.document) {
+    local = window;
+  } else {
+    local = self;
+  }
+
+  var es6PromiseSupport = 
+    "Promise" in local &&
+    // Some of these methods are missing from
+    // Firefox/Chrome experimental implementations
+    "resolve" in local.Promise &&
+    "reject" in local.Promise &&
+    "all" in local.Promise &&
+    "race" in local.Promise &&
+    // Older version of the spec had a resolver object
+    // as the arg rather than a function
+    (function() {
+      var resolve;
+      new local.Promise(function(r) { resolve = r; });
+      return isFunction(resolve);
+    }());
+
+  if (!es6PromiseSupport) {
+    local.Promise = RSVPPromise;
+  }
+}
+
+exports.polyfill = polyfill;
+},{"./promise":7,"./utils":11}],7:[function(require,module,exports){
+"use strict";
+var config = require("./config").config;
+var configure = require("./config").configure;
+var objectOrFunction = require("./utils").objectOrFunction;
+var isFunction = require("./utils").isFunction;
+var now = require("./utils").now;
+var all = require("./all").all;
+var race = require("./race").race;
+var staticResolve = require("./resolve").resolve;
+var staticReject = require("./reject").reject;
+var asap = require("./asap").asap;
+
+var counter = 0;
+
+config.async = asap; // default async is asap;
+
+function Promise(resolver) {
+  if (!isFunction(resolver)) {
+    throw new TypeError('You must pass a resolver function as the first argument to the promise constructor');
+  }
+
+  if (!(this instanceof Promise)) {
+    throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.");
+  }
+
+  this._subscribers = [];
+
+  invokeResolver(resolver, this);
+}
+
+function invokeResolver(resolver, promise) {
+  function resolvePromise(value) {
+    resolve(promise, value);
+  }
+
+  function rejectPromise(reason) {
+    reject(promise, reason);
+  }
+
+  try {
+    resolver(resolvePromise, rejectPromise);
+  } catch(e) {
+    rejectPromise(e);
+  }
+}
+
+function invokeCallback(settled, promise, callback, detail) {
+  var hasCallback = isFunction(callback),
+      value, error, succeeded, failed;
+
+  if (hasCallback) {
+    try {
+      value = callback(detail);
+      succeeded = true;
+    } catch(e) {
+      failed = true;
+      error = e;
+    }
+  } else {
+    value = detail;
+    succeeded = true;
+  }
+
+  if (handleThenable(promise, value)) {
+    return;
+  } else if (hasCallback && succeeded) {
+    resolve(promise, value);
+  } else if (failed) {
+    reject(promise, error);
+  } else if (settled === FULFILLED) {
+    resolve(promise, value);
+  } else if (settled === REJECTED) {
+    reject(promise, value);
+  }
+}
+
+var PENDING   = void 0;
+var SEALED    = 0;
+var FULFILLED = 1;
+var REJECTED  = 2;
+
+function subscribe(parent, child, onFulfillment, onRejection) {
+  var subscribers = parent._subscribers;
+  var length = subscribers.length;
+
+  subscribers[length] = child;
+  subscribers[length + FULFILLED] = onFulfillment;
+  subscribers[length + REJECTED]  = onRejection;
+}
+
+function publish(promise, settled) {
+  var child, callback, subscribers = promise._subscribers, detail = promise._detail;
+
+  for (var i = 0; i < subscribers.length; i += 3) {
+    child = subscribers[i];
+    callback = subscribers[i + settled];
+
+    invokeCallback(settled, child, callback, detail);
+  }
+
+  promise._subscribers = null;
+}
+
+Promise.prototype = {
+  constructor: Promise,
+
+  _state: undefined,
+  _detail: undefined,
+  _subscribers: undefined,
+
+  then: function(onFulfillment, onRejection) {
+    var promise = this;
+
+    var thenPromise = new this.constructor(function() {});
+
+    if (this._state) {
+      var callbacks = arguments;
+      config.async(function invokePromiseCallback() {
+        invokeCallback(promise._state, thenPromise, callbacks[promise._state - 1], promise._detail);
+      });
+    } else {
+      subscribe(this, thenPromise, onFulfillment, onRejection);
+    }
+
+    return thenPromise;
+  },
+
+  'catch': function(onRejection) {
+    return this.then(null, onRejection);
+  }
+};
+
+Promise.all = all;
+Promise.race = race;
+Promise.resolve = staticResolve;
+Promise.reject = staticReject;
+
+function handleThenable(promise, value) {
+  var then = null,
+  resolved;
+
+  try {
+    if (promise === value) {
+      throw new TypeError("A promises callback cannot return that same promise.");
+    }
+
+    if (objectOrFunction(value)) {
+      then = value.then;
+
+      if (isFunction(then)) {
+        then.call(value, function(val) {
+          if (resolved) { return true; }
+          resolved = true;
+
+          if (value !== val) {
+            resolve(promise, val);
+          } else {
+            fulfill(promise, val);
+          }
+        }, function(val) {
+          if (resolved) { return true; }
+          resolved = true;
+
+          reject(promise, val);
+        });
+
+        return true;
+      }
+    }
+  } catch (error) {
+    if (resolved) { return true; }
+    reject(promise, error);
+    return true;
+  }
+
+  return false;
+}
+
+function resolve(promise, value) {
+  if (promise === value) {
+    fulfill(promise, value);
+  } else if (!handleThenable(promise, value)) {
+    fulfill(promise, value);
+  }
+}
+
+function fulfill(promise, value) {
+  if (promise._state !== PENDING) { return; }
+  promise._state = SEALED;
+  promise._detail = value;
+
+  config.async(publishFulfillment, promise);
+}
+
+function reject(promise, reason) {
+  if (promise._state !== PENDING) { return; }
+  promise._state = SEALED;
+  promise._detail = reason;
+
+  config.async(publishRejection, promise);
+}
+
+function publishFulfillment(promise) {
+  publish(promise, promise._state = FULFILLED);
+}
+
+function publishRejection(promise) {
+  publish(promise, promise._state = REJECTED);
+}
+
+exports.Promise = Promise;
+},{"./all":3,"./asap":4,"./config":5,"./race":8,"./reject":9,"./resolve":10,"./utils":11}],8:[function(require,module,exports){
+"use strict";
+/* global toString */
+var isArray = require("./utils").isArray;
+
+/**
+  `RSVP.race` allows you to watch a series of promises and act as soon as the
+  first promise given to the `promises` argument fulfills or rejects.
+
+  Example:
+
+  ```javascript
+  var promise1 = new RSVP.Promise(function(resolve, reject){
+    setTimeout(function(){
+      resolve("promise 1");
+    }, 200);
+  });
+
+  var promise2 = new RSVP.Promise(function(resolve, reject){
+    setTimeout(function(){
+      resolve("promise 2");
+    }, 100);
+  });
+
+  RSVP.race([promise1, promise2]).then(function(result){
+    // result === "promise 2" because it was resolved before promise1
+    // was resolved.
+  });
+  ```
+
+  `RSVP.race` is deterministic in that only the state of the first completed
+  promise matters. For example, even if other promises given to the `promises`
+  array argument are resolved, but the first completed promise has become
+  rejected before the other promises became fulfilled, the returned promise
+  will become rejected:
+
+  ```javascript
+  var promise1 = new RSVP.Promise(function(resolve, reject){
+    setTimeout(function(){
+      resolve("promise 1");
+    }, 200);
+  });
+
+  var promise2 = new RSVP.Promise(function(resolve, reject){
+    setTimeout(function(){
+      reject(new Error("promise 2"));
+    }, 100);
+  });
+
+  RSVP.race([promise1, promise2]).then(function(result){
+    // Code here never runs because there are rejected promises!
+  }, function(reason){
+    // reason.message === "promise2" because promise 2 became rejected before
+    // promise 1 became fulfilled
+  });
+  ```
+
+  @method race
+  @for RSVP
+  @param {Array} promises array of promises to observe
+  @param {String} label optional string for describing the promise returned.
+  Useful for tooling.
+  @return {Promise} a promise that becomes fulfilled with the value the first
+  completed promises is resolved with if the first completed promise was
+  fulfilled, or rejected with the reason that the first completed promise
+  was rejected with.
+*/
+function race(promises) {
+  /*jshint validthis:true */
+  var Promise = this;
+
+  if (!isArray(promises)) {
+    throw new TypeError('You must pass an array to race.');
+  }
+  return new Promise(function(resolve, reject) {
+    var results = [], promise;
+
+    for (var i = 0; i < promises.length; i++) {
+      promise = promises[i];
+
+      if (promise && typeof promise.then === 'function') {
+        promise.then(resolve, reject);
+      } else {
+        resolve(promise);
+      }
+    }
+  });
+}
+
+exports.race = race;
+},{"./utils":11}],9:[function(require,module,exports){
+"use strict";
+/**
+  `RSVP.reject` returns a promise that will become rejected with the passed
+  `reason`. `RSVP.reject` is essentially shorthand for the following:
+
+  ```javascript
+  var promise = new RSVP.Promise(function(resolve, reject){
+    reject(new Error('WHOOPS'));
+  });
+
+  promise.then(function(value){
+    // Code here doesn't run because the promise is rejected!
+  }, function(reason){
+    // reason.message === 'WHOOPS'
+  });
+  ```
+
+  Instead of writing the above, your code now simply becomes the following:
+
+  ```javascript
+  var promise = RSVP.reject(new Error('WHOOPS'));
+
+  promise.then(function(value){
+    // Code here doesn't run because the promise is rejected!
+  }, function(reason){
+    // reason.message === 'WHOOPS'
+  });
+  ```
+
+  @method reject
+  @for RSVP
+  @param {Any} reason value that the returned promise will be rejected with.
+  @param {String} label optional string for identifying the returned promise.
+  Useful for tooling.
+  @return {Promise} a promise that will become rejected with the given
+  `reason`.
+*/
+function reject(reason) {
+  /*jshint validthis:true */
+  var Promise = this;
+
+  return new Promise(function (resolve, reject) {
+    reject(reason);
+  });
+}
+
+exports.reject = reject;
+},{}],10:[function(require,module,exports){
+"use strict";
+function resolve(value) {
+  /*jshint validthis:true */
+  if (value && typeof value === 'object' && value.constructor === this) {
+    return value;
+  }
+
+  var Promise = this;
+
+  return new Promise(function(resolve) {
+    resolve(value);
+  });
+}
+
+exports.resolve = resolve;
+},{}],11:[function(require,module,exports){
+"use strict";
+function objectOrFunction(x) {
+  return isFunction(x) || (typeof x === "object" && x !== null);
+}
+
+function isFunction(x) {
+  return typeof x === "function";
+}
+
+function isArray(x) {
+  return Object.prototype.toString.call(x) === "[object Array]";
+}
+
+// Date.now is not available in browsers < IE9
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/now#Compatibility
+var now = Date.now || function() { return new Date().getTime(); };
+
+
+exports.objectOrFunction = objectOrFunction;
+exports.isFunction = isFunction;
+exports.isArray = isArray;
+exports.now = now;
+},{}],12:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
-// 
+// version 3.0 of the License, or (at your option) any later version.
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -23,6 +684,8 @@
  * @requires packet
  * @module cleartext
  */
+
+'use strict';
 
 var config = require('./config'),
   packet = require('./packet'),
@@ -203,7 +866,7 @@ function verifyHeaders(headers, packetlist) {
 exports.CleartextMessage = CleartextMessage;
 exports.readArmored = readArmored;
 
-},{"./config":4,"./encoding/armor.js":28,"./enums.js":30,"./packet":40}],2:[function(require,module,exports){
+},{"./config":15,"./encoding/armor.js":39,"./enums.js":41,"./packet":51}],13:[function(require,module,exports){
 JXG = {
   exists: (function(undefined) {
     return function(v) {
@@ -1467,14 +2130,14 @@ JXG.Util.genUUID = function() {
 
 module.exports = JXG;
 
-},{}],3:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 //
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -1510,7 +2173,7 @@ module.exports = {
 
   show_version: true,
   show_comment: true,
-  versionstring: "OpenPGP.js v0.7.2",
+  versionstring: "OpenPGP.js v0.8.2",
   commentstring: "http://openpgpjs.org",
 
   keyserver: "keyserver.linux.it", // "pgp.mit.edu:11371"
@@ -1519,14 +2182,14 @@ module.exports = {
   debug: false
 };
 
-},{"../enums.js":30}],4:[function(require,module,exports){
+},{"../enums.js":41}],15:[function(require,module,exports){
 /**
  * @see module:config/config
  * @module config
  */
 module.exports = require('./config.js');
 
-},{"./config.js":3}],5:[function(require,module,exports){
+},{"./config.js":14}],16:[function(require,module,exports){
 // Modified by Recurity Labs GmbH 
 
 // modified version of http://www.hanewin.net/encrypt/PGdecode.js:
@@ -1820,7 +2483,7 @@ module.exports = {
   }
 };
 
-},{"../util.js":61,"./cipher":10}],6:[function(require,module,exports){
+},{"../util.js":72,"./cipher":21}],17:[function(require,module,exports){
 /* Rijndael (AES) Encryption
  * Copyright 2005 Herbert Hanewinkel, www.haneWIN.de
  * version 1.1, check www.haneWIN.de for the latest version
@@ -2339,7 +3002,7 @@ for (var i in types) {
   module.exports[types[i]] = makeClass(types[i]);
 }
 
-},{"../../util.js":61}],7:[function(require,module,exports){
+},{"../../util.js":72}],18:[function(require,module,exports){
 /* Modified by Recurity Labs GmbH 
  * 
  * Originally written by nklein software (nklein.com)
@@ -2757,7 +3420,7 @@ module.exports = BF;
 module.exports.keySize = BF.prototype.keySize = 16;
 module.exports.blockSize = BF.prototype.blockSize = 16;
 
-},{"../../util.js":61}],8:[function(require,module,exports){
+},{"../../util.js":72}],19:[function(require,module,exports){
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -3366,7 +4029,7 @@ module.exports = cast5;
 module.exports.blockSize = cast5.prototype.blockSize = 8;
 module.exports.keySize = cast5.prototype.keySize = 16;
 
-},{"../../util.js":61}],9:[function(require,module,exports){
+},{"../../util.js":72}],20:[function(require,module,exports){
 //Paul Tero, July 2001
 //http://www.tero.co.uk/des/
 //
@@ -3777,7 +4440,7 @@ module.exports = {
   originalDes: OriginalDes
 };
 
-},{"../../util.js":61}],10:[function(require,module,exports){
+},{"../../util.js":72}],21:[function(require,module,exports){
 /**
  * @requires crypto/cipher/aes
  * @requires crypto/cipher/blowfish
@@ -3811,7 +4474,7 @@ for (var i in aes) {
   module.exports['aes' + i] = aes[i];
 }
 
-},{"./aes.js":6,"./blowfish.js":7,"./cast5.js":8,"./des.js":9,"./twofish.js":11}],11:[function(require,module,exports){
+},{"./aes.js":17,"./blowfish.js":18,"./cast5.js":19,"./des.js":20,"./twofish.js":22}],22:[function(require,module,exports){
 /* Modified by Recurity Labs GmbH 
  * 
  * Cipher.js
@@ -4182,23 +4845,23 @@ module.exports = TF;
 module.exports.keySize = TF.prototype.keySize = 32;
 module.exports.blockSize = TF.prototype.blockSize = 16;
 
-},{"../../util.js":61}],12:[function(require,module,exports){
+},{"../../util.js":72}],23:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
-// 
+// version 3.0 of the License, or (at your option) any later version.
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 // The GPG4Browsers crypto interface
 
@@ -4217,12 +4880,12 @@ var random = require('./random.js'),
 
 module.exports = {
   /**
-   * Encrypts data using the specified public key multiprecision integers 
+   * Encrypts data using the specified public key multiprecision integers
    * and the specified algorithm.
    * @param {module:enums.publicKey} algo Algorithm to be used (See {@link http://tools.ietf.org/html/rfc4880#section-9.1|RFC 4880 9.1})
    * @param {Array<module:type/mpi>} publicMPIs Algorithm dependent multiprecision integers
    * @param {module:type/mpi} data Data to be encrypted as MPI
-   * @return {Array<module:type/mpi>} if RSA an module:type/mpi; 
+   * @return {Array<module:type/mpi>} if RSA an module:type/mpi;
    * if elgamal encryption an array of two module:type/mpi is returned; otherwise null
    */
   publicKeyEncrypt: function(algo, publicMPIs, data) {
@@ -4261,9 +4924,9 @@ module.exports = {
    * Decrypts data using the specified public key multiprecision integers of the private key,
    * the specified secretMPIs of the private key and the specified algorithm.
    * @param {module:enums.publicKey} algo Algorithm to be used (See {@link http://tools.ietf.org/html/rfc4880#section-9.1|RFC 4880 9.1})
-   * @param {Array<module:type/mpi>} publicMPIs Algorithm dependent multiprecision integers 
+   * @param {Array<module:type/mpi>} publicMPIs Algorithm dependent multiprecision integers
    * of the public key part of the private key
-   * @param {Array<module:type/mpi>} secretMPIs Algorithm dependent multiprecision integers 
+   * @param {Array<module:type/mpi>} secretMPIs Algorithm dependent multiprecision integers
    * of the private key used
    * @param {module:type/mpi} data Data to be encrypted as MPI
    * @return {module:type/mpi} returns a big integer containing the decrypted data; otherwise null
@@ -4364,14 +5027,13 @@ module.exports = {
   },
 
   generateMpi: function(algo, bits) {
-    var result = (function() {
-      switch (algo) {
-        case 'rsa_encrypt':
-        case 'rsa_encrypt_sign':
-        case 'rsa_sign':
-          //remember "publicKey" refers to the crypto/public_key dir
-          var rsa = new publicKey.rsa();
-          var keyObject = rsa.generate(bits, "10001");
+    switch (algo) {
+      case 'rsa_encrypt':
+      case 'rsa_encrypt_sign':
+      case 'rsa_sign':
+        //remember "publicKey" refers to the crypto/public_key dir
+        var rsa = new publicKey.rsa();
+        return rsa.generate(bits, "10001").then(function(keyObject) {
           var output = [];
           output.push(keyObject.n);
           output.push(keyObject.ee);
@@ -4379,17 +5041,19 @@ module.exports = {
           output.push(keyObject.p);
           output.push(keyObject.q);
           output.push(keyObject.u);
-          return output;
-        default:
-          throw new Error('Unsupported algorithm for key generation.');
-      }
-    })();
+          return mapResult(output);
+        });
+      default:
+        throw new Error('Unsupported algorithm for key generation.');
+    }
 
-    return result.map(function(bn) {
-      var mpi = new type_mpi();
-      mpi.fromBigInteger(bn);
-      return mpi;
-    });
+    function mapResult(result) {
+      return result.map(function(bn) {
+        var mpi = new type_mpi();
+        mpi.fromBigInteger(bn);
+        return mpi;
+      });
+    }
   },
 
 
@@ -4413,7 +5077,7 @@ module.exports = {
   }
 };
 
-},{"../type/mpi.js":59,"./cipher":10,"./public_key":23,"./random.js":26}],13:[function(require,module,exports){
+},{"../type/mpi.js":70,"./cipher":21,"./public_key":34,"./random.js":37}],24:[function(require,module,exports){
 /**
  * Secure Hash Algorithm with 256-bit digest (SHA-256) implementation.
  *
@@ -4704,7 +5368,7 @@ sha256.create = function() {
 
   return md;
 };
-},{"./forge_util.js":14}],14:[function(require,module,exports){
+},{"./forge_util.js":25}],25:[function(require,module,exports){
 /**
  * Utility functions for web applications.
  *
@@ -5542,7 +6206,7 @@ util.decodeUtf8 = function(str) {
   return decodeURIComponent(escape(str));
 };
 
-},{}],15:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 /**
  * @requires crypto/hash/sha
  * @module crypto/hash
@@ -5635,7 +6299,7 @@ module.exports = {
   }
 };
 
-},{"./forge_sha256.js":13,"./md5.js":16,"./ripe-md.js":17,"./sha.js":18}],16:[function(require,module,exports){
+},{"./forge_sha256.js":24,"./md5.js":27,"./ripe-md.js":28,"./sha.js":29}],27:[function(require,module,exports){
 /**
  * A fast MD5 JavaScript implementation
  * Copyright (c) 2012 Joseph Myers
@@ -5854,7 +6518,7 @@ if (md5('hello') != '5d41402abc4b2a76b9719d911017c592') {
   }
 }
 
-},{"../../util.js":61}],17:[function(require,module,exports){
+},{"../../util.js":72}],28:[function(require,module,exports){
 /*
  * CryptoMX Tools
  * Copyright (C) 2004 - 2006 Derek Buitenhuis
@@ -6153,7 +6817,7 @@ function RMDstring(message) {
 
 module.exports = RMDstring;
 
-},{}],18:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 /* A JavaScript implementation of the SHA family of hashes, as defined in FIPS 
  * PUB 180-2 as well as the corresponding HMAC implementation as defined in
  * FIPS PUB 198a
@@ -7280,7 +7944,7 @@ module.exports = {
   }
 };
 
-},{}],19:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 /**
  * @see module:crypto/crypto
  * @module crypto
@@ -7307,14 +7971,14 @@ var crypto = require('./crypto.js');
 for (var i in crypto)
   module.exports[i] = crypto[i];
 
-},{"./cfb.js":5,"./cipher":10,"./crypto.js":12,"./hash":15,"./pkcs1.js":20,"./public_key":23,"./random.js":26,"./signature.js":27}],20:[function(require,module,exports){
+},{"./cfb.js":16,"./cipher":21,"./crypto.js":23,"./hash":26,"./pkcs1.js":31,"./public_key":34,"./random.js":37,"./signature.js":38}],31:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -7480,14 +8144,14 @@ module.exports = {
   }
 };
 
-},{"../util.js":61,"./crypto.js":12,"./hash":15,"./public_key/jsbn.js":24,"./random.js":26}],21:[function(require,module,exports){
+},{"../util.js":72,"./crypto.js":23,"./hash":26,"./public_key/jsbn.js":35,"./random.js":37}],32:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -7664,14 +8328,14 @@ function DSA() {
 
 module.exports = DSA;
 
-},{"../../config":4,"../../util.js":61,"../hash":15,"../random.js":26,"./jsbn.js":24}],22:[function(require,module,exports){
+},{"../../config":15,"../../util.js":72,"../hash":26,"../random.js":37,"./jsbn.js":35}],33:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -7725,7 +8389,7 @@ function Elgamal() {
 
 module.exports = Elgamal;
 
-},{"../../util.js":61,"../random.js":26,"./jsbn.js":24}],23:[function(require,module,exports){
+},{"../../util.js":72,"../random.js":37,"./jsbn.js":35}],34:[function(require,module,exports){
 /**
  * @requires crypto/public_key/dsa
  * @requires crypto/public_key/elgamal
@@ -7741,7 +8405,7 @@ module.exports = {
   dsa: require('./dsa.js')
 };
 
-},{"./dsa.js":21,"./elgamal.js":22,"./rsa.js":25}],24:[function(require,module,exports){
+},{"./dsa.js":32,"./elgamal.js":33,"./rsa.js":36}],35:[function(require,module,exports){
 /*
  * Copyright (c) 2003-2005  Tom Wu (tjw@cs.Stanford.EDU) 
  * All Rights Reserved.
@@ -9454,20 +10118,20 @@ BigInteger.prototype.toMPI = bnToMPI;
 // JSBN-specific extension
 BigInteger.prototype.square = bnSquare;
 
-},{"../../util.js":61,"./jsbn.js":24}],25:[function(require,module,exports){
+},{"../../util.js":72,"./jsbn.js":35}],36:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
-// 
+// version 3.0 of the License, or (at your option) any later version.
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -9591,40 +10255,97 @@ function RSA() {
   // Generate a new random private key B bits long, using public expt E
 
   function generate(B, E) {
-    var key = new keyObject();
-    var rng = new SecureRandom();
-    var qs = B >> 1;
-    key.e = parseInt(E, 16);
-    key.ee = new BigInteger(E, 16);
-    for (;;) {
-      for (;;) {
-        key.p = new BigInteger(B - qs, 1, rng);
-        if (key.p.subtract(BigInteger.ONE).gcd(key.ee).compareTo(BigInteger.ONE) === 0 && key.p.isProbablePrime(10))
-          break;
-      }
-      for (;;) {
-        key.q = new BigInteger(qs, 1, rng);
-        if (key.q.subtract(BigInteger.ONE).gcd(key.ee).compareTo(BigInteger.ONE) === 0 && key.q.isProbablePrime(10))
-          break;
-      }
-      if (key.p.compareTo(key.q) <= 0) {
-        var t = key.p;
-        key.p = key.q;
-        key.q = t;
-      }
-      var p1 = key.p.subtract(BigInteger.ONE);
-      var q1 = key.q.subtract(BigInteger.ONE);
-      var phi = p1.multiply(q1);
-      if (phi.gcd(key.ee).compareTo(BigInteger.ONE) === 0) {
-        key.n = key.p.multiply(key.q);
-        key.d = key.ee.modInverse(phi);
-        key.dmp1 = key.d.mod(p1);
-        key.dmq1 = key.d.mod(q1);
-        key.u = key.p.modInverse(key.q);
-        break;
-      }
+    var webCrypto = util.getWebCrypto();
+    var promise;
+
+    //
+    // Native RSA keygen using Web Crypto
+    //
+
+    if (webCrypto) {
+      var Euint32 = new Uint32Array([parseInt(E, 16)]); // get integer of exponent
+      var Euint8 = new Uint8Array(Euint32.buffer); // get bytes of exponent
+      var keyGenOpt = {
+        name: 'RSASSA-PKCS1-v1_5',
+        modulusLength: B, // the specified keysize in bits
+        publicExponent: Euint8.subarray(0, 3), // take three bytes (max 65537)
+        hash: {
+          name: 'SHA-1' // not required for actual RSA keys, but for crypto api 'sign' and 'verify'
+        }
+      };
+      promise = webCrypto.generateKey(keyGenOpt, true, ['sign', 'verify']);
+      return promise.then(exportKey).then(decodeKey);
     }
-    return key;
+
+    function exportKey(key) {
+      // export the generated keys as JsonWebKey (JWK)
+      // https://tools.ietf.org/html/draft-ietf-jose-json-web-key-33
+      return webCrypto.exportKey('jwk', key.privateKey);
+    }
+
+    function decodeKey(jwk) {
+      // map JWK parameters to local BigInteger type system
+      var key = new keyObject();
+      key.n = toBigInteger(jwk.n);
+      key.ee = new BigInteger(E, 16);
+      key.d = toBigInteger(jwk.d);
+      key.p = toBigInteger(jwk.p);
+      key.q = toBigInteger(jwk.q);
+      key.u = key.p.modInverse(key.q);
+
+      function toBigInteger(base64url) {
+        var base64 = base64url.replace(/\-/g, '+').replace(/_/g, '/');
+        var hex = util.hexstrdump(atob(base64));
+        return new BigInteger(hex, 16);
+      }
+
+      return key;
+    }
+
+    //
+    // JS code
+    //
+
+    promise = new Promise(function(resolve) {
+      var key = new keyObject();
+      var rng = new SecureRandom();
+      var qs = B >> 1;
+      key.e = parseInt(E, 16);
+      key.ee = new BigInteger(E, 16);
+
+      for (;;) {
+        for (;;) {
+          key.p = new BigInteger(B - qs, 1, rng);
+          if (key.p.subtract(BigInteger.ONE).gcd(key.ee).compareTo(BigInteger.ONE) === 0 && key.p.isProbablePrime(10))
+            break;
+        }
+        for (;;) {
+          key.q = new BigInteger(qs, 1, rng);
+          if (key.q.subtract(BigInteger.ONE).gcd(key.ee).compareTo(BigInteger.ONE) === 0 && key.q.isProbablePrime(10))
+            break;
+        }
+        if (key.p.compareTo(key.q) <= 0) {
+          var t = key.p;
+          key.p = key.q;
+          key.q = t;
+        }
+        var p1 = key.p.subtract(BigInteger.ONE);
+        var q1 = key.q.subtract(BigInteger.ONE);
+        var phi = p1.multiply(q1);
+        if (phi.gcd(key.ee).compareTo(BigInteger.ONE) === 0) {
+          key.n = key.p.multiply(key.q);
+          key.d = key.ee.modInverse(phi);
+          key.dmp1 = key.d.mod(p1);
+          key.dmq1 = key.d.mod(q1);
+          key.u = key.p.modInverse(key.q);
+          break;
+        }
+      }
+
+      resolve(key);
+    });
+
+    return promise;
   }
 
   this.encrypt = encrypt;
@@ -9637,14 +10358,14 @@ function RSA() {
 
 module.exports = RSA;
 
-},{"../../config":4,"../../util.js":61,"../random.js":26,"./jsbn.js":24}],26:[function(require,module,exports){
+},{"../../config":15,"../../util.js":72,"../random.js":37,"./jsbn.js":35}],37:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -9832,7 +10553,7 @@ RandomBuffer.prototype.get = function(buf) {
   }
 };
 
-},{"../type/mpi.js":59,"crypto":false}],27:[function(require,module,exports){
+},{"../type/mpi.js":70,"crypto":false}],38:[function(require,module,exports){
 /**
  * @requires crypto/hash
  * @requires crypto/pkcs1
@@ -9942,14 +10663,14 @@ module.exports = {
   }
 };
 
-},{"./hash":15,"./pkcs1.js":20,"./public_key":23}],28:[function(require,module,exports){
+},{"./hash":26,"./pkcs1.js":31,"./public_key":34}],39:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 //
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -10352,7 +11073,7 @@ module.exports = {
   decode: dearmor
 };
 
-},{"../config":4,"../enums.js":30,"./base64.js":29}],29:[function(require,module,exports){
+},{"../config":15,"../enums.js":41,"./base64.js":40}],40:[function(require,module,exports){
 /* OpenPGP radix-64/base64 string encoding/decoding
  * Copyright 2005 Herbert Hanewinkel, www.haneWIN.de
  * version 1.0, check www.haneWIN.de for the latest version
@@ -10455,7 +11176,9 @@ module.exports = {
   decode: r2s
 };
 
-},{}],30:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
+'use strict';
+
 /**
  * @module enums
  */
@@ -10774,7 +11497,8 @@ module.exports = {
   }
 };
 
-},{}],31:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
+'use strict';
 
 module.exports = require('./openpgp.js');
 /**
@@ -10848,20 +11572,20 @@ module.exports.Keyring = require('./keyring');
  */
 module.exports.AsyncProxy = require('./worker/async_proxy.js');
 
-},{"./cleartext.js":1,"./config/config.js":3,"./crypto":19,"./encoding/armor.js":28,"./enums.js":30,"./key.js":32,"./keyring":33,"./message.js":36,"./openpgp.js":37,"./packet":40,"./type/keyid.js":58,"./type/mpi.js":59,"./type/s2k.js":60,"./util.js":61,"./worker/async_proxy.js":62}],32:[function(require,module,exports){
+},{"./cleartext.js":12,"./config/config.js":14,"./crypto":30,"./encoding/armor.js":39,"./enums.js":41,"./key.js":43,"./keyring":44,"./message.js":47,"./openpgp.js":48,"./packet":51,"./type/keyid.js":69,"./type/mpi.js":70,"./type/s2k.js":71,"./util.js":72,"./worker/async_proxy.js":73}],43:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
-// 
+// version 3.0 of the License, or (at your option) any later version.
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -10873,6 +11597,8 @@ module.exports.AsyncProxy = require('./worker/async_proxy.js');
  * @requires packet
  * @module key
  */
+
+'use strict';
 
 var packet = require('./packet'),
   enums = require('./enums.js'),
@@ -10999,14 +11725,14 @@ Key.prototype.toPacketlist = function() {
   if (this.subKeys) {
     for (i = 0; i < this.subKeys.length; i++) {
       packetlist.concat(this.subKeys[i].toPacketlist());
-    } 
+    }
   }
   return packetlist;
 };
 
-/** 
+/**
  * Returns all the private and public subkey packets
- * @returns {Array<(module:packet/public_subkey|module:packet/secret_subkey)>} 
+ * @returns {Array<(module:packet/public_subkey|module:packet/secret_subkey)>}
  */
 Key.prototype.getSubkeyPackets = function() {
   var subKeys = [];
@@ -11018,17 +11744,17 @@ Key.prototype.getSubkeyPackets = function() {
   return subKeys;
 };
 
-/** 
+/**
  * Returns all the private and public key and subkey packets
- * @returns {Array<(module:packet/public_subkey|module:packet/secret_subkey|module:packet/secret_key|module:packet/public_key)>} 
+ * @returns {Array<(module:packet/public_subkey|module:packet/secret_subkey|module:packet/secret_key|module:packet/public_key)>}
  */
 Key.prototype.getAllKeyPackets = function() {
   return [this.primaryKey].concat(this.getSubkeyPackets());
 };
 
-/** 
+/**
  * Returns key IDs of all key packets
- * @returns {Array<module:type/keyid>} 
+ * @returns {Array<module:type/keyid>}
  */
 Key.prototype.getKeyIds = function() {
   var keyIds = [];
@@ -11048,7 +11774,7 @@ Key.prototype.getKeyIds = function() {
 Key.prototype.getKeyPacket = function(keyIds) {
   var keys = this.getAllKeyPackets();
   for (var i = 0; i < keys.length; i++) {
-    var keyId = keys[i].getKeyId(); 
+    var keyId = keys[i].getKeyId();
     for (var j = 0; j < keyIds.length; j++) {
       if (keyId.equals(keyIds[j])) {
         return keys[i];
@@ -11135,7 +11861,7 @@ Key.prototype.getSigningKeyPacket = function() {
     throw new Error('Need private key for signing');
   }
   var primaryUser = this.getPrimaryUser();
-  if (primaryUser && 
+  if (primaryUser &&
       isValidSigningKeyPacket(this.primaryKey, primaryUser.selfCertificate)) {
     return this.primaryKey;
   }
@@ -11193,7 +11919,7 @@ Key.prototype.getEncryptionKeyPacket = function() {
   }
   // if no valid subkey for encryption, evaluate primary key
   var primaryUser = this.getPrimaryUser();
-  if (primaryUser && 
+  if (primaryUser &&
       isValidEncryptionKeyPacket(this.primaryKey, primaryUser.selfCertificate)) {
     return this.primaryKey;
   }
@@ -11202,7 +11928,7 @@ Key.prototype.getEncryptionKeyPacket = function() {
 
 /**
  * Decrypts all secret key and subkey packets
- * @param  {String} passphrase 
+ * @param  {String} passphrase
  * @return {Boolean} true if all key and subkey packets decrypted successfully
  */
 Key.prototype.decrypt = function(passphrase) {
@@ -11221,14 +11947,14 @@ Key.prototype.decrypt = function(passphrase) {
 /**
  * Decrypts specific key packets by key ID
  * @param  {Array<module:type/keyid>} keyIds
- * @param  {String} passphrase 
+ * @param  {String} passphrase
  * @return {Boolean} true if all key packets decrypted successfully
  */
 Key.prototype.decryptKeyPacket = function(keyIds, passphrase) {
   if (this.isPrivate()) {
     var keys = this.getAllKeyPackets();
     for (var i = 0; i < keys.length; i++) {
-      var keyId = keys[i].getKeyId(); 
+      var keyId = keys[i].getKeyId();
       for (var j = 0; j < keyIds.length; j++) {
         if (keyId.equals(keyIds[j])) {
           var success = keys[i].decrypt(passphrase);
@@ -11249,8 +11975,8 @@ Key.prototype.decryptKeyPacket = function(keyIds, passphrase) {
  */
 Key.prototype.verifyPrimaryKey = function() {
   // check revocation signature
-  if (this.revocationSignature && !this.revocationSignature.isExpired() && 
-     (this.revocationSignature.verified || 
+  if (this.revocationSignature && !this.revocationSignature.isExpired() &&
+     (this.revocationSignature.verified ||
       this.revocationSignature.verify(this.primaryKey, {key: this.primaryKey}))) {
     return enums.keyStatus.revoked;
   }
@@ -11331,13 +12057,13 @@ Key.prototype.getPrimaryUser = function() {
   }
   // sort by primary user flag and signature creation time
   primUser = primUser.sort(function(a, b) {
-    if (a.isPrimaryUserID > b.isPrimaryUserID) {
+    if (a.selfCertificate.isPrimaryUserID > b.selfCertificate.isPrimaryUserID) {
       return -1;
-    } else if (a.isPrimaryUserID < b.isPrimaryUserID) {
+    } else if (a.selfCertificate.isPrimaryUserID < b.selfCertificate.isPrimaryUserID) {
       return 1;
-    } else if (a.created > b.created) {
+    } else if (a.selfCertificate.created > b.selfCertificate.created) {
       return -1;
-    } else if (a.created < b.created) {
+    } else if (a.selfCertificate.created < b.selfCertificate.created) {
       return 1;
     } else {
       return 0;
@@ -11492,8 +12218,8 @@ User.prototype.isRevoked = function(certificate, primaryKey) {
     var that = this;
     return this.revocationCertifications.some(function(revCert) {
              return revCert.issuerKeyId.equals(certificate.issuerKeyId) &&
-                    !revCert.isExpired() && 
-                    (revCert.verified || 
+                    !revCert.isExpired() &&
+                    (revCert.verified ||
                      revCert.verify(primaryKey, {userid: that.userId || that.userAttribute, key: primaryKey}));
           });
   } else {
@@ -11546,7 +12272,7 @@ User.prototype.isValidSelfCertificate = function(primaryKey, selfCertificate) {
  * Verify User. Checks for existence of self signatures, revocation signatures
  * and validity of self signature
  * @param  {module:packet/secret_key|module:packet/public_key} primaryKey The primary key packet
- * @return {module:enums.keyStatus} status of user    
+ * @return {module:enums.keyStatus} status of user
  */
 User.prototype.verify = function(primaryKey) {
   if (!this.selfCertifications) {
@@ -11558,7 +12284,7 @@ User.prototype.verify = function(primaryKey) {
       status = enums.keyStatus.revoked;
       continue;
     }
-    if (!(this.selfCertifications[i].verified || 
+    if (!(this.selfCertifications[i].verified ||
         this.selfCertifications[i].verify(primaryKey, {userid: this.userId || this.userAttribute, key: primaryKey}))) {
       status = enums.keyStatus.invalid;
       continue;
@@ -11643,8 +12369,8 @@ SubKey.prototype.isValidSigningKey = function(primaryKey) {
  */
 SubKey.prototype.verify = function(primaryKey) {
   // check subkey revocation signature
-  if (this.revocationSignature && !this.revocationSignature.isExpired() && 
-     (this.revocationSignature.verified || 
+  if (this.revocationSignature && !this.revocationSignature.isExpired() &&
+     (this.revocationSignature.verified ||
       this.revocationSignature.verify(primaryKey, {key:primaryKey, bind: this.subKey}))) {
     return enums.keyStatus.revoked;
   }
@@ -11739,12 +12465,12 @@ function readArmored(armoredText) {
         result.keys.push(newKey);
       } catch (e) {
         result.err = result.err || [];
-        result.err.push(e); 
+        result.err.push(e);
       }
     }
   } catch (e) {
     result.err = result.err || [];
-    result.err.push(e); 
+    result.err.push(e);
   }
   return result;
 }
@@ -11762,6 +12488,8 @@ function readArmored(armoredText) {
  * @static
  */
 function generate(options) {
+  var packetlist, secretKeyPacket, userIdPacket, dataToSign, signaturePacket, secretSubkeyPacket, subkeySignaturePacket;
+
   options.keyType = options.keyType || enums.publicKey.rsa_encrypt_sign;
   // RSA Encrypt-Only and RSA Sign-Only are deprecated and SHOULD NOT be generated
   if (options.keyType !== enums.publicKey.rsa_encrypt_sign) {
@@ -11772,74 +12500,85 @@ function generate(options) {
     options.unlocked = true;
   }
 
-  var packetlist = new packet.List();
+  // generate
+  var genSecretKey = generateSecretKey();
+  var genSecretSubkey = generateSecretSubkey();
+  return Promise.all([genSecretKey, genSecretSubkey]).then(wrapKeyObject);
 
-  var secretKeyPacket = new packet.SecretKey();
-  secretKeyPacket.algorithm = enums.read(enums.publicKey, options.keyType);
-  secretKeyPacket.generate(options.numBits);
-  if (options.passphrase) {
-    secretKeyPacket.encrypt(options.passphrase);
+  function generateSecretKey() {
+    secretKeyPacket = new packet.SecretKey();
+    secretKeyPacket.algorithm = enums.read(enums.publicKey, options.keyType);
+    return secretKeyPacket.generate(options.numBits);
   }
 
-  var userIdPacket = new packet.Userid();
-  userIdPacket.read(options.userId);
-
-  var dataToSign = {};
-  dataToSign.userid = userIdPacket;
-  dataToSign.key = secretKeyPacket;
-  var signaturePacket = new packet.Signature();
-  signaturePacket.signatureType = enums.signature.cert_generic;
-  signaturePacket.publicKeyAlgorithm = options.keyType;
-  signaturePacket.hashAlgorithm = config.prefer_hash_algorithm;
-  signaturePacket.keyFlags = [enums.keyFlags.certify_keys | enums.keyFlags.sign_data];
-  signaturePacket.preferredSymmetricAlgorithms = [];
-  signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.aes256);
-  signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.aes192);
-  signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.aes128);
-  signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.cast5);
-  signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.tripledes);
-  signaturePacket.preferredHashAlgorithms = [];
-  signaturePacket.preferredHashAlgorithms.push(enums.hash.sha256);
-  signaturePacket.preferredHashAlgorithms.push(enums.hash.sha1);
-  signaturePacket.preferredHashAlgorithms.push(enums.hash.sha512);
-  signaturePacket.preferredCompressionAlgorithms = [];
-  signaturePacket.preferredCompressionAlgorithms.push(enums.compression.zlib);
-  signaturePacket.preferredCompressionAlgorithms.push(enums.compression.zip);
-  if (config.integrity_protect) {
-    signaturePacket.features = [];
-    signaturePacket.features.push(1); // Modification Detection
-  }
-  signaturePacket.sign(secretKeyPacket, dataToSign);
-
-  var secretSubkeyPacket = new packet.SecretSubkey();
-  secretSubkeyPacket.algorithm = enums.read(enums.publicKey, options.keyType);
-  secretSubkeyPacket.generate(options.numBits);
-  if (options.passphrase) {
-    secretSubkeyPacket.encrypt(options.passphrase);
+  function generateSecretSubkey() {
+    secretSubkeyPacket = new packet.SecretSubkey();
+    secretSubkeyPacket.algorithm = enums.read(enums.publicKey, options.keyType);
+    return secretSubkeyPacket.generate(options.numBits);
   }
 
-  dataToSign = {};
-  dataToSign.key = secretKeyPacket;
-  dataToSign.bind = secretSubkeyPacket;
-  var subkeySignaturePacket = new packet.Signature();
-  subkeySignaturePacket.signatureType = enums.signature.subkey_binding;
-  subkeySignaturePacket.publicKeyAlgorithm = options.keyType;
-  subkeySignaturePacket.hashAlgorithm = config.prefer_hash_algorithm;
-  subkeySignaturePacket.keyFlags = [enums.keyFlags.encrypt_communication | enums.keyFlags.encrypt_storage];
-  subkeySignaturePacket.sign(secretKeyPacket, dataToSign);
+  function wrapKeyObject() {
+    // set passphrase protection
+    if (options.passphrase) {
+      secretKeyPacket.encrypt(options.passphrase);
+      secretSubkeyPacket.encrypt(options.passphrase);
+    }
 
-  packetlist.push(secretKeyPacket);
-  packetlist.push(userIdPacket);
-  packetlist.push(signaturePacket);
-  packetlist.push(secretSubkeyPacket);
-  packetlist.push(subkeySignaturePacket);
+    packetlist = new packet.List();
 
-  if (!options.unlocked) {
-    secretKeyPacket.clearPrivateMPIs();
-    secretSubkeyPacket.clearPrivateMPIs();
+    userIdPacket = new packet.Userid();
+    userIdPacket.read(options.userId);
+
+    dataToSign = {};
+    dataToSign.userid = userIdPacket;
+    dataToSign.key = secretKeyPacket;
+    signaturePacket = new packet.Signature();
+    signaturePacket.signatureType = enums.signature.cert_generic;
+    signaturePacket.publicKeyAlgorithm = options.keyType;
+    signaturePacket.hashAlgorithm = config.prefer_hash_algorithm;
+    signaturePacket.keyFlags = [enums.keyFlags.certify_keys | enums.keyFlags.sign_data];
+    signaturePacket.preferredSymmetricAlgorithms = [];
+    signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.aes256);
+    signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.aes192);
+    signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.aes128);
+    signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.cast5);
+    signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.tripledes);
+    signaturePacket.preferredHashAlgorithms = [];
+    signaturePacket.preferredHashAlgorithms.push(enums.hash.sha256);
+    signaturePacket.preferredHashAlgorithms.push(enums.hash.sha1);
+    signaturePacket.preferredHashAlgorithms.push(enums.hash.sha512);
+    signaturePacket.preferredCompressionAlgorithms = [];
+    signaturePacket.preferredCompressionAlgorithms.push(enums.compression.zlib);
+    signaturePacket.preferredCompressionAlgorithms.push(enums.compression.zip);
+    if (config.integrity_protect) {
+      signaturePacket.features = [];
+      signaturePacket.features.push(1); // Modification Detection
+    }
+    signaturePacket.sign(secretKeyPacket, dataToSign);
+
+    dataToSign = {};
+    dataToSign.key = secretKeyPacket;
+    dataToSign.bind = secretSubkeyPacket;
+    subkeySignaturePacket = new packet.Signature();
+    subkeySignaturePacket.signatureType = enums.signature.subkey_binding;
+    subkeySignaturePacket.publicKeyAlgorithm = options.keyType;
+    subkeySignaturePacket.hashAlgorithm = config.prefer_hash_algorithm;
+    subkeySignaturePacket.keyFlags = [enums.keyFlags.encrypt_communication | enums.keyFlags.encrypt_storage];
+    subkeySignaturePacket.sign(secretKeyPacket, dataToSign);
+
+    packetlist.push(secretKeyPacket);
+    packetlist.push(userIdPacket);
+    packetlist.push(signaturePacket);
+    packetlist.push(secretSubkeyPacket);
+    packetlist.push(subkeySignaturePacket);
+
+    if (!options.unlocked) {
+      secretKeyPacket.clearPrivateMPIs();
+      secretSubkeyPacket.clearPrivateMPIs();
+    }
+
+    return new Key(packetlist);
   }
-
-  return new Key(packetlist);
 }
 
 /**
@@ -11880,7 +12619,7 @@ exports.readArmored = readArmored;
 exports.generate = generate;
 exports.getPreferredSymAlgo = getPreferredSymAlgo;
 
-},{"./config":4,"./encoding/armor.js":28,"./enums.js":30,"./packet":40,"./util":61}],33:[function(require,module,exports){
+},{"./config":15,"./encoding/armor.js":39,"./enums.js":41,"./packet":51,"./util":72}],44:[function(require,module,exports){
 /**
  * @see module:keyring/keyring
  * @module keyring
@@ -11888,14 +12627,14 @@ exports.getPreferredSymAlgo = getPreferredSymAlgo;
 module.exports = require('./keyring.js');
 module.exports.localstore = require('./localstore.js');
 
-},{"./keyring.js":34,"./localstore.js":35}],34:[function(require,module,exports){
+},{"./keyring.js":45,"./localstore.js":46}],45:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -12110,14 +12849,14 @@ KeyArray.prototype.removeForId = function (keyId) {
   return null;
 };
 
-},{"../enums.js":30,"../key.js":32,"../util.js":61,"./localstore.js":35}],35:[function(require,module,exports){
+},{"../enums.js":41,"../key.js":43,"../util.js":72,"./localstore.js":46}],46:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -12216,20 +12955,20 @@ function storeKeys(storage, itemname, keys) {
   storage.setItem(itemname, JSON.stringify(armoredKeys));
 }
 
-},{"../config":4,"../key.js":32,"../util.js":61,"node-localstorage":false}],36:[function(require,module,exports){
+},{"../config":15,"../key.js":43,"../util.js":72,"node-localstorage":false}],47:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
-// 
+// version 3.0 of the License, or (at your option) any later version.
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -12242,6 +12981,8 @@ function storeKeys(storage, itemname, keys) {
  * @requires packet
  * @module message
  */
+
+'use strict';
 
 var packet = require('./packet'),
   enums = require('./enums.js'),
@@ -12302,7 +13043,7 @@ Message.prototype.getSigningKeyIds = function() {
 
 /**
  * Decrypt the message
- * @param {module:key~Key} privateKey private key with decrypted secret data           
+ * @param {module:key~Key} privateKey private key with decrypted secret data
  * @return {Array<module:message~Message>} new message with decrypted content
  */
 Message.prototype.decrypt = function(privateKey) {
@@ -12405,7 +13146,7 @@ Message.prototype.sign = function(privateKeys) {
 
   var literalDataPacket = this.packets.findPacket(enums.packet.literal);
   if (!literalDataPacket) throw new Error('No literal data packet to sign.');
-  
+
   var literalFormat = enums.write(enums.literal, literalDataPacket.format);
   var signatureType = literalFormat == enums.literal.binary ?
                       enums.signature.binary : enums.signature.text;
@@ -12425,7 +13166,7 @@ Message.prototype.sign = function(privateKeys) {
   }
 
   packetlist.push(literalDataPacket);
-  
+
   for (i = privateKeys.length - 1; i >= 0; i--) {
     var signaturePacket = new packet.Signature();
     signaturePacket.signatureType = signatureType;
@@ -12562,14 +13303,14 @@ exports.readSignedContent = readSignedContent;
 exports.fromText = fromText;
 exports.fromBinary = fromBinary;
 
-},{"./config":4,"./crypto":19,"./encoding/armor.js":28,"./enums.js":30,"./key.js":32,"./packet":40}],37:[function(require,module,exports){
+},{"./config":15,"./crypto":30,"./encoding/armor.js":39,"./enums.js":41,"./key.js":43,"./packet":51}],48:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 //
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -12596,14 +13337,20 @@ exports.fromBinary = fromBinary;
  * @module openpgp
  */
 
+'use strict';
+
 var armor = require('./encoding/armor.js'),
-  packet = require('./packet'),
   enums = require('./enums.js'),
-  config = require('./config'),
   message = require('./message.js'),
   cleartext = require('./cleartext.js'),
   key = require('./key.js'),
+  util = require('./util'),
   AsyncProxy = require('./worker/async_proxy.js');
+
+if (typeof Promise === 'undefined') {
+  // load ES6 Promises polyfill
+  require('es6-promise').polyfill();
+}
 
 var asyncProxy; // instance of the asyncproxy
 
@@ -12619,18 +13366,16 @@ function initWorker(path) {
  * Encrypts message text with keys
  * @param  {(Array<module:key~Key>|module:key~Key)}  keys array of keys or single key, used to encrypt the message
  * @param  {String} text message as native JavaScript string
- * @param  {function} callback (optional) callback(error, result) for async style
- * @return {String}      encrypted ASCII armored message
+ * @return {Promise<String>}      encrypted ASCII armored message
  * @static
  */
-function encryptMessage(keys, text, callback) {
+function encryptMessage(keys, text) {
   if (!keys.length) {
     keys = [keys];
   }
 
-  if (useWorker(callback)) {
-    asyncProxy.encryptMessage(keys, text, callback);
-    return;
+  if (useWorker()) {
+    return asyncProxy.encryptMessage(keys, text);
   }
 
   return execute(function() {
@@ -12639,7 +13384,8 @@ function encryptMessage(keys, text, callback) {
     msg = msg.encrypt(keys);
     armored = armor.encode(enums.armor.message, msg.packets.write());
     return armored;
-  }, callback);
+
+  }, 'Error encrypting message!');
 }
 
 /**
@@ -12647,18 +13393,16 @@ function encryptMessage(keys, text, callback) {
  * @param  {(Array<module:key~Key>|module:key~Key)}  publicKeys array of keys or single key, used to encrypt the message
  * @param  {module:key~Key}    privateKey private key with decrypted secret key data for signing
  * @param  {String} text       message as native JavaScript string
- * @param  {function} callback (optional) callback(error, result) for async style
- * @return {String}            encrypted ASCII armored message
+ * @return {Promise<String>}   encrypted ASCII armored message
  * @static
  */
-function signAndEncryptMessage(publicKeys, privateKey, text, callback) {
+function signAndEncryptMessage(publicKeys, privateKey, text) {
   if (!publicKeys.length) {
     publicKeys = [publicKeys];
   }
 
-  if (useWorker(callback)) {
-    asyncProxy.signAndEncryptMessage(publicKeys, privateKey, text, callback);
-    return;
+  if (useWorker()) {
+    return asyncProxy.signAndEncryptMessage(publicKeys, privateKey, text);
   }
 
   return execute(function() {
@@ -12668,28 +13412,28 @@ function signAndEncryptMessage(publicKeys, privateKey, text, callback) {
     msg = msg.encrypt(publicKeys);
     armored = armor.encode(enums.armor.message, msg.packets.write());
     return armored;
-  }, callback);
+
+  }, 'Error signing and encrypting message!');
 }
 
 /**
  * Decrypts message
- * @param  {module:key~Key}     privateKey private key with decrypted secret key data
+ * @param  {module:key~Key}                privateKey private key with decrypted secret key data
  * @param  {module:message~Message} msg    the message object with the encrypted data
- * @param  {function} callback (optional) callback(error, result) for async style
- * @return {(String|null)}        decrypted message as as native JavaScript string
+ * @return {Promise<(String|null)>}        decrypted message as as native JavaScript string
  *                              or null if no literal data found
  * @static
  */
-function decryptMessage(privateKey, msg, callback) {
-  if (useWorker(callback)) {
-    asyncProxy.decryptMessage(privateKey, msg, callback);
-    return;
+function decryptMessage(privateKey, msg) {
+  if (useWorker()) {
+    return asyncProxy.decryptMessage(privateKey, msg);
   }
 
   return execute(function() {
     msg = msg.decrypt(privateKey);
     return msg.getText();
-  }, callback);
+
+  }, 'Error decrypting message!');
 }
 
 /**
@@ -12697,20 +13441,18 @@ function decryptMessage(privateKey, msg, callback) {
  * @param  {module:key~Key}     privateKey private key with decrypted secret key data
  * @param  {(Array<module:key~Key>|module:key~Key)}  publicKeys array of keys or single key, to verify signatures
  * @param  {module:message~Message} msg    the message object with signed and encrypted data
- * @param  {function} callback (optional) callback(error, result) for async style
- * @return {{text: String, signatures: Array<{keyid: module:type/keyid, valid: Boolean}>}}
+ * @return {Promise<{text: String, signatures: Array<{keyid: module:type/keyid, valid: Boolean}>}>}
  *                              decrypted message as as native JavaScript string
  *                              with verified signatures or null if no literal data found
  * @static
  */
-function decryptAndVerifyMessage(privateKey, publicKeys, msg, callback) {
+function decryptAndVerifyMessage(privateKey, publicKeys, msg) {
   if (!publicKeys.length) {
     publicKeys = [publicKeys];
   }
 
-  if (useWorker(callback)) {
-    asyncProxy.decryptAndVerifyMessage(privateKey, publicKeys, msg, callback);
-    return;
+  if (useWorker()) {
+    return asyncProxy.decryptAndVerifyMessage(privateKey, publicKeys, msg);
   }
 
   return execute(function() {
@@ -12722,51 +13464,49 @@ function decryptAndVerifyMessage(privateKey, publicKeys, msg, callback) {
       return result;
     }
     return null;
-  }, callback);
+
+  }, 'Error decrypting and verifying message!');
 }
 
 /**
  * Signs a cleartext message
  * @param  {(Array<module:key~Key>|module:key~Key)}  privateKeys array of keys or single key with decrypted secret key data to sign cleartext
  * @param  {String} text        cleartext
- * @param  {function} callback (optional) callback(error, result) for async style
- * @return {String}             ASCII armored message
+ * @return {Promise<String>}    ASCII armored message
  * @static
  */
-function signClearMessage(privateKeys, text, callback) {
+function signClearMessage(privateKeys, text) {
   if (!privateKeys.length) {
     privateKeys = [privateKeys];
   }
 
-  if (useWorker(callback)) {
-    asyncProxy.signClearMessage(privateKeys, text, callback);
-    return;
+  if (useWorker()) {
+    return asyncProxy.signClearMessage(privateKeys, text);
   }
 
   return execute(function() {
     var cleartextMessage = new cleartext.CleartextMessage(text);
     cleartextMessage.sign(privateKeys);
     return cleartextMessage.armor();
-  }, callback);
+
+  }, 'Error signing cleartext message!');
 }
 
 /**
  * Verifies signatures of cleartext signed message
  * @param  {(Array<module:key~Key>|module:key~Key)}  publicKeys array of keys or single key, to verify signatures
  * @param  {module:cleartext~CleartextMessage} msg    cleartext message object with signatures
- * @param  {function} callback (optional) callback(error, result) for async style
- * @return {{text: String, signatures: Array<{keyid: module:type/keyid, valid: Boolean}>}}
+ * @return {Promise<{text: String, signatures: Array<{keyid: module:type/keyid, valid: Boolean}>}>}
  *                                       cleartext with status of verified signatures
  * @static
  */
-function verifyClearSignedMessage(publicKeys, msg, callback) {
+function verifyClearSignedMessage(publicKeys, msg) {
   if (!publicKeys.length) {
     publicKeys = [publicKeys];
   }
 
-  if (useWorker(callback)) {
-    asyncProxy.verifyClearSignedMessage(publicKeys, msg, callback);
-    return;
+  if (useWorker()) {
+    return asyncProxy.verifyClearSignedMessage(publicKeys, msg);
   }
 
   return execute(function() {
@@ -12777,7 +13517,8 @@ function verifyClearSignedMessage(publicKeys, msg, callback) {
     result.text = msg.getText();
     result.signatures = msg.verify(publicKeys);
     return result;
-  }, callback);
+
+  }, 'Error verifying cleartext signed message!');
 }
 
 /**
@@ -12789,24 +13530,35 @@ function verifyClearSignedMessage(publicKeys, msg, callback) {
  * @param {String}  options.userId     assumes already in form of "User Name <username@email.com>"
  * @param {String}  options.passphrase The passphrase used to encrypt the resulting private key
  * @param {Boolean} [options.unlocked=false]    The secret part of the generated key is unlocked
- * @param  {function} callback (optional) callback(error, result) for async style
- * @return {Object} {key: module:key~Key, privateKeyArmored: String, publicKeyArmored: String}
+ * @return {Promise<Object>} {key: module:key~Key, privateKeyArmored: String, publicKeyArmored: String}
  * @static
  */
-function generateKeyPair(options, callback) {
-  if (useWorker(callback)) {
-    asyncProxy.generateKeyPair(options, callback);
-    return;
+function generateKeyPair(options) {
+  // use web worker if web crypto apis are not supported
+  if (!util.getWebCrypto() && useWorker()) {
+    return asyncProxy.generateKeyPair(options);
   }
 
-  return execute(function() {
+  return key.generate(options).then(function(newKey) {
     var result = {};
-    var newKey = key.generate(options);
     result.key = newKey;
     result.privateKeyArmored = newKey.armor();
     result.publicKeyArmored = newKey.toPublic().armor();
     return result;
-  }, callback);
+
+  }).catch(function(err) {
+    console.error(err);
+
+    if (!util.getWebCrypto()) {
+      // js fallback already tried
+      throw new Error('Error generating keypair using js fallback!');
+    }
+
+    // fall back to js keygen in a worker
+    console.log('Error generating keypair using native WebCrypto... falling back back to js!');
+    return asyncProxy.generateKeyPair(options);
+
+  }).catch(onError.bind(null, 'Error generating keypair!'));
 }
 
 //
@@ -12816,41 +13568,48 @@ function generateKeyPair(options, callback) {
 /**
  * Are we in a browser and do we support worker?
  */
-function useWorker(callback) {
-  if (typeof window === 'undefined' || !window.Worker || typeof callback !== 'function') {
+function useWorker() {
+  if (typeof window === 'undefined' || !window.Worker) {
     return false;
   }
 
   if (!asyncProxy) {
-    throw new Error('You need to set the worker path!');
+    console.log('You need to set the worker path!');
+    return false;
   }
 
   return true;
 }
 
 /**
- * Command pattern that handles async calls gracefully
+ * Command pattern that wraps synchronous code into a promise
+ * @param  {function} cmd     The synchronous function with a return value
+ *                            to be wrapped in a promise
+ * @param  {String}   errMsg  A human readable error Message
+ * @return {Promise}          The promise wrapped around cmd
  */
-function execute(cmd, callback) {
-  var result;
+function execute(cmd, errMsg) {
+  // wrap the sync cmd in a promise
+  var promise = new Promise(function(resolve) {
+    var result = cmd();
+    resolve(result);
+  });
 
-  try {
-    result = cmd();
-  } catch (err) {
-    if (callback) {
-      callback(err);
-      return;
-    }
+  // handler error globally
+  return promise.catch(onError.bind(null, errMsg));
+}
 
-    throw err;
-  }
-
-  if (callback) {
-    callback(null, result);
-    return;
-  }
-
-  return result;
+/**
+ * Global error handler that logs the stack trace and
+ *   rethrows a high lvl error message
+ * @param  {String} message   A human readable high level error Message
+ * @param  {Error}  error     The internal error that caused the failure
+ */
+function onError(message, error) {
+  // log the stack trace
+  console.error(error.stack);
+  // rethrow new high level error for api users
+  throw new Error(message);
 }
 
 exports.initWorker = initWorker;
@@ -12861,8 +13620,7 @@ exports.decryptAndVerifyMessage = decryptAndVerifyMessage;
 exports.signClearMessage = signClearMessage;
 exports.verifyClearSignedMessage = verifyClearSignedMessage;
 exports.generateKeyPair = generateKeyPair;
-
-},{"./cleartext.js":1,"./config":4,"./encoding/armor.js":28,"./enums.js":30,"./key.js":32,"./message.js":36,"./packet":40,"./worker/async_proxy.js":62}],38:[function(require,module,exports){
+},{"./cleartext.js":12,"./encoding/armor.js":39,"./enums.js":41,"./key.js":43,"./message.js":47,"./util":72,"./worker/async_proxy.js":73,"es6-promise":2}],49:[function(require,module,exports){
 /**
  * @requires enums
  * @module packet
@@ -12942,14 +13700,14 @@ function packetClassFromTagName(tag) {
   return tag.substr(0, 1).toUpperCase() + tag.substr(1);
 }
 
-},{"../enums.js":30,"./compressed.js":39,"./literal.js":41,"./marker.js":42,"./one_pass_signature.js":43,"./public_key.js":46,"./public_key_encrypted_session_key.js":47,"./public_subkey.js":48,"./secret_key.js":49,"./secret_subkey.js":50,"./signature.js":51,"./sym_encrypted_integrity_protected.js":52,"./sym_encrypted_session_key.js":53,"./symmetrically_encrypted.js":54,"./trust.js":55,"./user_attribute.js":56,"./userid.js":57}],39:[function(require,module,exports){
+},{"../enums.js":41,"./compressed.js":50,"./literal.js":52,"./marker.js":53,"./one_pass_signature.js":54,"./public_key.js":57,"./public_key_encrypted_session_key.js":58,"./public_subkey.js":59,"./secret_key.js":60,"./secret_subkey.js":61,"./signature.js":62,"./sym_encrypted_integrity_protected.js":63,"./sym_encrypted_session_key.js":64,"./symmetrically_encrypted.js":65,"./trust.js":66,"./user_attribute.js":67,"./userid.js":68}],50:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -13118,7 +13876,7 @@ Compressed.prototype.compress = function () {
   }
 };
 
-},{"../compression/jxg.js":2,"../encoding/base64.js":29,"../enums.js":30}],40:[function(require,module,exports){
+},{"../compression/jxg.js":13,"../encoding/base64.js":40,"../enums.js":41}],51:[function(require,module,exports){
 var enums = require('../enums.js');
 
 module.exports = {
@@ -13134,14 +13892,14 @@ var packets = require('./all_packets.js');
 for (var i in packets)
   module.exports[i] = packets[i];
 
-},{"../enums.js":30,"./all_packets.js":38,"./packetlist.js":45}],41:[function(require,module,exports){
+},{"../enums.js":41,"./all_packets.js":49,"./packetlist.js":56}],52:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -13286,14 +14044,14 @@ Literal.prototype.write = function () {
   return result;
 };
 
-},{"../enums.js":30,"../util.js":61}],42:[function(require,module,exports){
+},{"../enums.js":41,"../util.js":72}],53:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -13349,14 +14107,14 @@ Marker.prototype.read = function (bytes) {
   return false;
 };
 
-},{"../enums.js":30}],43:[function(require,module,exports){
+},{"../enums.js":41}],54:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -13455,14 +14213,14 @@ OnePassSignature.prototype.postCloneTypeFix = function() {
   this.signingKeyId = type_keyid.fromClone(this.signingKeyId);
 };
 
-},{"../enums.js":30,"../type/keyid.js":58}],44:[function(require,module,exports){
+},{"../enums.js":41,"../type/keyid.js":69}],55:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -13685,8 +14443,8 @@ module.exports = {
             mypos2 += tmplen;
           } else {
             mypos2++;
-            tmplen = (input.charCodeAt(mypos2++) << 24) | (input.charCodeAt(mypos2++) << 16) | (input[mypos2++]
-              .charCodeAt() << 8) | input.charCodeAt(mypos2++);
+            tmplen = (input.charCodeAt(mypos2++) << 24) | (input.charCodeAt(mypos2++) << 16) | (input
+              .charCodeAt(mypos2++) << 8) | input.charCodeAt(mypos2++);
             bodydata += input.substring(mypos2, mypos2 + tmplen);
             packet_length += tmplen;
             mypos2 += tmplen;
@@ -13720,7 +14478,7 @@ module.exports = {
   }
 };
 
-},{"../enums.js":30,"../util.js":61}],45:[function(require,module,exports){
+},{"../enums.js":41,"../util.js":72}],56:[function(require,module,exports){
 /**
  * This class represents a list of openpgp packets.
  * Take care when iterating over it - the packets themselves
@@ -13917,14 +14675,14 @@ module.exports.fromStructuredClone = function(packetlistClone) {
   }
   return packetlist;
 };
-},{"../enums.js":30,"./all_packets.js":38,"./packet.js":44}],46:[function(require,module,exports){
+},{"../enums.js":41,"./all_packets.js":49,"./packet.js":55}],57:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14143,14 +14901,14 @@ PublicKey.prototype.postCloneTypeFix = function() {
   }
 };
 
-},{"../crypto":19,"../enums.js":30,"../type/keyid.js":58,"../type/mpi.js":59,"../util.js":61}],47:[function(require,module,exports){
+},{"../crypto":30,"../enums.js":41,"../type/keyid.js":69,"../type/mpi.js":70,"../util.js":72}],58:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14338,14 +15096,14 @@ PublicKeyEncryptedSessionKey.prototype.postCloneTypeFix = function() {
   }
 };
 
-},{"../crypto":19,"../enums.js":30,"../type/keyid.js":58,"../type/mpi.js":59,"../util.js":61}],48:[function(require,module,exports){
+},{"../crypto":30,"../enums.js":41,"../type/keyid.js":69,"../type/mpi.js":70,"../util.js":72}],59:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14379,20 +15137,20 @@ function PublicSubkey() {
 PublicSubkey.prototype = new publicKey();
 PublicSubkey.prototype.constructor = PublicSubkey;
 
-},{"../enums.js":30,"./public_key.js":46}],49:[function(require,module,exports){
+},{"../enums.js":41,"./public_key.js":57}],60:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
-// 
+// version 3.0 of the License, or (at your option) any later version.
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -14653,8 +15411,12 @@ SecretKey.prototype.decrypt = function (passphrase) {
 };
 
 SecretKey.prototype.generate = function (bits) {
-  this.mpi = crypto.generateMpi(this.algorithm, bits);
-  this.isDecrypted = true;
+  var self = this;
+
+  return crypto.generateMpi(self.algorithm, bits).then(function(mpi) {
+    self.mpi = mpi;
+    self.isDecrypted = true;
+  });
 };
 
 /**
@@ -14668,14 +15430,14 @@ SecretKey.prototype.clearPrivateMPIs = function () {
   this.isDecrypted = false;
 };
 
-},{"../crypto":19,"../enums.js":30,"../type/mpi.js":59,"../type/s2k.js":60,"../util.js":61,"./public_key.js":46}],50:[function(require,module,exports){
+},{"../crypto":30,"../enums.js":41,"../type/mpi.js":70,"../type/s2k.js":71,"../util.js":72,"./public_key.js":57}],61:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14709,14 +15471,14 @@ function SecretSubkey() {
 SecretSubkey.prototype = new secretKey();
 SecretSubkey.prototype.constructor = SecretSubkey;
 
-},{"../enums.js":30,"./secret_key.js":49}],51:[function(require,module,exports){
+},{"../enums.js":41,"./secret_key.js":60}],62:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15371,14 +16133,14 @@ Signature.prototype.postCloneTypeFix = function() {
   this.issuerKeyId = type_keyid.fromClone(this.issuerKeyId);
 };
 
-},{"../crypto":19,"../enums.js":30,"../type/keyid.js":58,"../type/mpi.js":59,"../util.js":61,"./packet.js":44}],52:[function(require,module,exports){
+},{"../crypto":30,"../enums.js":41,"../type/keyid.js":69,"../type/mpi.js":70,"../util.js":72,"./packet.js":55}],63:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15499,14 +16261,14 @@ SymEncryptedIntegrityProtected.prototype.decrypt = function (sessionKeyAlgorithm
     this.packets.read(decrypted.substr(0, decrypted.length - 22));
 };
 
-},{"../crypto":19,"../enums.js":30,"../util.js":61}],53:[function(require,module,exports){
+},{"../crypto":30,"../enums.js":41,"../util.js":72}],64:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15650,14 +16412,14 @@ SymEncryptedSessionKey.prototype.postCloneTypeFix = function() {
   this.s2k = type_s2k.fromClone(this.s2k);
 };
 
-},{"../crypto":19,"../enums.js":30,"../type/s2k.js":60}],54:[function(require,module,exports){
+},{"../crypto":30,"../enums.js":41,"../type/s2k.js":71}],65:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15728,7 +16490,7 @@ SymmetricallyEncrypted.prototype.encrypt = function (algo, key) {
     crypto.getPrefixRandom(algo), algo, data, key, true);
 };
 
-},{"../crypto":19,"../enums.js":30}],55:[function(require,module,exports){
+},{"../crypto":30,"../enums.js":41}],66:[function(require,module,exports){
 /**
  * @requires enums
  * @module packet/trust
@@ -15754,14 +16516,14 @@ Trust.prototype.read = function (bytes) {
 
 };
 
-},{"../enums.js":30}],56:[function(require,module,exports){
+},{"../enums.js":41}],67:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15849,14 +16611,14 @@ UserAttribute.prototype.equals = function(usrAttr) {
   });
 };
 
-},{"../enums.js":30,"../util.js":61,"./packet.js":44}],57:[function(require,module,exports){
+},{"../enums.js":41,"../util.js":72,"./packet.js":55}],68:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15913,14 +16675,14 @@ Userid.prototype.write = function () {
   return util.encode_utf8(this.userid);
 };
 
-},{"../enums.js":30,"../util.js":61}],58:[function(require,module,exports){
+},{"../enums.js":41,"../util.js":72}],69:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15988,14 +16750,14 @@ module.exports.fromClone = function (clone) {
   return keyid;
 };
 
-},{"../util.js":61}],59:[function(require,module,exports){
+},{"../util.js":72}],70:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16101,14 +16863,14 @@ module.exports.fromClone = function (clone) {
   return mpi;
 };
 
-},{"../crypto/public_key/jsbn.js":24,"../util.js":61}],60:[function(require,module,exports){
+},{"../crypto/public_key/jsbn.js":35,"../util.js":72}],71:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 // 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 // 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16292,20 +17054,20 @@ module.exports.fromClone = function (clone) {
   return s2k;
 };
 
-},{"../crypto":19,"../enums.js":30,"../util.js":61}],61:[function(require,module,exports){
+},{"../crypto":30,"../enums.js":41,"../util.js":72}],72:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
-// 
+//
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
-// 
+// version 3.0 of the License, or (at your option) any later version.
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -16315,6 +17077,8 @@ module.exports.fromClone = function (clone) {
  * @requires config
  * @module util
  */
+
+'use strict';
 
 var config = require('./config');
 
@@ -16488,7 +17252,7 @@ module.exports = {
   },
 
   /**
-   * Convert a Uint8Array to a string. This currently functions 
+   * Convert a Uint8Array to a string. This currently functions
    * the same as bin2str.
    * @function module:util.Uint8Array2str
    * @param {Uint8Array} bin An array of (binary) integers to convert
@@ -16523,7 +17287,7 @@ module.exports = {
   },
 
   /**
-   * Helper function to print a debug message. Debug 
+   * Helper function to print a debug message. Debug
    * messages are only printed if
    * @link module:config/config.debug is set to true.
    * @param {String} str String of the debug message
@@ -16535,7 +17299,7 @@ module.exports = {
   },
 
   /**
-   * Helper function to print a debug message. Debug 
+   * Helper function to print a debug message. Debug
    * messages are only printed if
    * @link module:config/config.debug is set to true.
    * Different than print_debug because will call hexstrdump iff necessary.
@@ -16560,9 +17324,9 @@ module.exports = {
   /**
    * Shifting a string to n bits right
    * @param {String} value The string to shift
-   * @param {Integer} bitcount Amount of bits to shift (MUST be smaller 
+   * @param {Integer} bitcount Amount of bits to shift (MUST be smaller
    * than 9)
-   * @return {String} Resulting string. 
+   * @return {String} Resulting string.
    */
   shiftRight: function (value, bitcount) {
     var temp = util.str2bin(value);
@@ -16600,17 +17364,33 @@ module.exports = {
         return "SHA224";
     }
     return "unknown";
+  },
+
+  /**
+   * Get native Web Cryptography api. The default configuration is to use
+   * the api when available. But it can also be deactivated with config.useWebCrypto
+   * @return {Object} The SubtleCrypto api or 'undefined'
+   */
+  getWebCrypto: function() {
+    if (config.useWebCrypto === false) {
+      // make web crypto optional
+      return;
+    }
+
+    if (typeof window !== 'undefined' && window.crypto && window.crypto.subtle) {
+      return window.crypto.subtle;
+    }
   }
 };
 
-},{"./config":4}],62:[function(require,module,exports){
+},{"./config":15}],73:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
+// version 3.0 of the License, or (at your option) any later version.
 //
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16630,11 +17410,12 @@ module.exports = {
  * @module async_proxy
  */
 
+'use strict';
+
 var crypto = require('../crypto'),
   packet = require('../packet'),
   key = require('../key.js'),
-  type_keyid = require('../type/keyid.js'),
-  enums = require('../enums.js');
+  type_keyid = require('../type/keyid.js');
 
 var INITIAL_RANDOM_SEED = 50000, // random bytes seeded to worker
     RANDOM_SEED_REQUEST = 20000; // random bytes seeded after worker request
@@ -16656,13 +17437,37 @@ function AsyncProxy(path) {
 }
 
 /**
+ * Command pattern that wraps synchronous code into a promise
+ * @param  {Object}   self    The current this
+ * @param  {function} cmd     The synchronous function with a return value
+ *                            to be wrapped in a promise
+ * @return {Promise}          The promise wrapped around cmd
+ */
+AsyncProxy.prototype.execute = function(cmd) {
+  var self = this;
+
+  var promise = new Promise(function(resolve, reject) {
+    cmd();
+    self.tasks.push({ resolve:resolve, reject:reject });
+  });
+
+  return promise;
+};
+
+/**
  * Message handling
  */
 AsyncProxy.prototype.onMessage = function(event) {
   var msg = event.data;
   switch (msg.event) {
     case 'method-return':
-      this.tasks.shift()(msg.err ? new Error(msg.err) : null, msg.data);
+      if (msg.err) {
+        // fail
+        this.tasks.shift().reject(new Error(msg.err));
+      } else {
+        // success
+        this.tasks.shift().resolve(msg.data);
+      }
       break;
     case 'request-seed':
       this.seedRandom(RANDOM_SEED_REQUEST);
@@ -16704,21 +17509,23 @@ AsyncProxy.prototype.terminate = function() {
  * Encrypts message text with keys
  * @param  {(Array<module:key~Key>|module:key~Key)}  keys array of keys or single key, used to encrypt the message
  * @param  {String} text message as native JavaScript string
- * @param  {Function} callback receives encrypted ASCII armored message
  */
-AsyncProxy.prototype.encryptMessage = function(keys, text, callback) {
-  if (!keys.length) {
-    keys = [keys];
-  }
-  keys = keys.map(function(key) {
-    return key.toPacketlist();
+AsyncProxy.prototype.encryptMessage = function(keys, text) {
+  var self = this;
+
+  return self.execute(function() {
+    if (!keys.length) {
+      keys = [keys];
+    }
+    keys = keys.map(function(key) {
+      return key.toPacketlist();
+    });
+    self.worker.postMessage({
+      event: 'encrypt-message',
+      keys: keys,
+      text: text
+    });
   });
-  this.worker.postMessage({
-    event: 'encrypt-message',
-    keys: keys,
-    text: text
-  });
-  this.tasks.push(callback);
 };
 
 /**
@@ -16726,40 +17533,43 @@ AsyncProxy.prototype.encryptMessage = function(keys, text, callback) {
  * @param  {(Array<module:key~Key>|module:key~Key)}  publicKeys array of keys or single key, used to encrypt the message
  * @param  {module:key~Key}    privateKey private key with decrypted secret key data for signing
  * @param  {String} text       message as native JavaScript string
- * @param  {Function} callback receives encrypted ASCII armored message
  */
-AsyncProxy.prototype.signAndEncryptMessage = function(publicKeys, privateKey, text, callback) {
-  if (!publicKeys.length) {
-    publicKeys = [publicKeys];
-  }
-  publicKeys = publicKeys.map(function(key) {
-    return key.toPacketlist();
+AsyncProxy.prototype.signAndEncryptMessage = function(publicKeys, privateKey, text) {
+  var self = this;
+
+  return self.execute(function() {
+    if (!publicKeys.length) {
+      publicKeys = [publicKeys];
+    }
+    publicKeys = publicKeys.map(function(key) {
+      return key.toPacketlist();
+    });
+    privateKey = privateKey.toPacketlist();
+    self.worker.postMessage({
+      event: 'sign-and-encrypt-message',
+      publicKeys: publicKeys,
+      privateKey: privateKey,
+      text: text
+    });
   });
-  privateKey = privateKey.toPacketlist();
-  this.worker.postMessage({
-    event: 'sign-and-encrypt-message',
-    publicKeys: publicKeys,
-    privateKey: privateKey,
-    text: text
-  });
-  this.tasks.push(callback);
 };
 
 /**
  * Decrypts message
  * @param  {module:key~Key}     privateKey private key with decrypted secret key data
  * @param  {module:message~Message} message    the message object with the encrypted data
- * @param  {Function} callback   receives decrypted message as as native JavaScript string
- *                              or null if no literal data found
  */
-AsyncProxy.prototype.decryptMessage = function(privateKey, message, callback) {
-  privateKey = privateKey.toPacketlist();
-  this.worker.postMessage({
-    event: 'decrypt-message',
-    privateKey: privateKey,
-    message: message
+AsyncProxy.prototype.decryptMessage = function(privateKey, message) {
+  var self = this;
+
+  return self.execute(function() {
+    privateKey = privateKey.toPacketlist();
+    self.worker.postMessage({
+      event: 'decrypt-message',
+      privateKey: privateKey,
+      message: message
+    });
   });
-  this.tasks.push(callback);
 };
 
 /**
@@ -16767,82 +17577,91 @@ AsyncProxy.prototype.decryptMessage = function(privateKey, message, callback) {
  * @param  {module:key~Key}     privateKey private key with decrypted secret key data
  * @param  {(Array<module:key~Key>|module:key~Key)}  publicKeys array of keys or single key to verify signatures
  * @param  {module:message~Message} message    the message object with signed and encrypted data
- * @param  {Function} callback   receives decrypted message as as native JavaScript string
- *                               with verified signatures or null if no literal data found
  */
-AsyncProxy.prototype.decryptAndVerifyMessage = function(privateKey, publicKeys, message, callback) {
-  privateKey = privateKey.toPacketlist();
-  if (!publicKeys.length) {
-    publicKeys = [publicKeys];
-  }
-  publicKeys = publicKeys.map(function(key) {
-    return key.toPacketlist();
-  });
-  this.worker.postMessage({
-    event: 'decrypt-and-verify-message',
-    privateKey: privateKey,
-    publicKeys: publicKeys,
-    message: message
-  });
-  this.tasks.push(function(err, data) {
-    if (data) {
+AsyncProxy.prototype.decryptAndVerifyMessage = function(privateKey, publicKeys, message) {
+  var self = this;
+
+  var promise = new Promise(function(resolve, reject) {
+    privateKey = privateKey.toPacketlist();
+    if (!publicKeys.length) {
+      publicKeys = [publicKeys];
+    }
+    publicKeys = publicKeys.map(function(key) {
+      return key.toPacketlist();
+    });
+    self.worker.postMessage({
+      event: 'decrypt-and-verify-message',
+      privateKey: privateKey,
+      publicKeys: publicKeys,
+      message: message
+    });
+
+    self.tasks.push({ resolve:function(data) {
       data.signatures = data.signatures.map(function(sig) {
         sig.keyid = type_keyid.fromClone(sig.keyid);
         return sig;
       });
-    }
-    callback(err, data);
+      resolve(data);
+    }, reject:reject });
   });
+
+  return promise;
 };
 
 /**
  * Signs a cleartext message
  * @param  {(Array<module:key~Key>|module:key~Key)}  privateKeys array of keys or single key, with decrypted secret key data to sign cleartext
  * @param  {String} text        cleartext
- * @param  {Function} callback       receives ASCII armored message
  */
-AsyncProxy.prototype.signClearMessage = function(privateKeys, text, callback) {
-  if (!privateKeys.length) {
-    privateKeys = [privateKeys];
-  }
-  privateKeys = privateKeys.map(function(key) {
-    return key.toPacketlist();
+AsyncProxy.prototype.signClearMessage = function(privateKeys, text) {
+  var self = this;
+
+  return self.execute(function() {
+    if (!privateKeys.length) {
+      privateKeys = [privateKeys];
+    }
+    privateKeys = privateKeys.map(function(key) {
+      return key.toPacketlist();
+    });
+    self.worker.postMessage({
+      event: 'sign-clear-message',
+      privateKeys: privateKeys,
+      text: text
+    });
   });
-  this.worker.postMessage({
-    event: 'sign-clear-message',
-    privateKeys: privateKeys,
-    text: text
-  });
-  this.tasks.push(callback);
 };
 
 /**
  * Verifies signatures of cleartext signed message
  * @param  {(Array<module:key~Key>|module:key~Key)}  publicKeys array of keys or single key, to verify signatures
  * @param  {module:cleartext~CleartextMessage} message    cleartext message object with signatures
- * @param  {Function} callback   receives cleartext with status of verified signatures
  */
-AsyncProxy.prototype.verifyClearSignedMessage = function(publicKeys, message, callback) {
-  if (!publicKeys.length) {
-    publicKeys = [publicKeys];
-  }
-  publicKeys = publicKeys.map(function(key) {
-    return key.toPacketlist();
-  });
-  this.worker.postMessage({
-    event: 'verify-clear-signed-message',
-    publicKeys: publicKeys,
-    message: message
-  });
-  this.tasks.push(function(err, data) {
-    if (data) {
+AsyncProxy.prototype.verifyClearSignedMessage = function(publicKeys, message) {
+  var self = this;
+
+  var promise = new Promise(function(resolve, reject) {
+    if (!publicKeys.length) {
+      publicKeys = [publicKeys];
+    }
+    publicKeys = publicKeys.map(function(key) {
+      return key.toPacketlist();
+    });
+    self.worker.postMessage({
+      event: 'verify-clear-signed-message',
+      publicKeys: publicKeys,
+      message: message
+    });
+
+    self.tasks.push({ resolve:function(data) {
       data.signatures = data.signatures.map(function(sig) {
         sig.keyid = type_keyid.fromClone(sig.keyid);
         return sig;
       });
-    }
-    callback(err, data);
+      resolve(data);
+    }, reject:reject });
   });
+
+  return promise;
 };
 
 /**
@@ -16853,42 +17672,50 @@ AsyncProxy.prototype.verifyClearSignedMessage = function(publicKeys, message, ca
  * @param {Integer} numBits    number of bits for the key creation. (should be 1024+, generally)
  * @param {String}  userId     assumes already in form of "User Name <username@email.com>"
  * @param {String}  passphrase The passphrase used to encrypt the resulting private key
- * @param {Function} callback receives object with key and public and private armored texts
  */
-AsyncProxy.prototype.generateKeyPair = function(options, callback) {
-  this.worker.postMessage({
-    event: 'generate-key-pair',
-    options: options
-  });
-  this.tasks.push(function(err, data) {
-    if (data) {
+AsyncProxy.prototype.generateKeyPair = function(options) {
+  var self = this;
+
+  var promise = new Promise(function(resolve, reject) {
+    self.worker.postMessage({
+      event: 'generate-key-pair',
+      options: options
+    });
+
+    self.tasks.push({ resolve:function(data) {
       var packetlist = packet.List.fromStructuredClone(data.key);
       data.key = new key.Key(packetlist);
-    }
-    callback(err, data);
+      resolve(data);
+    }, reject:reject });
   });
+
+  return promise;
 };
 
 /**
  * Decrypts secret part of all secret key packets of key.
  * @param  {module:key~Key}     privateKey private key with encrypted secret key data
  * @param  {String} password    password to unlock the key
- * @param  {Function} callback   receives decrypted key
  */
-AsyncProxy.prototype.decryptKey = function(privateKey, password, callback) {
-  privateKey = privateKey.toPacketlist();
-  this.worker.postMessage({
-    event: 'decrypt-key',
-    privateKey: privateKey,
-    password: password
-  });
-  this.tasks.push(function(err, data) {
-    if (data) {
+AsyncProxy.prototype.decryptKey = function(privateKey, password) {
+  var self = this;
+
+  var promise = new Promise(function(resolve, reject) {
+    privateKey = privateKey.toPacketlist();
+    self.worker.postMessage({
+      event: 'decrypt-key',
+      privateKey: privateKey,
+      password: password
+    });
+
+    self.tasks.push({ resolve:function(data) {
       var packetlist = packet.List.fromStructuredClone(data);
       data = new key.Key(packetlist);
-    }
-    callback(err, data);
+      resolve(data);
+    }, reject:reject });
   });
+
+  return promise;
 };
 
 /**
@@ -16896,28 +17723,32 @@ AsyncProxy.prototype.decryptKey = function(privateKey, password, callback) {
  * @param  {module:key~Key}     privateKey private key with encrypted secret key data
  * @param  {Array<module:type/keyid>} keyIds
  * @param  {String} password    password to unlock the key
- * @param  {Function} callback   receives decrypted key
  */
-AsyncProxy.prototype.decryptKeyPacket = function(privateKey, keyIds, password, callback) {
-  privateKey = privateKey.toPacketlist();
-  this.worker.postMessage({
-    event: 'decrypt-key-packet',
-    privateKey: privateKey,
-    keyIds: keyIds,
-    password: password
-  });
-  this.tasks.push(function(err, data) {
-    if (data) {
+AsyncProxy.prototype.decryptKeyPacket = function(privateKey, keyIds, password) {
+  var self = this;
+
+  var promise = new Promise(function(resolve, reject) {
+    privateKey = privateKey.toPacketlist();
+    self.worker.postMessage({
+      event: 'decrypt-key-packet',
+      privateKey: privateKey,
+      keyIds: keyIds,
+      password: password
+    });
+
+    self.tasks.push({ resolve:function(data) {
       var packetlist = packet.List.fromStructuredClone(data);
       data = new key.Key(packetlist);
-    }
-    callback(err, data);
+      resolve(data);
+    }, reject:reject });
   });
+
+  return promise;
 };
 
 module.exports = AsyncProxy;
 
-},{"../crypto":19,"../enums.js":30,"../key.js":32,"../packet":40,"../type/keyid.js":58}]},{},[31])
-(31)
+},{"../crypto":30,"../key.js":43,"../packet":51,"../type/keyid.js":69}]},{},[42])
+(42)
 });
 ;
