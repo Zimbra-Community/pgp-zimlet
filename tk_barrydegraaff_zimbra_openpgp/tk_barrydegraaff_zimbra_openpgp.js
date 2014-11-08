@@ -183,7 +183,7 @@ function(zmObject) {
    }
 };
 
-/* verify method loops through public trusted keys and calls do_verify for each of the keys,
+/* verify method checks against known public keys and
  * will update the status bar with the result (good/bad signature).
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
@@ -218,48 +218,33 @@ tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
       var publicKeys28 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys28").value);
       var publicKeys29 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value);
       var publicKeys30 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value);
-      var combinedPublicKeys = [publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys,];
-
-      var result = 0;
-
-      combinedPublicKeys.forEach(function(entry) {
-         if(entry[0]) {
-            result += tk_barrydegraaff_zimbra_openpgp.prototype.do_verify(message, entry);
-         }
-      });
-
-      if(result > 0) {
-         tk_barrydegraaff_zimbra_openpgp.prototype.status("Got a good signature.", ZmStatusView.LEVEL_INFO);
-      }
-      else {
-         tk_barrydegraaff_zimbra_openpgp.prototype.status("Got a BAD signature.", ZmStatusView.LEVEL_CRITICAL);
-      };
+      var combinedPublicKeys = [].concat(publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys);
    }
    catch(err) {
       tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not parse your trusted public keys!", ZmStatusView.LEVEL_WARNING);
       return;
    }
+   openpgp.verifyClearSignedMessage(combinedPublicKeys, message).then(
+      function(signature) {
+         var goodsigs = 0;
+         var badsigs = 0;
+         for (var s=0 ; s < signature.signatures.length ; s++) {
+            if (signature.signatures[s].valid == true) {
+               goodsigs++;
+            } else {
+               badsigs++;
+            }
+         }
+         if ( (goodsigs > 0) && (badsigs == 0) ) {
+            tk_barrydegraaff_zimbra_openpgp.prototype.status("Got a good signature.", ZmStatusView.LEVEL_INFO);
+         } else {
+            tk_barrydegraaff_zimbra_openpgp.prototype.status("Got a BAD signature.", ZmStatusView.LEVEL_CRITICAL);
+         }
+      },
+      function (err) {
+         tk_barrydegraaff_zimbra_openpgp.prototype.status("Error verifying signature.", ZmStatusView.LEVEL_WARNING);
+   });
 }
-
-/* do_verify method calls openpgp.verifyClearSignedMessage, returns boolean 1 for good signature or 0 for bad signature
- * */
-tk_barrydegraaff_zimbra_openpgp.prototype.do_verify = function(message, keyObj) {
-   try {
-      var verified = openpgp.verifyClearSignedMessage(keyObj, message);
-   }
-   catch(err) {
-     return 0;
-   }
-
-   try {
-      if(verified.signatures[0].valid==true) {
-         return 1;
-      }
-   }
-   catch(err) {
-      return 0;
-   }
-};
 
 /* verify method for Internet Explorer 11, will post to jsp page that does verify in document mode edge.
  * */
@@ -549,7 +534,7 @@ function() {
 	var form = document.createElement("form");
 	form.setAttribute("method", "POST");
    form.setAttribute("target", "_BLANK");
-	form.setAttribute("action", "/service/zimlet/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_decrypt_ie.jsp");
+	form.setAttribute("action", "/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_decrypt_ie.jsp");
 
    var hiddenField = document.createElement("input");
    hiddenField.setAttribute("type", "hidden");
@@ -621,7 +606,7 @@ function() {
    var privateKeyInput = document.getElementById("privateKeyInput").value;
    this.privateKeyCache = privateKeyInput;
    var passphrase = document.getElementById("passphraseInput").value;
-   var msg = document.getElementById("message").value;
+   var message = document.getElementById("message").value;
 
    try {
       var privKeys = openpgp.key.readArmored(privateKeyInput);
@@ -634,34 +619,29 @@ function() {
    }
 
    if (success) {
-      try {
-         var signed = openpgp.signClearMessage(privKeys.keys, msg);
-      }
-      catch (err)
-      {
-         tk_barrydegraaff_zimbra_openpgp.prototype.status("Sign failed!", ZmStatusView.LEVEL_WARNING);
-      }
+      var myWindow = this;
+        openpgp.signClearMessage(privKey, message).then(
+           function(signed) {
+              myWindow._dialog.clearContent();
+              myWindow._dialog.popdown();
+              // Tries to open the compose view on its own.
+              var composeController = AjxDispatcher.run("GetComposeController");
+              if(composeController) {
+                 var appCtxt = window.top.appCtxt;
+                 var zmApp = appCtxt.getApp();
+                 var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
+                 var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:myWindow.composeMode,
+                 toOverride:null, subjOverride:null, extraBodyText:signed, callback:null}
+                 composeController.doAction(params); // opens asynchronously the window.
+              }
+           },
+           function(err) {
+              tk_barrydegraaff_zimbra_openpgp.prototype.status("Signing failed!", ZmStatusView.LEVEL_WARNING);
+           }
+        );
    }
    else {
       tk_barrydegraaff_zimbra_openpgp.prototype.status("Wrong passphrase!", ZmStatusView.LEVEL_WARNING);
-   }
-
-   if(signed)
-   {
-	   // What is the DWT method to destroy this._dialog? This only clears its contents.
-      this._dialog.clearContent();
-      this._dialog.popdown();
-
-      // Tries to open the compose view on its own.
-      var composeController = AjxDispatcher.run("GetComposeController");
-      if(composeController) {
-         var appCtxt = window.top.appCtxt;
-         var zmApp = appCtxt.getApp();
-         var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
-         var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:this.composeMode,
-         toOverride:null, subjOverride:null, extraBodyText:signed, callback:null}
-         composeController.doAction(params); // opens asynchronously the window.
-      }
    }
 };
 
@@ -682,7 +662,7 @@ function() {
 	var form = document.createElement("form");
 	form.setAttribute("method", "POST");
    form.setAttribute("target", "_BLANK");
-	form.setAttribute("action", "/service/zimlet/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_sign_ie.jsp");
+	form.setAttribute("action", "/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_sign_ie.jsp");
 
    var hiddenField = document.createElement("input");
    hiddenField.setAttribute("type", "hidden");
@@ -749,7 +729,7 @@ function() {
       var form = document.createElement("form");
       form.setAttribute("method", "POST");
       form.setAttribute("target", "_BLANK");
-      form.setAttribute("action", "/service/zimlet/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_keypair_ie.jsp");
+      form.setAttribute("action", "/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_keypair_ie.jsp");
 
       var hiddenField = document.createElement("input");
       hiddenField.setAttribute("type", "hidden");
@@ -908,7 +888,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.encrypt_ie = function(message) {
 	var form = document.createElement("form");
 	form.setAttribute("method", "POST");
    form.setAttribute("target", "_BLANK");
-	form.setAttribute("action", "/service/zimlet/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_encrypt_ie.jsp");
+	form.setAttribute("action", "/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_encrypt_ie.jsp");
 
    var hiddenField = document.createElement("input");
    hiddenField.setAttribute("type", "hidden");
