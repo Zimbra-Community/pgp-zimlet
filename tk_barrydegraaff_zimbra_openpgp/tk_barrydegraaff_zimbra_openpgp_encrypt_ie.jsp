@@ -36,7 +36,7 @@ var publicKeys = document.getElementById('publicKeys').value;
 var combinedPublicKeys = publicKeys.split("<tk_barrydegraaff_zimbra_openpgp>");
 
 var index;
-var result = '<select style="width:100%" id="pubKeySelect">';
+var result = '<select style="width:100%" id="pubKeySelect" multiple>';
 
 for (index = 0; index < combinedPublicKeys.length; ++index) {
    if(combinedPublicKeys[index]) {
