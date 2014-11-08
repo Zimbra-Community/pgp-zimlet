@@ -507,7 +507,6 @@ function() {
               myWindow.displayDialog(2,'Decrypted result','<textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:340px;">'+decrypted+'</textarea>');
            },
            function(err) {
-              alert(err);
               tk_barrydegraaff_zimbra_openpgp.prototype.status("Decryption failed!", ZmStatusView.LEVEL_WARNING);
            }
         );
@@ -844,7 +843,6 @@ function() {
          }
       }, 
       function(err) {
-         alert(err);
          tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not encrypt message!", ZmStatusView.LEVEL_WARNING);
       });
 };
