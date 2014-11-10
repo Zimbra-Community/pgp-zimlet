@@ -818,16 +818,18 @@ function() {
    var pubKeySelect = document.getElementById("pubKeySelect");
    var msg = document.getElementById("message").value;
    var pubKeys = [];
+   var addresses = '';
 
    // Build Public Keys list from selected
    for (k=0; k < pubKeySelect.selectedOptions.length ; k++) {
-      pubKeys= pubKeys.concat(openpgp.key.readArmored(pubKeySelect.selectedOptions.item(k).value).keys);
+      pubKeys=pubKeys.concat(openpgp.key.readArmored(pubKeySelect.selectedOptions.item(k).value).keys);
+      addresses=addresses + openpgp.key.readArmored(pubKeySelect.selectedOptions.item(k).value).keys[0].users[0].userId.userid + '; ';
    }
 
    // There should be a cleaner way to do this than stashing 
    // the parent in myWindow but I've not worked it out yet!
    var myWindow = this;
-   openpgp.encryptMessage(pubKeys, msg).then(
+   openpgp.encryptMessage(pubKeys, msg, addresses).then(
       function(pgpMessage) {
          myWindow._dialog.clearContent();
          myWindow._dialog.popdown();
@@ -838,7 +840,7 @@ function() {
             var zmApp = appCtxt.getApp();
             var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
             var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:myWindow.composeMode,
-            toOverride:null, subjOverride:null, extraBodyText:pgpMessage, callback:null}
+            toOverride:addresses, subjOverride:null, extraBodyText:pgpMessage, callback:null}
             composeController.doAction(params); // opens asynchronously the window.
          }
       }, 
