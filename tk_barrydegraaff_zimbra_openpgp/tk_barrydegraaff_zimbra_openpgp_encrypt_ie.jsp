@@ -25,7 +25,7 @@ Normal cache flush does NOT work
 <html><head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <title>Zimbra OpenPGP Zimlet</title>
-<script src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.js"></script>
+<script src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp-ie.js"></script>
 </head>
 <body style="font-family:sans-serif">
 <textarea style="display:none" readonly id="publicKeys" rows="20" cols="100"><%= request.getParameter("publicKeys")%></textarea>

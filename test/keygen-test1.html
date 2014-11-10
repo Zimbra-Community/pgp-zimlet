@@ -7,9 +7,12 @@
 <body>
 <h1>OpenPGP.js - Keygen test for Zimbra OpenPGP Zimlet</h1>
 <script>
-//for version 0.6 of openpgp.js
-var key = openpgp.generateKeyPair({numBits: 512, userId: 'My Test <test@localhost>', passphrase: 'passphrase1'});
-document.write('<textarea rows="20" cols="200">Your new key pair for testing only uid=`My Test <test@localhost>` and passphrase: `passphrase1`:\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored+'</textarea>');
+//for version 0.8 of openpgp.js
+ var opt = {numBits: 512, userId: 'test', passphrase: '123'};
+ openpgp.generateKeyPair(opt).then(function(key) {
+    document.write('<textarea rows="20" cols="200">Your new key pair for testing only uid=`test` and passphrase: `123`:\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored+'</textarea>');
+ });
+
 </script>
 <pre>
 This file is part of the Zimbra OpenPGP Zimlet project.
