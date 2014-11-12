@@ -36,7 +36,7 @@ For debugging in production I recommend to disable the Zimlet via user preferenc
 ### About private key security
 
 When you generate a private key with this zimlet or copy-paste it when signing or decrypting, it is NOT being send to the server and it is NOT stored on the server.
-Since version 1.2.0 you are able to store your private key and passphrase on the server in the Manage Keys. You are discouraged to do this, but the option has
+Since version 1.2.0 you are able to store your private key and passphrase on the server in the Manage Keys window. You are discouraged to do this, but the option has
 been added after numerous requests.
 
 ========================================================================
