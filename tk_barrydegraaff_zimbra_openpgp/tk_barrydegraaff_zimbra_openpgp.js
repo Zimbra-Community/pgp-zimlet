@@ -845,7 +845,14 @@ function() {
          }
       }, 
       function(err) {
-         tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not encrypt message!", ZmStatusView.LEVEL_WARNING);
+         if( pubKeySelect.selectedOptions.length==0)
+         {
+            tk_barrydegraaff_zimbra_openpgp.prototype.status("Please select recipient(s).", ZmStatusView.LEVEL_WARNING);
+       	}
+       	else
+       	{
+            tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not encrypt message!", ZmStatusView.LEVEL_WARNING);
+         }
       });
 };
 
