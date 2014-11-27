@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>OpenPGP.js - HTML5 localStorage test for Zimbra OpenPGP Zimlet</title>
+</head>
+<body>
+<h1>OpenPGP.js - HTML5 localStorage test for Zimbra OpenPGP Zimlet</h1>
+It's like a cookie, but then better.<br>
+<textarea rows="20" cols="100" id="fileDisplayArea"></textarea>
+<br><br>
+<a href="javascript:localStorage.setItem('test', document.getElementById('fileDisplayArea').value)">Store value of textarea to localStorage</a><br><br>
+<a href="javascript:alert(localStorage.getItem('test'))">Read value of localStorage to textarea</a><br>
+
+<br>Example from here: <a href="http://www.w3schools.com/html/html5_webstorage.asp">http://www.w3schools.com/html/html5_webstorage.asp</a>
+
+<pre>
+This file is part of the Zimbra OpenPGP Zimlet project.
+Copyright (C) 2014  Barry de Graaff
+
+Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see http://www.gnu.org/licenses/.
+</pre>
+</body>
+</html>
