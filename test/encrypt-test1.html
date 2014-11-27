@@ -46,9 +46,11 @@ var key = '-----BEGIN PGP PUBLIC KEY BLOCK-----\n' +
 '=ldYW\n' +
 '-----END PGP PUBLIC KEY BLOCK-----';
 
-var publicKey = openpgp.key.readArmored(key);
-var pgpMessage = openpgp.encryptMessage(publicKey.keys, document.getElementById('message').value);
-document.write('<pre>'+pgpMessage+'</pre>');
+var pubKeys = openpgp.key.readArmored(key);
+openpgp.encryptMessage(pubKeys.keys, document.getElementById('message').value).then(
+   function(pgpMessage) {
+      document.write('<pre>'+pgpMessage+'</pre>');
+   });
 
 </script>
 <pre>

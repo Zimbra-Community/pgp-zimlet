@@ -127,11 +127,13 @@ var privKey = privKeys.keys[0];
 var success = privKey.decrypt(passphrase);
 
 var message = openpgp.message.readArmored(document.getElementById('message').value);
-var decrypted = openpgp.decryptMessage(privKey, message);
 
-console.log("my object: %o", decrypted);
-document.write('<pre>' + decrypted + '</pre>');
-
+var myWindow = this;
+openpgp.decryptMessage(privKey, message).then(
+   function(decrypted) {
+      console.log("my object: %o", decrypted);
+      document.write('<pre>' + decrypted + '</pre>');
+   });
 </script>
 <pre>
 This file is part of the Zimbra OpenPGP Zimlet project.

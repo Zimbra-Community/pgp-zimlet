@@ -131,19 +131,19 @@ var success = privKey.decrypt(passphrase);
 
 var message = openpgp.cleartext.readArmored(document.getElementById('message').value);
 
-var verified = openpgp.verifyClearSignedMessage(publicKeys.keys, message);
-
-console.log("my object: %o", verified);
-
-if(verified.signatures[0].valid==true)
-{
-   document.write('<pre>Got a good signature.</pre>');
-}
-else
-{
-   document.write('<pre>SIGNATURE FAILED!'+verified.signatures[0].valid+'</pre>');
-}
-
+openpgp.verifyClearSignedMessage(publicKeys.keys, message).then(
+function(verified) {
+   console.log("my object: %o", verified);
+   
+   if(verified.signatures[0].valid==true)
+   {
+      document.write('<pre>Got a good signature.</pre>');
+   }
+   else
+   {
+      document.write('<pre>SIGNATURE FAILED!'+verified.signatures[0].valid+'</pre>');
+   }
+});
 
 </script>
 <pre>

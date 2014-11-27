@@ -112,10 +112,10 @@ var publicKeys = openpgp.key.readArmored(mPubKey);
 var privKey = privKeys.keys[0];
 var success = privKey.decrypt(passphrase);
 
-var signed = openpgp.signClearMessage(privKeys.keys, 'This is a signed message');
-
-document.write('<pre>'+signed+'</pre>');
-
+openpgp.signClearMessage(privKeys.keys, 'This is a signed message').then(
+   function(signed) {
+      document.write('<pre>'+signed+'</pre>');
+   });   
 </script>
 <pre>
 This file is part of the Zimbra OpenPGP Zimlet project.
