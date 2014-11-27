@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>OpenPGP.js - HTML5 File API test for Zimbra OpenPGP Zimlet</title>
+</head>
+<body>
+<h1>OpenPGP.js - HTML5 File API test for Zimbra OpenPGP Zimlet</h1>
+Please select a text file below:<br>
+<input type="file" id="fileInput"><br>
+<textarea rows="20" cols="100" id="fileDisplayArea"></textarea>
+
+<script type="text/javascript">
+var fileInput = document.getElementById('fileInput');
+var fileDisplayArea = document.getElementById('fileDisplayArea');
+
+fileInput.addEventListener('change', function(e) {
+   var file = fileInput.files[0];
+   var textType = /text.*/;
+
+   if (file.type.match(textType)) {
+      var reader = new FileReader();
+
+      reader.onload = function(e) {
+         fileDisplayArea.innerText = reader.result;
+      }
+
+      reader.readAsText(file);	
+   } else {
+      fileDisplayArea.innerText = "File not supported!";
+   }
+});
+</script>
+
+<br>Example from here: <a href="http://blog.teamtreehouse.com/reading-files-using-the-html5-filereader-api">http://blog.teamtreehouse.com/reading-files-using-the-html5-filereader-api</a>
+
+<pre>
+This file is part of the Zimbra OpenPGP Zimlet project.
+Copyright (C) 2014  Barry de Graaff
+
+Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see http://www.gnu.org/licenses/.
+</pre>
+</body>
+</html>
