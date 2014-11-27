@@ -25,33 +25,8 @@ tk_barrydegraaff_zimbra_openpgp = function() {
    version = ver.split("_");
 
    //Initialize workarounds for differences between Zimbra versions
-   if(version[0].indexOf("8.5.") > -1)
-   {
-      //Running Zimbra 8.5
-      //No IE work-around needed.      
-      this.isIE = false;
-      
-      //Compose new message as text in 8.5
-      this.composeMode = Dwt.TEXT;
-   }
-   else
-   {
-      //Running Zimbra 8.0
-      
-      //See if we run Internet Explorer, and if so, define isIE=true for work-arounds
-      /* Internet Explorer detect: http://www.pinlady.net/PluginDetect/IE/
-       * Make this Zimlet know if we are running in IE
-       */
-      var tmp = document.documentMode, e, isIE;
-      try{document.documentMode = "";}
-      catch(e){ };
-      this.isIE = typeof document.documentMode == "number" || eval("/*@cc_on!@*/!1");
-      try{document.documentMode = tmp;}
-      catch(e){ };
-     
-      //Compose new message as text in 8.0
-      this.composeMode = DwtHtmlEditor.TEXT;
-   }
+   this.composeMode = Dwt.TEXT;
+   //if(version[0].indexOf("8.5.") > -1)
 };
 
 tk_barrydegraaff_zimbra_openpgp.prototype = new ZmZimletBase;
@@ -65,32 +40,6 @@ function() {
 /* This method gets called when Zimbra Zimlet framework initializes
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
-   /* When escape key is pressed, dwt dialog does not get cleared, and entered data remains in the browser memory
-   * therefore we flush it with reload
-   * Redefine window.onkeydown, so all dwt shortcuts still work, but capture ESC key before dwt does */
-   window.document.onkeydown = (function(e) {
-      var cached_function = window.document.onkeydown;
-      return function(e) {
-         if (!e) e = event;
-         if (e.keyCode == 27) {
-            location.reload();
-         }
-         cached_function.apply(this, arguments); // use .apply() to call it
-      };
-   }());
-
-   // Only load openpgp.js for browsers <> Internet Explorer
-   if (this.isIE) {
-      return;
-   }
-   else
-   {
-      var oHead = document.getElementsByTagName('HEAD').item(0);
-      var oScript= document.createElement("script");
-      oScript.type = "text/javascript";
-      oScript.src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.js";
-      oHead.appendChild( oScript);
-   }
 };
 
 /* This method gets called by the Zimlet framework when double-click is performed.
@@ -109,12 +58,7 @@ function(itemId) {
       this.displayDialog(4, "Sign message", null);
 		break;
 	case "encrypt":
-      if(this.isIE) {
-         this.encrypt_ie();
-      }
-      else {
-         this.displayDialog(6, "Encrypt message", null);
-      }
+      this.displayDialog(6, "Encrypt message", null);
 		break;
 	case "pubkeys":
       this.displayDialog(3, "Manage keys", null);
@@ -123,7 +67,7 @@ function(itemId) {
       this.displayDialog(5, "Generate new key pair", null);
 		break;
 	case "about":
-      this.displayDialog(2, "About OpenPGP", '<h1><span style="font-family: sans-serif;">Zimbra OpenPGP Zimlet ' + this._zimletContext.version + '</span></h1>Running in Internet Explorer mode for Zimbra < 8.5 : ' + this.isIE + '<br><br><span style="font-family: sans-serif;">If you find Zimbra OpenPGP Zimlet useful and want to support its continued development, you can make a </span><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=info%40barrydegraaff%2etk&amp;lc=US&amp;item_name=Zimbra%20OpenPGP%20Zimlet&amp;no_note=0&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest"><span style="font-family: sans-serif;">donation</span></a><span style="font-family: sans-serif;">. Please report <a href="https://github.com/barrydegraaff/pgp-zimlet/issues">bugs</a></span><span style="font-family: sans-serif;"> on Github.</span><br><br><span style="font-family: sans-serif; font-weight: bold;">Credits</span><br><ul><li><span style="font-family: sans-serif;"><a href="http://www.premierheart.com/">Michael Graziano</a> <small>enhancements</small></span></li><li><span style="font-family: sans-serif;"><a href="http://www.onecentral.nl">Marius Savelbergh</a> <small>funds</small></span></li><li><span style="font-family: sans-serif;"><a href="http://www.profluid.de/">Klaus Belser</a> <small>funds</small></span></li><li><span style="font-family: sans-serif;"><a href="http://www.hivos.org">Hivos.org</a> <small>funds</small></span></li><li><span style="font-family: sans-serif;"><a href="http://openpgpjs.org/">OpenPGP.js</a><small></small></span></li><li><span style="font-family: sans-serif;"><small>and others.<br></small></span></li></ul><span style="font-family: sans-serif;"></span><span style="font-family: sans-serif;">Copyright (C) 2014&nbsp; Barry de Graaff </span><br style="font-family: sans-serif;"><br><span style="font-family: sans-serif;">This program is free software: you can redistribute it and/or modify</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">it under the terms of the GNU General Public License as published by</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">the Free Software Foundation, either version 3 of the License, or</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">(at your option) any later version.</span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">This program is distributed in the hope that it will be useful,</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">but WITHOUT ANY WARRANTY; without even the implied warranty of</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&nbsp; See the</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">GNU General Public License for more details.</span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">You should have received a copy of the GNU General Public License</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">along with this program.&nbsp; If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</span><br><br>');
+      this.displayDialog(2, "About OpenPGP", '<h1><span style="font-family: sans-serif;">Zimbra OpenPGP Zimlet ' + this._zimletContext.version + '</span></h1><span style="font-family: sans-serif;">If you find Zimbra OpenPGP Zimlet useful and want to support its continued development, you can make a </span><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=info%40barrydegraaff%2etk&amp;lc=US&amp;item_name=Zimbra%20OpenPGP%20Zimlet&amp;no_note=0&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest"><span style="font-family: sans-serif;">donation</span></a><span style="font-family: sans-serif;">. Please report <a href="https://github.com/barrydegraaff/pgp-zimlet/issues">bugs</a></span><span style="font-family: sans-serif;"> on Github.</span><br><br><span style="font-family: sans-serif; font-weight: bold;">Credits</span><br><ul><li><span style="font-family: sans-serif;"><a href="http://www.premierheart.com/">Michael Graziano</a> <small>enhancements</small></span></li><li><span style="font-family: sans-serif;"><a href="http://www.onecentral.nl">Marius Savelbergh</a> <small>funds</small></span></li><li><span style="font-family: sans-serif;"><a href="http://www.profluid.de/">Klaus Belser</a> <small>funds</small></span></li><li><span style="font-family: sans-serif;"><a href="http://www.hivos.org">Hivos.org</a> <small>funds</small></span></li><li><span style="font-family: sans-serif;"><a href="http://openpgpjs.org/">OpenPGP.js</a><small></small></span></li><li><span style="font-family: sans-serif;"><small>and others.<br></small></span></li></ul><span style="font-family: sans-serif;"></span><span style="font-family: sans-serif;">Copyright (C) 2014&nbsp; Barry de Graaff </span><br style="font-family: sans-serif;"><br><span style="font-family: sans-serif;">This program is free software: you can redistribute it and/or modify</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">it under the terms of the GNU General Public License as published by</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">the Free Software Foundation, either version 3 of the License, or</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">(at your option) any later version.</span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">This program is distributed in the hope that it will be useful,</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">but WITHOUT ANY WARRANTY; without even the implied warranty of</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&nbsp; See the</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">GNU General Public License for more details.</span><br style="font-family: sans-serif;"> <br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">You should have received a copy of the GNU General Public License</span><br style="font-family: sans-serif;"> <span style="font-family: sans-serif;">along with this program.&nbsp; If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</span><br><br>');
 		break;
    }
 };
@@ -150,37 +94,23 @@ function(zmObject) {
       console.log(msg);
    }
 
-   if(this.isIE) {
-      if (msg.match(clearSignedRegEx)) {
-         this.verify_ie(msg);
+    if (msg.match(clearSignedRegEx)) {
+      try {
+         var message = openpgp.cleartext.readArmored(msg);
       }
-      else if (msg.match(pgpMessageRegEx)) {
-         this.displayDialog(1, "Please provide private key and passphrase for decryption", msg);
-      }
-      else {
-         this.status("No PGP message detected.", ZmStatusView.LEVEL_WARNING);
+      catch(err) {
+         this.status("Could not read armored message!", ZmStatusView.LEVEL_CRITICAL);
          return;
       }
+      this.verify(message);
+   }
+   else if (msg.match(pgpMessageRegEx)) {
+      this.displayDialog(1, "Please provide private key and passphrase for decryption", msg);
    }
    else {
-      if (msg.match(clearSignedRegEx)) {
-         try {
-            var message = openpgp.cleartext.readArmored(msg);
-         }
-         catch(err) {
-            this.status("Could not read armored message!", ZmStatusView.LEVEL_CRITICAL);
-            return;
-         }
-         this.verify(message);
-      }
-      else if (msg.match(pgpMessageRegEx)) {
-         this.displayDialog(1, "Please provide private key and passphrase for decryption", msg);
-      }
-      else {
-         this.status("No PGP message detected.", ZmStatusView.LEVEL_WARNING);
-         return;
-      }
-   }
+      this.status("No PGP message detected.", ZmStatusView.LEVEL_WARNING);
+      return;
+   }   
 };
 
 /* verify method checks against known public keys and
@@ -246,63 +176,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
    });
 }
 
-/* verify method for Internet Explorer 11, will post to jsp page that does verify in document mode edge.
- * */
-tk_barrydegraaff_zimbra_openpgp.prototype.verify_ie = function(message) {
-   var publicKeys1 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys2 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys3 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys3").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys4 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys4").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys5 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys5").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys6 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys6").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys7 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys7").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys8 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys8").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys9 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys9").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys10 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys10").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys11 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys11").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys12 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys12").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys13 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys13").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys14 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys14").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys15 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys15").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys16 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys16").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys17 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys17").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys18 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys18").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys19 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys19").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys20 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys20").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys21 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys21").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys22 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys22").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys23 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys23").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys24 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys24").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys25 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys25").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys26 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys26").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys27 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys27").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys28 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys28").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys29 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys30 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var combinedPublicKeys = [publicKeys1, publicKeys2, publicKeys3, publicKeys4, publicKeys5, publicKeys6, publicKeys7, publicKeys8, publicKeys9, publicKeys10, publicKeys11, publicKeys12, publicKeys13, publicKeys14, publicKeys15, publicKeys16, publicKeys17, publicKeys18, publicKeys19, publicKeys20, publicKeys21, publicKeys22, publicKeys23, publicKeys24, publicKeys25, publicKeys26, publicKeys27, publicKeys28, publicKeys29, publicKeys30];
-
-	// Create form object to post to jsp
-	var form = document.createElement("form");
-	form.setAttribute("method", "POST");
-   form.setAttribute("target", "_BLANK");
-	form.setAttribute("action", "/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_verify_ie.jsp");
-
-   var hiddenField = document.createElement("input");
-   hiddenField.setAttribute("type", "hidden");
-   hiddenField.setAttribute("name", "message");
-   hiddenField.setAttribute("value", message);
-   form.appendChild(hiddenField);
-
-   var hiddenField = document.createElement("input");
-   hiddenField.setAttribute("type", "hidden");
-   hiddenField.setAttribute("name", "publicKeys");
-   hiddenField.setAttribute("value", combinedPublicKeys);
-   form.appendChild(hiddenField);
-
-	document.body.appendChild(form); // inject the form object into the body section
-	form.submit();
-}
-
 /* status method show a Zimbra status message
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.status = function(text, type) {
@@ -339,19 +212,14 @@ function(id, title, message) {
       "<textarea class=\"barrydegraaff_zimbra_openpgp-input\" id='message'>"+message+"</textarea>" +
       "</td></tr></table></div>";
       view.getHtmlElement().innerHTML = html;
-      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );
-      if(this.isIE) {
-         this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecrypt_ie));
-      }
-      else {
-         this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecrypt));
-      }
+      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
+      this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecrypt));
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 2:
       view.setSize("650", "350");
       view.getHtmlElement().innerHTML = "<div style='width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll;'>"+message+"</div>";
-      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.DISMISS_BUTTON] } );
+      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.DISMISS_BUTTON], disposeOnPopDown:true } );
       this._dialog.setButtonListener(DwtDialog.DISMISS_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 3:
@@ -393,7 +261,7 @@ function(id, title, message) {
       "<tr><td>Public Key 30:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput30'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value + "</textarea></td></tr>" +
       "</table></div>";
       view.getHtmlElement().innerHTML = html;
-      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );
+      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnPubKeySave));
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
@@ -418,13 +286,8 @@ function(id, title, message) {
       "<textarea class=\"barrydegraaff_zimbra_openpgp-msg\" id='message'></textarea>" +
       "</td></tr></table></div>";
       view.getHtmlElement().innerHTML = html;
-      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );
-      if(this.isIE) {
-         this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnSign_ie));
-      }
-      else {
-         this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnSign));
-      }
+      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
+      this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnSign));
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 5:
@@ -447,13 +310,8 @@ function(id, title, message) {
       "<br>Higher key length is better security, but slower. If you have trouble generating a key pair choose a lower key length or use an external program. Please be patient after hitting the OK button, generating can take some time.<br><br>" +
       "</td></tr></table></div>";
       view.getHtmlElement().innerHTML = html;
-      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );
-      if(this.isIE) {
-         this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnKeyPair_ie));
-      }
-      else {
-         this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnKeyPair));
-      }
+      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
+      this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnKeyPair));
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 6:
@@ -469,7 +327,7 @@ function(id, title, message) {
       "<textarea class=\"barrydegraaff_zimbra_openpgp-msg\" id='message'></textarea>" +
       "</td></tr></table></div>";
       view.getHtmlElement().innerHTML = html;
-      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON] } );
+      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnEncrypt));
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
@@ -514,47 +372,6 @@ function() {
    else {
       tk_barrydegraaff_zimbra_openpgp.prototype.status("Wrong passphrase!", ZmStatusView.LEVEL_WARNING);
    }
-};
-
-/* This method is called when the dialog "OK" button is clicked after private key has been entered for Internet Explorer
- */
-tk_barrydegraaff_zimbra_openpgp.prototype.okBtnDecrypt_ie =
-function() {
-   var privateKeyInput = document.getElementById("privateKeyInput").value;
-   this.privateKeyCache = privateKeyInput;
-   var passphraseInput = document.getElementById("passphraseInput").value;
-   var message = document.getElementById("message").value;
-
-   // What is the DWT method to destroy this._dialog? This only clears its contents.
-   this._dialog.clearContent();
-   this._dialog.popdown();
-
-	// Create form object to post to jsp
-	var form = document.createElement("form");
-	form.setAttribute("method", "POST");
-   form.setAttribute("target", "_BLANK");
-	form.setAttribute("action", "/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_decrypt_ie.jsp");
-
-   var hiddenField = document.createElement("input");
-   hiddenField.setAttribute("type", "hidden");
-   hiddenField.setAttribute("name", "message");
-   hiddenField.setAttribute("value", message);
-   form.appendChild(hiddenField);
-
-   var hiddenField = document.createElement("input");
-   hiddenField.setAttribute("type", "hidden");
-   hiddenField.setAttribute("name", "privateKey");
-   hiddenField.setAttribute("value", privateKeyInput);
-   form.appendChild(hiddenField);
-
-   var hiddenField = document.createElement("input");
-   hiddenField.setAttribute("type", "hidden");
-   hiddenField.setAttribute("name", "passphrase");
-   hiddenField.setAttribute("value", passphraseInput);
-   form.appendChild(hiddenField);
-
-	document.body.appendChild(form); // inject the form object into the body section
-	form.submit();
 };
 
 /* This method is called when the dialog "OK" button is clicked after public keys have been maintained
@@ -644,47 +461,6 @@ function() {
    }
 };
 
-/* This method is called for signing messages in Internet Explorer.
- */
-tk_barrydegraaff_zimbra_openpgp.prototype.okBtnSign_ie =
-function() {
-   var privateKeyInput = document.getElementById("privateKeyInput").value;
-   this.privateKeyCache = privateKeyInput;
-   var passphraseInput = document.getElementById("passphraseInput").value;
-   var message = document.getElementById("message").value;
-
-   // What is the DWT method to destroy this._dialog? This only clears its contents.
-   this._dialog.clearContent();
-   this._dialog.popdown();
-
-	// Create form object to post to jsp
-	var form = document.createElement("form");
-	form.setAttribute("method", "POST");
-   form.setAttribute("target", "_BLANK");
-	form.setAttribute("action", "/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_sign_ie.jsp");
-
-   var hiddenField = document.createElement("input");
-   hiddenField.setAttribute("type", "hidden");
-   hiddenField.setAttribute("name", "message");
-   hiddenField.setAttribute("value", message);
-   form.appendChild(hiddenField);
-
-   var hiddenField = document.createElement("input");
-   hiddenField.setAttribute("type", "hidden");
-   hiddenField.setAttribute("name", "privateKey");
-   hiddenField.setAttribute("value", privateKeyInput);
-   form.appendChild(hiddenField);
-
-   var hiddenField = document.createElement("input");
-   hiddenField.setAttribute("type", "hidden");
-   hiddenField.setAttribute("name", "passphrase");
-   hiddenField.setAttribute("value", passphraseInput);
-   form.appendChild(hiddenField);
-
-	document.body.appendChild(form); // inject the form object into the body section
-	form.submit();
-};
-
 /* This method is called when the dialog "OK" button is clicked for key pair generation.
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnKeyPair =
@@ -705,51 +481,6 @@ function() {
             myWindow.displayDialog(2,'Your new key pair','Please make sure to store this information in a safe place:<br><br><textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;">Passphrase ' + passphrase + ' for ' + userid + '\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored+'\r\n\r\nKey length: '+keyLength+' bits</textarea>');
          }       
       });
-   }
-   else {
-      this.status("You must provide a user ID and passphrase", ZmStatusView.LEVEL_WARNING);
-   }
-};
-
-/* This method is called when the dialog "OK" button is clicked for key pair generation for Internet Explorer.
- */
-tk_barrydegraaff_zimbra_openpgp.prototype.okBtnKeyPair_ie =
-function() {
-	var userid = document.getElementById("uid").value;
-   var passphrase = document.getElementById("passphraseInput").value;
-   var keyLength = document.getElementById("keyLength").value;
-
-   if ((userid) && (passphrase)) {
-      // What is the DWT method to destroy this._dialog? This only clears its contents.
-      this._dialog.clearContent();
-      this._dialog.popdown();
-
-      // Create form object to post to jsp
-      var form = document.createElement("form");
-      form.setAttribute("method", "POST");
-      form.setAttribute("target", "_BLANK");
-      form.setAttribute("action", "/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_keypair_ie.jsp");
-
-      var hiddenField = document.createElement("input");
-      hiddenField.setAttribute("type", "hidden");
-      hiddenField.setAttribute("name", "userid");
-      hiddenField.setAttribute("value", userid);
-      form.appendChild(hiddenField);
-
-      var hiddenField = document.createElement("input");
-      hiddenField.setAttribute("type", "hidden");
-      hiddenField.setAttribute("name", "keyLength");
-      hiddenField.setAttribute("value", keyLength);
-      form.appendChild(hiddenField);
-
-      var hiddenField = document.createElement("input");
-      hiddenField.setAttribute("type", "hidden");
-      hiddenField.setAttribute("name", "passphrase");
-      hiddenField.setAttribute("value", passphrase);
-      form.appendChild(hiddenField);
-
-      document.body.appendChild(form); // inject the form object into the body section
-      form.submit();
    }
    else {
       this.status("You must provide a user ID and passphrase", ZmStatusView.LEVEL_WARNING);
@@ -855,57 +586,6 @@ function() {
          }
       });
 };
-
-/* encrypt method for Internet Explorer 11, will post to jsp page that does encrypt in document mode edge.
- * */
-tk_barrydegraaff_zimbra_openpgp.prototype.encrypt_ie = function(message) {
-   var publicKeys1 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys2 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys3 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys3").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys4 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys4").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys5 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys5").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys6 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys6").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys7 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys7").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys8 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys8").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys9 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys9").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys10 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys10").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys11 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys11").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys12 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys12").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys13 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys13").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys14 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys14").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys15 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys15").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys16 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys16").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys17 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys17").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys18 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys18").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys19 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys19").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys20 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys20").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys21 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys21").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys22 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys22").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys23 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys23").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys24 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys24").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys25 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys25").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys26 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys26").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys27 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys27").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys28 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys28").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys29 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var publicKeys30 = 'comment-end\r\n' + this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value + '<tk_barrydegraaff_zimbra_openpgp>';
-   var combinedPublicKeys = [publicKeys1, publicKeys2, publicKeys3, publicKeys4, publicKeys5, publicKeys6, publicKeys7, publicKeys8, publicKeys9, publicKeys10, publicKeys11, publicKeys12, publicKeys13, publicKeys14, publicKeys15, publicKeys16, publicKeys17, publicKeys18, publicKeys19, publicKeys20, publicKeys21, publicKeys22, publicKeys23, publicKeys24, publicKeys25, publicKeys26, publicKeys27, publicKeys28, publicKeys29, publicKeys30];
-
-	// Create form object to post to jsp
-	var form = document.createElement("form");
-	form.setAttribute("method", "POST");
-   form.setAttribute("target", "_BLANK");
-	form.setAttribute("action", "/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp_encrypt_ie.jsp");
-
-   var hiddenField = document.createElement("input");
-   hiddenField.setAttribute("type", "hidden");
-   hiddenField.setAttribute("name", "publicKeys");
-   hiddenField.setAttribute("value", combinedPublicKeys);
-   form.appendChild(hiddenField);
-
-	document.body.appendChild(form); // inject the form object into the body section
-	form.submit();
-}
 
 /* This method is called when the dialog "CANCEL" or "DISMISS" button is clicked
  */
