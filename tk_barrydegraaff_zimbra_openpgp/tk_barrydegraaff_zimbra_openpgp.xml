@@ -40,7 +40,6 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
       </contextMenu>
    </zimletPanelItem>
    <userProperties>
-      <property type="string" label="Private Key" name="zimbra_openpgp_privatekey" rows="2"/>
       <property type="string" label="Private Key Passphrase" name="zimbra_openpgp_privatepass" rows="1"/>
       <property type="string" label="Trusted public key 1" name="zimbra_openpgp_pubkeys1" rows="2"/>
       <property type="string" label="Trusted public key 2" name="zimbra_openpgp_pubkeys2" rows="2"/>
