@@ -193,7 +193,7 @@ function(id, title, message) {
    switch(id) {
    case 1:
       view.setSize("650", "180");
-      if(localStorage.zimbra_openpgp_privatekey !== this.privateKeyCache)
+      if((localStorage.zimbra_openpgp_privatekey !== '') && (localStorage.zimbra_openpgp_privatekey !== this.privateKeyCache))
       {
          this.privateKeyCache = localStorage.zimbra_openpgp_privatekey;
 	  } 
@@ -268,7 +268,7 @@ function(id, title, message) {
       break;
    case 4:
       view.setSize("650", "350");
-      if(localStorage.zimbra_openpgp_privatekey !== this.privateKeyCache)
+      if((localStorage.zimbra_openpgp_privatekey !== '') && (localStorage.zimbra_openpgp_privatekey !== this.privateKeyCache))
       {
          this.privateKeyCache = localStorage.zimbra_openpgp_privatekey;
 	  }
