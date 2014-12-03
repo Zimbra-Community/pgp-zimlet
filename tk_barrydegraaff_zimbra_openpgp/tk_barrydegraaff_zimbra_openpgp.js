@@ -193,6 +193,10 @@ function(id, title, message) {
    switch(id) {
    case 1:
       view.setSize("650", "180");
+      if(localStorage.zimbra_openpgp_privatekey !== this.privateKeyCache)
+      {
+         this.privateKeyCache = localStorage.zimbra_openpgp_privatekey;
+	  } 
       html = "<div style='width:650px; height: 180px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
       "Please provide private key and passphrase for decryption. Your private key will remain in memory until you reload your browser.<br><br>" +
       "</td></tr><tr><td>" +
@@ -264,6 +268,10 @@ function(id, title, message) {
       break;
    case 4:
       view.setSize("650", "350");
+      if(localStorage.zimbra_openpgp_privatekey !== this.privateKeyCache)
+      {
+         this.privateKeyCache = localStorage.zimbra_openpgp_privatekey;
+	  }
       html = "<div style='width:650px; height: 350px; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
       "Please compose a message below to be signed with your private key. Your private key will remain in memory until you reload your browser.<br><br>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
@@ -415,10 +423,6 @@ function() {
 
    this._dialog.clearContent();
    this._dialog.popdown();
-   
-   /* For some reason we need to reload the page to make sure al textarea get updated
-    * needs debugging.*/
-   location.reload();
 };
 
 /* This method is called for signing messages
