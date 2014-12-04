@@ -20,13 +20,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 
 //Constructor
 tk_barrydegraaff_zimbra_openpgp = function() {
-   this.privateKeyCache=localStorage.zimbra_openpgp_privatekey;
-   var ver = appCtxt.get(ZmSetting.CLIENT_VERSION);
-   version = ver.split("_");
-
-   //Initialize workarounds for differences between Zimbra versions
-   this.composeMode = Dwt.TEXT;
-   //if(version[0].indexOf("8.5.") > -1)
+   tk_barrydegraaff_zimbra_openpgp.privateKeyCache='';   
 };
 
 tk_barrydegraaff_zimbra_openpgp.prototype = new ZmZimletBase;
@@ -192,17 +186,17 @@ function(id, title, message) {
 
    switch(id) {
    case 1:
-      view.setSize("650", "180");
-      if((localStorage.zimbra_openpgp_privatekey !== '') && (localStorage.zimbra_openpgp_privatekey !== this.privateKeyCache))
+      view.setSize("650", "180");     
+      if((localStorage.zimbra_openpgp_privatekey) && (localStorage.zimbra_openpgp_privatekey !== tk_barrydegraaff_zimbra_openpgp.privateKeyCache))
       {
-         this.privateKeyCache = localStorage.zimbra_openpgp_privatekey;
+         tk_barrydegraaff_zimbra_openpgp.privateKeyCache = localStorage.zimbra_openpgp_privatekey;
 	  } 
       html = "<div style='width:650px; height: 180px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
       "Please provide private key and passphrase for decryption. Your private key will remain in memory until you reload your browser.<br><br>" +
       "</td></tr><tr><td>" +
       "Private Key:" +
       "</td><td>" +
-      "<textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"20\" id='privateKeyInput'/>" + this.privateKeyCache + "</textarea>" +
+      "<textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"20\" id='privateKeyInput'/>" + tk_barrydegraaff_zimbra_openpgp.privateKeyCache + "</textarea>" +
       "</td></tr><tr><td>" +
       "Passphrase:" +
       "</td><td>" +
@@ -268,16 +262,16 @@ function(id, title, message) {
       break;
    case 4:
       view.setSize("650", "350");
-      if((localStorage.zimbra_openpgp_privatekey !== '') && (localStorage.zimbra_openpgp_privatekey !== this.privateKeyCache))
+      if((localStorage.zimbra_openpgp_privatekey) && (localStorage.zimbra_openpgp_privatekey !== tk_barrydegraaff_zimbra_openpgp.privateKeyCache))
       {
-         this.privateKeyCache = localStorage.zimbra_openpgp_privatekey;
+         tk_barrydegraaff_zimbra_openpgp.privateKeyCache = localStorage.zimbra_openpgp_privatekey;
 	  }
       html = "<div style='width:650px; height: 350px; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
       "Please compose a message below to be signed with your private key. Your private key will remain in memory until you reload your browser.<br><br>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
       "Private Key:" +
       "</td><td style=\"width:500px\">" +
-      "<textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"20\" id='privateKeyInput'/>" + this.privateKeyCache + "</textarea>" +
+      "<textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"20\" id='privateKeyInput'/>" + tk_barrydegraaff_zimbra_openpgp.privateKeyCache + "</textarea>" +
       "</td></tr><tr><td>" +
       "Passphrase:" +
       "</td><td>" +
@@ -342,7 +336,7 @@ function(id, title, message) {
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnDecrypt =
 function() {
    var privateKeyInput = document.getElementById("privateKeyInput").value;
-   this.privateKeyCache = privateKeyInput;
+   tk_barrydegraaff_zimbra_openpgp.privateKeyCache = privateKeyInput;
    var passphraseInput = document.getElementById("passphraseInput").value;
    var msg = document.getElementById("message").value;
 
@@ -380,8 +374,19 @@ function() {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.localStorageSave = 
 function() {
-   localStorage.zimbra_openpgp_privatekey = document.getElementById("privateKeyInput").value;
-   this.privateKeyCache=localStorage.zimbra_openpgp_privatekey;
+   var privKeyInput = document.getElementById("privateKeyInput").value;
+   //Do not allow to store invalid private keys
+   var pgpPrivKeyRegEx = new RegExp('[\-]*BEGIN PGP PRIVATE KEY BLOCK[\-]*');
+   if (privKeyInput.match(pgpPrivKeyRegEx)) 
+   {	   
+      localStorage.zimbra_openpgp_privatekey = document.getElementById("privateKeyInput").value;
+      tk_barrydegraaff_zimbra_openpgp.privateKeyCache=localStorage.zimbra_openpgp_privatekey;
+   }
+   else
+   {
+      localStorage.zimbra_openpgp_privatekey = '';
+      tk_barrydegraaff_zimbra_openpgp.privateKeyCache='';
+   }   
 }
 
 /* This method is called when the dialog "OK" button is clicked after public keys have been maintained
@@ -430,7 +435,7 @@ function() {
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnSign =
 function() {
    var privateKeyInput = document.getElementById("privateKeyInput").value;
-   this.privateKeyCache = privateKeyInput;
+   tk_barrydegraaff_zimbra_openpgp.privateKeyCache = privateKeyInput;
    var passphrase = document.getElementById("passphraseInput").value;
    var message = document.getElementById("message").value;
 
@@ -456,7 +461,7 @@ function() {
                  var appCtxt = window.top.appCtxt;
                  var zmApp = appCtxt.getApp();
                  var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
-                 var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:myWindow.composeMode,
+                 var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
                  toOverride:null, subjOverride:null, extraBodyText:signed, callback:null}
                  composeController.doAction(params); // opens asynchronously the window.
               }
@@ -580,7 +585,7 @@ function() {
             var appCtxt = window.top.appCtxt;
             var zmApp = appCtxt.getApp();
             var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
-            var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:myWindow.composeMode,
+            var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
             toOverride:addresses, subjOverride:null, extraBodyText:pgpMessage, callback:null}
             composeController.doAction(params); // opens asynchronously the window.
          }
