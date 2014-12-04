@@ -36,6 +36,42 @@ function() {
 tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
 };
 
+tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, view) {
+   var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
+   if (!bp)
+   {
+     //not a plain text message, means no PGP
+     return;
+   }
+   var clearSignedRegEx = new RegExp('[\-]*BEGIN PGP SIGNATURE[\-]*');
+   var pgpMessageRegEx = new RegExp('[\-]*BEGIN PGP MESSAGE[\-]*');
+   var msg = bp.node.content;
+   
+   if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
+   {
+      console.log(zmObject);
+      console.log(msgObj);
+      console.log(msg);
+   }
+
+    if (msg.match(clearSignedRegEx)) {
+      try {
+         var message = openpgp.cleartext.readArmored(msg);
+      }
+      catch(err) {
+         this.status("Could not read armored message!", ZmStatusView.LEVEL_CRITICAL);
+         return;
+      }
+      this.verify(message);
+   }
+   else if (msg.match(pgpMessageRegEx)) {
+      this.displayDialog(1, "Please provide private key and passphrase for decryption", msg);
+   }
+   else {
+      return;
+   }   
+};   
+
 /* This method gets called by the Zimlet framework when double-click is performed.
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.doubleClicked =
@@ -610,3 +646,4 @@ function() {
    this._dialog.clearContent();
    this._dialog.popdown();
 };
+
