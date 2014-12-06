@@ -21,7 +21,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 //Constructor
 tk_barrydegraaff_zimbra_openpgp = function() {
    tk_barrydegraaff_zimbra_openpgp.privateKeyCache='';
-   tk_barrydegraaff_zimbra_openpgp.metaData='';
+   tk_barrydegraaff_zimbra_openpgp.prototype.initZmMetaData();
 };
 
 tk_barrydegraaff_zimbra_openpgp.prototype = new ZmZimletBase;
@@ -36,6 +36,36 @@ function() {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
 };
+
+/* Initialize ZmMetaData in  see metaDataHandler below for more details.
+ * will set tk_barrydegraaff_zimbra_openpgp.metaData
+ */
+tk_barrydegraaff_zimbra_openpgp.prototype.initZmMetaData =
+function() { 
+   
+   this.currentMetaData = new ZmMetaData(appCtxt.getActiveAccount(), null);
+   this.currentMetaData.get("openpgpZimletMetaData",null,tk_barrydegraaff_zimbra_openpgp.prototype.metaDataHandler);
+}   
+
+/* zmMetaData object stores user data to SQL database in Zimbra
+ * This should be less limited than LDAP with getUserPropertyInfo
+ * See also: 
+ * https://files.zimbra.com/docs/zimlet/zcs/8.0.4/jsdocs/symbols/ZmMetaData.html
+ * https://github.com/Zimbra-Community/adopted/blob/master/com_zimbra_stickynotes/stickynotes.js
+ * https://gist.github.com/skyflyer/e03e79abcb18964de9d0
+ * */
+tk_barrydegraaff_zimbra_openpgp.prototype.metaDataHandler =
+function(data) {   
+   var response = data.getResponse().BatchResponse.GetMailboxMetadataResponse[0];
+   if (response.meta && response.meta[0] && response.meta[0]._attrs ) {
+      tk_barrydegraaff_zimbra_openpgp.metaData = response.meta[0]._attrs
+      return; 
+   }
+   else
+   {
+      tk_barrydegraaff_zimbra_openpgp.metaData = '';
+   }      
+}
 
 /*This method is called when a message is viewed in Zimbra
  * */
@@ -79,31 +109,9 @@ tk_barrydegraaff_zimbra_openpgp.prototype.singleClicked =
 function() {
    if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
    {
-      //try store ZmMetaData
-      this._currentMetaData = new ZmMetaData(appCtxt.getActiveAccount(), null);
-      var keyValArry = [];
-      keyValArry["test"] = 'testvalue';
-      keyValArry["test2"] = 'testvalue2';
-      keyValArry["test3"] = 'testvalue3';
-      this._currentMetaData.set("openpgpZimletMetaData", keyValArry, null, null);
-      
-      this._currentMetaData = new ZmMetaData(appCtxt.getActiveAccount(), null);
-      this._currentMetaData.get("openpgpZimletMetaData",null,tk_barrydegraaff_zimbra_openpgp.prototype.maauw);
-            
-      this.displayDialog(2, "Development in progress", 'Sample mysql stored data:' + tk_barrydegraaff_zimbra_openpgp.metaData['test2'] + 'be carefull a lot of asynchronous calls going on, and there is cache...');
    }   
 };
 
-tk_barrydegraaff_zimbra_openpgp.prototype.maauw =
-function(whatteh) {   
-   var response = whatteh.getResponse().BatchResponse.GetMailboxMetadataResponse[0];
-   if (response.meta && response.meta[0] && response.meta[0]._attrs ) {
-      tk_barrydegraaff_zimbra_openpgp.metaData = response.meta[0]._attrs
-      console.log(response.meta[0]._attrs);
-
-      console.log(tk_barrydegraaff_zimbra_openpgp.metaData['test2']);
-   }      
-}
 /* This method gets called by the Zimlet framework when double-click is performed.
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.doubleClicked =
@@ -210,7 +218,17 @@ tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
       var publicKeys28 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys28").value);
       var publicKeys29 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value);
       var publicKeys30 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value);
-      var combinedPublicKeys = [].concat(publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys);
+      var publicKeys31 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys31']);
+      var publicKeys32 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys32']);
+      var publicKeys33 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys33']);
+      var publicKeys34 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys34']);
+      var publicKeys35 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys35']);
+      var publicKeys36 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys36']);
+      var publicKeys37 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys37']);
+      var publicKeys38 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys38']);
+      var publicKeys39 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys39']);
+      var publicKeys40 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys40']);
+      var combinedPublicKeys = [].concat(publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys, publicKeys31.keys, publicKeys32.keys, publicKeys33.keys, publicKeys34.keys, publicKeys35.keys, publicKeys36.keys, publicKeys37.keys, publicKeys38.keys, publicKeys39.keys, publicKeys40.keys);
    }
    catch(err) {
       tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not parse your trusted public keys!", ZmStatusView.LEVEL_WARNING);
@@ -268,7 +286,7 @@ function(id, title, message) {
       "</td></tr><tr><td>" +
       "Passphrase:" +
       "</td><td>" +
-      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value='" + this.getUserPropertyInfo("zimbra_openpgp_privatepass").value + "'>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value='" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] : '') + "'>" +
       "</td></tr><tr><td>" +
       "Message:" +
       "</td><td>" +
@@ -281,7 +299,7 @@ function(id, title, message) {
       
       //If a private key is available and a password is stored, auto decrypt the message
       if((tk_barrydegraaff_zimbra_openpgp.privateKeyCache.length > 10) && 
-      (this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.length > 0))
+      ((tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] : '').length > 0))
       {
          this.okBtnDecrypt();
       }   
@@ -295,10 +313,10 @@ function(id, title, message) {
    case 3:
       view.setSize("650", "500");
       html = "<div style='width:650px; height: 500px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
-      "Copy-paste ASCII armored keys here. <br><br>You can put human readable comments before each key as long as you start on a new line for your public key.<br>Please be patient after hitting the OK button, saving takes some time.<br><br>" +
+      "Copy-paste ASCII armored keys here. <br><br>You can put human readable comments before each key as long as you start on a new line for your public key.<br><br><small>Please be patient after hitting the OK button, even after the dialog pops down it can take  some time for your changes to become visible.<br><br>Public keys 1-30 are stored in Zimbra LDAP and have maximum length of 5120 chars. Public keys 31-40 are stored in Zimbra SQL and have a combined maximum length of 32768 chars.</small><br><br>" +
       "</td></tr>" +
       "<tr><td style=\"width:100px\">Private Key:</td><td style=\"width:500px\">If you save your private key below it is stored in your browsers <a href=\"http://diveintohtml5.info/storage.html\" target=\"_blank\" >local storage</a>. If you do not store your private key the server will ask you to provide it for each session.<textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='privateKeyInput'/>" + localStorage.zimbra_openpgp_privatekey + "</textarea></td></tr>" +
-      "<tr><td>Passphrase:</td><td><br>If you save your password below it is stored in plain text in the Zimbra LDAP. If you do not store your password the server will ask you to provide it every time it is needed.<input class=\"barrydegraaff_zimbra_openpgp-input\" id='privatePassInput' type='password' value='" + this.getUserPropertyInfo("zimbra_openpgp_privatepass").value + "'></td></tr>" +
+      "<tr><td>Passphrase:</td><td><br>If you save your password below it is stored in plain text in the Zimbra SQL. If you do not store your password the server will ask you to provide it every time it is needed.<input class=\"barrydegraaff_zimbra_openpgp-input\" id='privatePassInput' type='password' value='" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] : '') + "'></td></tr>" +
       "<tr><td>Public Key 1:</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput1'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value + "</textarea></td></tr>" +
       "<tr><td>Public Key 2:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput2'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value + "</textarea></td></tr>" +
       "<tr><td>Public Key 3:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput3'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys3").value + "</textarea></td></tr>" +
@@ -329,6 +347,16 @@ function(id, title, message) {
       "<tr><td>Public Key 28:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput28'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys28").value + "</textarea></td></tr>" +
       "<tr><td>Public Key 29:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput29'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value + "</textarea></td></tr>" +
       "<tr><td>Public Key 30:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput30'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value + "</textarea></td></tr>" +
+      "<tr><td>Public Key 31:</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput31'/>" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys31'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys31'] : '')  + "</textarea></td></tr>" +
+      "<tr><td>Public Key 32:</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput32'/>" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys32'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys32'] : '')  + "</textarea></td></tr>" +
+      "<tr><td>Public Key 33:</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput33'/>" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys33'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys33'] : '')  + "</textarea></td></tr>" +
+      "<tr><td>Public Key 34:</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput34'/>" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys34'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys34'] : '')  + "</textarea></td></tr>" +
+      "<tr><td>Public Key 35:</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput35'/>" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys35'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys35'] : '')  + "</textarea></td></tr>" +
+      "<tr><td>Public Key 36:</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput36'/>" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys36'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys36'] : '')  + "</textarea></td></tr>" +
+      "<tr><td>Public Key 37:</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput37'/>" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys37'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys37'] : '')  + "</textarea></td></tr>" +
+      "<tr><td>Public Key 38:</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput38'/>" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys38'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys38'] : '')  + "</textarea></td></tr>" +
+      "<tr><td>Public Key 39:</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput39'/>" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys39'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys39'] : '')  + "</textarea></td></tr>" +
+      "<tr><td>Public Key 40:</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput40'/>" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys40'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys40'] : '')  + "</textarea></td></tr>" +                                                                                  
       "</table></div>";
       view.getHtmlElement().innerHTML = html;
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
@@ -350,7 +378,7 @@ function(id, title, message) {
       "</td></tr><tr><td>" +
       "Passphrase:" +
       "</td><td>" +
-      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value='" + this.getUserPropertyInfo("zimbra_openpgp_privatepass").value + "'>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value='" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] : '') + "'>" +
       "</td></tr><tr><td>" +
       "Message:" +
       "</td><td>" +
@@ -372,7 +400,7 @@ function(id, title, message) {
       "</td></tr><tr><td>" +
       "Passphrase:" +
       "</td><td>" +
-      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' value='" + this.getUserPropertyInfo("zimbra_openpgp_privatepass").value + "'>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' value='" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] : '') + "'>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
       "Key length:" +
       "</td><td style=\"width:500px\">" +
@@ -469,7 +497,8 @@ function() {
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnPubKeySave =
 function() {
    tk_barrydegraaff_zimbra_openpgp.prototype.localStorageSave();
-   this.setUserProperty("zimbra_openpgp_privatepass", document.getElementById("privatePassInput").value, true);
+
+   //Store values to LDAP
    this.setUserProperty("zimbra_openpgp_pubkeys1", document.getElementById("publicKeyInput1").value, true);
    this.setUserProperty("zimbra_openpgp_pubkeys2", document.getElementById("publicKeyInput2").value, true);
    this.setUserProperty("zimbra_openpgp_pubkeys3", document.getElementById("publicKeyInput3").value, true);
@@ -501,6 +530,26 @@ function() {
    this.setUserProperty("zimbra_openpgp_pubkeys29", document.getElementById("publicKeyInput29").value, true);
    this.setUserProperty("zimbra_openpgp_pubkeys30", document.getElementById("publicKeyInput30").value, true);
 
+   //Store public keys to SQL database using ZmMetaData
+   this._currentMetaData = new ZmMetaData(appCtxt.getActiveAccount(), null);
+   var keyValArry = [];
+   //Only send items to the server that are not empty
+   if(document.getElementById("privatePassInput").value) keyValArry["zimbra_openpgp_privatepass"] = document.getElementById("privatePassInput").value;
+   if(document.getElementById("publicKeyInput31").value) keyValArry["zimbra_openpgp_pubkeys31"] = document.getElementById("publicKeyInput31").value;
+   if(document.getElementById("publicKeyInput32").value) keyValArry["zimbra_openpgp_pubkeys32"] = document.getElementById("publicKeyInput32").value;
+   if(document.getElementById("publicKeyInput33").value) keyValArry["zimbra_openpgp_pubkeys33"] = document.getElementById("publicKeyInput33").value;
+   if(document.getElementById("publicKeyInput34").value) keyValArry["zimbra_openpgp_pubkeys34"] = document.getElementById("publicKeyInput34").value;
+   if(document.getElementById("publicKeyInput35").value) keyValArry["zimbra_openpgp_pubkeys35"] = document.getElementById("publicKeyInput35").value;
+   if(document.getElementById("publicKeyInput36").value) keyValArry["zimbra_openpgp_pubkeys36"] = document.getElementById("publicKeyInput36").value;
+   if(document.getElementById("publicKeyInput37").value) keyValArry["zimbra_openpgp_pubkeys37"] = document.getElementById("publicKeyInput37").value;
+   if(document.getElementById("publicKeyInput38").value) keyValArry["zimbra_openpgp_pubkeys38"] = document.getElementById("publicKeyInput38").value;
+   if(document.getElementById("publicKeyInput39").value) keyValArry["zimbra_openpgp_pubkeys39"] = document.getElementById("publicKeyInput39").value;
+   if(document.getElementById("publicKeyInput40").value) keyValArry["zimbra_openpgp_pubkeys40"] = document.getElementById("publicKeyInput40").value;
+   this._currentMetaData.set("openpgpZimletMetaData", keyValArry, null, null);
+
+   //Update ZmMetaData cache
+   tk_barrydegraaff_zimbra_openpgp.prototype.initZmMetaData();
+   
    this._dialog.clearContent();
    this._dialog.popdown();
 };
@@ -612,7 +661,17 @@ function() {
       var publicKeys28 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys28").value);
       var publicKeys29 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value);
       var publicKeys30 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value);
-      var combinedPublicKeys = [publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys,];
+      var publicKeys31 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys31']);
+      var publicKeys32 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys32']);
+      var publicKeys33 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys33']);
+      var publicKeys34 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys34']);
+      var publicKeys35 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys35']);
+      var publicKeys36 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys36']);
+      var publicKeys37 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys37']);
+      var publicKeys38 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys38']);
+      var publicKeys39 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys39']);
+      var publicKeys40 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys40']);
+      var combinedPublicKeys = [publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys, publicKeys31.keys, publicKeys32.keys, publicKeys33.keys, publicKeys34.keys, publicKeys35.keys, publicKeys36.keys, publicKeys37.keys, publicKeys38.keys, publicKeys39.keys, publicKeys40.keys];
 
       var result = '<select class="barrydegraaff_zimbra_openpgp-input" id="pubKeySelect" multiple>';
 
