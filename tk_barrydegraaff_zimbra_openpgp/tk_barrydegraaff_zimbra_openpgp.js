@@ -20,7 +20,8 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 
 //Constructor
 tk_barrydegraaff_zimbra_openpgp = function() {
-   tk_barrydegraaff_zimbra_openpgp.privateKeyCache='';   
+   tk_barrydegraaff_zimbra_openpgp.privateKeyCache='';
+   tk_barrydegraaff_zimbra_openpgp.metaData='';
 };
 
 tk_barrydegraaff_zimbra_openpgp.prototype = new ZmZimletBase;
@@ -72,16 +73,37 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
    }   
 };   
 
-/* This method gets called by the Zimlet framework when double-click is performed.
+/* This method gets called by the Zimlet framework when single-click is performed.
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.singleClicked =
 function() {
    if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
    {
-      this.displayDialog(2, "Development window", 'nothing here');
+      //try store ZmMetaData
+      this._currentMetaData = new ZmMetaData(appCtxt.getActiveAccount(), null);
+      var keyValArry = [];
+      keyValArry["test"] = 'testvalue';
+      keyValArry["test2"] = 'testvalue2';
+      keyValArry["test3"] = 'testvalue3';
+      this._currentMetaData.set("openpgpZimletMetaData", keyValArry, null, null);
+      
+      this._currentMetaData = new ZmMetaData(appCtxt.getActiveAccount(), null);
+      this._currentMetaData.get("openpgpZimletMetaData",null,tk_barrydegraaff_zimbra_openpgp.prototype.maauw);
+            
+      this.displayDialog(2, "Development in progress", 'Sample mysql stored data:' + tk_barrydegraaff_zimbra_openpgp.metaData['test2'] + 'be carefull a lot of asynchronous calls going on, and there is cache...');
    }   
 };
 
+tk_barrydegraaff_zimbra_openpgp.prototype.maauw =
+function(whatteh) {   
+   var response = whatteh.getResponse().BatchResponse.GetMailboxMetadataResponse[0];
+   if (response.meta && response.meta[0] && response.meta[0]._attrs ) {
+      tk_barrydegraaff_zimbra_openpgp.metaData = response.meta[0]._attrs
+      console.log(response.meta[0]._attrs);
+
+      console.log(tk_barrydegraaff_zimbra_openpgp.metaData['test2']);
+   }      
+}
 /* This method gets called by the Zimlet framework when double-click is performed.
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.doubleClicked =
