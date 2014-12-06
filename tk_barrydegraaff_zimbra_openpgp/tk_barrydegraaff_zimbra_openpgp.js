@@ -36,6 +36,8 @@ function() {
 tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
 };
 
+/*This method is called when a message is viewed in Zimbra
+ * */
 tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, view) {
    var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
    if (!bp)
@@ -49,8 +51,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
    
    if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
    {
-      console.log(zmObject);
-      console.log(msgObj);
       console.log(msg);
    }
 
@@ -71,6 +71,16 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
       return;
    }   
 };   
+
+/* This method gets called by the Zimlet framework when double-click is performed.
+ */
+tk_barrydegraaff_zimbra_openpgp.prototype.singleClicked =
+function() {
+   if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
+   {
+      this.displayDialog(2, "Development window", 'nothing here');
+   }   
+};
 
 /* This method gets called by the Zimlet framework when double-click is performed.
  */
@@ -246,6 +256,13 @@ function(id, title, message) {
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecrypt));
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
+      
+      //If a private key is available and a password is stored, auto decrypt the message
+      if((tk_barrydegraaff_zimbra_openpgp.privateKeyCache.length > 10) && 
+      (this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.length > 0))
+      {
+         this.okBtnDecrypt();
+      }   
       break;
    case 2:
       view.setSize("650", "350");
@@ -646,4 +663,3 @@ function() {
    this._dialog.clearContent();
    this._dialog.popdown();
 };
-
