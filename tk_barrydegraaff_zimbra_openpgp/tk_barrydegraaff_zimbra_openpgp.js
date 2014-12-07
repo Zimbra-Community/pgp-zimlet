@@ -470,18 +470,87 @@ function() {
    }
    if (success) {
       var message = openpgp.message.readArmored(msg);
+
+   try {
+      var publicKeys1 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
+      var publicKeys2 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value);
+      var publicKeys3 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys3").value);
+      var publicKeys4 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys4").value);
+      var publicKeys5 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys5").value);
+      var publicKeys6 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys6").value);
+      var publicKeys7 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys7").value);
+      var publicKeys8 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys8").value);
+      var publicKeys9 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys9").value);
+      var publicKeys10 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys10").value);
+      var publicKeys11 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys11").value);
+      var publicKeys12 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys12").value);
+      var publicKeys13 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys13").value);
+      var publicKeys14 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys14").value);
+      var publicKeys15 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys15").value);
+      var publicKeys16 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys16").value);
+      var publicKeys17 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys17").value);
+      var publicKeys18 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys18").value);
+      var publicKeys19 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys19").value);
+      var publicKeys20 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys20").value);
+      var publicKeys21 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys21").value);
+      var publicKeys22 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys22").value);
+      var publicKeys23 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys23").value);
+      var publicKeys24 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys24").value);
+      var publicKeys25 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys25").value);
+      var publicKeys26 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys26").value);
+      var publicKeys27 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys27").value);
+      var publicKeys28 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys28").value);
+      var publicKeys29 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value);
+      var publicKeys30 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value);
+      var publicKeys31 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys31']);
+      var publicKeys32 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys32']);
+      var publicKeys33 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys33']);
+      var publicKeys34 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys34']);
+      var publicKeys35 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys35']);
+      var publicKeys36 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys36']);
+      var publicKeys37 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys37']);
+      var publicKeys38 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys38']);
+      var publicKeys39 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys39']);
+      var publicKeys40 = openpgp.key.readArmored(tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys40']);
+      var pubKey = [].concat(publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys, publicKeys31.keys, publicKeys32.keys, publicKeys33.keys, publicKeys34.keys, publicKeys35.keys, publicKeys36.keys, publicKeys37.keys, publicKeys38.keys, publicKeys39.keys, publicKeys40.keys);
+   }
+   catch(err) {
+      tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not parse your trusted public keys!", ZmStatusView.LEVEL_WARNING);
+      return;
+   }
       // There should be a cleaner way to do this than stashing 
       // the parent in myWindow but I've not worked it out yet!
       var myWindow = this;
-        openpgp.decryptMessage(privKey, message).then(
+        openpgp.decryptAndVerifyMessage(privKey, pubKey, message).then(
            function(decrypted) {
-              myWindow._dialog.clearContent();
-              myWindow._dialog.popdown();
-              myWindow.displayDialog(2,'Decrypted result','<textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:340px;">'+decrypted+'</textarea>');
-           },
-           function(err) {
-              tk_barrydegraaff_zimbra_openpgp.prototype.status("Decryption failed!", ZmStatusView.LEVEL_WARNING);
-           }
+               myWindow._dialog.clearContent();
+               myWindow._dialog.popdown();
+               var sigStatus ='';
+               try 
+               {
+                  if(decrypted.text+decrypted.signatures[0].valid)
+                  {
+                     if(decrypted.signatures[0].valid==true)
+                     {
+                        sigStatus ='<b style="color:green">Got a good signature.</b>';
+                        tk_barrydegraaff_zimbra_openpgp.prototype.status("Got a good signature.", ZmStatusView.LEVEL_INFO);
+                     }
+                     else
+                     {
+                        sigStatus ='<b style="color:red">Got a BAD signature.</b>';
+                        tk_barrydegraaff_zimbra_openpgp.prototype.status("Got a BAD signature.", ZmStatusView.LEVEL_CRITICAL);
+                     }
+                  }
+               }
+               catch (err) 
+               {
+                  sigStatus ='This encrypted message was not signed.';
+               }                 
+               myWindow.displayDialog(2,'Decrypted result','<textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:325px;">'+decrypted.text+'</textarea><br>'+sigStatus);
+            },
+            function(err) {
+               tk_barrydegraaff_zimbra_openpgp.prototype.status("Decryption failed!", ZmStatusView.LEVEL_WARNING);
+            }
         );
    }
    else {
@@ -740,7 +809,7 @@ function() {
    {
       tk_barrydegraaff_zimbra_openpgp.privateKeyCache = privateKeyInput;
       var passphrase = document.getElementById("passphraseInput").value;
-//alert('true'+)
+
       try {
          var privKeys = openpgp.key.readArmored(privateKeyInput);
          var privKey = privKeys.keys[0];
