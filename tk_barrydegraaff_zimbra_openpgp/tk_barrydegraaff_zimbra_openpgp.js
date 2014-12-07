@@ -392,8 +392,8 @@ function(id, title, message) {
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 5:
-      view.setSize("650", "180");
-      html = "<div style='width:650px; height: 180px; overflow-x: hidden; overflow-y: hidden;'><table style='width:650px;'><tr><td colspan='2'>" +
+      view.setSize("650", "240");
+      html = "<div style='width:650px; height: 240px; overflow-x: hidden; overflow-y: hidden;'><table style='width:650px;'><tr><td colspan='2'>" +
       "Please enter User ID (example: Firstname Lastname &lt;your@email.com&gt;) and passphrase for new key pair.<br><br>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
       "User ID:" +
@@ -409,6 +409,8 @@ function(id, title, message) {
       "<select class=\"barrydegraaff_zimbra_openpgp-input\" id=\"keyLength\" name=\"keyLength\"><option value=\"512\">512</option><option selected=\"selected\" value=\"1024\">1024</option><option value=\"2048\">2048</option><option value=\"4096\">4096</option></select>" +
       "</td></tr><tr><td colspan='2'>" +
       "<br>Higher key length is better security, but slower. If you have trouble generating a key pair choose a lower key length or use an external program. Please be patient after hitting the OK button, generating can take some time.<br><br>" +
+      "</td></tr><tr><td colspan='2'>" +
+      "<input type='checkbox' checked='checked' name='keyStore' id='keyStore' value='yes'>Store and overwrite current Private Key, Passphrase and Public Key 1.<br>" +
       "</td></tr></table></div>";
       view.getHtmlElement().innerHTML = html;
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
@@ -609,6 +611,7 @@ function() {
 	var userid = document.getElementById("uid").value;
    var keyLength = document.getElementById("keyLength").value;
    var passphrase = document.getElementById("passphraseInput").value;
+   var keyStore = document.getElementById("keyStore").checked;
 
    if ((userid) && (passphrase)) {
       var opt = {numBits: keyLength, userId: userid, passphrase: passphrase};
@@ -616,6 +619,13 @@ function() {
       openpgp.generateKeyPair(opt).then(function(key) {
          if((key.privateKeyArmored) && (key.publicKeyArmored))
          {
+            if(keyStore)
+            {
+               localStorage.zimbra_openpgp_privatekey = key.privateKeyArmored;
+               tk_barrydegraaff_zimbra_openpgp.privateKeyCache=localStorage.zimbra_openpgp_privatekey;               
+               myWindow.setUserProperty("zimbra_openpgp_privatepass", passphrase, true);
+               myWindow.setUserProperty("zimbra_openpgp_pubkeys1", key.publicKeyArmored, true);
+            }
             // What is the DWT method to destroy this._dialog? This only clears its contents.
             myWindow._dialog.clearContent();
             myWindow._dialog.popdown();
