@@ -286,7 +286,7 @@ function(id, title, message) {
       "</td></tr><tr><td>" +
       "Passphrase:" +
       "</td><td>" +
-      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value='" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] : '') + "'>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value='" + (this.getUserPropertyInfo("zimbra_openpgp_privatepass").value ? this.getUserPropertyInfo("zimbra_openpgp_privatepass").value : '') + "'>" +
       "</td></tr><tr><td>" +
       "Message:" +
       "</td><td>" +
@@ -299,7 +299,7 @@ function(id, title, message) {
       
       //If a private key is available and a password is stored, auto decrypt the message
       if((tk_barrydegraaff_zimbra_openpgp.privateKeyCache.length > 10) && 
-      ((tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] : '').length > 0))
+      ((this.getUserPropertyInfo("zimbra_openpgp_privatepass").value ? this.getUserPropertyInfo("zimbra_openpgp_privatepass").value : '').length > 0))
       {
          this.okBtnDecrypt();
       }   
@@ -316,7 +316,7 @@ function(id, title, message) {
       "Copy-paste ASCII armored keys here. <br><br>You can put human readable comments before each key as long as you start on a new line for your public key.<br><br><small>Please be patient after hitting the OK button, even after the dialog pops down it can take  some time for your changes to become visible.<br><br>Public keys 1-30 are stored in Zimbra LDAP and have maximum length of 5120 chars. Public keys 31-40 are stored in Zimbra SQL and have a combined maximum length of 32768 chars.</small><br><br>" +
       "</td></tr>" +
       "<tr><td style=\"width:100px\">Private Key:</td><td style=\"width:500px\">If you save your private key below it is stored in your browsers <a href=\"http://diveintohtml5.info/storage.html\" target=\"_blank\" >local storage</a>. If you do not store your private key the server will ask you to provide it for each session.<textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='privateKeyInput'/>" + localStorage.zimbra_openpgp_privatekey + "</textarea></td></tr>" +
-      "<tr><td>Passphrase:</td><td><br>If you save your password below it is stored in plain text in the Zimbra SQL. If you do not store your password the server will ask you to provide it every time it is needed.<input class=\"barrydegraaff_zimbra_openpgp-input\" id='privatePassInput' type='password' value='" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] : '') + "'></td></tr>" +
+      "<tr><td>Passphrase:</td><td><br>If you save your password below it is stored in plain text in the Zimbra LDAP. If you do not store your password the server will ask you to provide it every time it is needed.<input class=\"barrydegraaff_zimbra_openpgp-input\" id='privatePassInput' type='password' value='" + (this.getUserPropertyInfo("zimbra_openpgp_privatepass").value ? this.getUserPropertyInfo("zimbra_openpgp_privatepass").value : '') + "'></td></tr>" +
       "<tr><td>Public Key 1:</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput1'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value + "</textarea></td></tr>" +
       "<tr><td>Public Key 2:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput2'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value + "</textarea></td></tr>" +
       "<tr><td>Public Key 3:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput3'/>" + this.getUserPropertyInfo("zimbra_openpgp_pubkeys3").value + "</textarea></td></tr>" +
@@ -378,7 +378,7 @@ function(id, title, message) {
       "</td></tr><tr><td>" +
       "Passphrase:" +
       "</td><td>" +
-      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value='" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] : '') + "'>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value='" + (this.getUserPropertyInfo("zimbra_openpgp_privatepass").value ? this.getUserPropertyInfo("zimbra_openpgp_privatepass").value : '') + "'>" +
       "</td></tr><tr><td>" +
       "Message:" +
       "</td><td>" +
@@ -400,7 +400,7 @@ function(id, title, message) {
       "</td></tr><tr><td>" +
       "Passphrase:" +
       "</td><td>" +
-      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' value='" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_privatepass'] : '') + "'>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' value='" + (this.getUserPropertyInfo("zimbra_openpgp_privatepass").value ? this.getUserPropertyInfo("zimbra_openpgp_privatepass").value : '') + "'>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
       "Key length:" +
       "</td><td style=\"width:500px\">" +
@@ -499,6 +499,7 @@ function() {
    tk_barrydegraaff_zimbra_openpgp.prototype.localStorageSave();
 
    //Store values to LDAP
+   this.setUserProperty("zimbra_openpgp_privatepass", document.getElementById("privatePassInput").value, true);
    this.setUserProperty("zimbra_openpgp_pubkeys1", document.getElementById("publicKeyInput1").value, true);
    this.setUserProperty("zimbra_openpgp_pubkeys2", document.getElementById("publicKeyInput2").value, true);
    this.setUserProperty("zimbra_openpgp_pubkeys3", document.getElementById("publicKeyInput3").value, true);
@@ -534,7 +535,6 @@ function() {
    this._currentMetaData = new ZmMetaData(appCtxt.getActiveAccount(), null);
    var keyValArry = [];
    //Only send items to the server that are not empty
-   if(document.getElementById("privatePassInput").value) keyValArry["zimbra_openpgp_privatepass"] = document.getElementById("privatePassInput").value;
    if(document.getElementById("publicKeyInput31").value) keyValArry["zimbra_openpgp_pubkeys31"] = document.getElementById("publicKeyInput31").value;
    if(document.getElementById("publicKeyInput32").value) keyValArry["zimbra_openpgp_pubkeys32"] = document.getElementById("publicKeyInput32").value;
    if(document.getElementById("publicKeyInput33").value) keyValArry["zimbra_openpgp_pubkeys33"] = document.getElementById("publicKeyInput33").value;
