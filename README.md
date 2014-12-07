@@ -12,8 +12,12 @@ Adding PGP support to Zimbra Collaboration Suite, currently tested on:
 - Linux: Google Chrome, Chromium, Firefox, Iceweasel
 - OSX: Safari
 
-This Zimlet is developed for and tested with Zimbra version 8.0.9 and 8.5.1.
-It is not available for use in Zimbra Desktop.
+This Zimlet is developed for and tested with Zimbra version 8.5 and above.
+
+If you are looking for a version that works with Zimbra 8.0 go here:
+https://github.com/barrydegraaff/pgp-zimlet/tree/1.2.2
+
+This Zimlet is not available for use in Zimbra Desktop.
 
 Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues
 
@@ -36,86 +40,15 @@ For debugging in production I recommend to disable the Zimlet via user preferenc
 ### About private key security
 
 When you generate a private key with this zimlet or copy-paste it when signing or decrypting, it is NOT being send to the server and it is NOT stored on the server.
-Since version 1.2.0 you are able to store your private key and passphrase on the server in the Manage Keys window. You are discouraged to do this, but the option has
-been added after numerous requests.
+
+As of version 1.2.4 you can optionally store your private key in your browsers local storage. If you do not store your private key the server will ask you to provide it for each session. Also you can optionally store your passphrase to the Zimbra server. If you do not store your passphrase the server will ask you to provide it every time it is needed.
 
 ========================================================================
-
-### Esc keyboard shortcut
-
-This Zimlet redefines the behavior of the Escape key. This is done for security reasons.
-(Normally when a user hits the Escape key in a dialog, the dialogs gets removed from display,
-but the content of the dialog remains in the page source.)
-
-With zimlet deployed:
-
-Login to Zimbra: press Esc => page reloads
-
-Compose new message, press Esc => page reloads
-
-
-Without zimlet deployed:
-
-Login to Zimbra, press Esc => nothing
-
-Compose new message, press Esc => New message tab closes
-
-========================================================================
-
-### Known issues
-
-### DEALING WITH PUBLIC KEYS LONGER THAN 5120 CHARS
-
-Sometimes people generate public keys that are too long for Zimba to store in zimbraZimletUserProperties.
-Saving long pubkeys will trow a warning message, but the key is saved correctly.
-
-To resolve this you can:
-
-A - Ask for a shorter pubkey
-
-B - Edit zimbra-attrs.xml (at your own risk) !MIGRATION?! like this:
-
-As root:
-
-    nano /opt/zimbra/conf/attrs/zimbra-attrs.xml
-    Find the line:
-    name="zimbraZimletUserProperties" type="cstring" max="5120"
-    and change it to
-    name="zimbraZimletUserProperties" type="cstring" max="15120"
-
-As zimbra:
-
-    zmcontrol restart
-
 
 ### DEALING WITH LARGE ENCRYPTED MESSAGES
 
-If you receive a large encrypted message and Zimbra displays "This message is too large to display properly." You cannot
-immediately drop your message in the Zimlet. You have to click "View entire message" and drop it onto the Zimlet
-again after a minute or so. If you are in a hurry you can copy paste the message text to the text input field in
-the decrypt dialog.
-
-### DEALING WITH LARGE ENCRYPTED MESSAGES IN INTERNET EXPLORER
-
-All the above and you must change, as root:
-
-    nano /opt/zimbra/jetty-distribution-[buildnumber here]/etc/jetty.xml
-    nano /opt/zimbra/jetty-distribution-[buildnumber here]/etc/jetty.xml.in
-
-And add:
-
-    <Call name="setAttribute">
-        <Arg>org.eclipse.jetty.server.Request.maxFormContentSize</Arg>
-        <Arg>2000000</Arg>
-    </Call>
-
-Under:
-
-    <Configure id="Server" class="org.eclipse.jetty.server.Server">
-
-Then issue:
-
-    zmmailboxdctl restart
+If you receive a large encrypted message and Zimbra displays "This message is too large to display properly." 
+You have to click "View entire message" and then drag/drop it onto the Zimlet again after a minute or so. 
 
 ========================================================================
 
