@@ -370,7 +370,7 @@ function(id, title, message) {
       if((localStorage.zimbra_openpgp_privatekey) && (localStorage.zimbra_openpgp_privatekey !== tk_barrydegraaff_zimbra_openpgp.privateKeyCache))
       {
          tk_barrydegraaff_zimbra_openpgp.privateKeyCache = localStorage.zimbra_openpgp_privatekey;
-	  }
+	   }
       html = "<div style='width:650px; height: 350px; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
       "Please compose a message below to be signed with your private key. Your private key will remain in memory until you reload your browser.<br><br>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
@@ -418,8 +418,12 @@ function(id, title, message) {
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 6:
-      view.setSize("650", "250");
-      html = "<div style='width:650px; height: 250; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
+      view.setSize("650", "350");
+      if((localStorage.zimbra_openpgp_privatekey) && (localStorage.zimbra_openpgp_privatekey !== tk_barrydegraaff_zimbra_openpgp.privateKeyCache))
+      {
+         tk_barrydegraaff_zimbra_openpgp.privateKeyCache = localStorage.zimbra_openpgp_privatekey;
+	   }      
+      html = "<div style='width:650px; height: 350; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
       "Please compose a message below to be encrypted.<br><br>" +
       "</td></tr><tr><td>" +
       "Recipient:" +
@@ -428,6 +432,14 @@ function(id, title, message) {
       "Message:" +
       "</td><td>" +
       "<textarea class=\"barrydegraaff_zimbra_openpgp-msg\" id='message'></textarea>" +
+      "</td></tr><tr><td colspan='2'><br><br>Optional: Sign your encrypted message by entering private key and passphrase.</td></tr><tr><td>" +
+      "Private Key:" +
+      "</td><td>" +
+      "<textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"20\" id='privateKeyInput'/>" + tk_barrydegraaff_zimbra_openpgp.privateKeyCache + "</textarea>" +
+      "</td></tr><tr><td>" +
+      "Passphrase:" +
+      "</td><td>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value='" + (this.getUserPropertyInfo("zimbra_openpgp_privatepass").value ? this.getUserPropertyInfo("zimbra_openpgp_privatepass").value : '') + "'>" +
       "</td></tr></table></div>";
       view.getHtmlElement().innerHTML = html;
       this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
@@ -709,6 +721,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.okBtnEncrypt =
 function() {
    var pubKeySelect = document.getElementById("pubKeySelect");
    var msg = document.getElementById("message").value;
+     
    var pubKeys = [];
    var addresses = '';
 
@@ -721,31 +734,77 @@ function() {
    // There should be a cleaner way to do this than stashing 
    // the parent in myWindow but I've not worked it out yet!
    var myWindow = this;
-   openpgp.encryptMessage(pubKeys, msg, addresses).then(
-      function(pgpMessage) {
-         myWindow._dialog.clearContent();
-         myWindow._dialog.popdown();
-         // Tries to open the compose view on its own.
-         var composeController = AjxDispatcher.run("GetComposeController");
-         if(composeController) {
-            var appCtxt = window.top.appCtxt;
-            var zmApp = appCtxt.getApp();
-            var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
-            var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
-            toOverride:addresses, subjOverride:null, extraBodyText:pgpMessage, callback:null}
-            composeController.doAction(params); // opens asynchronously the window.
-         }
-      }, 
-      function(err) {
-         if( pubKeySelect.selectedOptions.length==0)
-         {
-            tk_barrydegraaff_zimbra_openpgp.prototype.status("Please select recipient(s).", ZmStatusView.LEVEL_WARNING);
-       	}
-       	else
-       	{
-            tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not encrypt message!", ZmStatusView.LEVEL_WARNING);
-         }
-      });
+   
+   var privateKeyInput = document.getElementById("privateKeyInput").value;
+   if(privateKeyInput.length > 0)
+   {
+      tk_barrydegraaff_zimbra_openpgp.privateKeyCache = privateKeyInput;
+      var passphrase = document.getElementById("passphraseInput").value;
+//alert('true'+)
+      try {
+         var privKeys = openpgp.key.readArmored(privateKeyInput);
+         var privKey = privKeys.keys[0];
+         var success = privKey.decrypt(passphrase);
+      }
+      catch (err) {
+         tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not parse private key!", ZmStatusView.LEVEL_WARNING);
+         return;
+      }
+
+      openpgp.signAndEncryptMessage(pubKeys, privKey, msg, addresses).then(
+         function(pgpMessage) {
+            myWindow._dialog.clearContent();
+            myWindow._dialog.popdown();
+            // Tries to open the compose view on its own.
+            var composeController = AjxDispatcher.run("GetComposeController");
+            if(composeController) {
+               var appCtxt = window.top.appCtxt;
+               var zmApp = appCtxt.getApp();
+               var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
+               var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
+               toOverride:addresses, subjOverride:null, extraBodyText:pgpMessage, callback:null}
+               composeController.doAction(params); // opens asynchronously the window.
+            }
+         }, 
+         function(err) {
+            if( pubKeySelect.selectedOptions.length==0)
+            {
+               tk_barrydegraaff_zimbra_openpgp.prototype.status("Please select recipient(s).", ZmStatusView.LEVEL_WARNING);
+            }
+            else
+            {
+               tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not encrypt message!", ZmStatusView.LEVEL_WARNING);
+            }
+        });      
+   }
+   else
+   {   
+      openpgp.encryptMessage(pubKeys, msg, addresses).then(
+         function(pgpMessage) {
+            myWindow._dialog.clearContent();
+            myWindow._dialog.popdown();
+            // Tries to open the compose view on its own.
+            var composeController = AjxDispatcher.run("GetComposeController");
+            if(composeController) {
+               var appCtxt = window.top.appCtxt;
+               var zmApp = appCtxt.getApp();
+               var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
+               var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
+               toOverride:addresses, subjOverride:null, extraBodyText:pgpMessage, callback:null}
+               composeController.doAction(params); // opens asynchronously the window.
+            }
+         }, 
+         function(err) {
+            if( pubKeySelect.selectedOptions.length==0)
+            {
+               tk_barrydegraaff_zimbra_openpgp.prototype.status("Please select recipient(s).", ZmStatusView.LEVEL_WARNING);
+            }
+            else
+            {
+               tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not encrypt message!", ZmStatusView.LEVEL_WARNING);
+            }
+        });
+     }   
 };
 
 /* This method is called when the dialog "CANCEL" or "DISMISS" button is clicked
