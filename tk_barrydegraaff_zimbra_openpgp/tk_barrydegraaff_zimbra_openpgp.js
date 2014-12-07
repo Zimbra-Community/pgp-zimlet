@@ -426,7 +426,7 @@ function(id, title, message) {
       html = "<div style='width:650px; height: 350; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
       "Please compose a message below to be encrypted.<br><br>" +
       "</td></tr><tr><td>" +
-      "Recipient:" +
+      "Recipients:" +
       "</td><td>" + this.pubKeySelect() +
       "</td></tr><tr><td>" +
       "Message:" +
