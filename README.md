@@ -5,7 +5,7 @@ I am accepting donations for the continued development of this Zimlet:
 
 https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=info%40barrydegraaff%2etk&lc=US&item_name=Zimbra%20OpenPGP%20Zimlet&no_note=0&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 
-Demo video: https://drive.google.com/file/d/0B_lMZlQY3S2lNXJfUjlrMU1faXM/edit?usp=sharing
+Demo video: https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/docu/Zimbra%20OpenPGP%20Zimlet%20version%201.2.4webm
 
 Adding PGP support to Zimbra Collaboration Suite, currently tested on:
 - Windows: Internet Explorer 11, Google Chrome, Chromium, Firefox
@@ -28,7 +28,7 @@ Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues
     su zimbra
     cd /tmp
     rm tk_barrydegraaff_zimbra_openpgp*
-    wget https://github.com/barrydegraaff/pgp-zimlet-binaries/raw/master/1.2.2/tk_barrydegraaff_zimbra_openpgp.zip
+    wget https://github.com/barrydegraaff/pgp-zimlet-binaries/raw/master/1.2.4/tk_barrydegraaff_zimbra_openpgp.zip
     zmzimletctl deploy tk_barrydegraaff_zimbra_openpgp.zip
 
 Please be warned, if you undeploy this Zimlet after some time Zimbra will truncate your users preferences (public keys) of this Zimlet.
