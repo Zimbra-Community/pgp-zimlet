@@ -22,8 +22,14 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 tk_barrydegraaff_zimbra_openpgp = function() {
    tk_barrydegraaff_zimbra_openpgp.privateKeyCache='';
    tk_barrydegraaff_zimbra_openpgp.prototype.initZmMetaData();
-   //worker is still optional, but recommended by openpgpjs project
-   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+   
+   //openpgp.js cannot be included via zimlet xml definition, 
+   //will fail to work after deploy using zmzimletctl deploy
+   var oHead = document.getElementsByTagName('HEAD').item(0);
+   var oScript= document.createElement("script");
+   oScript.type = "text/javascript";
+   oScript.src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.js";
+   oHead.appendChild( oScript);
 };
 
 tk_barrydegraaff_zimbra_openpgp.prototype = new ZmZimletBase;
