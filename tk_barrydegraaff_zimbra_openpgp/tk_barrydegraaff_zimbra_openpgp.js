@@ -801,16 +801,19 @@ function() {
    var addresses = '';
 
    // Build Public Keys list from selected
-   for (k=0; k < pubKeySelect.selectedOptions.length ; k++) {
-      pubKeys=pubKeys.concat(openpgp.key.readArmored(pubKeySelect.selectedOptions.item(k).value).keys);
-      addresses=addresses + openpgp.key.readArmored(pubKeySelect.selectedOptions.item(k).value).keys[0].users[0].userId.userid + '; ';
+   for (k=0; k < pubKeySelect.options.length ; k++) {
+      if (pubKeySelect.options[k].selected) {
+         pubKeys=pubKeys.concat(openpgp.key.readArmored(pubKeySelect.options[k].value).keys);
+         addresses=addresses + openpgp.key.readArmored(pubKeySelect.options[k].value).keys[0].users[0].userId.userid + '; ';
+      }   
    }
+   
+   var privateKeyInput = document.getElementById("privateKeyInput").value;
 
    // There should be a cleaner way to do this than stashing 
    // the parent in myWindow but I've not worked it out yet!
    var myWindow = this;
-   
-   var privateKeyInput = document.getElementById("privateKeyInput").value;
+      
    if(privateKeyInput.length > 0)
    {
       tk_barrydegraaff_zimbra_openpgp.privateKeyCache = privateKeyInput;
