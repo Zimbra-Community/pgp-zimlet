@@ -7,6 +7,8 @@ https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=info%40barrydegraa
 
 Demo video: https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/docu/Zimbra%20OpenPGP%20Zimlet%20version%201.2.4webm
 
+User manual: http://htmlpreview.github.io/?https://github.com/barrydegraaff/pgp-zimlet/blob/master/tk_barrydegraaff_zimbra_openpgp/help/index.html
+
 Adding PGP support to Zimbra Collaboration Suite, currently tested on:
 - Windows: Internet Explorer 11, Google Chrome, Chromium, Firefox
 - Linux: Google Chrome, Chromium, Firefox, Iceweasel
