@@ -3,8 +3,8 @@
 <head>
 <meta charset='utf-8'>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta http-equiv="Content-Language" content="en">       
-<title>barrydegraaff/pgp-zimlet End User Help</title>
+<link rel="shortcut icon" href="../icon.png" />
+<title>OpenPGP User Help</title>
 
 <style type="text/css">
 h1
@@ -17,11 +17,12 @@ h2
 }
 table {
     border-collapse: collapse;
+    background-color:white; 
 }
 td{
    border:1px solid #888888;
    min-width:175px;
-   padding:5px;
+   padding:10px;
 }
 hr {
   border: 0;
@@ -36,8 +37,21 @@ hr {
 
 
 <body style="font-family: sans-serif; font-size:14px; background-color:#eeeeee">    
-<p>
-<h1>Why Use PGP?</h1>
+<div style="width:990px">
+<h1>OpenPGP Zimlet User Help</h1>
+<h2>Contents</h2>
+<ul>
+<li><a href="#why">Why Use PGP?</a></li>
+<li><a href="#generate">Generating a new key pair</a></li>
+<li><a href="#sign">Clear signing a message</a></li>
+<li><a href="#adding">Adding Public Keys</a></li>
+<li><a href="#encrypt">Encrypting a message</a></li>
+<li><a href="#about">About OpenPGP Zimlet</a></li>
+</ul>
+<br>
+   
+<a name="why"></a>
+<h2>Why Use PGP?</h2>
 
 PGP stands for "Pretty Good Privacy," and it's most often used for two things: 
 <ol>
@@ -45,21 +59,19 @@ PGP stands for "Pretty Good Privacy," and it's most often used for two things:
 <li><b>Authenticity:</b><br>Ensure a message was send by the person you think it was and no one else altered the email message.</li>
 </ol>
 PGP uses a system involving Private Keys and Public Keys. The tutorial below shows you how to get started with PGP in Zimbra web mail.<br><br>
-</p>
-<h1>The OpenPGP Zimlet</h1>
+
+<img src="../icon.png" alt="" style="float: left; margin-top:13px; padding-right:5px;"><h1>OpenPGP Zimlet</h1>
 <p>Find the OpenPGP menu under Zimlets in your Zimbra web mail. Right click on OpenPGP and select "Manage keys".
 
 <br><br><img src="manage-key-menu.png" alt=""><br><hr><br>
 New users should see that there are no keys stored in the "Manage keys" window. If you are new to PGP you can now click the Cancel button to go to the next step.
-<br><br><a name="gen"></a>
-
-
-<h2>Generating a new key pair</h2>
+<br><br>
 <img src="manage-key-window-without-generated.png" alt=""><br><hr><br>
-Right click on OpenPGP and select "Generate key pair".
-
+<a name="generate"></a>
+<h2>Generating a new key pair</h2>
+Right click on OpenPGP and then click "Generate key pair".
 <br><br><img src="generate-keypair-menu.png" alt=""><br><hr><br>
-In the "Generate new key pair" window fill out all the fields. The table below may help you with the task:
+In the "Generate new key pair" window fill out all the fields. The table below may help you with the task:<br><br>
 <table>
 <tr><td>User ID</td><td>example: Firstname Lastname &lt;myemail@example.com&gt;<br>Please follow this example, so people can automatically find your email address when using your public key.</td></tr>
 <tr><td>Passphrase</td><td>
@@ -92,7 +104,7 @@ Now go back to the "Manage keys" window. You should see your keys and passphrase
 
 <br><br><a name="sign"></a>
 <h2>Clear signing a message</h2>
-Right click on OpenPGP and select "Sign message".<br>
+Right click on OpenPGP and click "Sign message".<br>
 <br><img src="sign-message-menu.png" alt=""><br><hr><br>
 
 Enter your Private Key and Passphrase if needed and compose your message. Click OK when you are done.<br>
@@ -105,15 +117,128 @@ Go to your Drafts folder and click the mail you just created. There should be a 
 <br><img src="sign-message-goodsig.png" alt=""><br><hr><br>
 
 
-<br><img src="encrypt-message-menu.png" alt=""><br><hr><br>
-
+<br><br><a name="adding"></a>
+<h2>Adding Public Keys</h2>
+Before you can encrypt messages or verify signatures you must copy-paste Public Keys of the people you wish to communicate with to the "Manage keys" window. This example adds Public Key 2. Click OK when you are done.<br>
 <br><img src="manage-key-window-add-co-worker.png" alt=""><br><hr><br>
-<br><img src="decrypt-verify-result.png" alt=""><br><hr><br>
 
-<br><img src="encrypt-message-window-compose.png" alt=""><br><hr><br>
+<br><br><a name="encrypt"></a>
+<h2>Encrypting a message</h2>
+Right click on OpenPGP and then click "Encrypt message".<br>
+<br><img src="encrypt-message-menu.png" alt=""><br><hr><br>
+In the "Encrypt message" window:
+<ol>
+<li>Select one or more recipients using (CTRL+click). You may wish to select yourself so you can read the message afterwards</li>
+<li>Compose the message</li>
+</ol>
+In case the private key and passphrase are set, your encrypted message will also be signed. Click OK when you are done.<br>
 <br><img src="encrypt-message-window.png" alt=""><br><hr><br>
 
+You will now see the Zimbra compose window with your encrypted message. Enter a subject and verify the recipients like a normal mail and click Save Draft and Close when you are done.<br>
+<br><img src="encrypt-message-window-compose.png" alt=""><br><hr><br>
+
+Go to your Drafts folder and click the mail you just created. There should be a message saying "Got a good signature.", in case you selected yourself as one of the recipients you should now also see your message text. Click Dismiss, then open and send your mail.<br>
+<br><img src="decrypt-verify-result.png" alt=""><br><hr><br>
 
 
-
-</p>
+<br><br><a name="about"></a>
+<h1>Zimbra OpenPGP Zimlet</h1>If you find Zimbra OpenPGP Zimlet useful and want to support its continued development, you can make a 
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=info%40barrydegraaff%2etk&amp;lc=US&amp;item_name=Zimbra%20OpenPGP%20Zimlet&amp;no_note=0&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest">donation</a>. Please report <a href="https://github.com/barrydegraaff/pgp-zimlet/issues">bugs</a>
+ on Github.
+<br><br><b>Credits</b>
+<br><ul><li><a href="http://www.premierheart.com/">Michael Graziano</a> <small>enhancements</small>
+</li><li><a href="http://www.onecentral.nl">Marius Savelbergh</a> <small>funds</small>
+</li><li><a href="http://www.profluid.de/">Klaus Belser</a> <small>funds</small>
+</li><li><a href="http://www.hivos.org">Hivos.org</a> <small>funds</small>
+</li><li><a href="http://openpgpjs.org/">OpenPGP.js</a><small></small>
+</li><li><small>and others.<br></small>
+</li></ul>
+Copyright (C) 2014&nbsp; Barry de Graaff 
+<br><br>This program is free software: you can redistribute it and/or modify
+<br> it under the terms of the GNU General Public License as published by
+<br> the Free Software Foundation, either version 3 of the License, or
+<br> (at your option) any later version.
+<br> <br> This program is distributed in the hope that it will be useful,
+<br> but WITHOUT ANY WARRANTY; without even the implied warranty of
+<br> MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&nbsp; See the
+<br> GNU General Public License for more details.
+<br> <br> You should have received a copy of the GNU General Public License
+<br> along with this program.&nbsp; If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.
+<br><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</div>
