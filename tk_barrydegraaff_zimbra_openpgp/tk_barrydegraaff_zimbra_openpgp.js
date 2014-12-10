@@ -826,7 +826,7 @@ function() {
    for (k=0; k < pubKeySelect.options.length ; k++) {
       if (pubKeySelect.options[k].selected) {
          pubKeys=pubKeys.concat(openpgp.key.readArmored(pubKeySelect.options[k].value).keys);
-         addresses=addresses + openpgp.key.readArmored(pubKeySelect.options[k].value).keys[0].users[0].userId.userid + '; ';
+         addresses=addresses + pubKeySelect.options[k].label + '; ';
       }   
    }
    
