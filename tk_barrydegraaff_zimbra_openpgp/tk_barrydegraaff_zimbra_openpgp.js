@@ -777,9 +777,11 @@ function() {
 
       combinedPublicKeys.forEach(function(entry) {
          if(entry[0]) {
-            userid = entry[0].users[0].userId.userid.replace(/\</g,"&lt;");
-            userid = userid.replace(/\>/g,"&gt;") ;
-            result = result + '<option value="'+entry[0].armor()+'">'+userid+'</option>';
+				for (i = 0; i < entry[0].users.length; i++) {
+					userid = entry[0].users[0].userId.userid.replace(/\</g,"&lt;");
+					userid = userid.replace(/\>/g,"&gt;") ;
+					result = result + '<option value="'+entry[0].armor()+'">'+userid+'</option>';
+				}
          }
       });
       result = result + '</select>';
@@ -805,7 +807,7 @@ function() {
    for (k=0; k < pubKeySelect.options.length ; k++) {
       if (pubKeySelect.options[k].selected) {
          pubKeys=pubKeys.concat(openpgp.key.readArmored(pubKeySelect.options[k].value).keys);
-         addresses=addresses + openpgp.key.readArmored(pubKeySelect.options[k].value).keys[0].users[0].userId.userid + '; ';
+         addresses=addresses + pubKeySelect.options[k].label + '; ';
       }   
    }
    
