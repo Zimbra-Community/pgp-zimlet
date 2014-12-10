@@ -778,7 +778,7 @@ function() {
       combinedPublicKeys.forEach(function(entry) {
          if(entry[0]) {
 				for (i = 0; i < entry[0].users.length; i++) {
-					userid = entry[0].users[0].userId.userid.replace(/\</g,"&lt;");
+					userid = entry[0].users[i].userId.userid.replace(/\</g,"&lt;");
 					userid = userid.replace(/\>/g,"&gt;") ;
 					result = result + '<option value="'+entry[0].armor()+'">'+userid+'</option>';
 				}
