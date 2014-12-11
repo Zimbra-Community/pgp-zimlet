@@ -399,18 +399,26 @@ function(id, title, message) {
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 5:
-      view.setSize("650", "240");
+      view.setSize("650", "240");      
+      if (appCtxt.get(ZmSetting.DISPLAY_NAME))
+      {
+         displayname = appCtxt.get(ZmSetting.DISPLAY_NAME);
+      }
+      else
+      {
+         displayname = appCtxt.getActiveAccount().name;
+      }  
       html = "<div style='width:650px; height: 240px; overflow-x: hidden; overflow-y: hidden;'><table style='width:650px;'><tr><td colspan='2'>" +
       "Please enter User ID (example: Firstname Lastname &lt;your@email.com&gt;) and passphrase for new key pair.<br><br>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
       "User ID:" +
       "</td><td style=\"width:500px\">" +
-      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='uid' value=''>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='uid' value='" + displayname + ' <' +appCtxt.getActiveAccount().name+">'>" +
       "</td></tr><tr><td>" +
       "Passphrase:" +
       "</td><td>" +
-      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' value='" + (this.getUserPropertyInfo("zimbra_openpgp_privatepass").value ? this.getUserPropertyInfo("zimbra_openpgp_privatepass").value : '') + "'>" +
-      "</td></tr><tr><td style=\"width:100px;\">" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' value='" + (this.getUserPropertyInfo("zimbra_openpgp_privatepass").value ? this.getUserPropertyInfo("zimbra_openpgp_privatepass").value : tk_barrydegraaff_zimbra_openpgp.prototype.pwgen()) + "'>" +
+      "</td></tr><tr><td></td><td><button type=\"button\" onclick='document.getElementById(\"passphraseInput\").value=tk_barrydegraaff_zimbra_openpgp.prototype.pwgen()'>Generate passphrase</button></td></tr><tr><td style=\"width:100px;\">" +
       "Key length:" +
       "</td><td style=\"width:500px\">" +
       "<select class=\"barrydegraaff_zimbra_openpgp-input\" id=\"keyLength\" name=\"keyLength\"><option value=\"512\">512</option><option selected=\"selected\" value=\"1024\">1024</option><option value=\"2048\">2048</option><option value=\"4096\">4096</option></select>" +
@@ -896,3 +904,19 @@ function() {
    this._dialog.clearContent();
    this._dialog.popdown();
 };
+
+/*
+ */
+tk_barrydegraaff_zimbra_openpgp.prototype.pwgen =
+function ()
+{
+   chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+   pass = "";
+
+   for(x=0;x<25;x++)
+   {
+      i = Math.floor(Math.random() * 62);
+      pass += chars.charAt(i);
+   }
+   return pass;
+}
