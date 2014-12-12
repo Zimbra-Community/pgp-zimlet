@@ -426,7 +426,7 @@ function(id, title, message) {
       "</td></tr><tr><td>" +
       "Passphrase:" +
       "</td><td>" +
-      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' value='" + localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()] ? localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()] : tk_barrydegraaff_zimbra_openpgp.prototype.pwgen()) + "'>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' value='" + tk_barrydegraaff_zimbra_openpgp.prototype.pwgen() + "'>" +
       "</td></tr><tr><td></td><td><button type=\"button\" onclick='document.getElementById(\"passphraseInput\").value=tk_barrydegraaff_zimbra_openpgp.prototype.pwgen()'>Generate passphrase</button></td></tr><tr><td style=\"width:100px;\">" +
       "Key length:" +
       "</td><td style=\"width:500px\">" +
