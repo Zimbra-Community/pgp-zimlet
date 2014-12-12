@@ -316,8 +316,8 @@ function(id, title, message) {
    case 2:
       view.setSize("650", "350");
       view.getHtmlElement().innerHTML = "<div style='width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll;'>"+message+"</div>";
-      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.DISMISS_BUTTON], disposeOnPopDown:true } );
-      this._dialog.setButtonListener(DwtDialog.DISMISS_BUTTON, new AjxListener(this, this.cancelBtn));
+      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
+      this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 3:
       view.setSize("650", "500");
@@ -896,7 +896,7 @@ function() {
      }   
 };
 
-/* This method is called when the dialog "CANCEL" or "DISMISS" button is clicked
+/* This method is called when the dialog "CANCEL" button is clicked
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.cancelBtn =
 function() {
