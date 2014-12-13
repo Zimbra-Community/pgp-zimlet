@@ -84,16 +84,15 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
      //not a plain text message, means no PGP
      return;
    }
-   var clearSignedRegEx = new RegExp('[\-]*BEGIN PGP SIGNATURE[\-]*');
-   var pgpMessageRegEx = new RegExp('[\-]*BEGIN PGP MESSAGE[\-]*');
    var msg = bp.node.content;
+   var msgSearch = msg.substring(0,60);
    
    if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
    {
       console.log(msg);
    }
 
-    if (msg.match(clearSignedRegEx)) {
+    if (msgSearch.indexOf("BEGIN PGP SIGNED MESSAGE") > 0 ) {          
       try {
          var message = openpgp.cleartext.readArmored(msg);
       }
@@ -103,7 +102,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
       }
       this.verify(message);
    }
-   else if (msg.match(pgpMessageRegEx)) {
+   else if (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ) {
       this.displayDialog(1, "Please provide private key and passphrase for decryption", msg);
    }
    else {
@@ -483,9 +482,15 @@ function() {
       tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not parse private key!", ZmStatusView.LEVEL_WARNING);
       return;
    }
-   if (success) {
-      var message = openpgp.message.readArmored(msg);
 
+   if (success) {
+      try {
+         var message = openpgp.message.readArmored(msg);
+      }
+      catch(err) {
+         this.status("Could not read armored message!", ZmStatusView.LEVEL_CRITICAL);
+         return;
+      }
    try {
       var publicKeys1 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
       var publicKeys2 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value);
