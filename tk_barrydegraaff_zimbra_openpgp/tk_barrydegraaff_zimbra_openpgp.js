@@ -85,16 +85,15 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
      //not a plain text message, means no PGP
      return;
    }
-   var clearSignedRegEx = new RegExp('[\-]*BEGIN PGP SIGNATURE[\-]*');
-   var pgpMessageRegEx = new RegExp('[\-]*BEGIN PGP MESSAGE[\-]*');
    var msg = bp.node.content;
+   var msgSearch = msg.substring(0,60);
    
    if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
    {
       console.log(msg);
    }
 
-    if (msg.match(clearSignedRegEx)) {
+    if (msgSearch.indexOf("BEGIN PGP SIGNED MESSAGE") > 0 ) {          
       try {
          var message = openpgp.cleartext.readArmored(msg);
       }
@@ -104,7 +103,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
       }
       this.verify(message);
    }
-   else if (msg.match(pgpMessageRegEx)) {
+   else if (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ) {
       this.displayDialog(1, "Please provide private key and passphrase for decryption", msg);
    }
    else {
@@ -321,8 +320,8 @@ function(id, title, message) {
    case 2:
       view.setSize("650", "350");
       view.getHtmlElement().innerHTML = "<div style='width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll;'>"+message+"</div>";
-      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.DISMISS_BUTTON], disposeOnPopDown:true } );
-      this._dialog.setButtonListener(DwtDialog.DISMISS_BUTTON, new AjxListener(this, this.cancelBtn));
+      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
+      this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 3:
       view.setSize("650", "500");
@@ -497,9 +496,15 @@ function() {
       tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not parse private key!", ZmStatusView.LEVEL_WARNING);
       return;
    }
-   if (success) {
-      var message = openpgp.message.readArmored(msg);
 
+   if (success) {
+      try {
+         var message = openpgp.message.readArmored(msg);
+      }
+      catch(err) {
+         this.status("Could not read armored message!", ZmStatusView.LEVEL_CRITICAL);
+         return;
+      }
    try {
       var publicKeys1 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
       var publicKeys2 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value);
@@ -916,7 +921,7 @@ function() {
      }   
 };
 
-/* This method is called when the dialog "CANCEL" or "DISMISS" button is clicked
+/* This method is called when the dialog "CANCEL" button is clicked
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.cancelBtn =
 function() {

@@ -5,7 +5,7 @@ I am accepting donations for the continued development of this Zimlet:
 
 https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=info%40barrydegraaff%2etk&lc=US&item_name=Zimbra%20OpenPGP%20Zimlet&no_note=0&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 
-Demo video: https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/docu/Zimbra%20OpenPGP%20Zimlet%20version%201.2.4webm
+Demo video: https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/docu/Zimbra%20OpenPGP%20Zimlet%20version%201.2.7.webm
 
 User manual: http://htmlpreview.github.io/?https://github.com/barrydegraaff/pgp-zimlet/blob/master/tk_barrydegraaff_zimbra_openpgp/help/index.html
 
