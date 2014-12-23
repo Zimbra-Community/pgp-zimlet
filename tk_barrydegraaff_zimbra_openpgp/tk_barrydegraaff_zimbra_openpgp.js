@@ -682,8 +682,6 @@ function() {
       var myWindow = this;
         openpgp.signClearMessage(privKey, message).then(
            function(signed) {
-              myWindow._dialog.clearContent();
-              myWindow._dialog.popdown();
               // Tries to open the compose view on its own.
               var composeController = AjxDispatcher.run("GetComposeController");
               if(composeController) {
@@ -694,6 +692,8 @@ function() {
                  toOverride:null, subjOverride:null, extraBodyText:signed, callback:null}
                  composeController.doAction(params); // opens asynchronously the window.
               }
+              myWindow._dialog.clearContent();
+              myWindow._dialog.popdown();
            },
            function(err) {
               tk_barrydegraaff_zimbra_openpgp.prototype.status("Signing failed!", ZmStatusView.LEVEL_WARNING);
@@ -847,8 +847,6 @@ function() {
 
       openpgp.signAndEncryptMessage(pubKeys, privKey, msg, addresses).then(
          function(pgpMessage) {
-            myWindow._dialog.clearContent();
-            myWindow._dialog.popdown();
             // Tries to open the compose view on its own.
             var composeController = AjxDispatcher.run("GetComposeController");
             if(composeController) {
@@ -859,6 +857,8 @@ function() {
                toOverride:addresses, subjOverride:null, extraBodyText:pgpMessage, callback:null}
                composeController.doAction(params); // opens asynchronously the window.
             }
+            myWindow._dialog.clearContent();
+            myWindow._dialog.popdown();
          }, 
          function(err) {
             if( pubKeySelect.selectedOptions.length==0)
@@ -910,7 +910,7 @@ function() {
    this._dialog.popdown();
 };
 
-/*
+/* This method generates a password like passphrase for lazy users
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.pwgen =
 function ()
