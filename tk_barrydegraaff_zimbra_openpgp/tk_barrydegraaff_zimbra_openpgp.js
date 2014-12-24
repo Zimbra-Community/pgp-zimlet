@@ -558,6 +558,7 @@ function() {
                {
                   sigStatus ='This encrypted message was not signed.';
                }                 
+               myWindow._dialog.setTitle('Decrypted message');
                myWindow._dialog.setContent('<div style="width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll;"><textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:325px;">'+decrypted.text+'</textarea><br>'+sigStatus+'</div>');
             },
             function(err) {
@@ -707,6 +708,7 @@ function() {
    var passphrase = document.getElementById("passphraseInput").value;
    var keyStore = document.getElementById("keyStore").checked;
 
+   this._dialog.setTitle('Now generating your key pair');
    this._dialog.setContent('<div style="width:650px; height: 240px; overflow-x: hidden; overflow-y: hidden;">Please be patient after hitting the OK button, generating can take some time.<br><br>If you have trouble generating a key pair choose a lower key length or use an external program.<br><br><br><br><img src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/loading.gif" style="width:48px; height:48px; display: block; margin-left: auto; margin-right: auto" alt="loading"></div>');
 
    if ((userid) && (passphrase)) {
@@ -722,6 +724,7 @@ function() {
                myWindow.setUserProperty("zimbra_openpgp_privatepass", passphrase, true);
                myWindow.setUserProperty("zimbra_openpgp_pubkeys1", key.publicKeyArmored, true);
             }
+            myWindow._dialog.setTitle('Your new key pair');
             myWindow._dialog.setContent('<div style="width:650px; height: 240px; overflow-x: hidden; overflow-y: hidden;"><table style="width:650px;">Please make sure to store this information in a safe place:<br><br><textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;">Passphrase ' + passphrase + ' for ' + userid + '\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored+'\r\n\r\nKey length: '+keyLength+' bits</textarea></div>');
          }       
       });
