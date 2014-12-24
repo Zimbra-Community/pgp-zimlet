@@ -276,12 +276,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.status = function(text, type) {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.displayDialog =
 function(id, title, message) {
-	var view = new DwtComposite(this.getShell());
-	view.getHtmlElement().style.overflow = "auto";
-
    switch(id) {
    case 1:
-      view.setSize("650", "180");     
       if((localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()]) && (localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()] !== tk_barrydegraaff_zimbra_openpgp.privateKeyCache))
       {
          tk_barrydegraaff_zimbra_openpgp.privateKeyCache = localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()];
@@ -305,8 +301,8 @@ function(id, title, message) {
       "</td><td>" +
       "<textarea class=\"barrydegraaff_zimbra_openpgp-input\" id='message'>"+message+"</textarea>" +
       "</td></tr></table></div>";
-      view.getHtmlElement().innerHTML = html;
-      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
+      this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
+      this._dialog.setContent(html);
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecrypt));
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       
@@ -318,13 +314,11 @@ function(id, title, message) {
       }   
       break;
    case 2:
-      view.setSize("650", "350");
-      view.getHtmlElement().innerHTML = "<div style='width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll;'>"+message+"</div>";
-      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
+      this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
+      this._dialog.setContent("<div style='width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll;'>"+message+"</div>");
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 3:
-      view.setSize("650", "500");
       html = "<div style='width:650px; height: 500px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
       "Copy-paste ASCII armored keys here. <br><br>You can put human readable comments before each key as long as you start on a new line for your public key.<br><br><small>Please be patient after hitting the OK button, even after the dialog pops down it can take  some time for your changes to become visible.<br><br>Public keys 1-30 are stored in Zimbra LDAP and have maximum length of 5120 chars. Public keys 31-40 are stored in Zimbra SQL and have a combined maximum length of 32768 chars.</small><br><br>" +
       "</td></tr>" +
@@ -371,13 +365,12 @@ function(id, title, message) {
       "<tr><td>Public Key 39:</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput39'/>" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys39'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys39'] : '')  + "</textarea></td></tr>" +
       "<tr><td>Public Key 40:</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput40'/>" + (tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys40'] ? tk_barrydegraaff_zimbra_openpgp.metaData['zimbra_openpgp_pubkeys40'] : '')  + "</textarea></td></tr>" +                                                                                  
       "</table></div>";
-      view.getHtmlElement().innerHTML = html;
-      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
+      this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
+      this._dialog.setContent(html);
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnPubKeySave));
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 4:
-      view.setSize("650", "350");
       if((localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()]) && (localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()] !== tk_barrydegraaff_zimbra_openpgp.privateKeyCache))
       {
          tk_barrydegraaff_zimbra_openpgp.privateKeyCache = localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()];
@@ -401,13 +394,12 @@ function(id, title, message) {
       "</td><td>" +
       "<textarea class=\"barrydegraaff_zimbra_openpgp-msg\" id='message'></textarea>" +
       "</td></tr></table></div>";
-      view.getHtmlElement().innerHTML = html;
-      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
+      this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
+      this._dialog.setContent(html);
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnSign));
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 5:
-      view.setSize("650", "240");      
       if (appCtxt.get(ZmSetting.DISPLAY_NAME))
       {
          displayname = appCtxt.get(ZmSetting.DISPLAY_NAME);
@@ -431,17 +423,16 @@ function(id, title, message) {
       "</td><td style=\"width:500px\">" +
       "<select class=\"barrydegraaff_zimbra_openpgp-input\" id=\"keyLength\" name=\"keyLength\"><option value=\"512\">512</option><option selected=\"selected\" value=\"1024\">1024</option><option value=\"2048\">2048</option><option value=\"4096\">4096</option></select>" +
       "</td></tr><tr><td colspan='2'>" +
-      "<br>Higher key length is better security, but slower. If you have trouble generating a key pair choose a lower key length or use an external program. Please be patient after hitting the OK button, generating can take some time.<br><br>" +
+      "<br>Higher key length is better security, but slower.<br><br>" +
       "</td></tr><tr><td colspan='2'>" +
       "<input type='checkbox' checked='checked' name='keyStore' id='keyStore' value='yes'>Store and overwrite current Private Key, Passphrase and Public Key 1.<br>" +
       "</td></tr></table></div>";
-      view.getHtmlElement().innerHTML = html;
-      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
+      this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true  } );
+      this._dialog.setContent(html);
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnKeyPair));
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 6:
-      view.setSize("650", "350");
       if((localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()]) && (localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()] !== tk_barrydegraaff_zimbra_openpgp.privateKeyCache))
       {
          tk_barrydegraaff_zimbra_openpgp.privateKeyCache = localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()];
@@ -467,9 +458,9 @@ function(id, title, message) {
       "Passphrase:" +
       "</td><td>" +
       "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value='" + tk_barrydegraaff_zimbra_openpgp.privatePassCache + "'>" +
-      "</td></tr></table></div>";
-      view.getHtmlElement().innerHTML = html;
-      this._dialog = new ZmDialog( { title:title, view:view, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
+      "</td></tr></table></div>";      
+      this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
+      this._dialog.setContent(html);
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnEncrypt));
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
@@ -481,6 +472,9 @@ function(id, title, message) {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnDecrypt =
 function() {
+   this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.cancelBtn));
+   this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, false);
+   
    var privateKeyInput = document.getElementById("privateKeyInput").value;
    tk_barrydegraaff_zimbra_openpgp.privateKeyCache = privateKeyInput;
    var passphraseInput = document.getElementById("passphraseInput").value;
@@ -556,9 +550,7 @@ function() {
       // the parent in myWindow but I've not worked it out yet!
       var myWindow = this;
         openpgp.decryptAndVerifyMessage(privKey, pubKey, message).then(
-           function(decrypted) {
-               myWindow._dialog.clearContent();
-               myWindow._dialog.popdown();
+           function(decrypted) {               
                var sigStatus ='';
                try 
                {
@@ -580,7 +572,8 @@ function() {
                {
                   sigStatus ='This encrypted message was not signed.';
                }                 
-               myWindow.displayDialog(2,'Decrypted result','<textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:325px;">'+decrypted.text+'</textarea><br>'+sigStatus);
+               myWindow._dialog.setTitle('Decrypted message');
+               myWindow._dialog.setContent('<div style="width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll;"><textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:325px;">'+decrypted.text+'</textarea><br>'+sigStatus+'</div>');
             },
             function(err) {
                tk_barrydegraaff_zimbra_openpgp.prototype.status("Decryption failed!", ZmStatusView.LEVEL_WARNING);
@@ -672,7 +665,6 @@ function() {
    //Update ZmMetaData cache
    tk_barrydegraaff_zimbra_openpgp.prototype.initZmMetaData();
    
-   this._dialog.clearContent();
    this._dialog.popdown();
 };
 
@@ -710,7 +702,6 @@ function() {
                  toOverride:null, subjOverride:null, extraBodyText:signed, callback:null}
                  composeController.doAction(params); // opens asynchronously the window.
               }
-              myWindow._dialog.clearContent();
               myWindow._dialog.popdown();
            },
            function(err) {
@@ -727,10 +718,16 @@ function() {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnKeyPair =
 function() {
+   this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.cancelBtn));
+   this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, false);
+
 	var userid = document.getElementById("uid").value;
    var keyLength = document.getElementById("keyLength").value;
    var passphrase = document.getElementById("passphraseInput").value;
    var keyStore = document.getElementById("keyStore").checked;
+
+   this._dialog.setTitle('Now generating your key pair');
+   this._dialog.setContent('<div style="width:650px; height: 240px; overflow-x: hidden; overflow-y: hidden;">Please be patient after hitting the OK button, generating can take some time.<br><br>If you have trouble generating a key pair choose a lower key length or use an external program.<br><br><br><br><img src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/loading.gif" style="width:48px; height:48px; display: block; margin-left: auto; margin-right: auto" alt="loading"></div>');
 
    if ((userid) && (passphrase)) {
       var opt = {numBits: keyLength, userId: userid, passphrase: passphrase};
@@ -746,10 +743,8 @@ function() {
                tk_barrydegraaff_zimbra_openpgp.privatePassCache=localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()];               
                myWindow.setUserProperty("zimbra_openpgp_pubkeys1", key.publicKeyArmored, true);
             }
-            // What is the DWT method to destroy this._dialog? This only clears its contents.
-            myWindow._dialog.clearContent();
-            myWindow._dialog.popdown();
-            myWindow.displayDialog(2,'Your new key pair','Please make sure to store this information in a safe place:<br><br><textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;">Passphrase ' + passphrase + ' for ' + userid + '\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored+'\r\n\r\nKey length: '+keyLength+' bits</textarea>');
+            myWindow._dialog.setTitle('Your new key pair');
+            myWindow._dialog.setContent('<div style="width:650px; height: 240px; overflow-x: hidden; overflow-y: hidden;"><table style="width:650px;">Please make sure to store this information in a safe place:<br><br><textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;">Passphrase ' + passphrase + ' for ' + userid + '\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored+'\r\n\r\nKey length: '+keyLength+' bits</textarea></div>');
          }       
       });
    }
@@ -877,7 +872,6 @@ function() {
                toOverride:addresses, subjOverride:null, extraBodyText:pgpMessage, callback:null}
                composeController.doAction(params); // opens asynchronously the window.
             }
-            myWindow._dialog.clearContent();
             myWindow._dialog.popdown();
          }, 
          function(err) {
@@ -895,7 +889,6 @@ function() {
    {   
       openpgp.encryptMessage(pubKeys, msg, addresses).then(
          function(pgpMessage) {
-            myWindow._dialog.clearContent();
             myWindow._dialog.popdown();
             // Tries to open the compose view on its own.
             var composeController = AjxDispatcher.run("GetComposeController");
@@ -925,9 +918,12 @@ function() {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.cancelBtn =
 function() {
-   // What is the DWT method to destroy this._dialog? This only clears its contents.
-   this._dialog.clearContent();
-   this._dialog.popdown();
+   try{
+      this._dialog.setContent('');
+      this._dialog.popdown();
+   }
+      catch (err) {
+  }
 };
 
 /* This method generates a password like passphrase for lazy users
