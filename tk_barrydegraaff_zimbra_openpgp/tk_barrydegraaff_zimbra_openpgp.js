@@ -78,6 +78,7 @@ function(data) {
 /*This method is called when a message is viewed in Zimbra
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, view) {
+   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
    var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
    if (!bp)
    {
@@ -177,6 +178,7 @@ function(itemId) {
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.doDrop =
 function(zmObject) {
+   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
    var msgObj = zmObject.srcObj;
 
    //if its a conversation i.e. "ZmConv" object, get the first loaded message "ZmMailMsg" object within that.
@@ -218,6 +220,7 @@ function(zmObject) {
  * will update the status bar with the result (good/bad signature).
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
+   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
    try {
       var publicKeys1 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
       var publicKeys2 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value);
@@ -482,6 +485,7 @@ function(id, title, message) {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnDecrypt =
 function() {
+   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
    this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.cancelBtn));
    this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, false);
    
@@ -617,6 +621,7 @@ function() {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnPubKeySave =
 function() {
+   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
    tk_barrydegraaff_zimbra_openpgp.prototype.localStorageSave();
 
    //Store values to LDAP
@@ -678,6 +683,7 @@ function() {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnSign =
 function() {
+   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
    var privateKeyInput = document.getElementById("privateKeyInput").value;
    tk_barrydegraaff_zimbra_openpgp.privateKeyCache = privateKeyInput;
    var passphrase = document.getElementById("passphraseInput").value;
@@ -723,44 +729,48 @@ function() {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnKeyPair =
 function() {
-   this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.cancelBtn));
-   this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, false);
-
 	var userid = document.getElementById("uid").value;
    var keyLength = document.getElementById("keyLength").value;
    var passphrase = document.getElementById("passphraseInput").value;
    var keyStore = document.getElementById("keyStore").checked;
 
-   this._dialog.setTitle('Now generating your key pair');
-   this._dialog.setContent('<div style="width:650px; height: 240px; overflow-x: hidden; overflow-y: hidden;">Please be patient after hitting the OK button, generating can take some time.<br><br>If you have trouble generating a key pair choose a lower key length or use an external program.<br><br><br><br><img src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/loading.gif" style="width:48px; height:48px; display: block; margin-left: auto; margin-right: auto" alt="loading"></div>');
-
-   if ((userid) && (passphrase)) {
-      var opt = {numBits: keyLength, userId: userid, passphrase: passphrase};
-      var myWindow = this;
-      openpgp.generateKeyPair(opt).then(function(key) {
-         if((key.privateKeyArmored) && (key.publicKeyArmored))
-         {
-            if(keyStore)
-            {
-               localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()] = key.privateKeyArmored;
-               tk_barrydegraaff_zimbra_openpgp.privateKeyCache=localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()];               
-               myWindow.setUserProperty("zimbra_openpgp_privatepass", passphrase, true);
-               myWindow.setUserProperty("zimbra_openpgp_pubkeys1", key.publicKeyArmored, true);
-            }
-            myWindow._dialog.setTitle('Your new key pair');
-            myWindow._dialog.setContent('<div style="width:650px; height: 240px; overflow-x: hidden; overflow-y: hidden;"><table style="width:650px;">Please make sure to store this information in a safe place:<br><br><textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;">Passphrase ' + passphrase + ' for ' + userid + '\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored+'\r\n\r\nKey length: '+keyLength+' bits</textarea></div>');
-         }       
-      });
-   }
-   else {
+   if ((!userid) || (!passphrase)) {
       this.status("You must provide a user ID and passphrase", ZmStatusView.LEVEL_WARNING);
+      return;
    }
+
+   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+   this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.cancelBtn));
+   this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, false);
+   this._dialog.setButtonVisible(DwtDialog.OK_BUTTON, false);
+
+   this._dialog.setTitle('Now generating your key pair');
+   this._dialog.setContent('<div style="width:650px; height: 240px; overflow-x: hidden; overflow-y: hidden;">Please be patient generating can take some time.<br><br>If you have trouble generating a key pair choose a lower key length or use an external program.<br><br><br><br><img src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/loading.gif" style="width:48px; height:48px; display: block; margin-left: auto; margin-right: auto" alt="loading"></div>');
+
+   var opt = {numBits: keyLength, userId: userid, passphrase: passphrase};
+   var myWindow = this;
+   openpgp.generateKeyPair(opt).then(function(key) {
+      if((key.privateKeyArmored) && (key.publicKeyArmored))
+      {
+         if(keyStore)
+         {
+            localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()] = key.privateKeyArmored;
+            tk_barrydegraaff_zimbra_openpgp.privateKeyCache=localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()];               
+            myWindow.setUserProperty("zimbra_openpgp_privatepass", passphrase, true);
+            myWindow.setUserProperty("zimbra_openpgp_pubkeys1", key.publicKeyArmored, true);
+         }
+         myWindow._dialog.setTitle('Your new key pair');
+         myWindow._dialog.setContent('<div style="width:650px; height: 240px; overflow-x: hidden; overflow-y: hidden;"><table style="width:650px;">Please make sure to store this information in a safe place:<br><br><textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;">Passphrase ' + passphrase + ' for ' + userid + '\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored+'\r\n\r\nKey length: '+keyLength+' bits</textarea></div>');
+         myWindow._dialog.setButtonVisible(DwtDialog.OK_BUTTON, true);
+      }       
+   });
 };
 
 /* This method generates an html select list with public keys
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.pubKeySelect =
 function() {
+   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
    try {
       var publicKeys1 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
       var publicKeys2 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value);
@@ -828,6 +838,7 @@ function() {
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnEncrypt =
 function() {
+   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
    var pubKeySelect = document.getElementById("pubKeySelect");
    var msg = document.getElementById("message").value;
      
