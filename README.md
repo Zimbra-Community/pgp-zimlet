@@ -56,7 +56,7 @@ You have to click "View entire message" and then drag/drop it onto the Zimlet ag
 
 ### License
 
-Copyright (C) 2014  Barry de Graaff
+Copyright (C) 2014-2015  Barry de Graaff
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
