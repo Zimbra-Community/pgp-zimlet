@@ -113,12 +113,30 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
 /* This method gets called by the Zimlet framework when single-click is performed.
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.singleClicked =
-function() {
-   this.status("OpenPGP version: " + this._zimletContext.version, ZmStatusView.LEVEL_INFO);   
+function() {   
    if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
    {
    }   
 };
+
+/* This method creates a Zimbra tab
+ * - currently hardcoded to provide help
+ * */
+tk_barrydegraaff_zimbra_openpgp.prototype.appLaunch =
+function(appName) {
+   var app = appCtxt.getApp(appName);
+   app.setContent('<iframe style="width:100%; height:100%; border:0px;" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html">');
+};
+
+/* This method destroys the Zimlet tab
+ */
+tk_barrydegraaff_zimbra_openpgp.prototype._resetApp=
+function(appName) {
+	app = appCtxt.getCurrentApp();
+	app.reset(false) ;
+	appCtxt.getAppController().activateApp("Mail") ;	
+	appCtxt.getAppChooser().getButton(tk_barrydegraaff_zimbra_openpgp.openPGPApp).setVisible(false);
+}   
 
 /* This method gets called by the Zimlet framework when double-click is performed.
  */
@@ -145,7 +163,12 @@ function(itemId) {
       this.displayDialog(5, "Generate new key pair", null);
 		break;
 	case "help":
-      window.open("/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html");
+      //window.open("/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html");
+      tk_barrydegraaff_zimbra_openpgp.openPGPApp = this.createApp('OpenPGP Help', "tk_barrydegraaff_zimbra_openpgp-panelIcon", "Encrypt/Decrypt messages with OpenPGP");
+      var app = appCtxt.getApp(tk_barrydegraaff_zimbra_openpgp.openPGPApp);	
+      var toolbar = app.getToolbar(); // returns ZmToolBar
+      toolbar.setContent("<button style='margin:10px;' onclick='tk_barrydegraaff_zimbra_openpgp.prototype._resetApp()'>Close</button> <b>OpenPGP version: " + this._zimletContext.version, ZmStatusView.LEVEL_INFO + "</b><br><br>");
+      app.launch();      
 		break;
    }
 };
@@ -269,7 +292,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
 tk_barrydegraaff_zimbra_openpgp.prototype.status = function(text, type) {
    var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.FADE_OUT ];
    appCtxt.getAppController().setStatusMsg(text, type, null, transitions);
-};
+}; 
 
 /* displays dialogs.
  */
