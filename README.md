@@ -5,7 +5,7 @@ I am accepting donations for the continued development of this Zimlet:
 
 https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=info%40barrydegraaff%2etk&lc=US&item_name=Zimbra%20OpenPGP%20Zimlet&no_note=0&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 
-Demo video: https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/docu/Zimbra%20OpenPGP%20Zimlet%20version%201.2.7.webm
+Demo video: https://drive.google.com/a/barrydegraaff.tk/file/d/0B_lMZlQY3S2lMzQ2VFJaMS11elk/view
 
 User manual: http://htmlpreview.github.io/?https://github.com/barrydegraaff/pgp-zimlet/blob/master/tk_barrydegraaff_zimbra_openpgp/help/index.html
 
@@ -30,8 +30,9 @@ Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues
     su zimbra
     cd /tmp
     rm tk_barrydegraaff_zimbra_openpgp*
-    wget https://github.com/barrydegraaff/pgp-zimlet-binaries/raw/master/1.3.0/tk_barrydegraaff_zimbra_openpgp.zip
+    wget https://github.com/barrydegraaff/pgp-zimlet-binaries/raw/master/1.3.1/tk_barrydegraaff_zimbra_openpgp.zip
     zmzimletctl deploy tk_barrydegraaff_zimbra_openpgp.zip
+    (wait 15 minutes for the deploy to propagate; or zmprov fc all)
 
 Please be warned, if you undeploy this Zimlet after some time Zimbra will truncate your users preferences (public keys) of this Zimlet.
 
@@ -56,7 +57,7 @@ You have to click "View entire message" and then drag/drop it onto the Zimlet ag
 
 ### License
 
-Copyright (C) 2014  Barry de Graaff
+Copyright (C) 2014-2015  Barry de Graaff
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
