@@ -1,9 +1,10 @@
 Zimbra OpenPGP Zimlet
 ==========
 
-I am accepting donations for the continued development of this Zimlet:
-
-https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=info%40barrydegraaff%2etk&lc=US&item_name=Zimbra%20OpenPGP%20Zimlet&no_note=0&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
+If you find Zimbra OpenPGP Zimlet useful and want to support its continued development, you can make donations via:
+- PayPal: info@barrydegraaff.tk
+- Bitcoin: 1BaRRyS7wvGarEGgDwmPgRCygzcvocyxJt
+- Bank transfer: IBAN NL55ABNA0623226413 ; BIC ABNANL2A
 
 Demo video: https://drive.google.com/a/barrydegraaff.tk/file/d/0B_lMZlQY3S2lMzQ2VFJaMS11elk/view
 
