@@ -43,6 +43,7 @@ function() {
 /* This method gets called when Zimbra Zimlet framework initializes
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
+   tk_barrydegraaff_zimbra_openpgp.version=this._zimletContext.version;
 };
 
 /* Initialize ZmMetaData in  see metaDataHandler below for more details.
@@ -127,6 +128,9 @@ tk_barrydegraaff_zimbra_openpgp.prototype.appLaunch =
 function(appName) {
    var app = appCtxt.getApp(appName);
    app.setContent('<iframe style="width:100%; height:100%; border:0px;" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html">');
+
+   var toolbar = app.getToolbar(); // returns ZmToolBar
+   toolbar.setContent("<button style='margin:10px;' onclick='tk_barrydegraaff_zimbra_openpgp.prototype._resetApp()'>Close</button> <b>OpenPGP version: " + tk_barrydegraaff_zimbra_openpgp.version + "</b><br><br>");
 };
 
 /* This method destroys the Zimlet tab
@@ -164,13 +168,13 @@ function(itemId) {
       this.displayDialog(5, "Generate new key pair", null);
 		break;
 	case "help":
-      //window.open("/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html");
       tk_barrydegraaff_zimbra_openpgp.openPGPApp = this.createApp('OpenPGP Help', "tk_barrydegraaff_zimbra_openpgp-panelIcon", "Encrypt/Decrypt messages with OpenPGP");
       var app = appCtxt.getApp(tk_barrydegraaff_zimbra_openpgp.openPGPApp);	
-      var toolbar = app.getToolbar(); // returns ZmToolBar
-      toolbar.setContent("<button style='margin:10px;' onclick='tk_barrydegraaff_zimbra_openpgp.prototype._resetApp()'>Close</button> <b>OpenPGP version: " + this._zimletContext.version, ZmStatusView.LEVEL_INFO + "</b><br><br>");
       app.launch();      
 		break;
+   case "help-new":
+      window.open("/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html");
+      break;
    }
 };
 
@@ -455,7 +459,7 @@ function(id, title, message) {
          tk_barrydegraaff_zimbra_openpgp.privateKeyCache = localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()];
 	   }      
       html = "<div style='width:650px; height: 350; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
-      "Please compose a message below to be encrypted.<br><br>" +
+      "Please compose a message below to be encrypted. First time users may want to read the <a style='color:blue; text-decoration: underline;' onclick=\"      tk_barrydegraaff_zimbra_openpgp.prototype.menuItemSelected('help-new')\">help</a>.<br><br>" +
       "</td></tr><tr><td>" +
       "Recipients:" +
       "</td><td>" + this.pubKeySelect() +
