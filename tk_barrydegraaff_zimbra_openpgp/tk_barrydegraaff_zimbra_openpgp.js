@@ -462,7 +462,7 @@ function(id, title, message) {
       "</td></tr><tr><td>" +
       "Message:" +
       "</td><td>" +
-      "<textarea class=\"barrydegraaff_zimbra_openpgp-msg\" id='message'></textarea>" +
+      "<textarea class=\"barrydegraaff_zimbra_openpgp-msg\" id='message'>"+ (message ? message : '' ) +"</textarea>" +
       "</td></tr><tr><td colspan='2'><br><br>Optional: Sign your encrypted message by entering private key and passphrase.</td></tr><tr><td>" +
       "Private Key:" +
       "</td><td>" +
@@ -471,7 +471,7 @@ function(id, title, message) {
       "Passphrase:" +
       "</td><td>" +
       "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value='" + (this.getUserPropertyInfo("zimbra_openpgp_privatepass").value ? this.getUserPropertyInfo("zimbra_openpgp_privatepass").value : '') + "'>" +
-      "</td></tr></table></div>";      
+      "</td></tr></table></div><input type='hidden' id='returnType' value=" + ( message ? 'existing-compose-window' : 'new-compose-window' )+">";      
       this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       this._dialog.setContent(html);
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnEncrypt));
@@ -621,7 +621,6 @@ function() {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnPubKeySave =
 function() {
-   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
    tk_barrydegraaff_zimbra_openpgp.prototype.localStorageSave();
 
    //Store values to LDAP
@@ -840,6 +839,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.okBtnEncrypt =
 function() {
    openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
    var pubKeySelect = document.getElementById("pubKeySelect");
+   var returnType = document.getElementById("returnType").value;
    var msg = document.getElementById("message").value;
      
    var pubKeys = [];
@@ -876,15 +876,21 @@ function() {
 
       openpgp.signAndEncryptMessage(pubKeys, privKey, msg, addresses).then(
          function(pgpMessage) {
-            // Tries to open the compose view on its own.
-            var composeController = AjxDispatcher.run("GetComposeController");
-            if(composeController) {
-               var appCtxt = window.top.appCtxt;
-               var zmApp = appCtxt.getApp();
-               var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
-               var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
-               toOverride:addresses, subjOverride:null, extraBodyText:pgpMessage, callback:null}
-               composeController.doAction(params); // opens asynchronously the window.
+            if (returnType == 'existing-compose-window')
+            {
+               tk_barrydegraaff_zimbra_openpgp.prototype.composeEncrypt(addresses, pgpMessage);
+            }
+            else
+            {
+               var composeController = AjxDispatcher.run("GetComposeController");
+               if(composeController) {
+                  var appCtxt = window.top.appCtxt;
+                  var zmApp = appCtxt.getApp();
+                  var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
+                  var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
+                  toOverride:addresses, subjOverride:null, extraBodyText:pgpMessage, callback:null}
+                  composeController.doAction(params); // opens asynchronously the window.
+               }
             }
             myWindow._dialog.popdown();
          }, 
