@@ -908,18 +908,24 @@ function() {
    else
    {   
       openpgp.encryptMessage(pubKeys, msg, addresses).then(
-         function(pgpMessage) {
-            myWindow._dialog.popdown();
-            // Tries to open the compose view on its own.
-            var composeController = AjxDispatcher.run("GetComposeController");
-            if(composeController) {
-               var appCtxt = window.top.appCtxt;
-               var zmApp = appCtxt.getApp();
-               var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
-               var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
-               toOverride:addresses, subjOverride:null, extraBodyText:pgpMessage, callback:null}
-               composeController.doAction(params); // opens asynchronously the window.
+         function(pgpMessage) {            
+            if (returnType == 'existing-compose-window')
+            {
+               tk_barrydegraaff_zimbra_openpgp.prototype.composeEncrypt(addresses, pgpMessage);
             }
+            else
+            {
+               var composeController = AjxDispatcher.run("GetComposeController");
+               if(composeController) {
+                  var appCtxt = window.top.appCtxt;
+                  var zmApp = appCtxt.getApp();
+                  var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
+                  var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
+                  toOverride:addresses, subjOverride:null, extraBodyText:pgpMessage, callback:null}
+                  composeController.doAction(params); // opens asynchronously the window.
+               }
+            }
+            myWindow._dialog.popdown();
          }, 
          function(err) {
             if( pubKeySelect.selectedOptions.length==0)
