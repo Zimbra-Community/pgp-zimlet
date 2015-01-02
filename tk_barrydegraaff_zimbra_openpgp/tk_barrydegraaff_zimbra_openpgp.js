@@ -44,6 +44,7 @@ function() {
 /* This method gets called when Zimbra Zimlet framework initializes
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
+   tk_barrydegraaff_zimbra_openpgp.version=this._zimletContext.version;
 };
 
 /* Initialize ZmMetaData in  see metaDataHandler below for more details.
@@ -128,6 +129,9 @@ tk_barrydegraaff_zimbra_openpgp.prototype.appLaunch =
 function(appName) {
    var app = appCtxt.getApp(appName);
    app.setContent('<iframe style="width:100%; height:100%; border:0px;" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html">');
+
+   var toolbar = app.getToolbar(); // returns ZmToolBar
+   toolbar.setContent("<button style='margin:10px;' onclick='tk_barrydegraaff_zimbra_openpgp.prototype._resetApp()'>Close</button> <b>OpenPGP version: " + tk_barrydegraaff_zimbra_openpgp.version + "</b><br><br>");
 };
 
 /* This method destroys the Zimlet tab
@@ -165,13 +169,13 @@ function(itemId) {
       this.displayDialog(5, "Generate new key pair", null);
 		break;
 	case "help":
-      //window.open("/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html");
       tk_barrydegraaff_zimbra_openpgp.openPGPApp = this.createApp('OpenPGP Help', "tk_barrydegraaff_zimbra_openpgp-panelIcon", "Encrypt/Decrypt messages with OpenPGP");
       var app = appCtxt.getApp(tk_barrydegraaff_zimbra_openpgp.openPGPApp);	
-      var toolbar = app.getToolbar(); // returns ZmToolBar
-      toolbar.setContent("<button style='margin:10px;' onclick='tk_barrydegraaff_zimbra_openpgp.prototype._resetApp()'>Close</button> <b>OpenPGP version: " + this._zimletContext.version, ZmStatusView.LEVEL_INFO + "</b><br><br>");
       app.launch();      
 		break;
+   case "help-new":
+      window.open("/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html");
+      break;
    }
 };
 
@@ -468,14 +472,14 @@ function(id, title, message) {
          tk_barrydegraaff_zimbra_openpgp.privatePassCache = localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()];
 	   }      
       html = "<div style='width:650px; height: 350; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
-      "Please compose a message below to be encrypted.<br><br>" +
+      "Please compose a message below to be encrypted. First time users may want to read the <a style='color:blue; text-decoration: underline;' onclick=\"      tk_barrydegraaff_zimbra_openpgp.prototype.menuItemSelected('help-new')\">help</a>.<br><br>" +
       "</td></tr><tr><td>" +
       "Recipients:" +
       "</td><td>" + this.pubKeySelect() +
       "</td></tr><tr><td>" +
       "Message:" +
       "</td><td>" +
-      "<textarea class=\"barrydegraaff_zimbra_openpgp-msg\" id='message'></textarea>" +
+      "<textarea class=\"barrydegraaff_zimbra_openpgp-msg\" id='message'>"+ (message ? message : '' ) +"</textarea>" +
       "</td></tr><tr><td colspan='2'><br><br>Optional: Sign your encrypted message by entering private key and passphrase.</td></tr><tr><td>" +
       "Private Key:" +
       "</td><td>" +
@@ -484,7 +488,7 @@ function(id, title, message) {
       "Passphrase:" +
       "</td><td>" +
       "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value='" + tk_barrydegraaff_zimbra_openpgp.privatePassCache + "'>" +
-      "</td></tr></table></div>";      
+      "</td></tr></table></div><input type='hidden' id='returnType' value=" + ( message ? 'existing-compose-window' : 'new-compose-window' )+">";      
       this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       this._dialog.setContent(html);
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnEncrypt));
@@ -639,7 +643,6 @@ function() {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnPubKeySave =
 function() {
-   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
    tk_barrydegraaff_zimbra_openpgp.prototype.localStorageSave();
 
    //Store values to LDAP
@@ -859,6 +862,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.okBtnEncrypt =
 function() {
    openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
    var pubKeySelect = document.getElementById("pubKeySelect");
+   var returnType = document.getElementById("returnType").value;
    var msg = document.getElementById("message").value;
      
    var pubKeys = [];
@@ -896,15 +900,21 @@ function() {
 
       openpgp.signAndEncryptMessage(pubKeys, privKey, msg, addresses).then(
          function(pgpMessage) {
-            // Tries to open the compose view on its own.
-            var composeController = AjxDispatcher.run("GetComposeController");
-            if(composeController) {
-               var appCtxt = window.top.appCtxt;
-               var zmApp = appCtxt.getApp();
-               var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
-               var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
-               toOverride:addresses, subjOverride:null, extraBodyText:pgpMessage, callback:null}
-               composeController.doAction(params); // opens asynchronously the window.
+            if (returnType == 'existing-compose-window')
+            {
+               tk_barrydegraaff_zimbra_openpgp.prototype.composeEncrypt(addresses, pgpMessage);
+            }
+            else
+            {
+               var composeController = AjxDispatcher.run("GetComposeController");
+               if(composeController) {
+                  var appCtxt = window.top.appCtxt;
+                  var zmApp = appCtxt.getApp();
+                  var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
+                  var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
+                  toOverride:addresses, subjOverride:null, extraBodyText:pgpMessage, callback:null}
+                  composeController.doAction(params); // opens asynchronously the window.
+               }
             }
             myWindow._dialog.popdown();
          }, 
@@ -922,18 +932,24 @@ function() {
    else
    {   
       openpgp.encryptMessage(pubKeys, msg, addresses).then(
-         function(pgpMessage) {
-            myWindow._dialog.popdown();
-            // Tries to open the compose view on its own.
-            var composeController = AjxDispatcher.run("GetComposeController");
-            if(composeController) {
-               var appCtxt = window.top.appCtxt;
-               var zmApp = appCtxt.getApp();
-               var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
-               var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
-               toOverride:addresses, subjOverride:null, extraBodyText:pgpMessage, callback:null}
-               composeController.doAction(params); // opens asynchronously the window.
+         function(pgpMessage) {            
+            if (returnType == 'existing-compose-window')
+            {
+               tk_barrydegraaff_zimbra_openpgp.prototype.composeEncrypt(addresses, pgpMessage);
             }
+            else
+            {
+               var composeController = AjxDispatcher.run("GetComposeController");
+               if(composeController) {
+                  var appCtxt = window.top.appCtxt;
+                  var zmApp = appCtxt.getApp();
+                  var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
+                  var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
+                  toOverride:addresses, subjOverride:null, extraBodyText:pgpMessage, callback:null}
+                  composeController.doAction(params); // opens asynchronously the window.
+               }
+            }
+            myWindow._dialog.popdown();
          }, 
          function(err) {
             if( pubKeySelect.selectedOptions.length==0)
