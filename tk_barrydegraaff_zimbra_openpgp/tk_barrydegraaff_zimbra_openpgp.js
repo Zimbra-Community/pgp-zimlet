@@ -575,22 +575,22 @@ function() {
                   {
                      if(decrypted.signatures[0].valid==true)
                      {
-                        sigStatus ='<b style="color:green">Got a good signature.</b>';
+                        sigStatus ='<b style="color:green">got a good signature.</b>';
                         tk_barrydegraaff_zimbra_openpgp.prototype.status("Got a good signature.", ZmStatusView.LEVEL_INFO);
                      }
                      else
                      {
-                        sigStatus ='<b style="color:red">Got a BAD signature.</b>';
+                        sigStatus ='<b style="color:red">got a BAD signature.</b>';
                         tk_barrydegraaff_zimbra_openpgp.prototype.status("Got a BAD signature.", ZmStatusView.LEVEL_CRITICAL);
                      }
                   }
                }
                catch (err) 
                {
-                  sigStatus ='This encrypted message was not signed.';
+                  sigStatus ='was not signed.';
                }                 
-               myWindow._dialog.setTitle('Decrypted message');
-               myWindow._dialog.setContent('<div style="width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll;"><div contenteditable="true" id="barrydegraaff_zimbra_openpgp_tinymce" class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;">'+decrypted.text+'</div><br>'+sigStatus+'</div>');
+               myWindow._dialog.setTitle('Decrypted message '+ sigStatus);
+               myWindow._dialog.setContent('<div style="width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll;"><div contenteditable="true" id="barrydegraaff_zimbra_openpgp_tinymce" class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;">'+decrypted.text+'</div></div>');
             },
             function(err) {
                tk_barrydegraaff_zimbra_openpgp.prototype.status("Decryption failed!", ZmStatusView.LEVEL_WARNING);
