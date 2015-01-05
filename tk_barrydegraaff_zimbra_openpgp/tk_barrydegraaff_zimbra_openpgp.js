@@ -971,3 +971,65 @@ function ()
    }
    return pass;
 }
+
+/* Compose window integration
+ * Add buttons to compose window
+ * */
+tk_barrydegraaff_zimbra_openpgp.prototype.initializeToolbar =
+function(app, toolbar, controller, viewId) {
+   // bug fix #7192 - disable detach toolbar button
+   toolbar.enable(ZmOperation.DETACH_COMPOSE, false);   
+	if(viewId.indexOf("COMPOSE")  >=0){
+		var buttonIndex = 4;      
+      if (toolbar.getButton('OPENPGPENCRYPT'))
+      {
+         //button already defined
+         return;
+      }
+		var buttonArgs = {
+			text    : "Encrypt",
+			tooltip: "Encrypt this email with OpenPGP",
+			index: buttonIndex, //position of the button
+			image: "zimbraicon" //icon
+		};
+		var button = toolbar.createOp("OPENPGPENCRYPT", buttonArgs);
+		button.addSelectionListener(new AjxListener(this, this.composeEncryptHandler, controller));
+	}
+};
+
+/* Compose window integration
+ * Call the encrypt dialog after Encrypt button pressed in Compose window
+ * */
+tk_barrydegraaff_zimbra_openpgp.prototype.composeEncryptHandler =
+function(controller) {
+   var composeMode = appCtxt.getCurrentView().getHtmlEditor().getMode();
+   var message = controller._getBodyContent();
+   
+   if(composeMode != 'text/plain')
+   {
+      controller._setFormat(Dwt.TEXT);
+      if(message.length > 0)   
+      {
+         tk_barrydegraaff_zimbra_openpgp.prototype.status("Please format as plain text and try again.", ZmStatusView.LEVEL_INFO);
+      }   
+      return;
+   }
+   
+   if(message.length < 1)
+   {
+      tk_barrydegraaff_zimbra_openpgp.prototype.status("Please compose message first", ZmStatusView.LEVEL_INFO);
+      return;
+   }
+   this.displayDialog(6, "Encrypt message", message);
+};
+
+/* Compose window integration
+ * Continue in the compose window after encrypt
+ * */
+tk_barrydegraaff_zimbra_openpgp.prototype.composeEncrypt =
+function(addresses, message) {
+   var composeView = appCtxt.getCurrentView();
+   composeView.getHtmlEditor().setMode(Dwt.TEXT);   
+   composeView.getHtmlEditor().setContent(message);    
+   composeView.setAddress(AjxEmailAddress.TO, addresses);     
+}
