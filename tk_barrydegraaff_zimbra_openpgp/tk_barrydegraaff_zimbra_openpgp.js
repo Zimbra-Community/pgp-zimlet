@@ -590,7 +590,7 @@ function() {
                   sigStatus ='This encrypted message was not signed.';
                }                 
                myWindow._dialog.setTitle('Decrypted message');
-               myWindow._dialog.setContent('<div style="width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll;"><textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:325px;">'+decrypted.text+'</textarea><br>'+sigStatus+'</div>');
+               myWindow._dialog.setContent('<div style="width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll;"><div contenteditable="true" id="barrydegraaff_zimbra_openpgp_tinymce" class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;">'+decrypted.text+'</div><br>'+sigStatus+'</div>');
             },
             function(err) {
                tk_barrydegraaff_zimbra_openpgp.prototype.status("Decryption failed!", ZmStatusView.LEVEL_WARNING);
@@ -1005,21 +1005,23 @@ function(controller) {
    var composeMode = appCtxt.getCurrentView().getHtmlEditor().getMode();
    var message = controller._getBodyContent();
    
-   if(composeMode != 'text/plain')
-   {
-      controller._setFormat(Dwt.TEXT);
-      if(message.length > 0)   
-      {
-         tk_barrydegraaff_zimbra_openpgp.prototype.status("Please format as plain text and try again.", ZmStatusView.LEVEL_INFO);
-      }   
-      return;
-   }
-   
    if(message.length < 1)
    {
       tk_barrydegraaff_zimbra_openpgp.prototype.status("Please compose message first", ZmStatusView.LEVEL_INFO);
       return;
    }
+
+   
+   if(composeMode != 'text/plain')
+   {
+      var composeView = appCtxt.getCurrentView();   
+      composeView.getHtmlEditor().setContent('');    
+
+      controller._setFormat(Dwt.TEXT);
+      composeView.getHtmlEditor().setMode(Dwt.TEXT);   
+      composeView.getHtmlEditor().setContent(message);    
+   }
+   
    this.displayDialog(6, "Encrypt message", message);
 };
 
