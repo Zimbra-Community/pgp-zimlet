@@ -273,10 +273,12 @@ tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
       tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not parse your trusted public keys!", ZmStatusView.LEVEL_WARNING);
       return;
    }
+   var myWindow = this;
    openpgp.verifyClearSignedMessage(combinedPublicKeys, message).then(
       function(signature) {
          var goodsigs = 0;
          var badsigs = 0;
+         var sigStatus = '';
          for (var s=0 ; s < signature.signatures.length ; s++) {
             if (signature.signatures[s].valid == true) {
                goodsigs++;
@@ -285,13 +287,19 @@ tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
             }
          }
          if ( (goodsigs > 0) && (badsigs == 0) ) {
-            tk_barrydegraaff_zimbra_openpgp.prototype.status("Got a good signature.", ZmStatusView.LEVEL_INFO);
+            myWindow.status("Got a good signature.", ZmStatusView.LEVEL_INFO);
+            sigStatus ='<b style="color:green">got a good signature.</b>';
          } else {
-            tk_barrydegraaff_zimbra_openpgp.prototype.status("Got a BAD signature.", ZmStatusView.LEVEL_CRITICAL);
+            myWindow.status("Got a BAD signature.", ZmStatusView.LEVEL_CRITICAL);
+            sigStatus ='<b style="color:red">got a BAD signature.</b>';
+         }
+         if (message.text.indexOf('<html><body><div>') > -1 ) 
+         {       
+            myWindow.displayDialog(2, 'Signed message ' + sigStatus, '<div style="width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll;"><div contenteditable="true" id="barrydegraaff_zimbra_openpgp_tinymce" class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;">'+message.text+'</div></div>');
          }
       },
       function (err) {
-         tk_barrydegraaff_zimbra_openpgp.prototype.status("Error verifying signature.", ZmStatusView.LEVEL_WARNING);
+         myWindow.status("Error verifying signature.", ZmStatusView.LEVEL_WARNING);
    });
 }
 
@@ -345,7 +353,7 @@ function(id, title, message) {
       break;
    case 2:
       this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
-      this._dialog.setContent("<div style='width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll;'>"+message+"</div>");
+      this._dialog.setContent(message);
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    case 3:
@@ -422,8 +430,8 @@ function(id, title, message) {
       "</td></tr><tr><td>" +
       "Message:" +
       "</td><td>" +
-      "<textarea class=\"barrydegraaff_zimbra_openpgp-msg\" id='message'></textarea>" +
-      "</td></tr></table></div>";
+      "<textarea class=\"barrydegraaff_zimbra_openpgp-msg\" id='message'>"+ (message ? message : '' ) +"</textarea>" +
+      "</td></tr></table></div><input type='hidden' id='returnType' value=" + ( message ? 'existing-compose-window' : 'new-compose-window' )+">";
       this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       this._dialog.setContent(html);
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnSign));
@@ -589,22 +597,22 @@ function() {
                   {
                      if(decrypted.signatures[0].valid==true)
                      {
-                        sigStatus ='<b style="color:green">Got a good signature.</b>';
+                        sigStatus ='<b style="color:green">got a good signature.</b>';
                         tk_barrydegraaff_zimbra_openpgp.prototype.status("Got a good signature.", ZmStatusView.LEVEL_INFO);
                      }
                      else
                      {
-                        sigStatus ='<b style="color:red">Got a BAD signature.</b>';
+                        sigStatus ='<b style="color:red">got a BAD signature.</b>';
                         tk_barrydegraaff_zimbra_openpgp.prototype.status("Got a BAD signature.", ZmStatusView.LEVEL_CRITICAL);
                      }
                   }
                }
                catch (err) 
                {
-                  sigStatus ='This encrypted message was not signed.';
+                  sigStatus ='was not signed.';
                }                 
-               myWindow._dialog.setTitle('Decrypted message');
-               myWindow._dialog.setContent('<div style="width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll;"><textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:325px;">'+decrypted.text+'</textarea><br>'+sigStatus+'</div>');
+               myWindow._dialog.setTitle('Decrypted message '+ sigStatus);
+               myWindow._dialog.setContent('<div style="width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll;"><div contenteditable="true" id="barrydegraaff_zimbra_openpgp_tinymce" class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;">'+decrypted.text+'</div></div>');
             },
             function(err) {
                tk_barrydegraaff_zimbra_openpgp.prototype.status("Decryption failed!", ZmStatusView.LEVEL_WARNING);
@@ -709,6 +717,7 @@ function() {
    var passphrase = document.getElementById("passphraseInput").value;
    tk_barrydegraaff_zimbra_openpgp.privatePassCache = passphraseInput;
    var message = document.getElementById("message").value;
+   var returnType = document.getElementById("returnType").value;   
 
    try {
       var privKeys = openpgp.key.readArmored(privateKeyInput);
@@ -724,16 +733,22 @@ function() {
       var myWindow = this;
         openpgp.signClearMessage(privKey, message).then(
            function(signed) {
-              // Tries to open the compose view on its own.
-              var composeController = AjxDispatcher.run("GetComposeController");
-              if(composeController) {
-                 var appCtxt = window.top.appCtxt;
-                 var zmApp = appCtxt.getApp();
-                 var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
-                 var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
-                 toOverride:null, subjOverride:null, extraBodyText:signed, callback:null}
-                 composeController.doAction(params); // opens asynchronously the window.
+              if (returnType == 'existing-compose-window')
+              {                 
+                 tk_barrydegraaff_zimbra_openpgp.prototype.composeSign(signed);
               }
+              else
+              {
+                 var composeController = AjxDispatcher.run("GetComposeController");
+                 if(composeController) {
+                    var appCtxt = window.top.appCtxt;
+                    var zmApp = appCtxt.getApp();
+                    var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
+                    var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
+                    toOverride:null, subjOverride:null, extraBodyText:signed, callback:null}
+                    composeController.doAction(params); // opens asynchronously the window.
+                 }
+              }   
               myWindow._dialog.popdown();
            },
            function(err) {
@@ -991,3 +1006,122 @@ function ()
    }
    return pass;
 }
+
+/* Compose window integration
+ * Add buttons to compose window
+ * */
+tk_barrydegraaff_zimbra_openpgp.prototype.initializeToolbar =
+function(app, toolbar, controller, viewId) {
+   // bug fix #7192 - disable detach toolbar button
+   toolbar.enable(ZmOperation.DETACH_COMPOSE, false);   
+   
+	if(viewId.indexOf("COMPOSE") >=0){
+      if (toolbar.getButton('OPENPGPENCRYPT'))
+      {
+         //button already defined
+         return;
+      }
+		var buttonArgs = {
+			text    : "Encrypt",
+			tooltip: "Encrypt this email with OpenPGP",
+			index: 4, //position of the button
+			image: "zimbraicon" //icon
+		};
+		var button = toolbar.createOp("OPENPGPENCRYPT", buttonArgs);
+		button.addSelectionListener(new AjxListener(this, this.composeEncryptHandler, controller));
+
+      if (toolbar.getButton('OPENPGPSIGN'))
+      {
+         //button already defined
+         return;
+      }
+		var buttonArgs = {
+			text    : "Sign",
+			tooltip: "Sign this email with OpenPGP",
+			index: 5, //position of the button
+			image: "zimbraicon" //icon
+		};
+		var button = toolbar.createOp("OPENPGPSIGN", buttonArgs);
+		button.addSelectionListener(new AjxListener(this, this.composeSignHandler, controller));
+
+	}
+};
+
+/* Compose window integration
+ * Call the encrypt dialog after Encrypt button pressed in Compose window
+ * */
+tk_barrydegraaff_zimbra_openpgp.prototype.composeEncryptHandler =
+function(controller) {
+   var composeMode = appCtxt.getCurrentView().getHtmlEditor().getMode();
+   var message = controller._getBodyContent();
+   
+   if(message.length < 1)
+   {
+      tk_barrydegraaff_zimbra_openpgp.prototype.status("Please compose message first", ZmStatusView.LEVEL_INFO);
+      return;
+   }
+
+   
+   if(composeMode != 'text/plain')
+   {
+      var composeView = appCtxt.getCurrentView();   
+      composeView.getHtmlEditor().setContent('');    
+
+      controller._setFormat(Dwt.TEXT);
+      composeView.getHtmlEditor().setMode(Dwt.TEXT);   
+      composeView.getHtmlEditor().setContent(message);    
+   }
+   
+   this.displayDialog(6, "Encrypt message", message);
+};
+
+/* Compose window integration
+ * Continue in the compose window after encrypt
+ * */
+tk_barrydegraaff_zimbra_openpgp.prototype.composeEncrypt =
+function(addresses, message) {
+   var composeView = appCtxt.getCurrentView();
+   composeView.getHtmlEditor().setMode(Dwt.TEXT);   
+   composeView.getHtmlEditor().setContent(message);    
+   composeView.setAddress(AjxEmailAddress.TO, addresses);     
+}
+
+
+/* Compose window integration
+ * Call the sign dialog after Sign button pressed in Compose window
+ * */
+tk_barrydegraaff_zimbra_openpgp.prototype.composeSignHandler =
+function(controller) {
+   var composeMode = appCtxt.getCurrentView().getHtmlEditor().getMode();
+   var message = controller._getBodyContent();
+   
+   if(message.length < 1)
+   {
+      tk_barrydegraaff_zimbra_openpgp.prototype.status("Please compose message first", ZmStatusView.LEVEL_INFO);
+      return;
+   }
+
+   
+   if(composeMode != 'text/plain')
+   {
+      var composeView = appCtxt.getCurrentView();   
+      composeView.getHtmlEditor().setContent('');    
+
+      controller._setFormat(Dwt.TEXT);
+      composeView.getHtmlEditor().setMode(Dwt.TEXT);   
+      composeView.getHtmlEditor().setContent(message);    
+   }
+   
+   this.displayDialog(4, "Sign message", message);
+};
+
+/* Compose window integration
+ * Continue in the compose window after sign
+ * */
+tk_barrydegraaff_zimbra_openpgp.prototype.composeSign =
+function(message) {
+   var composeView = appCtxt.getCurrentView();
+   composeView.getHtmlEditor().setMode(Dwt.TEXT);   
+   composeView.getHtmlEditor().setContent(message);    
+   //composeView.setAddress(AjxEmailAddress.TO, addresses); 
+}   
