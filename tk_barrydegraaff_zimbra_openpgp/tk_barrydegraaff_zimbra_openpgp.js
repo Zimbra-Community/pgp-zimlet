@@ -413,7 +413,7 @@ function(id, title, message) {
       "</td><td>" +
       "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value='" + (this.getUserPropertyInfo("zimbra_openpgp_privatepass").value ? this.getUserPropertyInfo("zimbra_openpgp_privatepass").value : '') + "'>" +
       "<textarea style='display: none' id='message'>"+ (message ? message : '' ) +"</textarea></td></tr>" +
-      "</table></div><input type='hidden' id='returnType' value=" + ( message ? 'existing-compose-window' : 'new-compose-window' )+">";
+      "</table></div>";
       this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       this._dialog.setContent(html);
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnSign));
@@ -470,7 +470,7 @@ function(id, title, message) {
       "Passphrase:" +
       "</td><td>" +
       "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value='" + (this.getUserPropertyInfo("zimbra_openpgp_privatepass").value ? this.getUserPropertyInfo("zimbra_openpgp_privatepass").value : '') + "'>" +
-      "</td></tr></table></div><input type='hidden' id='returnType' value=" + ( message ? 'existing-compose-window' : 'new-compose-window' )+">";      
+      "</td></tr></table></div>";      
       this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       this._dialog.setContent(html);
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnEncrypt));
@@ -686,7 +686,6 @@ function() {
    tk_barrydegraaff_zimbra_openpgp.privateKeyCache = privateKeyInput;
    var passphrase = document.getElementById("passphraseInput").value;
    var message = document.getElementById("message").value;
-   var returnType = document.getElementById("returnType").value;   
 
    try {
       var privKeys = openpgp.key.readArmored(privateKeyInput);
@@ -702,22 +701,7 @@ function() {
       var myWindow = this;
         openpgp.signClearMessage(privKey, message).then(
            function(signed) {
-              if (returnType == 'existing-compose-window')
-              {                 
-                 tk_barrydegraaff_zimbra_openpgp.prototype.composeSign(signed);
-              }
-              else
-              {
-                 var composeController = AjxDispatcher.run("GetComposeController");
-                 if(composeController) {
-                    var appCtxt = window.top.appCtxt;
-                    var zmApp = appCtxt.getApp();
-                    var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
-                    var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
-                    toOverride:null, subjOverride:null, extraBodyText:signed, callback:null}
-                    composeController.doAction(params); // opens asynchronously the window.
-                 }
-              }   
+              tk_barrydegraaff_zimbra_openpgp.prototype.composeSign(signed);
               myWindow._dialog.popdown();
            },
            function(err) {
@@ -845,7 +829,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.okBtnEncrypt =
 function() {
    openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
    var pubKeySelect = document.getElementById("pubKeySelect");
-   var returnType = document.getElementById("returnType").value;
    var msg = document.getElementById("message").value;
      
    var pubKeys = [];
@@ -881,23 +864,8 @@ function() {
       }
 
       openpgp.signAndEncryptMessage(pubKeys, privKey, msg, addresses).then(
-         function(pgpMessage) {
-            if (returnType == 'existing-compose-window')
-            {
-               tk_barrydegraaff_zimbra_openpgp.prototype.composeEncrypt(addresses, pgpMessage);
-            }
-            else
-            {
-               var composeController = AjxDispatcher.run("GetComposeController");
-               if(composeController) {
-                  var appCtxt = window.top.appCtxt;
-                  var zmApp = appCtxt.getApp();
-                  var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
-                  var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
-                  toOverride:addresses, subjOverride:null, extraBodyText:pgpMessage, callback:null}
-                  composeController.doAction(params); // opens asynchronously the window.
-               }
-            }
+         function(pgpMessage) {             
+            tk_barrydegraaff_zimbra_openpgp.prototype.composeEncrypt(addresses, pgpMessage);
             myWindow._dialog.popdown();
          }, 
          function(err) {
@@ -915,22 +883,7 @@ function() {
    {   
       openpgp.encryptMessage(pubKeys, msg, addresses).then(
          function(pgpMessage) {            
-            if (returnType == 'existing-compose-window')
-            {
-               tk_barrydegraaff_zimbra_openpgp.prototype.composeEncrypt(addresses, pgpMessage);
-            }
-            else
-            {
-               var composeController = AjxDispatcher.run("GetComposeController");
-               if(composeController) {
-                  var appCtxt = window.top.appCtxt;
-                  var zmApp = appCtxt.getApp();
-                  var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
-                  var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
-                  toOverride:addresses, subjOverride:null, extraBodyText:pgpMessage, callback:null}
-                  composeController.doAction(params); // opens asynchronously the window.
-               }
-            }
+            tk_barrydegraaff_zimbra_openpgp.prototype.composeEncrypt(addresses, pgpMessage);
             myWindow._dialog.popdown();
          }, 
          function(err) {
