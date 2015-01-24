@@ -23,7 +23,7 @@ tk_barrydegraaff_zimbra_openpgp = function() {
    tk_barrydegraaff_zimbra_openpgp.privateKeyCache='';
    tk_barrydegraaff_zimbra_openpgp.privatePassCache='';
    tk_barrydegraaff_zimbra_openpgp.addressBookPublicKeys = [];
-   tk_barrydegraaff_zimbra_openpgp.prototype.readAddressBook();
+//   tk_barrydegraaff_zimbra_openpgp.prototype.readAddressBook();
    
    //openpgp.js cannot be included via zimlet xml definition, 
    //will fail to work after deploy using zmzimletctl deploy
@@ -59,7 +59,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onShowView = function (view) {
    if ((tk_barrydegraaff_zimbra_openpgp.prototype.editAddressBookEvent == true) && ( view.indexOf('CN') < 0 ))
    {
       tk_barrydegraaff_zimbra_openpgp.prototype.editAddressBookEvent = false;
-      tk_barrydegraaff_zimbra_openpgp.prototype.readAddressBook();
+//      tk_barrydegraaff_zimbra_openpgp.prototype.readAddressBook();
    }
 }
 
@@ -67,6 +67,12 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onShowView = function (view) {
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, view) {
    openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+   
+   if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
+   {
+      this.status("Still loading contacts, ignoring your addressbook", ZmStatusView.LEVEL_INFO);   
+   }
+   
    var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
    if (!bp)
    {
@@ -164,6 +170,12 @@ function(itemId) {
 tk_barrydegraaff_zimbra_openpgp.prototype.doDrop =
 function(zmObject) {
    openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+
+   if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
+   {
+      this.status("Still loading contacts, ignoring your addressbook", ZmStatusView.LEVEL_INFO);   
+   }
+
    var msgObj = zmObject.srcObj;
 
    //if its a conversation i.e. "ZmConv" object, get the first loaded message "ZmMailMsg" object within that.
@@ -238,7 +250,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
       var publicKeys29 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value);
       var publicKeys30 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value);
 
-      var combinedPublicKeys = [].concat(publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys, tk_barrydegraaff_zimbra_openpgp.addressBookPublicKeys);
+      var combinedPublicKeys = [].concat(publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys);
    }
    catch(err) {
       tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not parse your trusted public keys!", ZmStatusView.LEVEL_WARNING);
@@ -523,7 +535,7 @@ function() {
       var publicKeys28 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys28").value);
       var publicKeys29 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value);
       var publicKeys30 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value);
-      var pubKey = [].concat(publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys, tk_barrydegraaff_zimbra_openpgp.addressBookPublicKeys);
+      var pubKey = [].concat(publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys);
    }
    catch(err) {
       tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not parse your trusted public keys!", ZmStatusView.LEVEL_WARNING);
@@ -748,7 +760,7 @@ function() {
       var publicKeys28 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys28").value);
       var publicKeys29 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value);
       var publicKeys30 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value);
-      var combinedPublicKeys = [publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys, tk_barrydegraaff_zimbra_openpgp.addressBookPublicKeys];
+      var combinedPublicKeys = [publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys];
 
       var result = '<select class="barrydegraaff_zimbra_openpgp-input" id="pubKeySelect" multiple>';
 
@@ -1009,6 +1021,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.parseContacts = function() {
       }
    });
 
+   tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress = false;
    if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
    {
       console.log("tk_barrydegraaff_zimbra_openpgp.prototype.parseContacts Addressbook loading completed.");
@@ -1019,8 +1032,9 @@ tk_barrydegraaff_zimbra_openpgp.prototype.parseContacts = function() {
  * http://wiki.zimbra.com/wiki/Zimlet_cookbook_based_on_JavaScript_API#Scan_AddressBook
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.readAddressBook = function() {
+   tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress = true;
    var  postCallback = new AjxCallback(this, this.parseContacts);
-	this.loadAllContacts(postCallback);
+   this.loadAllContacts(postCallback);
 };
 
 /* AddressBook integration
