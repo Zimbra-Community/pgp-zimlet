@@ -990,6 +990,11 @@ tk_barrydegraaff_zimbra_openpgp.prototype.composeEncryptHandler =
 function(controller) {
    var composeMode = appCtxt.getCurrentView().getHtmlEditor().getMode();
    var message = controller._getBodyContent();
+
+   if(message.indexOf("__SIG_PRE__") > 0 ) { 
+      tk_barrydegraaff_zimbra_openpgp.prototype.status("Please disable your email signature", ZmStatusView.LEVEL_INFO);
+      return;      
+   }
    
    if(message.length < 1)
    {
@@ -1030,6 +1035,11 @@ tk_barrydegraaff_zimbra_openpgp.prototype.composeSignHandler =
 function(controller) {
    var composeMode = appCtxt.getCurrentView().getHtmlEditor().getMode();
    var message = controller._getBodyContent();
+   
+   if(message.indexOf("__SIG_PRE__") > 0 ) { 
+      tk_barrydegraaff_zimbra_openpgp.prototype.status("Please disable your email signature", ZmStatusView.LEVEL_INFO);
+      return;      
+   }
    
    if(message.length < 1)
    {
