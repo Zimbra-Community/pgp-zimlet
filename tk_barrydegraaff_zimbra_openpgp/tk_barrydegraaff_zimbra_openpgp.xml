@@ -1,4 +1,4 @@
-<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="1.3.5" label="OpenPGP" description="Encrypt/Decrypt messages with OpenPGP">
+<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="1.3.6" label="OpenPGP" description="Encrypt/Decrypt messages with OpenPGP">
    <summary>
 Zimbra OpenPGP Zimlet
 
@@ -31,12 +31,16 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
       <dragSource type="ZmConv" />
 		<dragSource type="ZmMailMsg" />
       <contextMenu>
+         <menuItem icon="tk_barrydegraaff_zimbra_openpgp-sign" label="Sign message" id="sign" />
+         <menuItem icon="tk_barrydegraaff_zimbra_openpgp-panelIcon" label="Encrypt message" id="encrypt" />
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-pubkeys" label="Manage Keys" id="pubkeys" />
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-keypair" label="Generate key pair" id="keypair" />
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-help" label="Help / About" id="help" />
       </contextMenu>
    </zimletPanelItem>
    <userProperties>
+      <property type="string" label="none" name="zimbra_openpgp_options" rows="2" />
+      <property type="string" label="Trusted public key 1" name="zimbra_openpgp_pubkeys1" rows="2"/>
       <property type="string" label="Private Key Passphrase" name="zimbra_openpgp_privatepass" rows="1"/>
       <property type="string" label="Trusted public key 1" name="zimbra_openpgp_pubkeys1" rows="2"/>
       <property type="string" label="Trusted public key 2" name="zimbra_openpgp_pubkeys2" rows="2"/>
