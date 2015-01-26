@@ -22,7 +22,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 tk_barrydegraaff_zimbra_openpgp = function() {
    tk_barrydegraaff_zimbra_openpgp.privateKeyCache='';
    tk_barrydegraaff_zimbra_openpgp.addressBookPublicKeys = []; 
-   tk_barrydegraaff_zimbra_openpgp.prototype.settings = {};
+   tk_barrydegraaff_zimbra_openpgp.settings = {};
    
    //openpgp.js cannot be included via zimlet xml definition, 
    //will fail to work after deploy using zmzimletctl deploy
@@ -48,11 +48,11 @@ tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
 
    //Per user configuration options are jsonified from a single Zimbra userProperty
    try {
-      tk_barrydegraaff_zimbra_openpgp.prototype.settings = JSON.parse(this.getUserProperty("zimbra_openpgp_options"));         
+      tk_barrydegraaff_zimbra_openpgp.settings = JSON.parse(this.getUserProperty("zimbra_openpgp_options"));         
    } 
    catch(err) {   
       //Load default values
-      tk_barrydegraaff_zimbra_openpgp.prototype.settings['enable_contacts_scanning'] = 'false';
+      tk_barrydegraaff_zimbra_openpgp.settings['enable_contacts_scanning'] = 'false';
    } 
    tk_barrydegraaff_zimbra_openpgp.prototype.readAddressBook();
 };
@@ -356,7 +356,7 @@ function(id, title, message) {
       "</td></tr>" +      
       "<tr><td style=\"width:100px\">Private Key:</td><td style=\"width:500px\">If you save your private key below it is stored in your browsers <a href=\"http://diveintohtml5.info/storage.html\" target=\"_blank\" >local storage</a>. If you do not store your private key the server will ask you to provide it for each session.<textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='privateKeyInput'/>" + (localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()] ? localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()] : '') + "</textarea></td></tr>" +
       "<tr><td>Passphrase:</td><td><br>If you save your passphrase below it is stored in plain text in the Zimbra LDAP. If you do not store your passphrase the server will ask you to provide it every time it is needed.<input class=\"barrydegraaff_zimbra_openpgp-input\" id='privatePassInput' type='password' value='" + (this.getUserPropertyInfo("zimbra_openpgp_privatepass").value ? this.getUserPropertyInfo("zimbra_openpgp_privatepass").value : '') + "'></td></tr>" +
-      "<tr><td><br>Scan contacts:</td><td><br><input type='checkbox' title='If checked, read Public Keys from the notes field in the Zimbra addressbook' id='enable_contacts_scanning' name='enable_contacts_scanning' " + (tk_barrydegraaff_zimbra_openpgp.prototype.settings['enable_contacts_scanning']=='false' ? '' : 'checked') + " value='true'>" + "</td></tr>" +
+      "<tr><td><br>Scan contacts:</td><td><br><input type='checkbox' title='If checked, read Public Keys from the notes field in the Zimbra addressbook' id='enable_contacts_scanning' name='enable_contacts_scanning' " + (tk_barrydegraaff_zimbra_openpgp.settings['enable_contacts_scanning']=='false' ? '' : 'checked') + " value='true'>" + "</td></tr>" +
       "<tr><td>Public Key 1:</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput1'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value : '') + "</textarea></td></tr>" +
       "<tr><td>Public Key 2:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput2'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value : '') + "</textarea></td></tr>" +
       "<tr><td>Public Key 3:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput3'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys3").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys3").value : '') + "</textarea></td></tr>" +
@@ -616,10 +616,10 @@ function() {
    tk_barrydegraaff_zimbra_openpgp.prototype.localStorageSave();
  
    //Per user configuration options are jsonified into a single Zimbra userProperty
-   tk_barrydegraaff_zimbra_openpgp.prototype.settings['enable_contacts_scanning'] = (document.getElementById("enable_contacts_scanning").checked ? 'true' : 'false');
+   tk_barrydegraaff_zimbra_openpgp.settings['enable_contacts_scanning'] = (document.getElementById("enable_contacts_scanning").checked ? 'true' : 'false');
 
    //Store values to LDAP
-   this.setUserProperty("zimbra_openpgp_options", JSON.stringify(tk_barrydegraaff_zimbra_openpgp.prototype.settings), false);
+   this.setUserProperty("zimbra_openpgp_options", JSON.stringify(tk_barrydegraaff_zimbra_openpgp.settings), false);
    this.setUserProperty("zimbra_openpgp_privatepass", document.getElementById("privatePassInput").value, false);
    this.setUserProperty("zimbra_openpgp_pubkeys1", document.getElementById("publicKeyInput1").value, false);
    this.setUserProperty("zimbra_openpgp_pubkeys2", document.getElementById("publicKeyInput2").value, false);
@@ -1103,8 +1103,10 @@ tk_barrydegraaff_zimbra_openpgp.prototype.parseContacts = function() {
  * http://wiki.zimbra.com/wiki/Zimlet_cookbook_based_on_JavaScript_API#Scan_AddressBook
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.readAddressBook = function() {
-   if (tk_barrydegraaff_zimbra_openpgp.prototype.settings['enable_contacts_scanning'] == 'false')
+   if (tk_barrydegraaff_zimbra_openpgp.settings['enable_contacts_scanning'] == 'false')
    {
+      //Undefine contacts from addressbook
+      tk_barrydegraaff_zimbra_openpgp.addressBookPublicKeys = [];
       return;
    }
    
