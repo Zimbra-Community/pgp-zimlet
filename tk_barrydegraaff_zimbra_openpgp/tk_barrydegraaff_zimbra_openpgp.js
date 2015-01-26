@@ -653,7 +653,10 @@ function() {
    this.setUserProperty("zimbra_openpgp_pubkeys30", document.getElementById("publicKeyInput30").value, true);
   
    tk_barrydegraaff_zimbra_openpgp.prototype.readAddressBook();  
-   this._dialog.popdown();
+   //Suppress dwt dispose on popdown type errors
+   try {
+      this._dialog.popdown();
+   } catch (err) { }   
 };
 
 /* This method is called for signing messages
@@ -992,7 +995,7 @@ function(controller) {
    var message = controller._getBodyContent();
 
    if(message.indexOf("__SIG_PRE__") > 0 ) { 
-      tk_barrydegraaff_zimbra_openpgp.prototype.status("Please disable your email signature", ZmStatusView.LEVEL_INFO);
+      this.displayDialog(2, "Please disable your email signature", "Sorry, Zimbra OpenPGP Zimlet does not work well with HTML email signatures. Please disable them for this message like this: <br><br><img src='/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/no-signatures.png' alt=''>");
       return;      
    }
    
@@ -1037,7 +1040,7 @@ function(controller) {
    var message = controller._getBodyContent();
    
    if(message.indexOf("__SIG_PRE__") > 0 ) { 
-      tk_barrydegraaff_zimbra_openpgp.prototype.status("Please disable your email signature", ZmStatusView.LEVEL_INFO);
+      this.displayDialog(2, "Please disable your email signature", "Sorry, Zimbra OpenPGP Zimlet does not work well with HTML email signatures. Please disable them for this message like this: <br><br><img src='/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/no-signatures.png' alt=''>");
       return;      
    }
    
