@@ -951,6 +951,12 @@ function ()
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.initializeToolbar =
 function(app, toolbar, controller, viewId) {
+   if (controller._action != 'NEW_MESSAGE')
+   {
+      //only integrate this zimlet on new email messages, not forwarded messages
+      return;
+   }
+   
    // bug fix #7192 - disable detach toolbar button
    toolbar.enable(ZmOperation.DETACH_COMPOSE, false);   
    
@@ -982,7 +988,6 @@ function(app, toolbar, controller, viewId) {
 		};
 		var button = toolbar.createOp("OPENPGPSIGN", buttonArgs);
 		button.addSelectionListener(new AjxListener(this, this.composeSignHandler, controller));
-
 	}
 };
 
