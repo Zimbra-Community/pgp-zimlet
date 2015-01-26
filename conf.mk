@@ -1,4 +1,4 @@
-VERSION=1.3.4
+VERSION=1.3.6
 PACKAGE=zcs-openpgp
 MAINTAINER=Barry de Graaff <info@barrydegraaff.tk>
 SECTION=free/zcs-mail
