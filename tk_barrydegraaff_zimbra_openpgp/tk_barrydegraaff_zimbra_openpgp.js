@@ -1104,8 +1104,7 @@ function(message) {
 tk_barrydegraaff_zimbra_openpgp.prototype.parseContacts = function() {  
    openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
 
-   tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress = false;
-   tk_barrydegraaff_zimbra_openpgp.prototype.status("OpenPGP scanning contacts completed", ZmStatusView.LEVEL_INFO);
+   tk_barrydegraaff_zimbra_openpgp.addressBookPublicKeys = [];
    this._contactList._vector._array.forEach(function(entry) {      
       try{
          if(entry._attrs.notes.indexOf("BEGIN PGP PUBLIC KEY BLOCK") > 0 ) {
@@ -1116,6 +1115,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.parseContacts = function() {
       catch(err) {
       }
    });
+   tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress = false;
+   tk_barrydegraaff_zimbra_openpgp.prototype.status("OpenPGP scanning contacts completed", ZmStatusView.LEVEL_INFO);
 }
 
 /* AddressBook integration
@@ -1126,6 +1127,12 @@ tk_barrydegraaff_zimbra_openpgp.prototype.readAddressBook = function() {
    {
       //Undefine contacts from addressbook
       tk_barrydegraaff_zimbra_openpgp.addressBookPublicKeys = [];
+      return;
+   }
+
+   //For performance, no concurrent scanning of addressbook 
+   if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
+   {
       return;
    }
    
