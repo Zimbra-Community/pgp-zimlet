@@ -579,8 +579,13 @@ function() {
                {
                   sigStatus ='was not signed.';
                }                 
+               
+               if (decrypted.text.indexOf('<html><body>') < 0 ) 
+               {
+                  decrypted.text = '<pre>' + decrypted.text + '</pre>';
+               }               
                myWindow._dialog.setTitle('Decrypted message '+ sigStatus);
-               myWindow._dialog.setContent('<div style="width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll; background-color:white; padding:5px;"><div contenteditable="true" class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;">'+decrypted.text+'</div></div>');
+               myWindow._dialog.setContent('<div style="width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll; background-color:white; padding:5px;"><div contenteditable="true" class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;"><div id="decrmsg" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.selectText(\'decrmsg\')">'+decrypted.text+'</div></div></div><br><small>Copy to clipboard: Left click + Ctrl+C</small>');               
             },
             function(err) {
                tk_barrydegraaff_zimbra_openpgp.prototype.status("Decryption failed!", ZmStatusView.LEVEL_WARNING);
@@ -591,6 +596,22 @@ function() {
       tk_barrydegraaff_zimbra_openpgp.prototype.status("Wrong passphrase!", ZmStatusView.LEVEL_WARNING);
    }
 };
+
+/* This method select text in decrypt result
+ */
+tk_barrydegraaff_zimbra_openpgp.prototype.selectText = 
+function(containerid) {
+    if (document.selection) {
+        var range = document.body.createTextRange();
+        range.moveToElementText(document.getElementById(containerid));
+        range.select();
+    } else if (window.getSelection()) {
+        var range = document.createRange();
+        range.selectNode(document.getElementById(containerid));
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+    }
+}
 
 /* This method stores values to html localstorage
  */

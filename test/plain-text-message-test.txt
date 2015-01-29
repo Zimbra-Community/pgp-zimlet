@@ -1,0 +1,10 @@
+Dear Barry de Graaff,
+
+You will need the following username and password to log on to our services:
+
+Username: barry
+Password: EiG4yebu
+
+You will need these credentials to log on to our services.
+
+We have also changed our password and account lock-out policies. From now on you can only change your password via https://yourdomain/someurl when logged on to the Network. This change also applies to users at The White House. For more information read: https://yourdomain/someotherurl
