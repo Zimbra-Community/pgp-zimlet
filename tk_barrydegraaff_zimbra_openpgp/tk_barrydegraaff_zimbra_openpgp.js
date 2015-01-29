@@ -591,7 +591,7 @@ function() {
                   var preClose = '';
                }
                myWindow._dialog.setTitle('Decrypted message '+ sigStatus);
-               myWindow._dialog.setContent('<div style="width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll; background-color:white; padding:5px;"><div contenteditable="true" class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;">'+ preOpen + decrypted.text + preClose +'</div></div><br><small><a id="original-a" onclick="document.getElementById(\'openpgp-original\').style.display = \'inline\';document.getElementById(\'original-a\').style.display = \'none\';">original</a></small><textarea id="openpgp-original" class="barrydegraaff_zimbra_openpgp-msg" style="height:40px; display:none">'+decrypted.text+'</textarea>');               
+               myWindow._dialog.setContent('<div style="width:650px; height: 350px; overflow-x: scroll; overflow-y: scroll; background-color:white; padding:5px;"><div contenteditable="true" class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;">'+ preOpen + decrypted.text + preClose +'</div></div><br><small><a id="original-a" onclick="document.getElementById(\'openpgp-original\').style.display = \'inline\';document.getElementById(\'original-a\').style.display = \'none\';">original</a></small><textarea id="openpgp-original" class="barrydegraaff_zimbra_openpgp-msg" style="height:40px; display:none">'+decrypted.text+'</textarea>');
             },
             function(err) {
                tk_barrydegraaff_zimbra_openpgp.prototype.status("Decryption failed!", ZmStatusView.LEVEL_WARNING);
