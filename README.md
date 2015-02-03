@@ -31,7 +31,7 @@ Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues
     su zimbra
     cd /tmp
     rm tk_barrydegraaff_zimbra_openpgp*
-    wget https://github.com/barrydegraaff/pgp-zimlet-binaries/raw/master/1.4.2/tk_barrydegraaff_zimbra_openpgp.zip
+    wget https://github.com/barrydegraaff/pgp-zimlet-binaries/raw/master/1.4.3/tk_barrydegraaff_zimbra_openpgp.zip
     zmzimletctl deploy tk_barrydegraaff_zimbra_openpgp.zip
     (wait 15 minutes for the deploy to propagate; or zmprov fc all)
 
@@ -51,8 +51,8 @@ As of version 1.2.4 you can optionally store your private key in your browsers l
 
 ### DEALING WITH LARGE ENCRYPTED MESSAGES
 
-If you receive a large encrypted message and Zimbra displays "This message is too large to display properly." 
-You have to click "View entire message" and then drag/drop it onto the Zimlet again after a minute or so. 
+Problem: I am not getting an expected result in the message view.
+Solution: Please drag and drop the message onto the Zimlet.
 
 ========================================================================
 

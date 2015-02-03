@@ -184,6 +184,40 @@ function(itemId) {
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.doDrop =
 function(zmObject) {
+
+   //http://wiki.zimbra.com/wiki/Zimlet_cookbook_based_on_JavaScript_API#Download_Entire_Email
+	this.srcMsgObj = zmObject.srcObj;
+	if(this.srcMsgObj.type == "CONV"){
+		this.srcMsgObj = this.srcMsgObj.getFirstHotMsg();
+	}
+	var url = [];
+	var i = 0;
+	var proto = location.protocol;
+	var port = Number(location.port);
+	url[i++] = proto;
+	url[i++] = "//";
+	url[i++] = location.hostname;
+	if (port && ((proto == ZmSetting.PROTO_HTTP && port != ZmSetting.HTTP_DEFAULT_PORT) 
+		|| (proto == ZmSetting.PROTO_HTTPS && port != ZmSetting.HTTPS_DEFAULT_PORT))) {
+		url[i++] = ":";
+		url[i++] = port;
+	}
+	url[i++] = "/home/";
+	url[i++]= AjxStringUtil.urlComponentEncode(appCtxt.getActiveAccount().name);
+	url[i++] = "/message.txt?fmt=txt&id=";
+	url[i++] = this.srcMsgObj.id;
+
+	var getUrl = url.join(""); 
+
+   //Now make an ajax request and read the contents of this mail, including all attachments as text
+   //it should be base64 encoded
+   var xmlHttp = null;   
+   xmlHttp = new XMLHttpRequest();
+   xmlHttp.open( "GET", getUrl, false );
+   xmlHttp.send( null );
+   
+   var msg = xmlHttp.responseText;   
+
    openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
 
    if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
@@ -191,24 +225,9 @@ function(zmObject) {
       this.status("Still loading contacts, ignoring your addressbook", ZmStatusView.LEVEL_INFO);   
    }
 
-   var msgObj = zmObject.srcObj;
-
-   //if its a conversation i.e. "ZmConv" object, get the first loaded message "ZmMailMsg" object within that.
-   if (zmObject.type == "CONV") {
-      msgObj  = zmObject.getFirstHotMsg();
-   }
-
    var clearSignedRegEx = new RegExp('[\-]*BEGIN PGP SIGNATURE[\-]*');
    var pgpMessageRegEx = new RegExp('[\-]*BEGIN PGP MESSAGE[\-]*');
-   var msg = zmObject.body;
    
-   if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
-   {
-      console.log(zmObject);
-      console.log(msgObj);
-      console.log(msg);
-   }
-
     if (msg.match(clearSignedRegEx)) {
       try {
          var message = openpgp.cleartext.readArmored(msg);

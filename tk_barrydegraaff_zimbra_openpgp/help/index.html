@@ -51,6 +51,8 @@ border: 1px solid #888888;
 <li><a href="#sign">Clear signing a message</a></li>
 <li><a href="#adding">Adding Public Keys</a></li>
 <li><a href="#encrypt">Encrypting a message</a></li>
+<li><a href="#thunderbird-enigmail">Thunderbird/Enigmail compatibility</a></li>
+<li><a href="#contacts-scanning">Storing public keys to Zimbra contacts</a></li>
 <li><a href="#about">About OpenPGP Zimlet</a></li>
 <li><a href="#licenses">License and third party FOSS libraries</a></li>
 </ul>
@@ -144,6 +146,19 @@ You will now see the Zimbra compose window with your encrypted message. Enter a 
 
 Go to your Drafts folder and click the mail you just created. There should be a message saying "Got a good signature.", in case you selected yourself as one of the recipients you should now also see your message text. Click OK, then open and send your mail.<br>
 <br><img src="decrypt-verify-result.png" alt=""><br><hr><br>
+
+
+<br><br><a name="thunderbird-enigmail"></a>
+<h1>Reading messages encrypted/signed with Thunderbird/Enigmail</h1>
+OpenPGP/MIME encrypted messages using RFC 4880 and 3156 implemented in Thunderbird/Enigmail can be decrypted and verified by this Zimlet by dragging the message and drop it onto the Zimlet panel icon. This is beta functionality and only text/plain is supported.<br>
+<br><img src="thunderbird-enigmail-support.png" alt=""><br>
+<br><img src="thunderbird-enigmail-support-result.png" alt=""><br><hr><br>
+
+<br><br><a name="contacts-scanning"></a>
+<h1>Storing public keys to Zimbra contacts</h1>
+Optionally you can store public keys in Contacts, the Zimbra Addressbook. First enable the Scan Contacts option then copy/paste public keys to the notes field of your contacts.<br>
+<br><img src="scan-contacts.png" alt=""><br>
+<br><img src="scan-contacts-book.png" alt=""><br><hr><br>
 
 
 <br><br><a name="about"></a>
