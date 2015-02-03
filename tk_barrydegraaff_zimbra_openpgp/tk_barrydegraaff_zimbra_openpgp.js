@@ -209,6 +209,11 @@ function(zmObject) {
 
 	var getUrl = url.join(""); 
 
+   if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
+   {
+      console.log(getUrl);
+   }   
+
    //Now make an ajax request and read the contents of this mail, including all attachments as text
    //it should be base64 encoded
    var xmlHttp = null;   
