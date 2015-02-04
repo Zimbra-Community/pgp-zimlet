@@ -185,6 +185,45 @@ function(itemId) {
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.doDrop =
 function(zmObject) {
+
+   //http://wiki.zimbra.com/wiki/Zimlet_cookbook_based_on_JavaScript_API#Download_Entire_Email
+	this.srcMsgObj = zmObject.srcObj;
+	if(this.srcMsgObj.type == "CONV"){
+		this.srcMsgObj = this.srcMsgObj.getFirstHotMsg();
+	}
+	var url = [];
+	var i = 0;
+	var proto = location.protocol;
+	var port = Number(location.port);
+	url[i++] = proto;
+	url[i++] = "//";
+	url[i++] = location.hostname;
+	if (port && ((proto == ZmSetting.PROTO_HTTP && port != ZmSetting.HTTP_DEFAULT_PORT) 
+		|| (proto == ZmSetting.PROTO_HTTPS && port != ZmSetting.HTTPS_DEFAULT_PORT))) {
+		url[i++] = ":";
+		url[i++] = port;
+	}
+	url[i++] = "/home/";
+	url[i++]= AjxStringUtil.urlComponentEncode(appCtxt.getActiveAccount().name);
+	url[i++] = "/message.txt?fmt=txt&id=";
+	url[i++] = this.srcMsgObj.id;
+
+	var getUrl = url.join(""); 
+
+   if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
+   {
+      console.log(getUrl);
+   }   
+
+   //Now make an ajax request and read the contents of this mail, including all attachments as text
+   //it should be base64 encoded
+   var xmlHttp = null;   
+   xmlHttp = new XMLHttpRequest();
+   xmlHttp.open( "GET", getUrl, false );
+   xmlHttp.send( null );
+   
+   var msg = xmlHttp.responseText;   
+
    openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
 
    if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
@@ -192,24 +231,9 @@ function(zmObject) {
       this.status("Still loading contacts, ignoring your addressbook", ZmStatusView.LEVEL_INFO);   
    }
 
-   var msgObj = zmObject.srcObj;
-
-   //if its a conversation i.e. "ZmConv" object, get the first loaded message "ZmMailMsg" object within that.
-   if (zmObject.type == "CONV") {
-      msgObj  = zmObject.getFirstHotMsg();
-   }
-
    var clearSignedRegEx = new RegExp('[\-]*BEGIN PGP SIGNATURE[\-]*');
    var pgpMessageRegEx = new RegExp('[\-]*BEGIN PGP MESSAGE[\-]*');
-   var msg = zmObject.body;
    
-   if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
-   {
-      console.log(zmObject);
-      console.log(msgObj);
-      console.log(msg);
-   }
-
     if (msg.match(clearSignedRegEx)) {
       try {
          var message = openpgp.cleartext.readArmored(msg);
@@ -295,7 +319,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
          }
          if (message.text.indexOf('<html><body>') > -1 ) 
          {       
-            myWindow.displayDialog(2, 'Signed message ' + sigStatus, '<div style="width:650px; height: 350px; overflow-x: hidden; overflow-y: scroll; background-color:white; padding:5px;"><div contenteditable="true" class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;">'+message.text+'</div></div>');
+            myWindow.displayDialog(2, 'Signed message ' + sigStatus, '<div style="width:650px; height: 350px; overflow-x: auto; overflow-y: auto; background-color:white; padding:5px;" contenteditable="true">'+message.text+'</div>');
          }
       },
       function (err) {
@@ -593,19 +617,62 @@ function() {
                {
                   sigStatus ='was not signed.';
                }                 
-               
-               if (decrypted.text.indexOf('<html><body>') < 0 ) 
-               {
-                  var preOpen = '<pre>';
-                  var preClose = '</pre>';
+
+               var preOpen = '';
+               var preClose = '';
+               var original = decrypted.text;
+               var msgSearch = decrypted.text.substring(0,60);               
+               if (msgSearch.indexOf("Content-Type: multipart/mixed;") > -1 ) {
+                  try{
+                     var boundary = decrypted.text.match(/boundary="([^"\\]*(?:\\.[^"\\]*)*)"/i);                     
+                     var multipart = decrypted.text.split(boundary[1]);
+                     multipart.forEach(function(part) {
+                        var partArr=part.split('\n\n', 2);
+                        if (partArr[0].indexOf('Content-Disposition: attachment')> 0)
+                        {                                                   
+                           var filename = partArr[0].match(/filename="([^"\\]*(?:\\.[^"\\]*)*)"/i);
+                           partArr[1] = partArr[1].split('=\n', 1);
+                           partArr[1] = partArr[1] + '=';
+                           partArr[1] = partArr[1].replace(/(\r\n|\n|\r)/gm,"");
+                           preClose = preClose + '<br><a onclick="tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(\''+filename[1]+'\',\'octet/stream\',\''+partArr[1]+'\')">'+filename[1]+'</a>';
+                        }                     
+                        else if(partArr[0].indexOf('text/plain')> 0)
+                        {
+                           preOpen = '<pre>'+part+'</pre>';
+                        }
+                        else if(partArr[0].indexOf('text/html')> 0)
+                        {
+                           preOpen = part;
+                        }
+                     });
+                     if(preClose.length > 0)
+                     {
+                        preClose = '<br><br><hr style="border: none; height: 1px; background-color: #888888;"><b>Attachments</b>'+preClose;   
+                     }
+                     decrypted.text='';
+                  } catch (err) {
+                     console.log('multipart parser failed: ' + err);
+                     preOpen = '<pre>';
+                     preClose = '</pre>';
+                     decrypted.text=original;
+                  }
+                  
                }
                else
-               {
-                  var preOpen = '';
-                  var preClose = '';
+               {               
+                  if (decrypted.text.indexOf('<html><body>') < 0 ) 
+                  {
+                     preOpen = '<pre>';
+                     preClose = '</pre>';
+                  }
+                  else
+                  {
+                     preOpen = '';
+                     preClose = '';
+                  }
                }
                myWindow._dialog.setTitle('Decrypted message '+ sigStatus);
-               myWindow._dialog.setContent('<div style="width:650px; height: 350px; overflow-x: scroll; overflow-y: scroll; background-color:white; padding:5px;"><div contenteditable="true" class="barrydegraaff_zimbra_openpgp-msg" style="height:320px;">'+ preOpen + decrypted.text + preClose +'</div></div><br><small><a id="original-a" onclick="document.getElementById(\'openpgp-original\').style.display = \'inline\';document.getElementById(\'original-a\').style.display = \'none\';">original</a></small><textarea id="openpgp-original" class="barrydegraaff_zimbra_openpgp-msg" style="height:40px; display:none">'+decrypted.text+'</textarea>');
+               myWindow._dialog.setContent('<div style="width:650px; height: 350px; overflow-x: auto; overflow-y: auto; background-color:white; padding:5px;" contenteditable="true">'+ preOpen + decrypted.text + preClose +'</div><br><small><a id="original-a" onclick="document.getElementById(\'openpgp-original\').style.display = \'inline\';document.getElementById(\'original-a\').style.display = \'none\';">original</a></small><textarea id="openpgp-original" class="barrydegraaff_zimbra_openpgp-msg" style="height:80px; display:none">'+original+'</textarea>');
             },
             function(err) {
                tk_barrydegraaff_zimbra_openpgp.prototype.status("Decryption failed!", ZmStatusView.LEVEL_WARNING);
@@ -1210,4 +1277,65 @@ tk_barrydegraaff_zimbra_openpgp.prototype._waitForContactToLoadAndProcess = func
    } 
    catch(err) {
    }
+}
+
+/* Attachment integration
+ * Decode and download a base64 encoded attachment
+ * */
+tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob = function (filename, type, base64Data) {
+   filename = filename ? filename : 'file.bin';
+   type = type ? type : 'octet/stream';
+   var dataBin = tk_barrydegraaff_zimbra_openpgp.prototype.base64DecToArr(base64Data);
+   var blob = new Blob([dataBin], { type: type });
+   
+   if (!window.navigator.msSaveOrOpenBlob) 
+   {
+      var a = document.createElement("a");
+      document.body.appendChild(a);
+      a.style = "display: none";
+      url = window.URL.createObjectURL(blob);
+      a.href = url;
+      a.download = filename;
+      a.click();
+   }
+   else
+   {
+      window.navigator.msSaveOrOpenBlob(blob, filename);
+   }
+}
+
+/* Base64 decode binary safe
+ https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
+*/
+tk_barrydegraaff_zimbra_openpgp.prototype.b64ToUint6 = function (nChr) {
+  return nChr > 64 && nChr < 91 ?
+      nChr - 65
+    : nChr > 96 && nChr < 123 ?
+      nChr - 71
+    : nChr > 47 && nChr < 58 ?
+      nChr + 4
+    : nChr === 43 ?
+      62
+    : nChr === 47 ?
+      63
+    :
+      0;
+}
+
+tk_barrydegraaff_zimbra_openpgp.prototype.base64DecToArr = function (sBase64, nBlocksSize) {
+  var
+    sB64Enc = sBase64.replace(/[^A-Za-z0-9\+\/]/g, ""), nInLen = sB64Enc.length,
+    nOutLen = nBlocksSize ? Math.ceil((nInLen * 3 + 1 >> 2) / nBlocksSize) * nBlocksSize : nInLen * 3 + 1 >> 2, taBytes = new Uint8Array(nOutLen);
+
+  for (var nMod3, nMod4, nUint24 = 0, nOutIdx = 0, nInIdx = 0; nInIdx < nInLen; nInIdx++) {
+    nMod4 = nInIdx & 3;
+    nUint24 |= tk_barrydegraaff_zimbra_openpgp.prototype.b64ToUint6(sB64Enc.charCodeAt(nInIdx)) << 18 - 6 * nMod4;
+    if (nMod4 === 3 || nInLen - nInIdx === 1) {
+      for (nMod3 = 0; nMod3 < 3 && nOutIdx < nOutLen; nMod3++, nOutIdx++) {
+        taBytes[nOutIdx] = nUint24 >>> (16 >>> nMod3 & 24) & 255;
+      }
+      nUint24 = 0;
+    }
+  }
+  return taBytes;
 }
