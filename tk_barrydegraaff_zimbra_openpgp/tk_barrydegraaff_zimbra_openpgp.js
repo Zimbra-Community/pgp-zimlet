@@ -614,21 +614,21 @@ function() {
                      var multipart = decrypted.text.split(boundary[1]);
                      multipart.forEach(function(part) {
                         var partArr=part.split('\n\n', 2);
-                        if(partArr[0].indexOf('text/plain')> 0)
-                        {
-                           preOpen = '<pre>'+part+'</pre>';
-                        }
-                        else if(partArr[0].indexOf('text/html')> 0)
-                        {
-                           preOpen = part;
-                        }
-                        else if (partArr[0].indexOf('Content-Disposition: attachment')> 0)
+                        if (partArr[0].indexOf('Content-Disposition: attachment')> 0)
                         {                                                   
                            var filename = partArr[0].match(/filename="([^"\\]*(?:\\.[^"\\]*)*)"/i);
                            partArr[1] = partArr[1].split('=\n', 1);
                            partArr[1] = partArr[1] + '=';
                            partArr[1] = partArr[1].replace(/(\r\n|\n|\r)/gm,"");
                            preClose = preClose + '<br><a onclick="tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(\''+filename[1]+'\',\'octet/stream\',\''+partArr[1]+'\')">'+filename[1]+'</a>';
+                        }                     
+                        else if(partArr[0].indexOf('text/plain')> 0)
+                        {
+                           preOpen = '<pre>'+part+'</pre>';
+                        }
+                        else if(partArr[0].indexOf('text/html')> 0)
+                        {
+                           preOpen = part;
                         }
                      });
                      if(preClose.length > 0)
