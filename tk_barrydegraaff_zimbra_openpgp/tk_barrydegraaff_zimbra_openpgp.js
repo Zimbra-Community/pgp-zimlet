@@ -318,7 +318,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
          }
          if (message.text.indexOf('<html><body>') > -1 ) 
          {       
-            myWindow.displayDialog(2, 'Signed message ' + sigStatus, '<div style="width:650px; height: 350px; overflow-x: auto; overflow-y: auto; background-color:white; padding:5px;" contenteditable="true">'+message.text+'</div>');
+            myWindow.displayDialog(2, 'Signed message ' + sigStatus, '<div style="width:650px; height: 350px; overflow-x: auto; overflow-y: auto; background-color:white; padding:5px;" spellcheck="false" contenteditable="true">'+message.text+'</div>');
          }
       },
       function (err) {
@@ -505,7 +505,8 @@ function(id, title, message) {
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    }
-	this._dialog.popup();
+	this._dialog._setAllowSelection();
+   this._dialog.popup();
 };
 
 /* This method is called when the dialog "OK" button is clicked after private key has been entered.
@@ -658,7 +659,7 @@ function() {
                   }
                }
                myWindow._dialog.setTitle('Decrypted message '+ sigStatus);
-               myWindow._dialog.setContent('<div style="width:650px; height: 350px; overflow-x: auto; overflow-y: auto; background-color:white; padding:5px;" contenteditable="true">'+ preOpen + decrypted.text + preClose +'</div><br><small><a id="original-a" onclick="document.getElementById(\'openpgp-original\').style.display = \'inline\';document.getElementById(\'original-a\').style.display = \'none\';">original</a></small><textarea id="openpgp-original" class="barrydegraaff_zimbra_openpgp-msg" style="height:80px; display:none">'+original+'</textarea>');
+               myWindow._dialog.setContent('<div style="width:650px; height: 350px; overflow-x: auto; overflow-y: auto; background-color:white; padding:5px;" spellcheck="false" contenteditable="true">'+ preOpen + decrypted.text + preClose +'</div><br><small><a id="original-a" onclick="document.getElementById(\'openpgp-original\').style.display = \'inline\';document.getElementById(\'original-a\').style.display = \'none\';">original</a></small><textarea id="openpgp-original" class="barrydegraaff_zimbra_openpgp-msg" spellcheck="false" style="height:80px; display:none">'+original+'</textarea>');
             },
             function(err) {
                tk_barrydegraaff_zimbra_openpgp.prototype.status("Decryption failed!", ZmStatusView.LEVEL_WARNING);
