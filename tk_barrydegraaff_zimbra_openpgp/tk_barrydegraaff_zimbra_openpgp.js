@@ -742,6 +742,9 @@ function() {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnSign =
 function() {
+   this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, false);
+   this._dialog.setButtonVisible(DwtDialog.OK_BUTTON, false);
+   document.getElementById("message").style.backgroundImage = "url('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/loading.gif')";
    openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
    var privateKeyInput = document.getElementById("privateKeyInput").value;
    tk_barrydegraaff_zimbra_openpgp.privateKeyCache = privateKeyInput;
@@ -755,6 +758,9 @@ function() {
       var success = privKey.decrypt(passphrase);
    }
    catch (err) {
+      this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, true);
+      this._dialog.setButtonVisible(DwtDialog.OK_BUTTON, true);
+      document.getElementById("message").style.backgroundImage = "url('')";
       tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not parse private key!", ZmStatusView.LEVEL_WARNING);
       return;
    }
@@ -784,11 +790,17 @@ function() {
               } catch (err) { }   
            },
            function(err) {
+              myWindow._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, true);
+              myWindow._dialog.setButtonVisible(DwtDialog.OK_BUTTON, true);
+              document.getElementById("message").style.backgroundImage = "url('')";
               tk_barrydegraaff_zimbra_openpgp.prototype.status("Signing failed!", ZmStatusView.LEVEL_WARNING);
            }
         );
    }
    else {
+      this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, true);
+      this._dialog.setButtonVisible(DwtDialog.OK_BUTTON, true);
+      document.getElementById("message").style.backgroundImage = "url('')";
       tk_barrydegraaff_zimbra_openpgp.prototype.status("Wrong passphrase!", ZmStatusView.LEVEL_WARNING);
    }
 };
