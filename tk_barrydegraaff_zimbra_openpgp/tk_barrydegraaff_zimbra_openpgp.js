@@ -984,14 +984,13 @@ function() {
          function(err) {
             myWindow._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, true);
             myWindow._dialog.setButtonVisible(DwtDialog.OK_BUTTON, true);
+            document.getElementById("message").style.backgroundImage = "url('')";
             if( pubKeySelect.selectedOptions.length==0)
             {
-               document.getElementById("message").style.backgroundImage = "url('')";
                tk_barrydegraaff_zimbra_openpgp.prototype.status("Please select recipient(s).", ZmStatusView.LEVEL_WARNING);
             }
             else
             {
-               document.getElementById("message").style.backgroundImage = "url('')";
                tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not encrypt message!", ZmStatusView.LEVEL_WARNING);
             }
         });      
@@ -1023,14 +1022,13 @@ function() {
          function(err) {
             myWindow._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, true);
             myWindow._dialog.setButtonVisible(DwtDialog.OK_BUTTON, true);
+            document.getElementById("message").style.backgroundImage = "url('')";
             if( pubKeySelect.selectedOptions.length==0)
             {
-               document.getElementById("message").style.backgroundImage = "url('')";
                tk_barrydegraaff_zimbra_openpgp.prototype.status("Please select recipient(s).", ZmStatusView.LEVEL_WARNING);
             }
             else
             {
-               document.getElementById("message").style.backgroundImage = "url('')";
                tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not encrypt message!", ZmStatusView.LEVEL_WARNING);
             }
         });
