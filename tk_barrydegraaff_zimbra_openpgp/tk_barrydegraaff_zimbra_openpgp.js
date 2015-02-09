@@ -30,17 +30,7 @@ tk_barrydegraaff_zimbra_openpgp = function() {
    var oScript= document.createElement("script");
    oScript.type = "text/javascript";
    oScript.src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.js";
-   oHead.appendChild( oScript);
-
-   /* Internet Explorer detect: http://www.pinlady.net/PluginDetect/IE/
-    * Make this Zimlet know if we are running in IE
-    */
-   var tmp = document.documentMode, e, isIE;
-   try{document.documentMode = "";}
-   catch(e){ };   
-   tk_barrydegraaff_zimbra_openpgp.isIE = typeof document.documentMode == "number" || eval("/*@cc_on!@*/!1");   
-   try{document.documentMode = tmp;}
-   catch(e){ };   
+   oHead.appendChild( oScript); 
 };
 
 tk_barrydegraaff_zimbra_openpgp.prototype = new ZmZimletBase;
@@ -85,12 +75,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onShowView = function (view) {
 /*This method is called when a message is viewed in Zimbra
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, view) {
-   //Patch for Internet Explorer 10, this Zimlet will break IE if user double clicks messages 
-   if (!tk_barrydegraaff_zimbra_openpgp.isIE)
-   {
-      openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
-   }
-   
    if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
    {
       this.status("Still loading contacts, ignoring your addressbook", ZmStatusView.LEVEL_INFO);   
