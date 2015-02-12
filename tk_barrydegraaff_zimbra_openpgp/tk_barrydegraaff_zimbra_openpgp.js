@@ -934,6 +934,15 @@ function() {
          addresses=addresses + pubKeySelect.options[k].label + '; ';
       }   
    }
+
+   if (pubKeys.length < 1)
+   {
+      this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, true);
+      this._dialog.setButtonVisible(DwtDialog.OK_BUTTON, true);
+      document.getElementById("message").style.backgroundImage = "url('')";
+      tk_barrydegraaff_zimbra_openpgp.prototype.status("Please select recipient(s).", ZmStatusView.LEVEL_WARNING);
+      return;
+   }   
    
    var privateKeyInput = document.getElementById("privateKeyInput").value;
 
@@ -985,14 +994,7 @@ function() {
             myWindow._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, true);
             myWindow._dialog.setButtonVisible(DwtDialog.OK_BUTTON, true);
             document.getElementById("message").style.backgroundImage = "url('')";
-            if( pubKeySelect.selectedOptions.length==0)
-            {
-               tk_barrydegraaff_zimbra_openpgp.prototype.status("Please select recipient(s).", ZmStatusView.LEVEL_WARNING);
-            }
-            else
-            {
-               tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not encrypt message!", ZmStatusView.LEVEL_WARNING);
-            }
+            tk_barrydegraaff_zimbra_openpgp.prototype.status("Could not encrypt message!", ZmStatusView.LEVEL_WARNING);
         });      
    }
    else
