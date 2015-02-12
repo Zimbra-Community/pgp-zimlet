@@ -968,6 +968,14 @@ function() {
          return;
       }
 
+      if (!success) {
+         this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, true);
+         this._dialog.setButtonVisible(DwtDialog.OK_BUTTON, true);
+         document.getElementById("message").style.backgroundImage = "url('')";
+         tk_barrydegraaff_zimbra_openpgp.prototype.status("Wrong passphrase!", ZmStatusView.LEVEL_WARNING);
+         return;
+      }
+      
       openpgp.signAndEncryptMessage(pubKeys, privKey, msg, addresses).then(
          function(pgpMessage) {
             if (returnType == 'existing-compose-window')
