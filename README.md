@@ -33,7 +33,7 @@ Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues
     rm tk_barrydegraaff_zimbra_openpgp*
     wget https://github.com/barrydegraaff/pgp-zimlet-binaries/raw/master/1.4.8/tk_barrydegraaff_zimbra_openpgp.zip
     zmzimletctl deploy tk_barrydegraaff_zimbra_openpgp.zip
-    (wait 15 minutes for the deploy to propagate; or zmprov fc all)
+    (wait 15 minutes for the deploy to propagate; or zmprov fc all && zmmailboxdctl restart)
 
 Please be warned, if you undeploy this Zimlet after some time Zimbra will truncate your users preferences (public keys) of this Zimlet.
 
