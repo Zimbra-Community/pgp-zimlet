@@ -60,7 +60,6 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 
 .barrydegraaff_zimbra_openpgp-input textarea{
    height:50px;
-   
 }
 
 .DwtDialog textarea{
@@ -76,4 +75,5 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
    background-color: white;
    width:500px;
    height: 200px;
+   background: url("") center center no-repeat;
 }
