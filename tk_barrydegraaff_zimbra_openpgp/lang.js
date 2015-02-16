@@ -1,7 +1,13 @@
-/* When editing, please open this file in Geany http://www.geany.org/ or use and UTF-8 aware editor
+/* When adding a language for translation, you may git clone this file and send a pull request OR
+ * just download it using https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/tk_barrydegraaff_zimbra_openpgp/lang.js
+ * do your translations and send your compy to info@barrydegraaff.tk 
+ * 
+ * When editing, please open this file in Geany http://www.geany.org/ or use and UTF-8 aware editor
  * mode = Unix LF
  * encoding = UTF-8
  * Additionally you may wish to translate /help/index.html
+ * 
+ * New languages will be added to the Zimlet after review.
  */
 
 
@@ -60,6 +66,14 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['english'][48] = 'Please be patient generating can take some time.<br><br>If you have trouble generating a key pair choose a lower key length or use an external program.';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][49] = 'Please make sure to store this information in a safe place';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][50] = 'Your new key pair';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][51] = 'Please select recipient(s).';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][52] = 'Could not encrypt message!';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][53] = 'with OpenPGP';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][54] = 'Please disable your email signature';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][55] = 'Sorry, Zimbra OpenPGP Zimlet does not work well with HTML email signatures. Please disable them for this message like this';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][56] = 'Please compose message first';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][57] = 'OpenPGP scanning contacts completed';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][58] = 'OpenPGP scanning contacts in progress';
 
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][0] = 'OpenPGP berichten uitbreiding voor Zimbra Collaboration Suite.';
@@ -84,7 +98,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][19] = 'Privé sleutel';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][20] = 'Wachtwoordzin';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][21] = 'Bericht';
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][22] = '<li>Hieronder kunt u ASCII gecodeerde sleutels kopiëren en plakken.</li><li>U kunt ook het notities veld gebruiken in het Zimbra addresboek.</li><li>U kunt ook commentaar bij elke sleutel plaatsen, zolang de sleutel maar begint op een nieuwe regel.</li>';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][22] = '<li>Hieronder kunt u ASCII gecodeerde sleutels kopiëren en plakken.</li><li>U kunt ook het notities veld gebruiken in het Zimbra adresboek.</li><li>U kunt ook commentaar bij elke sleutel plaatsen, zolang de sleutel maar begint op een nieuwe regel.</li>';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][23] = 'Taal';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][24] = 'Indien u uw wachtwoordzin hieronder opslaat, wordt deze in platte tekst opgeslagen in de Zimbra LDAP. Indien u uw wachtwoordzin niet opslaat, zal de server hier telkens naar vragen indien nodig.';   
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][25] = 'Indien u hieronder uw privé sleutel opslaat, wordt deze bewaard in uw browser  <a href=\"http://diveintohtml5.info/storage.html\" target=\"_blank\" >lokale opslag</a>. Indien u uw privé sleutel niet opslaat, zal der server hiernaar vragen voor iedere sessie.';
@@ -112,6 +126,14 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][47] = 'Bezig met genereren van sleutels';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][48] = 'Even geduld a.u.b. genereren kost wat tijd.<br><br>Indien u problemen ondervind met genereren, kunt u een lagere sleutellengte kiezen of een extern programma gebruiken.';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][49] = 'Bewaar deze gegevens op een veilige plek';
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][50] = 'Uw nieuwe sleutelpaar';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][50] = 'Uw nieuwe sleutelpaar'
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][51] = 'Selecteer geadresseerde(n).';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][52] = 'Versleuteling van bericht mislukt!';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][53] = 'met OpenPGP';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][54] = 'Zet uw email handtekening uit a.u.b.';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][55] = 'Sorry, Zimbra OpenPGP Zimlet werkt niet goed met HTML email handtekeningen. Zet deze uit voor dit bericht zoals in dit voorbeeld';   
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][56] = 'Stel a.u.b. eerst uw bericht op';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][57] = 'OpenPGP scannen van contactpersonen gereed';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][58] = 'OpenPGP bezig met scannen van contactpersonen';
 }
 
