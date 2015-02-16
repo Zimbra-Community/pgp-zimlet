@@ -1,6 +1,7 @@
 /* When editing, please open this file in Geany http://www.geany.org/ or use and UTF-8 aware editor
  * mode = Unix LF
  * encoding = UTF-8
+ * Additionally you may wish to translate /help/index.html
  */
 
 
@@ -37,7 +38,28 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['english'][26] = 'Public Key';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][27] = 'Scan contacts';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][28] = 'Please compose a message below to be signed with your private key.';
-   
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][29] = 'Please enter User ID (example: Firstname Lastname &lt;your@email.com&gt;) and passphrase for new key pair.';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][30] = 'User ID';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][31] = 'Key length';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][32] = 'Higher key length is better security, but slower.';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][33] = 'Store and overwrite current Private Key, Passphrase and Public Key 1.';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][34] = 'Generate passphrase';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][35] = 'Recipients';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][36] = 'Please compose a message below to be encrypted. First time users may want to read the';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][37] = 'Optional: Sign your encrypted message by entering private key and passphrase.';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][38] = 'Could not parse private key!';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][39] = 'was not signed';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][40] = 'Attachments';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][41] = 'Decrypted message';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][42] = 'original message';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][43] = 'Decryption failed!';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][44] = 'Wrong passphrase!';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][45] = 'Signing failed!';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][46] = 'You must provide a user ID and passphrase';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][47] = 'Now generating your key pair';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][48] = 'Please be patient generating can take some time.<br><br>If you have trouble generating a key pair choose a lower key length or use an external program.';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][49] = 'Please make sure to store this information in a safe place';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][50] = 'Your new key pair';
 
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][0] = 'OpenPGP berichten uitbreiding voor Zimbra Collaboration Suite.';
@@ -69,7 +91,27 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][26] = 'Publieke sleutel';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][27] = 'Scan contactpersonen';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][28] = 'Stel uw bericht op om te ondertekenen met uw privé sleutel.';
-   
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][29] = 'Graag de gebruikers ID invoeren (bijvoorbeeld: Voornaam Achternaam &lt;mijn@email.nl&gt;) en de wachtwoordzin voor nieuw sleutelpaar.';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][30] = 'Gebruikers ID';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][31] = 'Sleutel lengte';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][32] = 'Hogere sleutel lengte is veiliger, maar ook langzamer.';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][33] = 'Opslaan en overschrijf huidige Privé sleutel, Wachtwoordzin en Publieke sleutel 1.';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][34] = 'Genereer wachtwoordzin';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][35] = 'Geadresseerden';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][36] = 'Stel uw bericht op om te versleutelen. Voor nieuwe gebruikers is er de';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][37] = 'Optioneel: Onderteken uw versleuteld bericht door uw privé sleutel en wachtwoordzin in te voeren.';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][38] = 'Kan de privé sleutel niet verwerken!';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][39] = 'is niet ondertekend';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][40] = 'Bijlagen';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][41] = 'Ontsleuteld bericht';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][42] = 'origineel bericht';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][43] = 'Ontsleutelen mislukt!';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][44] = 'Wachtwoordzin onjuist!';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][45] = 'Ondertekenen mislukt!';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][46] = 'Gebruikers ID en wachtwoordzin zijn verplicht';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][47] = 'Bezig met genereren van sleutels';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][48] = 'Even geduld a.u.b. genereren kost wat tijd.<br><br>Indien u problemen ondervind met genereren, kunt u een lagere sleutellengte kiezen of een extern programma gebruiken.';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][49] = 'Bewaar deze gegevens op een veilige plek';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][50] = 'Uw nieuwe sleutelpaar';
 }
-
 
