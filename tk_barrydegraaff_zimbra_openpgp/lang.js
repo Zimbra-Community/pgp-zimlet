@@ -74,6 +74,12 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['english'][56] = 'Please compose message first';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][57] = 'OpenPGP scanning contacts completed';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][58] = 'OpenPGP scanning contacts in progress';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][59] = 'Encrypt file';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][60] = 'Decrypt file';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][61] = 'Please select a file to be encrypted.';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][62] = 'Optional: Sign your encrypted file by entering private key and passphrase.';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][63] = 'Please select a file to be decrypted.';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][64] = 'Decrypt using';
 
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][0] = 'OpenPGP berichten uitbreiding voor Zimbra Collaboration Suite.';
@@ -135,5 +141,11 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][56] = 'Stel a.u.b. eerst uw bericht op';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][57] = 'OpenPGP scannen van contactpersonen gereed';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][58] = 'OpenPGP bezig met scannen van contactpersonen';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][59] = 'Encrypt file';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][60] = 'Decrypt file';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][61] = 'Please select a file to be encrypted.';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][62] = 'Optional: Sign your encrypted file by entering private key and passphrase.';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][63] = 'Please select a file to be decrypted.';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][64] = 'Decrypt using';   
 }
 
