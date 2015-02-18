@@ -1,6 +1,6 @@
 /* When adding a language for translation, you may git clone this file and send a pull request OR
  * just download it using https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/tk_barrydegraaff_zimbra_openpgp/lang.js
- * do your translations and send your compy to info@barrydegraaff.tk 
+ * do your translations and send your copy to info@barrydegraaff.tk 
  * 
  * When editing, please open this file in Geany http://www.geany.org/ or use and UTF-8 aware editor
  * mode = Unix LF
@@ -9,7 +9,26 @@
  * 
  * New languages will be added to the Zimlet after review.
  */
+ 
+/*
+This file is part of the Zimbra OpenPGP Zimlet project.
+Copyright (C) 2014-2015  Barry de Graaff
 
+Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see http://www.gnu.org/licenses/.
+*/
 
 tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang = [];
