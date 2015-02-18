@@ -75,5 +75,6 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
    background-color: white;
    width:500px;
    height: 200px;
-   background: url("") center center no-repeat;
+   background-size: 48px 48px;
+   background: url("") center top no-repeat;
 }
