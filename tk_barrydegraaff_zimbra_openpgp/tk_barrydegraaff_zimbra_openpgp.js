@@ -623,7 +623,7 @@ function(id, title, message) {
             tk_barrydegraaff_zimbra_openpgp.file = reader.result;
             tk_barrydegraaff_zimbra_openpgp.filename = file.name;
          }
-         reader.readAsBinaryString(file);			
+         reader.readAsText(file);			
       });
       
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecryptFile));
