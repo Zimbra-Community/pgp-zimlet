@@ -99,6 +99,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['english'][62] = 'Optional: Sign your encrypted file by entering private key and passphrase.';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][63] = 'Please select a file to be decrypted.';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][64] = 'Decrypt using';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][65] = 'File';
 
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][0] = 'OpenPGP berichten uitbreiding voor Zimbra Collaboration Suite.';
@@ -160,12 +161,13 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][56] = 'Stel a.u.b. eerst uw bericht op';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][57] = 'OpenPGP scannen van contactpersonen gereed';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][58] = 'OpenPGP bezig met scannen van contactpersonen';
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][59] = 'Encrypt file';
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][60] = 'Decrypt file';
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][61] = 'Please select a file to be encrypted.';
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][62] = 'Optional: Sign your encrypted file by entering private key and passphrase.';
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][63] = 'Please select a file to be decrypted.';
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][64] = 'Decrypt using';   
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][59] = 'Versleutel bestand';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][60] = 'Ontsleutel bestand';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][61] = 'Selecteer een bestand voor versleutelen.';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][62] = 'Optioneel: Onderteken uw versleutelde bestand door uw privé sleutel en wachtwoordzin in te voeren.';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][63] = 'Selecteer een bestand voor ontsleutelen.';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][64] = 'Ontsleutel met';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][65] = 'Bestand';
 
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][0] = 'Extensión de mensajes OpenPGP para Zimbra Collaboration Suite.';
@@ -233,6 +235,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][62] = 'Opcional: Firme su fichero encriptado introduciendo su llave Privada y su clave.';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][63] = 'Por favor, seleccione el fichero que ser´desencriptado.';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][64] = 'Desencriptar usando';
+   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][65] = 'Fichero';
    
    tk_barrydegraaff_zimbra_openpgp.lang['italian'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][0] = 'Estensione per messaggi OpenPGP per Zimbra Collaboration Suite.';
@@ -300,6 +303,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][62] = 'Opzionale: firma il file criptato inserendo chiave privata e passphrase.';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][63] = 'Per favore seleziona un file da decriptare.';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][64] = 'Decripta usando';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][65] = 'File';
 
 }
-
