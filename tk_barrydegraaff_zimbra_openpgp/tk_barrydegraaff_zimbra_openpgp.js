@@ -927,7 +927,7 @@ function() {
                {
                }                 
                decrypted.text = tk_barrydegraaff_zimbra_openpgp.prototype.base64DecToArr(decrypted.text);
-               tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(tk_barrydegraaff_zimbra_openpgp.filename,'',decrypted.text);
+               tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(tk_barrydegraaff_zimbra_openpgp.filename,'zimbra/pgp',decrypted.text);
                //Free memory
                tk_barrydegraaff_zimbra_openpgp.file = '';
                try {
@@ -1716,7 +1716,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob = function (filename, typ
    filename = filename ? filename : 'file.bin';
    type = type ? type : 'octet/stream';
    
-   if (type='zimbra/pgp')
+   if (type=='zimbra/pgp')
    {
       //is already a pgp armored
       var blob = new Blob([base64Data], { type: type });
