@@ -89,13 +89,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onShowView = function (view) {
 
 /*This method is called when a message is viewed in Zimbra
  * */
-tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, view) {
-   if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
-   {
-      //Still loading contacts, ignoring your addressbook
-      this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][6], ZmStatusView.LEVEL_INFO);   
-   }
-   
+tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, view) {  
    var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
    if (!bp)
    {
@@ -110,7 +104,13 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
       console.log(msg);
    }
 
-    if (msgSearch.indexOf("BEGIN PGP SIGNED MESSAGE") > 0 ) {          
+   if (msgSearch.indexOf("BEGIN PGP SIGNED MESSAGE") > 0 ) {          
+      if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
+      {
+         //Still loading contacts, ignoring your addressbook
+         this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][6], ZmStatusView.LEVEL_INFO);   
+      }
+
       try {
          var message = openpgp.cleartext.readArmored(msg);
       }
@@ -122,6 +122,12 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
       this.verify(message);
    }
    else if (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ) {
+      if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
+      {
+         //Still loading contacts, ignoring your addressbook
+         this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][6], ZmStatusView.LEVEL_INFO);   
+      }
+
       //Please provide private key and passphrase for decryption
       this.displayDialog(1, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][8], msg);
    }
@@ -1303,7 +1309,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.parseContacts = function() {
    });
    tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress = false;
    //OpenPGP scanning contacts completed
-   tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][57], ZmStatusView.LEVEL_INFO);
+   console.log('------------------------------------- '+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][57]);
 }
 
 /* AddressBook integration
@@ -1325,7 +1331,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.readAddressBook = function() {
    
    tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress = true;
    //OpenPGP scanning contacts in progress
-   tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][58], ZmStatusView.LEVEL_INFO);
+   console.log('------------------------------------- '+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][58]);
    var  postCallback = new AjxCallback(this, tk_barrydegraaff_zimbra_openpgp.prototype.parseContacts);
    this.loadAllContacts(postCallback);
 };
