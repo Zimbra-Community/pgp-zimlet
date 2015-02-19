@@ -1,6 +1,6 @@
 /* When adding a language for translation, you may git clone this file and send a pull request OR
  * just download it using https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/tk_barrydegraaff_zimbra_openpgp/lang.js
- * do your translations and send your compy to info@barrydegraaff.tk 
+ * do your translations and send your copy to info@barrydegraaff.tk 
  * 
  * When editing, please open this file in Geany http://www.geany.org/ or use and UTF-8 aware editor
  * mode = Unix LF
@@ -9,7 +9,26 @@
  * 
  * New languages will be added to the Zimlet after review.
  */
+ 
+/*
+This file is part of the Zimbra OpenPGP Zimlet project.
+Copyright (C) 2014-2015  Barry de Graaff
 
+Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see http://www.gnu.org/licenses/.
+*/
 
 tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang = [];
@@ -80,6 +99,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['english'][62] = 'Optional: Sign your encrypted file by entering private key and passphrase.';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][63] = 'Please select a file to be decrypted.';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][64] = 'Decrypt using';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][65] = 'File';
 
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][0] = 'OpenPGP berichten uitbreiding voor Zimbra Collaboration Suite.';
@@ -141,12 +161,13 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][56] = 'Stel a.u.b. eerst uw bericht op';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][57] = 'OpenPGP scannen van contactpersonen gereed';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][58] = 'OpenPGP bezig met scannen van contactpersonen';
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][59] = 'Encrypt file';
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][60] = 'Decrypt file';
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][61] = 'Please select a file to be encrypted.';
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][62] = 'Optional: Sign your encrypted file by entering private key and passphrase.';
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][63] = 'Please select a file to be decrypted.';
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][64] = 'Decrypt using';   
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][59] = 'Versleutel bestand';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][60] = 'Ontsleutel bestand';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][61] = 'Selecteer een bestand voor versleutelen.';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][62] = 'Optioneel: Onderteken uw versleutelde bestand door uw privé sleutel en wachtwoordzin in te voeren.';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][63] = 'Selecteer een bestand voor ontsleutelen.';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][64] = 'Ontsleutel met';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][65] = 'Bestand';
 
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][0] = 'Extensión de mensajes OpenPGP para Zimbra Collaboration Suite.';
@@ -214,6 +235,74 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][62] = 'Opcional: Firme su fichero encriptado introduciendo su llave Privada y su clave.';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][63] = 'Por favor, seleccione el fichero que ser´desencriptado.';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][64] = 'Desencriptar usando';
+   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][65] = 'Fichero';
    
-}
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'] = [];
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][0] = 'Estensione per messaggi OpenPGP per Zimbra Collaboration Suite.';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][1] = 'Firma messaggio';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][2] = 'Cripta messaggio';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][3] = 'Gestisci chiavi';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][4] = 'Genera coppia di chiavi';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][5] = 'Aiuto / Info su';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][6] = 'Contatti ancora in caricamento, rubrica ignorata';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][7] = 'Impossibile leggere messaggio con armatura!';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][8] = 'Per favore fornisci una chiave privata e una passphrase per decriptare';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][9] = 'Chiudi';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][10] = 'Versione';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][11] = 'Aiuto';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][12] = 'Nessun messaggio PGP rilevato';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][13] = 'Impossibile fare il parsing delle tue chiavi pubbliche fidate!';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][14] = 'Trovata una firma valida';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][15] = 'Trovata una firma NON valida';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][16] = 'Messaggio firmato';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][17] = 'Errore nella verifica della firma';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][18] = 'La tua chiave privata rimarr&agrave; in memoria fino al prossimo caricamento della pagina.';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][19] = 'Chiave privata';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][20] = 'Passphrase';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][21] = 'Messaggio';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][22] = '<li>Copia ed incolla le chiavi ASCII con armatura qui sotto. </li><li>Puoi anche usare il campo Note del contatto nella tua rubrica.</li><li>Puoi mettere comunque dei commenti prima di ogni chiave, purch&eacute; la chiave pubblica inizi su una nuova linea.</li>';   
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][23] = 'Lingua';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][24] = 'Se salvi la tua passphrase qui sotto verr&agrave; memorizzata in chiaro nell\'LDAP di Zimbra. Se non memorizzi la passphrase ti verr&agrave; richiesta ogni volta.';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][25] = 'Se salvi la tua chiave privata qui sotto verr&agrave; memorizzata nel <a href=\"http://diveintohtml5.info/storage.html\" target=\"_blank\" >local storage</a> del tuo browser. Se non memorizzi la chiave privata ti verr&agrave; richiesta ad ogni sessione.';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][26] = 'Chiave pubblica';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][27] = 'Scansiona contatti';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][28] = 'Per favore componi il messaggio da firmare con la tua chiave privata qui sotto.';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][29] = 'Per favore inserisci l\'ID utente (ad esempio: Nome Cognome &lt;tuo@email.it&gt;) e la passphrase per una nuova coppia di chiavi.';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][30] = 'ID utente';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][31] = 'Lunghezza chiave';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][32] = 'Una lunghezza di chiave maggiore corrisponde a maggiore sicurezza, ma minor velocit&agrave;.';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][33] = 'Memorizza e sovrascrivi la chiave privata corrente, passphrase e chiave pubblica 1.';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][34] = 'Genera passphrase';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][35] = 'Destinatari';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][36] = 'Per favore componi qui sotti il messaggio da criptare. Se &egrave; la prima volta potresti voler leggere il';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][37] = 'Opzionale: firma il tuo messaggio criptato inserendo una chiave privata e la passphrase.';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][38] = 'Impossibile effettuare il parsing della chiave privata!';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][39] = 'non &egrave; stato firmato';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][40] = 'Allegati';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][41] = 'Messaggio decriptato';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][42] = 'messaggio originale';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][43] = 'Impossibile decriptare!';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][44] = 'Passphrase sbagliata!';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][45] = 'Impossibile firmare!';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][46] = 'Devi fornire un ID utente e una passphrase';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][47] = 'Coppia di chiavi in generazione';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][48] = 'Per favore attendi, la generazione pu&ograve; richiedere molto tempo.<br><br>Se hai problemi nella generazione delle chiavi prova a rifare l\'operazione scegliendo una lunghezza minore per la chiave o ad usare un programma esterno.';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][49] = 'Assicurati di memorizzare queste informazioni in una posizione sicura';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][50] = 'La tua nuova coppia di chiavi';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][51] = 'Per favore seleziona il/i destinatario/i.';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][52] = 'Impossibile criptare il messaggio!';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][53] = 'con OpenPGP';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][54] = 'Per favore disabilita la firma';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][55] = 'Spiacente ma la zimlet OpenPGP non funziona correttamente con le firme HTML. Per favore disabilita la firma per questo messaggio in questo modo';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][56] = 'Per favore prima componi il messaggio';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][57] = 'Scansione contatti per firme OpenPGP completata';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][58] = 'Scansione contatti per firme OpenPGP in corso';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][59] = 'Cripta file';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][60] = 'Decripta file';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][61] = 'Per favore seleziona un file da criptare.';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][62] = 'Opzionale: firma il file criptato inserendo chiave privata e passphrase.';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][63] = 'Per favore seleziona un file da decriptare.';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][64] = 'Decripta usando';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][65] = 'File';
 
+}

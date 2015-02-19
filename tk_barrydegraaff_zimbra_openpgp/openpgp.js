@@ -988,10 +988,11 @@ module.exports = {
   compression: enums.compression.zip,
   integrity_protect: true,
   rsa_blinding: true,
+  useWebCrypto: true,
 
   show_version: true,
   show_comment: true,
-  versionstring: "OpenPGP.js v0.9.0",
+  versionstring: "OpenPGP.js v0.10.1",
   commentstring: "http://openpgpjs.org",
 
   keyserver: "keyserver.linux.it", // "pgp.mit.edu:11371"
@@ -7067,14 +7068,18 @@ function DSA() {
   function verify(hashalgo, s1, s2, m, p, q, g, y) {
     var hashed_data = util.getLeftNBits(hashModule.digest(hashalgo, m), q.bitLength());
     var hash = new BigInteger(util.hexstrdump(hashed_data), 16);
-    if (BigInteger.ZERO.compareTo(s1) > 0 ||
-      s1.compareTo(q) > 0 ||
-      BigInteger.ZERO.compareTo(s2) > 0 ||
-      s2.compareTo(q) > 0) {
+    if (BigInteger.ZERO.compareTo(s1) >= 0 ||
+      s1.compareTo(q) >= 0 ||
+      BigInteger.ZERO.compareTo(s2) >= 0 ||
+      s2.compareTo(q) >= 0) {
       util.print_debug("invalid DSA Signature");
       return null;
     }
     var w = s2.modInverse(q);
+    if (BigInteger.ZERO.compareTo(w) == 0) {
+      util.print_debug("invalid DSA Signature");
+      return null;
+    }
     var u1 = hash.multiply(w).mod(q);
     var u2 = s1.multiply(w).mod(q);
     return g.modPow(u1, p).multiply(y.modPow(u2, p)).mod(p).mod(q);
@@ -9303,7 +9308,7 @@ module.exports = {
 
     var range = max.subtract(min);
     var r = this.getRandomBigInteger(range.bitLength());
-    while (r > range) {
+    while (r.compareTo(range) > 0) {
       r = this.getRandomBigInteger(range.bitLength());
     }
     return min.add(r);
@@ -11571,12 +11576,10 @@ KeyArray.prototype.getForAddress = function(email) {
  * @return {Boolean} True if the email address is defined in the specified key
  */
 function emailCheck(email, key) {
-  email = email.toLowerCase();
+  var emailRegex = new RegExp('<' + email.toLowerCase() + '>');
   var keyEmails = key.getUserIds();
   for (var i = 0; i < keyEmails.length; i++) {
-    //we need to get just the email from the userid key
-    keyEmail = keyEmails[i].split('<')[1].split('>')[0].trim().toLowerCase();
-    if (keyEmail == email) {
+    if (emailRegex.test(keyEmails[i].toLowerCase())) {
       return true;
     }
   }
@@ -12170,14 +12173,32 @@ if (typeof Promise === 'undefined') {
   require('es6-promise').polyfill();
 }
 
-var asyncProxy; // instance of the asyncproxy
+var asyncProxy = null; // instance of the asyncproxy
 
 /**
  * Set the path for the web worker script and create an instance of the async proxy
- * @param {String} path relative path to the worker scripts
+ * @param {String} path relative path to the worker scripts, default: 'openpgp.worker.js'
+ * @param {Object} [options.worker=Object] alternative to path parameter:
+ *                                         web worker initialized with 'openpgp.worker.js'
+ * @return {Boolean} true if worker created successfully
  */
-function initWorker(path) {
-  asyncProxy = new AsyncProxy(path);
+function initWorker(path, options) {
+  if (options && options.worker || typeof window !== 'undefined' && window.Worker) {
+    options = options || {};
+    options.config = this.config;
+    asyncProxy = new AsyncProxy(path, options);
+    return true;
+  } else {
+    return false;
+  }
+}
+
+/**
+ * Returns a reference to the async proxy if the worker was initialized with openpgp.initWorker()
+ * @return {module:worker/async_proxy~AsyncProxy|null} the async proxy or null if not initialized
+ */
+function getWorker() {
+  return asyncProxy;
 }
 
 /**
@@ -12192,7 +12213,7 @@ function encryptMessage(keys, text) {
     keys = [keys];
   }
 
-  if (useWorker()) {
+  if (asyncProxy) {
     return asyncProxy.encryptMessage(keys, text);
   }
 
@@ -12219,7 +12240,7 @@ function signAndEncryptMessage(publicKeys, privateKey, text) {
     publicKeys = [publicKeys];
   }
 
-  if (useWorker()) {
+  if (asyncProxy) {
     return asyncProxy.signAndEncryptMessage(publicKeys, privateKey, text);
   }
 
@@ -12243,7 +12264,7 @@ function signAndEncryptMessage(publicKeys, privateKey, text) {
  * @static
  */
 function decryptMessage(privateKey, msg) {
-  if (useWorker()) {
+  if (asyncProxy) {
     return asyncProxy.decryptMessage(privateKey, msg);
   }
 
@@ -12269,7 +12290,7 @@ function decryptAndVerifyMessage(privateKey, publicKeys, msg) {
     publicKeys = [publicKeys];
   }
 
-  if (useWorker()) {
+  if (asyncProxy) {
     return asyncProxy.decryptAndVerifyMessage(privateKey, publicKeys, msg);
   }
 
@@ -12298,7 +12319,7 @@ function signClearMessage(privateKeys, text) {
     privateKeys = [privateKeys];
   }
 
-  if (useWorker()) {
+  if (asyncProxy) {
     return asyncProxy.signClearMessage(privateKeys, text);
   }
 
@@ -12323,7 +12344,7 @@ function verifyClearSignedMessage(publicKeys, msg) {
     publicKeys = [publicKeys];
   }
 
-  if (useWorker()) {
+  if (asyncProxy) {
     return asyncProxy.verifyClearSignedMessage(publicKeys, msg);
   }
 
@@ -12353,7 +12374,7 @@ function verifyClearSignedMessage(publicKeys, msg) {
  */
 function generateKeyPair(options) {
   // use web worker if web crypto apis are not supported
-  if (!util.getWebCrypto() && useWorker()) {
+  if (!util.getWebCrypto() && asyncProxy) {
     return asyncProxy.generateKeyPair(options);
   }
 
@@ -12382,22 +12403,6 @@ function generateKeyPair(options) {
 //
 // helper functions
 //
-
-/**
- * Are we in a browser and do we support worker?
- */
-function useWorker() {
-  if (typeof window === 'undefined' || !window.Worker) {
-    return false;
-  }
-
-  if (!asyncProxy) {
-    console.log('You need to set the worker path!');
-    return false;
-  }
-
-  return true;
-}
 
 /**
  * Command pattern that wraps synchronous code into a promise
@@ -12431,6 +12436,7 @@ function onError(message, error) {
 }
 
 exports.initWorker = initWorker;
+exports.getWorker = getWorker;
 exports.encryptMessage = encryptMessage;
 exports.signAndEncryptMessage = signAndEncryptMessage;
 exports.decryptMessage = decryptMessage;
@@ -15557,6 +15563,12 @@ module.exports.fromClone = function (clone) {
   return keyid;
 };
 
+module.exports.fromId = function (hex) {
+  var keyid = new Keyid();
+  keyid.read(util.hex2bin(hex));
+  return keyid;
+};
+
 },{"../util.js":74}],72:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
@@ -16231,9 +16243,16 @@ var INITIAL_RANDOM_SEED = 50000, // random bytes seeded to worker
  * Initializes a new proxy and loads the web worker
  * @constructor
  * @param {String} path The path to the worker or 'openpgp.worker.js' by default
+ * @param {Object} [options.config=Object] config The worker configuration
+ * @param {Object} [options.worker=Object] alternative to path parameter:
+ *                                         web worker initialized with 'openpgp.worker.js'
  */
-function AsyncProxy(path) {
-  this.worker = new Worker(path || 'openpgp.worker.js');
+function AsyncProxy(path, options) {
+  if (options && options.worker) {
+    this.worker = options.worker;
+  } else {
+    this.worker = new Worker(path || 'openpgp.worker.js');
+  }
   this.worker.onmessage = this.onMessage.bind(this);
   this.worker.onerror = function(e) {
     throw new Error('Unhandled error in openpgp worker: ' + e.message + ' (' + e.filename + ':' + e.lineno + ')');
@@ -16241,6 +16260,9 @@ function AsyncProxy(path) {
   this.seedRandom(INITIAL_RANDOM_SEED);
   // FIFO
   this.tasks = [];
+  if (options && options.config) {
+    this.worker.postMessage({event: 'configure', config: options.config});
+  }
 }
 
 /**
