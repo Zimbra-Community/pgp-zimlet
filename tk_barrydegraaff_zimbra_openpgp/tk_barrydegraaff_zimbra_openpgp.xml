@@ -1,4 +1,4 @@
-<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="1.4.8" label="OpenPGP" description="Encrypt/Decrypt messages with OpenPGP">
+<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="1.4.9" label="OpenPGP" description="Encrypt/Decrypt messages with OpenPGP">
    <summary>
 Zimbra OpenPGP Zimlet
 
@@ -21,13 +21,17 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses/.
+
+Remark for developers:
+Property labels and menuItem labels are set in tk_barrydegraaff_zimbra_openpgp.js, changing
+them here has no effect.
    </summary>
    <resource>icon.png</resource>
    <include>tk_barrydegraaff_zimbra_openpgp.js</include>
+   <include>lang.js</include>
    <handlerObject>tk_barrydegraaff_zimbra_openpgp</handlerObject>
    <includeCSS>tk_barrydegraaff_zimbra_openpgp.css</includeCSS>
    <zimletPanelItem label="OpenPGP" icon="tk_barrydegraaff_zimbra_openpgp-panelIcon">
-      <toolTipText>Drag-drop a message to verify/decrypt or right click for menu.</toolTipText>
       <dragSource type="ZmConv" />
 		<dragSource type="ZmMailMsg" />
       <contextMenu>
