@@ -926,8 +926,8 @@ function() {
                catch (err) 
                {
                }                 
-               decrypted.text = tk_barrydegraaff_zimbra_openpgp.prototype.base64DecToArr(decrypted.text);
-               tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(tk_barrydegraaff_zimbra_openpgp.filename,'zimbra/pgp',decrypted.text);
+               
+               tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(tk_barrydegraaff_zimbra_openpgp.filename,'',decrypted.text);
                //Free memory
                tk_barrydegraaff_zimbra_openpgp.file = '';
                try {
