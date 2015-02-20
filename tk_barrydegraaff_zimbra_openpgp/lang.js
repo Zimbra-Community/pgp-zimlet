@@ -307,7 +307,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
 
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][0] = 'Phần mở rộng thư OpenPGP cho Zimbra Collaboration Suite.';
-   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][1] = 'Ký thư';
+   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][1] = 'Ký điện tử thư';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][2] = 'Mã hóa thư';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][3] = 'Quản lý khóa';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][4] = 'Sinh cặp khóa';
