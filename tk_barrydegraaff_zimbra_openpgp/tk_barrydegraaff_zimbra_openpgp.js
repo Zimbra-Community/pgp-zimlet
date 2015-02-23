@@ -419,8 +419,8 @@ function(id, title, message) {
       break;
    case 3:
       //Manage keys
-      langListName = ['Nederlands','English','Italiano','Español','Tiếng Việt'];
-      langListValue = ['dutch','english','italian','spanish','vietnamese'];
+      langListName = ['English','Español','Italiano','Nederlands','Tiếng Việt'];
+      langListValue = ['english','spanish','italian','dutch','vietnamese'];
       
       langListHtml = "<select id='zimbra_openpgp_language' name='zimbra_openpgp_language'>";
       for (i = 0; i < langListValue.length; i++) {
