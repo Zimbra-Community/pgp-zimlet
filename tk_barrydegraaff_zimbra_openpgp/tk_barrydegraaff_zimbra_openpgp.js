@@ -426,7 +426,7 @@ function(id, title, message) {
       for (i = 0; i < langListValue.length; i++) {
       	if (langListValue[i] == tk_barrydegraaff_zimbra_openpgp.settings['language']) {
 	      	langListHtml += "<option value=\"" + langListValue[i] + "\" selected=\"selected\">" + langListName[i] + "</option>";
-	      else
+	      } else {
 	      	langListHtml += "<option value=\"" + langListValue[i] + "\">" + langListName[i] + "</option>";
 	      }
       }
