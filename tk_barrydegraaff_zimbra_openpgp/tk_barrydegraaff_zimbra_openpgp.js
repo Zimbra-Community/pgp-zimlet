@@ -423,6 +423,8 @@ function(id, title, message) {
       break;
    case 3:
       //Manage keys
+
+		// make supported languages list in HTML
       langListName = ['English','Español','Italiano','Nederlands','Tiếng Việt'];
       langListValue = ['english','spanish','italian','dutch','vietnamese'];
       
@@ -435,6 +437,14 @@ function(id, title, message) {
 	      }
       }
       langListHtml += "</selected>";
+      
+      // make list of public keys in HTML
+      pubkeyListHtml = "";
+      for (i = 1; i < 31; i++) {
+      	numStr = i.toString();
+      	pubkeyNumStr = "zimbra_openpgp_pubkeys" + numStr;
+			pubkeyListHtml += "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" "+numStr+":</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput"+numStr+"'/>" + (this.getUserPropertyInfo(pubkeyNumStr).value ? this.getUserPropertyInfo(pubkeyNumStr).value : '') + "</textarea><br>" + "<label for='publicKeyInfo"+numStr+"'>"+(this.getUserPropertyInfo(pubkeyNumStr).value ? this.pubkeyInfo(this.getUserPropertyInfo(pubkeyNumStr).value) : '')+"</label>" + "</td></tr>";
+		}
       	 
       html = "<div style='width:650px; height: 500px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
       "<ul>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][22]+"</ul><br>" +
@@ -443,37 +453,7 @@ function(id, title, message) {
       "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][20]+":</td><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][24]+"<input class=\"barrydegraaff_zimbra_openpgp-input\" id='privatePassInput' type='password' value='" + (this.getUserPropertyInfo("zimbra_openpgp_privatepass").value ? this.getUserPropertyInfo("zimbra_openpgp_privatepass").value : '') + "'></td></tr>" +
       "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][23]+":</td><td><br>" + langListHtml + "</td></tr>" +
       "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][27]+":</td><td><br><input type='checkbox' id='enable_contacts_scanning' name='enable_contacts_scanning' " + (tk_barrydegraaff_zimbra_openpgp.settings['enable_contacts_scanning']=='false' ? '' : 'checked') + " value='true'>" + "</td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 1:</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput1'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 2:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput2'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 3:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput3'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys3").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys3").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 4:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput4'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys4").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys4").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 5:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput5'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys5").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys5").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 6:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput6'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys6").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys6").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 7:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput7'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys7").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys7").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 8:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput8'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys8").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys8").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 9:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput9'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys9").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys9").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 10:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput10'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys10").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys10").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 11:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput11'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys11").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys11").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 12:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput12'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys12").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys12").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 13:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput13'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys13").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys13").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 14:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput14'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys14").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys14").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 15:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput15'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys15").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys15").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 16:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput16'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys16").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys16").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 17:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput17'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys17").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys17").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 18:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput18'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys18").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys18").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 19:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput19'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys19").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys19").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 20:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput20'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys20").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys20").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 21:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput21'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys21").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys21").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 22:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput22'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys22").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys22").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 23:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput23'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys23").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys23").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 24:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput24'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys24").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys24").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 25:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput25'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys25").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys25").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 26:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput26'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys26").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys26").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 27:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput27'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys27").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys27").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 28:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput28'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys28").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys28").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 29:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput29'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value : '') + "</textarea></td></tr>" +
-      "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" 30:</td><td><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput30'/>" + (this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value ? this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value : '') + "</textarea></td></tr>" +
-      "</table></div>";
+      pubkeyListHtml + "</table></div>";
       this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       this._dialog.setContent(html);
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnPubKeySave));
@@ -1169,6 +1149,25 @@ function() {
       }       
    });
 };
+
+/* This method gets public key details
+ * */
+tk_barrydegraaff_zimbra_openpgp.prototype.pubkeyInfo =
+function(pubkey) {
+   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+   try {
+      var publicKeys = openpgp.key.readArmored(pubkey);
+		userid = publicKeys.keys[0].users[0].userId.userid;
+		userid = userid.replace(/\</g,"&lt;");
+		userid = userid.replace(/\>/g,"&gt;");
+		result = "* UserID[0]: " + userid + "<br>* FingerPrint: " + publicKeys.keys[0].primaryKey.fingerprint + "<br>* Created: " + publicKeys.keys[0].primaryKey.created;
+   }
+   catch(err) {
+      //Could not parse your trusted public keys!
+      result = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][13];
+   }
+   return result;
+}
 
 /* This method generates an html select list with public keys
  * */
