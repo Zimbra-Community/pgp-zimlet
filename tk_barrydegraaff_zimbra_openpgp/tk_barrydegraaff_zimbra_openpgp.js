@@ -1164,7 +1164,7 @@ function(pubkey) {
    }
    catch(err) {
       //Could not parse your trusted public keys!
-      result = "Could not parse above public key.";
+      result = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][13];
    }
    return result;
 }
