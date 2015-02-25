@@ -443,7 +443,7 @@ function(id, title, message) {
       for (i = 1; i < 31; i++) {
       	numStr = i.toString();
       	pubkeyNumStr = "zimbra_openpgp_pubkeys" + numStr;
-			pubkeyListHtml += "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" "+numStr+":</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput"+numStr+"'/>" + (this.getUserPropertyInfo(pubkeyNumStr).value ? this.getUserPropertyInfo(pubkeyNumStr).value : '') + "</textarea><br>" + "<label for='publicKeyInfo"+numStr+"'/>" + "</td></tr>";
+			pubkeyListHtml += "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" "+numStr+":</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput"+numStr+"'/>" + (this.getUserPropertyInfo(pubkeyNumStr).value ? this.getUserPropertyInfo(pubkeyNumStr).value : '') + "</textarea><br>" + "<label for='publicKeyInfo"+numStr+"'>"+(this.getUserPropertyInfo(pubkeyNumStr).value ? this.pubkeyInfo(this.getUserPropertyInfo(pubkeyNumStr).value) : '')+"</label>" + "</td></tr>";
 		}
       	 
       html = "<div style='width:650px; height: 500px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
@@ -453,7 +453,7 @@ function(id, title, message) {
       "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][20]+":</td><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][24]+"<input class=\"barrydegraaff_zimbra_openpgp-input\" id='privatePassInput' type='password' value='" + (this.getUserPropertyInfo("zimbra_openpgp_privatepass").value ? this.getUserPropertyInfo("zimbra_openpgp_privatepass").value : '') + "'></td></tr>" +
       "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][23]+":</td><td><br>" + langListHtml + "</td></tr>" +
       "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][27]+":</td><td><br><input type='checkbox' id='enable_contacts_scanning' name='enable_contacts_scanning' " + (tk_barrydegraaff_zimbra_openpgp.settings['enable_contacts_scanning']=='false' ? '' : 'checked') + " value='true'>" + "</td></tr>" +
-       "<tr><td></td><td align='right'><button type='button' id='getPublicKeyInfo' onclick='showPubKeyInfo()'>Get Key Details</button></td></tr>" + pubkeyListHtml + "</table></div>";
+      pubkeyListHtml + "</table></div>";
       this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       this._dialog.setContent(html);
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnPubKeySave));
@@ -1149,6 +1149,25 @@ function() {
       }       
    });
 };
+
+/* This method gets public key details
+ * */
+tk_barrydegraaff_zimbra_openpgp.prototype.pubkeyInfo =
+function(pubkey) {
+   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+   try {
+      var publicKeys = openpgp.key.readArmored(pubkey);
+		userid = publicKeys.keys[0].users[0].userId.userid;
+		userid = userid.replace(/\</g,"&lt;");
+		userid = userid.replace(/\>/g,"&gt;");
+		result = "* UserID[0]: " + userid + "<br>* FingerPrint: " + publicKeys.keys[0].primaryKey.fingerprint + "<br>* Created: " + publicKeys.keys[0].primaryKey.created;
+   }
+   catch(err) {
+      //Could not parse your trusted public keys!
+      result = "Could not parse above public key.";
+   }
+   return result;
+}
 
 /* This method generates an html select list with public keys
  * */
