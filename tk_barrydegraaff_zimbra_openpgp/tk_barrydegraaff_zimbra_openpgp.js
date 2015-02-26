@@ -1157,10 +1157,20 @@ function(pubkey) {
    openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
    try {
       var publicKeys = openpgp.key.readArmored(pubkey);
+      
       userid = publicKeys.keys[0].users[0].userId.userid;
       userid = userid.replace(/\</g,"&lt;");
       userid = userid.replace(/\>/g,"&gt;");
-      result = "<small>&bull; User ID[0]: " + userid + "<br>&bull; Fingerprint: " + publicKeys.keys[0].primaryKey.fingerprint + "<br>&bull; Created: " + publicKeys.keys[0].primaryKey.created + '</small>';
+      
+      publicKeyPacket = publicKeys.keys[0].primaryKey;
+      var keyLength = "";
+      if (publicKeyPacket != null) {
+         if (publicKeyPacket.mpi.length > 0) {
+            keyLength = (publicKeyPacket.mpi[0].byteLength() * 8);
+         }
+      }
+      
+      result = "<small>&bull; User ID[0]: " + userid + "<br>&bull; Fingerprint: " + publicKeyPacket.fingerprint + "<br>&bull; Key length: " + keyLength + "<br>&bull; Created: " + publicKeyPacket.created + '</small>';
    }
    catch(err) {
       //Could not parse your trusted public keys!
