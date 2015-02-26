@@ -1160,7 +1160,7 @@ function(pubkey) {
 		userid = publicKeys.keys[0].users[0].userId.userid;
 		userid = userid.replace(/\</g,"&lt;");
 		userid = userid.replace(/\>/g,"&gt;");
-		result = "* UserID[0]: " + userid + "<br>* FingerPrint: " + publicKeys.keys[0].primaryKey.fingerprint + "<br>* Created: " + publicKeys.keys[0].primaryKey.created;
+		result = "<small>&bull; User ID[0]: " + userid + "<br>&bull; Fingerprint: " + publicKeys.keys[0].primaryKey.fingerprint + "<br>&bull; Created: " + publicKeys.keys[0].primaryKey.created + '</small>';
    }
    catch(err) {
       //Could not parse your trusted public keys!
