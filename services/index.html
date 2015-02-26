@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Zimbra OpenPGP Zimlet - Web Services</title>
+<script src="openpgp.js"></script>
+<link rel="stylesheet" href="style.css">
+<link href='icon.png' rel='shortcut icon'>
+</head>
+<body>
+<div class="container">
+<h1>Zimbra OpenPGP Zimlet - Web Services</h1>
+
+      <div style='width:650px; height: 350; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>Please select a file to be decrypted.<br><br>
+      </td></tr><tr><td>File:
+      </td><td>
+      <input type='file' id='fileInput'>
+      </td></tr><tr><td>Private Key:
+      </td><td>
+      <textarea rows=\"3\" cols=\"20\" id='privateKeyInput'/></textarea>
+      </td></tr><tr><td>Passphrase:
+      </td><td>
+      <input id='passphraseInput' type='password' value=''>
+      </td></tr><tr><td></td><td><button onclick="okBtnDecryptFile();">Decrypt!</button></td></tr></tr></table></div>
+
+<script>
+      var fileInput = document.getElementById('fileInput');
+      fileInput.addEventListener('change', function(e) {
+         var file = fileInput.files[0];
+         var reader = new FileReader();
+         reader.onload = function(e) {
+            window.file = reader.result;
+            window.filename = file.name;
+         }
+         reader.readAsText(file);			
+      });
+      
+function okBtnDecryptFile() {
+//   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+   
+   var privateKeyInput = document.getElementById("privateKeyInput").value;
+   var passphraseInput = document.getElementById("passphraseInput").value;
+   var msg = window.file;   
+
+   try {
+      var privKeys = openpgp.key.readArmored(privateKeyInput);
+      var privKey = privKeys.keys[0];
+      var success = privKey.decrypt(passphraseInput);
+   }
+   catch (err) {
+      alert('Could not parse private key!');
+      return;
+   }
+
+   if (success) {
+      try {
+         var message = openpgp.message.readArmored(msg);
+      }
+      catch(err) {
+         alert('Could not read armored message!');
+         return;
+      }
+
+      var pubKey = [];
+
+
+        openpgp.decryptMessage(privKey, message).then(
+           function(decrypted) {               
+               downloadBlob(window.filename,'',decrypted);
+               //Free memory
+               window.file = '';
+  
+            },
+            function(err) {
+               alert('Decryption failed!');
+            }
+        );
+   }
+   else {
+      alert('Wrong passphrase!');
+   }
+};
+
+
+function downloadBlob (filename, type, base64Data) {
+   filename = filename ? filename : 'file.bin';
+   type = type ? type : 'octet/stream';
+   
+   if (type=='zimbra/pgp')
+   {
+      //is already a pgp armored
+      var blob = new Blob([base64Data], { type: type });
+   }
+   else
+   {
+      var dataBin = base64DecToArr(base64Data);
+      var blob = new Blob([dataBin], { type: type });
+   }
+   
+   if (!window.navigator.msSaveOrOpenBlob) 
+   {
+      var a = document.createElement("a");
+      document.body.appendChild(a);
+      a.style = "display: none";
+      url = window.URL.createObjectURL(blob);
+      a.href = url;
+      a.download = filename;
+      a.click();
+   }
+   else
+   {
+      window.navigator.msSaveOrOpenBlob(blob, filename);
+   }
+}
+
+/* Base64 decode binary safe
+ https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
+*/
+function b64ToUint6 (nChr) {
+  return nChr > 64 && nChr < 91 ?
+      nChr - 65
+    : nChr > 96 && nChr < 123 ?
+      nChr - 71
+    : nChr > 47 && nChr < 58 ?
+      nChr + 4
+    : nChr === 43 ?
+      62
+    : nChr === 47 ?
+      63
+    :
+      0;
+}
+
+function base64DecToArr (sBase64, nBlocksSize) {
+  var
+    sB64Enc = sBase64.replace(/[^A-Za-z0-9\+\/]/g, ""), nInLen = sB64Enc.length,
+    nOutLen = nBlocksSize ? Math.ceil((nInLen * 3 + 1 >> 2) / nBlocksSize) * nBlocksSize : nInLen * 3 + 1 >> 2, taBytes = new Uint8Array(nOutLen);
+
+  for (var nMod3, nMod4, nUint24 = 0, nOutIdx = 0, nInIdx = 0; nInIdx < nInLen; nInIdx++) {
+    nMod4 = nInIdx & 3;
+    nUint24 |= b64ToUint6(sB64Enc.charCodeAt(nInIdx)) << 18 - 6 * nMod4;
+    if (nMod4 === 3 || nInLen - nInIdx === 1) {
+      for (nMod3 = 0; nMod3 < 3 && nOutIdx < nOutLen; nMod3++, nOutIdx++) {
+        taBytes[nOutIdx] = nUint24 >>> (16 >>> nMod3 & 24) & 255;
+      }
+      nUint24 = 0;
+    }
+  }
+  return taBytes;
+}
+
+      
+</script>
+<br><br><br><br><br>
+<p style="text-align: center"><small>
+Copyright (C) 2014-2015  Barry de Graaff<br>
+Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues<br><br>
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses/.
+</small></p>
+
+</div>
+</body>
+</html>
