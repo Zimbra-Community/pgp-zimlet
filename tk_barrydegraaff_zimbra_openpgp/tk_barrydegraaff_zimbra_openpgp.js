@@ -424,28 +424,28 @@ function(id, title, message) {
    case 3:
       //Manage keys
 
-		// make supported languages list in HTML
+      // make supported languages list in HTML
       langListName = ['English','Español','Italiano','Nederlands','Tiếng Việt'];
       langListValue = ['english','spanish','italian','dutch','vietnamese'];
       
       langListHtml = "<select id='zimbra_openpgp_language' name='zimbra_openpgp_language'>";
       for (i = 0; i < langListValue.length; i++) {
-      	if (langListValue[i] == tk_barrydegraaff_zimbra_openpgp.settings['language']) {
-	      	langListHtml += "<option value=\"" + langListValue[i] + "\" selected=\"selected\">" + langListName[i] + "</option>";
-	      } else {
-	      	langListHtml += "<option value=\"" + langListValue[i] + "\">" + langListName[i] + "</option>";
-	      }
+         if (langListValue[i] == tk_barrydegraaff_zimbra_openpgp.settings['language']) {
+            langListHtml += "<option value=\"" + langListValue[i] + "\" selected=\"selected\">" + langListName[i] + "</option>";
+         } else {
+            langListHtml += "<option value=\"" + langListValue[i] + "\">" + langListName[i] + "</option>";
+         }
       }
       langListHtml += "</selected>";
       
       // make list of public keys in HTML
       pubkeyListHtml = "";
       for (i = 1; i < 31; i++) {
-      	numStr = i.toString();
-      	pubkeyNumStr = "zimbra_openpgp_pubkeys" + numStr;
-			pubkeyListHtml += "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" "+numStr+":</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput"+numStr+"'/>" + (this.getUserPropertyInfo(pubkeyNumStr).value ? this.getUserPropertyInfo(pubkeyNumStr).value : '') + "</textarea><br>" + "<label for='publicKeyInfo"+numStr+"'>"+(this.getUserPropertyInfo(pubkeyNumStr).value ? this.pubkeyInfo(this.getUserPropertyInfo(pubkeyNumStr).value) : '')+"</label>" + "</td></tr>";
-		}
-      	 
+         numStr = i.toString();
+         pubkeyNumStr = "zimbra_openpgp_pubkeys" + numStr;
+         pubkeyListHtml += "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][26]+" "+numStr+":</td><td><br><textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput"+numStr+"'/>" + (this.getUserPropertyInfo(pubkeyNumStr).value ? this.getUserPropertyInfo(pubkeyNumStr).value : '') + "</textarea><br>" + "<label for='publicKeyInfo"+numStr+"'>"+(this.getUserPropertyInfo(pubkeyNumStr).value ? this.pubkeyInfo(this.getUserPropertyInfo(pubkeyNumStr).value) : '')+"</label>" + "</td></tr>";
+      }
+      
       html = "<div style='width:650px; height: 500px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
       "<ul>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][22]+"</ul><br>" +
       "</td></tr>" +      
@@ -1157,10 +1157,10 @@ function(pubkey) {
    openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
    try {
       var publicKeys = openpgp.key.readArmored(pubkey);
-		userid = publicKeys.keys[0].users[0].userId.userid;
-		userid = userid.replace(/\</g,"&lt;");
-		userid = userid.replace(/\>/g,"&gt;");
-		result = "<small>&bull; User ID[0]: " + userid + "<br>&bull; Fingerprint: " + publicKeys.keys[0].primaryKey.fingerprint + "<br>&bull; Created: " + publicKeys.keys[0].primaryKey.created + '</small>';
+      userid = publicKeys.keys[0].users[0].userId.userid;
+      userid = userid.replace(/\</g,"&lt;");
+      userid = userid.replace(/\>/g,"&gt;");
+      result = "<small>&bull; User ID[0]: " + userid + "<br>&bull; Fingerprint: " + publicKeys.keys[0].primaryKey.fingerprint + "<br>&bull; Created: " + publicKeys.keys[0].primaryKey.created + '</small>';
    }
    catch(err) {
       //Could not parse your trusted public keys!
@@ -1216,11 +1216,11 @@ function() {
 
       combinedPublicKeys.forEach(function(entry) {
          if(entry[0]) {
-				for (i = 0; i < entry[0].users.length; i++) {
-					userid = entry[0].users[i].userId.userid.replace(/\</g,"&lt;");
-					userid = userid.replace(/\>/g,"&gt;") ;
-					result = result + '<option title="fingerprint: '+entry[0].primaryKey.fingerprint+' \r\ncreated: '+entry[0].primaryKey.created+'" value="'+entry[0].armor()+'">'+userid+'</option>';
-				}
+            for (i = 0; i < entry[0].users.length; i++) {
+               userid = entry[0].users[i].userId.userid.replace(/\</g,"&lt;");
+               userid = userid.replace(/\>/g,"&gt;") ;
+               result = result + '<option title="fingerprint: '+entry[0].primaryKey.fingerprint+' \r\ncreated: '+entry[0].primaryKey.created+'" value="'+entry[0].armor()+'">'+userid+'</option>';
+            }
          }
       });
       result = result + '</select>';
