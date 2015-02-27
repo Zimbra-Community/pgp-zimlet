@@ -1170,7 +1170,7 @@ function(pubkey) {
          }
       }
       
-      result = "<small>&bull; User ID[0]: " + userid + "<br>&bull; Fingerprint: " + publicKeyPacket.fingerprint + "<br>&bull; Key length: " + keyLength + "<br>&bull; Created: " + publicKeyPacket.created + '</small>';
+      result = "<small>&bull; User ID[0]: " + userid + "<br>&bull; Fingerprint: " + publicKeyPacket.fingerprint + "<br>&bull; Primary key length: " + keyLength + "<br>&bull; Created: " + publicKeyPacket.created + '</small>';
    }
    catch(err) {
       //Could not parse your trusted public keys!
