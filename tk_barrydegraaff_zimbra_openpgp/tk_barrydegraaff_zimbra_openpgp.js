@@ -1193,7 +1193,7 @@ function(pubkey) {
    }
    catch(err) {
       //Could not parse your trusted public keys!
-      result = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][13];
+      result = '<small>'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][13]+'</small>';
    }
    return result;
 }
@@ -1679,104 +1679,6 @@ function(message) {
    composeView.getHtmlEditor().setMode(Dwt.TEXT);   
    composeView.getHtmlEditor().setContent(message);    
 }   
-
-/* AddressBook integration
- * AddressBook integration still need some clean-up and debugging!!
- */
-
-/* AddressBook integration
- * Read the notes field from all contacts and look for public key blocks
- */
-/*
-tk_barrydegraaff_zimbra_openpgp.prototype.parseContacts = function() {  
-   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
-
-   tk_barrydegraaff_zimbra_openpgp.addressBookPublicKeys = [];
-   this._contactList._vector._array.forEach(function(entry) {      
-      try{
-         if(entry._attrs.notes.indexOf("BEGIN PGP PUBLIC KEY BLOCK") > 0 ) {
-            var pubkey = openpgp.key.readArmored(entry._attrs.notes);
-            tk_barrydegraaff_zimbra_openpgp.addressBookPublicKeys = [].concat(tk_barrydegraaff_zimbra_openpgp.addressBookPublicKeys, pubkey.keys);
-         }
-      }   
-      catch(err) {
-      }
-   });
-   tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress = false;
-   //OpenPGP scanning contacts completed
-   console.log('------------------------------------- '+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][57]);
-}
-*/
-
-/* AddressBook integration
- * http://wiki.zimbra.com/wiki/Zimlet_cookbook_based_on_JavaScript_API#Scan_AddressBook
- * */
-/*
-tk_barrydegraaff_zimbra_openpgp.prototype.readAddressBook = function() {
-   if (tk_barrydegraaff_zimbra_openpgp.settings['enable_contacts_scanning'] == 'false')
-   {
-      //Undefine contacts from addressbook
-      tk_barrydegraaff_zimbra_openpgp.addressBookPublicKeys = [];
-      return;
-   }
-
-   //For performance, no concurrent scanning of addressbook 
-   if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
-   {
-      return;
-   }
-   
-   tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress = true;
-   //OpenPGP scanning contacts in progress
-   console.log('------------------------------------- '+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][58]);
-   var  postCallback = new AjxCallback(this, tk_barrydegraaff_zimbra_openpgp.prototype.parseContacts);
-   this.loadAllContacts(postCallback);
-};
-*/
-
-/* AddressBook integration
- * http://wiki.zimbra.com/wiki/Zimlet_cookbook_based_on_JavaScript_API#Scan_AddressBook
- * */
-/*
-tk_barrydegraaff_zimbra_openpgp.prototype.loadAllContacts = function(postCallBack) {
-	this.__oldNumContacts = 0;
-	this._noOpLoopCnt = 0;
-	this._totalWaitCnt = 0;
-	this._contactsAreLoaded = false;
-	this._waitForContactToLoadAndProcess(postCallBack);
-	this._contactsAreLoaded = true;
-};
-*/
-
-/* AddressBook integration
- * http://wiki.zimbra.com/wiki/Zimlet_cookbook_based_on_JavaScript_API#Scan_AddressBook
- * */
-/*
-tk_barrydegraaff_zimbra_openpgp.prototype._waitForContactToLoadAndProcess = function(postCallback) {
-	try {
-      this._contactList = AjxDispatcher.run("GetContacts");
-      if (!this._contactList)
-         return;
-   
-      this.__currNumContacts = this._contactList.getArray().length;
-      if (this._totalWaitCnt < 2 || this._noOpLoopCnt < 3) {//minimum 2 cycles post currentCnt==oldCnt
-         if (this.__oldNumContacts == this.__currNumContact) {
-            this._noOpLoopCnt++;
-         }
-         this._totalWaitCnt++;
-         this.__oldNumContacts = this.__currNumContact;
-         setTimeout(AjxCallback.simpleClosure(this._waitForContactToLoadAndProcess, this, postCallback), 5000);
-      } else {//process..
-         if(postCallback) {
-            postCallback.run(this);
-         }
-      }
-   } 
-   catch(err) {
-   }
-}
-*/
-
 
 /* AddressBook integration
  * based on ajax call to export function
