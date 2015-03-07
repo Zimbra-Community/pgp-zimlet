@@ -6,9 +6,9 @@ If you find Zimbra OpenPGP Zimlet useful and want to support its continued devel
 - Bitcoin: 1BaRRyS7wvGarEGgDwmPgRCygzcvocyxJt
 - Bank transfer: IBAN NL55ABNA0623226413 ; BIC ABNANL2A
 
-Demo video: https://drive.google.com/a/barrydegraaff.tk/file/d/0B_lMZlQY3S2lR2FaUjdlR1hCQW8/view
+Demo video: https://drive.google.com/file/d/0B5EwML8QuJ5_WGNnUmZQa3hIQU0/preview
 
-User manual: http://htmlpreview.github.io/?https://github.com/barrydegraaff/pgp-zimlet/blob/master/tk_barrydegraaff_zimbra_openpgp/help/index.html
+User manual: https://barrydegraaff.github.io/help/
 
 Adding PGP support to Zimbra Collaboration Suite, currently tested on:
 - Windows: Internet Explorer 11, Google Chrome, Chromium, Firefox
