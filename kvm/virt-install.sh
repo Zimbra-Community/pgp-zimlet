@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# To install using Kickstart:
+# install using Kickstart:
 # For this to work your KVM host and your workstation should be able to resolve 
-# webserver1.hivos.nl. You can also use http://192.168.200.24:8081/centos7.cfg
+# and connect to https://raw.githubusercontent.com
 
 lvcreate -L 11G -n zimbra-dev-disk1 vg_dev
 
