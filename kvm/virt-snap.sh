@@ -5,7 +5,7 @@ virsh undefine zimbra-dev
 
 lvremove -f /dev/vg_dev/zimbra-dev-snap
 
-lvcreate -L5G -s -n /dev/vg_dev/zimbra-dev-snap /dev/vg_devzimbra-dev-disk1
+lvcreate -L5G -s -n /dev/vg_dev/zimbra-dev-snap /dev/vg_dev/zimbra-dev-disk1
 
 virt-install \
 --connect qemu:///system \
