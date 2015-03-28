@@ -11,7 +11,7 @@ virt-install \
 --connect qemu:///system \
 --hvm \
 --virt-type kvm \
---network=network:virbr0,model=virtio,mac=52:54:00:d4:22:bf \
+--network=default,model=virtio,mac=52:54:00:d4:22:bf \
 --noautoconsole \
 --name zimbra-dev \
 --disk path=/dev/vg_dev/zimbra-dev-snap,bus=virtio,cache=none \
