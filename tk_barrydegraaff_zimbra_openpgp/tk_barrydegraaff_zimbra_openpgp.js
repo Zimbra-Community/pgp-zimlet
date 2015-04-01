@@ -112,39 +112,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
          (msg.attrs['Content-Type'].indexOf('application/pgp-encrypted') > -1))
          {
             //PGP Mime
-            var url = [];
-            var i = 0;
-            var proto = location.protocol;
-            var port = Number(location.port);
-            url[i++] = proto;
-            url[i++] = "//";
-            url[i++] = location.hostname;
-            if (port && ((proto == ZmSetting.PROTO_HTTP && port != ZmSetting.HTTP_DEFAULT_PORT) 
-               || (proto == ZmSetting.PROTO_HTTPS && port != ZmSetting.HTTPS_DEFAULT_PORT))) {
-               url[i++] = ":";
-               url[i++] = port;
-            }
-            url[i++] = "/home/";
-            url[i++]= AjxStringUtil.urlComponentEncode(appCtxt.getActiveAccount().name);
-            url[i++] = "/message.txt?fmt=txt&id=";
-            url[i++] = msg.id;
-         
-            var getUrl = url.join(""); 
-         
-            if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
-            {
-               console.log(getUrl);
-            }   
-         
-            //Now make an ajax request and read the contents of this mail, including all attachments as text
-            //it should be base64 encoded
-            var xmlHttp = null;   
-            xmlHttp = new XMLHttpRequest();
-            xmlHttp.open( "GET", getUrl, false );
-            xmlHttp.send( null );
-            
-            var msg = xmlHttp.responseText;
-            var msgSearch = msg;
+            var msgSearch = '';
          }
          else
          {
@@ -155,14 +123,54 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
       catch (err) 
       {
          // Content-Type header not found
+         var msgSearch = '';
       }       
    }
    else
    {
       //This is a plain-text message with PGP content
-      var msg = bp.node.content;
-      var msgSearch = msg.substring(0,60);
+      var msgSearch = bp.node.content.substring(0,60);
    }   
+
+   var url = [];
+   var i = 0;
+   var proto = location.protocol;
+   var port = Number(location.port);
+   url[i++] = proto;
+   url[i++] = "//";
+   url[i++] = location.hostname;
+   if (port && ((proto == ZmSetting.PROTO_HTTP && port != ZmSetting.HTTP_DEFAULT_PORT) 
+      || (proto == ZmSetting.PROTO_HTTPS && port != ZmSetting.HTTPS_DEFAULT_PORT))) {
+      url[i++] = ":";
+      url[i++] = port;
+   }
+   url[i++] = "/home/";
+   url[i++]= AjxStringUtil.urlComponentEncode(appCtxt.getActiveAccount().name);
+   url[i++] = "/message.txt?fmt=txt&id=";
+   url[i++] = msg.id;
+
+   var getUrl = url.join(""); 
+
+   if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
+   {
+      console.log(getUrl);
+   }   
+
+   //Now make an ajax request and read the contents of this mail, including all attachments as text
+   //it should be base64 encoded
+   var xmlHttp = null;   
+   xmlHttp = new XMLHttpRequest();
+   xmlHttp.open( "GET", getUrl, false );
+   xmlHttp.send( null );
+     
+   //Overwrite the msg variable here intentionally, since it is not complete for large emails
+   var msg = xmlHttp.responseText;
+
+   if(msgSearch=='')
+   {
+      //In case of PGP mime, we look in the entire mail for PGP Message block
+      msgSearch=msg;
+   }
    
    if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
    {
@@ -278,7 +286,6 @@ function(itemId) {
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.doDrop =
 function(zmObject) {
-
    //http://wiki.zimbra.com/wiki/Zimlet_cookbook_based_on_JavaScript_API#Download_Entire_Email
 	this.srcMsgObj = zmObject.srcObj;
 	if(this.srcMsgObj.type == "CONV"){
@@ -347,7 +354,7 @@ function(zmObject) {
       //No PGP message detected.
       this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][12], ZmStatusView.LEVEL_WARNING);
       return;
-   }   
+   }
 };
 
 /* verify method checks against known public keys and
