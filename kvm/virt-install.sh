@@ -10,14 +10,15 @@ virt-install \
   --connect qemu:///system \
   --hvm \
   --virt-type kvm \
-  --network=default,model=virtio,mac=52:54:00:d4:22:bf \
+  --network=default,model=virtio,mac=52:54:00:93:28:27 \
   --noautoconsole \
-  --name zimbra-dev \
-  --disk path=/dev/vg_dev/zimbra-dev-disk1,bus=virtio,cache=none \
+  --name windows7 \
+  --disk path=/dev/vg_dev/windows7-disk1,bus=ide,cache=none \
   --ram 2048 \
   --vcpus=4\
   --vnc \
-  --os-type linux \
-  --os-variant rhel6 \
+  --os-type windows \
+  --os-variant win7 \
+  --cdrom /dev/sr0
   --location http://ftp.tudelft.nl/centos.org/7/os/x86_64/ \
   -x "ks=https://raw.githubusercontent.com/barrydegraaff/pgp-zimlet/master/kvm/centos7.cfg"

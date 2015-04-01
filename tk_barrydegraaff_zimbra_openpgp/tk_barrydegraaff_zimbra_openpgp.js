@@ -1353,7 +1353,7 @@ function() {
    // the parent in myWindow but I've not worked it out yet!
    var myWindow = this;
       
-   if (privateKeyInput.length > 0 && passphrase.length > 0)
+   if ((privateKeyInput.length > 0) && (passphrase.length > 0))
    {
       tk_barrydegraaff_zimbra_openpgp.privateKeyCache = privateKeyInput;
 
@@ -1487,16 +1487,15 @@ function() {
    }   
    
    var privateKeyInput = document.getElementById("privateKeyInput").value;
+   var passphrase = document.getElementById("passphraseInput").value;
 
    // There should be a cleaner way to do this than stashing 
    // the parent in myWindow but I've not worked it out yet!
    var myWindow = this;
-      
-   if(privateKeyInput.length > 0)
+   
+   if ((privateKeyInput.length > 0) && (passphrase.length > 0))
    {
       tk_barrydegraaff_zimbra_openpgp.privateKeyCache = privateKeyInput;
-      var passphrase = document.getElementById("passphraseInput").value;
-
       try {
          var privKeys = openpgp.key.readArmored(privateKeyInput);
          var privKey = privKeys.keys[0];
