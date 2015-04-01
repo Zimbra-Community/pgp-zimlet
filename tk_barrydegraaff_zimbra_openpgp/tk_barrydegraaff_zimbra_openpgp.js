@@ -98,12 +98,13 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onShowView = function (view) {
 tk_barrydegraaff_zimbra_openpgp.prototype._applyRequestHeaders =
 function() {	
    ZmMailMsg.requestHeaders["Content-Type"] = "Content-Type";
+   ZmMailMsg.requestHeaders["Content-Transfer-Encoding"] = "Content-Transfer-Encoding";
 };
 
 
 /*This method is called when a message is viewed in Zimbra
  * */
-tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, view) {  
+tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, view) {     
    var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
    if (!bp)
    {
@@ -113,39 +114,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
          (msg.attrs['Content-Type'].indexOf('application/pgp-encrypted') > -1))
          {
             //PGP Mime
-            var url = [];
-            var i = 0;
-            var proto = location.protocol;
-            var port = Number(location.port);
-            url[i++] = proto;
-            url[i++] = "//";
-            url[i++] = location.hostname;
-            if (port && ((proto == ZmSetting.PROTO_HTTP && port != ZmSetting.HTTP_DEFAULT_PORT) 
-               || (proto == ZmSetting.PROTO_HTTPS && port != ZmSetting.HTTPS_DEFAULT_PORT))) {
-               url[i++] = ":";
-               url[i++] = port;
-            }
-            url[i++] = "/home/";
-            url[i++]= AjxStringUtil.urlComponentEncode(appCtxt.getActiveAccount().name);
-            url[i++] = "/message.txt?fmt=txt&id=";
-            url[i++] = msg.id;
-         
-            var getUrl = url.join(""); 
-         
-            if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
-            {
-               console.log(getUrl);
-            }   
-         
-            //Now make an ajax request and read the contents of this mail, including all attachments as text
-            //it should be base64 encoded
-            var xmlHttp = null;   
-            xmlHttp = new XMLHttpRequest();
-            xmlHttp.open( "GET", getUrl, false );
-            xmlHttp.send( null );
-            
-            var msg = xmlHttp.responseText;
-            var msgSearch = msg;
+            var msgSearch = '';
          }
          else
          {
@@ -156,14 +125,68 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
       catch (err) 
       {
          // Content-Type header not found
+         var msgSearch = '';
       }       
    }
    else
    {
       //This is a plain-text message with PGP content
-      var msg = bp.node.content;
-      var msgSearch = msg.substring(0,60);
+      var msgSearch = bp.node.content.substring(0,60);
    }   
+
+   var url = [];
+   var i = 0;
+   var proto = location.protocol;
+   var port = Number(location.port);
+   url[i++] = proto;
+   url[i++] = "//";
+   url[i++] = location.hostname;
+   if (port && ((proto == ZmSetting.PROTO_HTTP && port != ZmSetting.HTTP_DEFAULT_PORT) 
+      || (proto == ZmSetting.PROTO_HTTPS && port != ZmSetting.HTTPS_DEFAULT_PORT))) {
+      url[i++] = ":";
+      url[i++] = port;
+   }
+   url[i++] = "/home/";
+   url[i++]= AjxStringUtil.urlComponentEncode(appCtxt.getActiveAccount().name);
+   url[i++] = "/message.txt?fmt=txt&id=";
+   url[i++] = msg.id;
+
+   var getUrl = url.join(""); 
+
+   if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
+   {
+      console.log(getUrl);
+   }   
+
+   //Now make an ajax request and read the contents of this mail, including all attachments as text
+   //it should be base64 encoded
+   var xmlHttp = null;   
+   xmlHttp = new XMLHttpRequest();
+   xmlHttp.open( "GET", getUrl, false );
+   xmlHttp.send( null );
+   
+   try {
+      if (msg.attrs['Content-Transfer-Encoding'].indexOf('quoted-printable') > -1)
+      {
+         var msg = tk_barrydegraaff_zimbra_openpgp.prototype.quoted_printable_decode(xmlHttp.responseText);
+      }
+      else
+      {
+         //Overwrite the msg variable here intentionally, since it is not complete for large emails
+         var msg = xmlHttp.responseText;      
+      }
+   } catch (err) {      
+      //No Content-Transfer-Encoding Header
+      var msg = xmlHttp.responseText;
+   }   
+     
+
+
+   if(msgSearch=='')
+   {
+      //In case of PGP mime, we look in the entire mail for PGP Message block
+      msgSearch=msg;
+   }
    
    if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
    {
@@ -279,7 +302,6 @@ function(itemId) {
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.doDrop =
 function(zmObject) {
-
    //http://wiki.zimbra.com/wiki/Zimlet_cookbook_based_on_JavaScript_API#Download_Entire_Email
 	this.srcMsgObj = zmObject.srcObj;
 	if(this.srcMsgObj.type == "CONV"){
@@ -348,7 +370,7 @@ function(zmObject) {
       //No PGP message detected.
       this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][12], ZmStatusView.LEVEL_WARNING);
       return;
-   }   
+   }
 };
 
 /* verify method checks against known public keys and
@@ -1365,7 +1387,7 @@ function() {
    // the parent in myWindow but I've not worked it out yet!
    var myWindow = this;
       
-   if(privateKeyInput.length > 0)
+   if ((privateKeyInput.length > 0) && (passphrase.length > 0))
    {
       tk_barrydegraaff_zimbra_openpgp.privateKeyCache = privateKeyInput;
       tk_barrydegraaff_zimbra_openpgp.privatePassCache = passphrase;
@@ -1500,16 +1522,15 @@ function() {
    }   
    
    var privateKeyInput = document.getElementById("privateKeyInput").value;
+   var passphrase = document.getElementById("passphraseInput").value;
 
    // There should be a cleaner way to do this than stashing 
    // the parent in myWindow but I've not worked it out yet!
    var myWindow = this;
-      
-   if(privateKeyInput.length > 0)
+   
+   if ((privateKeyInput.length > 0) && (passphrase.length > 0))
    {
       tk_barrydegraaff_zimbra_openpgp.privateKeyCache = privateKeyInput;
-      var passphrase = document.getElementById("passphraseInput").value;
-
       try {
          var privKeys = openpgp.key.readArmored(privateKeyInput);
          var privKey = privKeys.keys[0];
@@ -1874,4 +1895,32 @@ tk_barrydegraaff_zimbra_openpgp.prototype.base64DecToArr = function (sBase64, nB
     }
   }
   return taBytes;
+}
+
+tk_barrydegraaff_zimbra_openpgp.prototype.quoted_printable_decode = function(str) {
+//https://raw.githubusercontent.com/kvz/phpjs/master/functions/strings/quoted_printable_decode.js
+  //       discuss at: http://phpjs.org/functions/quoted_printable_decode/
+  //      original by: Ole Vrijenhoek
+  //      bugfixed by: Brett Zamir (http://brett-zamir.me)
+  //      bugfixed by: Theriault
+  // reimplemented by: Theriault
+  //      improved by: Brett Zamir (http://brett-zamir.me)
+  //        example 1: quoted_printable_decode('a=3Db=3Dc');
+  //        returns 1: 'a=b=c'
+  //        example 2: quoted_printable_decode('abc  =20\r\n123  =20\r\n');
+  //        returns 2: 'abc   \r\n123   \r\n'
+  //        example 3: quoted_printable_decode('012345678901234567890123456789012345678901234567890123456789012345678901234=\r\n56789');
+  //        returns 3: '01234567890123456789012345678901234567890123456789012345678901234567890123456789'
+  //        example 4: quoted_printable_decode("Lorem ipsum dolor sit amet=23, consectetur adipisicing elit");
+  //        returns 4: 'Lorem ipsum dolor sit amet#, consectetur adipisicing elit'
+
+  var RFC2045Decode1 = /=\r\n/gm,
+    // Decodes all equal signs followed by two hex digits
+    RFC2045Decode2IN = /=([0-9A-F]{2})/gim,
+    // the RFC states against decoding lower case encodings, but following apparent PHP behavior
+    // RFC2045Decode2IN = /=([0-9A-F]{2})/gm,
+    RFC2045Decode2OUT = function (sMatch, sHex) {
+      return String.fromCharCode(parseInt(sHex, 16));
+    };
+  return str.replace(RFC2045Decode1, '').replace(RFC2045Decode2IN, RFC2045Decode2OUT);
 }
