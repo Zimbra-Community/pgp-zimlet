@@ -97,12 +97,13 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onShowView = function (view) {
 tk_barrydegraaff_zimbra_openpgp.prototype._applyRequestHeaders =
 function() {	
    ZmMailMsg.requestHeaders["Content-Type"] = "Content-Type";
+   ZmMailMsg.requestHeaders["Content-Transfer-Encoding"] = "Content-Transfer-Encoding";
 };
 
 
 /*This method is called when a message is viewed in Zimbra
  * */
-tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, view) {  
+tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, view) {     
    var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
    if (!bp)
    {
@@ -162,9 +163,23 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
    xmlHttp = new XMLHttpRequest();
    xmlHttp.open( "GET", getUrl, false );
    xmlHttp.send( null );
+   
+   try {
+      if (msg.attrs['Content-Transfer-Encoding'].indexOf('quoted-printable') > -1)
+      {
+         var msg = tk_barrydegraaff_zimbra_openpgp.prototype.quoted_printable_decode(xmlHttp.responseText);
+      }
+      else
+      {
+         //Overwrite the msg variable here intentionally, since it is not complete for large emails
+         var msg = xmlHttp.responseText;      
+      }
+   } catch (err) {      
+      //No Content-Transfer-Encoding Header
+      var msg = xmlHttp.responseText;
+   }   
      
-   //Overwrite the msg variable here intentionally, since it is not complete for large emails
-   var msg = xmlHttp.responseText;
+
 
    if(msgSearch=='')
    {
@@ -1860,4 +1875,32 @@ tk_barrydegraaff_zimbra_openpgp.prototype.base64DecToArr = function (sBase64, nB
     }
   }
   return taBytes;
+}
+
+tk_barrydegraaff_zimbra_openpgp.prototype.quoted_printable_decode = function(str) {
+//https://raw.githubusercontent.com/kvz/phpjs/master/functions/strings/quoted_printable_decode.js
+  //       discuss at: http://phpjs.org/functions/quoted_printable_decode/
+  //      original by: Ole Vrijenhoek
+  //      bugfixed by: Brett Zamir (http://brett-zamir.me)
+  //      bugfixed by: Theriault
+  // reimplemented by: Theriault
+  //      improved by: Brett Zamir (http://brett-zamir.me)
+  //        example 1: quoted_printable_decode('a=3Db=3Dc');
+  //        returns 1: 'a=b=c'
+  //        example 2: quoted_printable_decode('abc  =20\r\n123  =20\r\n');
+  //        returns 2: 'abc   \r\n123   \r\n'
+  //        example 3: quoted_printable_decode('012345678901234567890123456789012345678901234567890123456789012345678901234=\r\n56789');
+  //        returns 3: '01234567890123456789012345678901234567890123456789012345678901234567890123456789'
+  //        example 4: quoted_printable_decode("Lorem ipsum dolor sit amet=23, consectetur adipisicing elit");
+  //        returns 4: 'Lorem ipsum dolor sit amet#, consectetur adipisicing elit'
+
+  var RFC2045Decode1 = /=\r\n/gm,
+    // Decodes all equal signs followed by two hex digits
+    RFC2045Decode2IN = /=([0-9A-F]{2})/gim,
+    // the RFC states against decoding lower case encodings, but following apparent PHP behavior
+    // RFC2045Decode2IN = /=([0-9A-F]{2})/gm,
+    RFC2045Decode2OUT = function (sMatch, sHex) {
+      return String.fromCharCode(parseInt(sHex, 16));
+    };
+  return str.replace(RFC2045Decode1, '').replace(RFC2045Decode2IN, RFC2045Decode2OUT);
 }
