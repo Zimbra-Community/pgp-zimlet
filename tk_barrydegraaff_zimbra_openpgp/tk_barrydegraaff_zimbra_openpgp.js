@@ -34,6 +34,19 @@ tk_barrydegraaff_zimbra_openpgp = function() {
    oScript.type = "text/javascript";
    oScript.src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.js";
    oHead.appendChild( oScript); 
+
+   var oHead = document.getElementsByTagName('HEAD').item(0);
+   var oScript= document.createElement("script");
+   oScript.type = "text/javascript";
+   oScript.src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/aes.js";
+   oHead.appendChild( oScript); 
+
+   var oHead = document.getElementsByTagName('HEAD').item(0);
+   var oScript= document.createElement("script");
+   oScript.type = "text/javascript";
+   oScript.src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/aes-ctr.js";
+   oHead.appendChild( oScript); 
+
 };
 
 tk_barrydegraaff_zimbra_openpgp.prototype = new ZmZimletBase;
@@ -227,9 +240,12 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
 /* This method gets called by the Zimlet framework when single-click is performed.
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.singleClicked =
-function() {
+function() {  
    if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
    {
+      //test AES crypto
+      console.log(Aes.Ctr.encrypt('big secret', 'myfreakingpassword', 256));
+      console.log(Aes.Ctr.decrypt('mgCMcV2gNFUCxcXyCYQgD1fI', 'myfreakingpassword', 256));
    } 
 };
 
