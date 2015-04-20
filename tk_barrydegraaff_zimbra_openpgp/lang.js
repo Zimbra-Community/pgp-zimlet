@@ -59,7 +59,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['english'][22] = '<li>Copy-paste ASCII armored keys below. </li><li>You can also use the notes field from contacts added to your Zimbra address book.</li><li>You can put comments before each key as long as you start on a new line for your public key.</li>';   
    tk_barrydegraaff_zimbra_openpgp.lang['english'][23] = 'Language';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][24] = 'If you save your passphrase below it is stored in plain text in the Zimbra LDAP. If you do not store your passphrase the server will ask you to provide it every time it is needed.';
-   tk_barrydegraaff_zimbra_openpgp.lang['english'][25] = 'If you save your private key below it is stored in your browsers <a href=\"http://diveintohtml5.info/storage.html\" target=\"_blank\" >local storage</a>. If you do not store your private key the server will ask you to provide it for each session.';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][25] = 'If you save your private key below it is stored in your browsers <a href=\"http://diveintohtml5.info/storage.html\" target=\"_blank\" >local storage</a> using AES-256 encryption. If you do not store your private key the server will ask you to provide it for each session.';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][26] = 'Public Key';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][27] = 'Scan contacts';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][28] = 'Please compose a message below to be signed with your private key.';
