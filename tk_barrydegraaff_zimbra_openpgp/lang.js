@@ -331,7 +331,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][22] = '<li>Cắt-dán khóa mã ASCII bên dưới. </li><li>Bạn cũng có thể sử dụng trường Notes trong địa chỉ lưu trong sổ địa chỉ riêng của bạn.</li><li>Bạn có thể đặt ghi chú trên dòng riêng phía trên mỗi khóa công khai.</li>';   
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][23] = 'Ngôn ngữ';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][24] = 'Nếu bạn chọn lưu mật mã bên dưới, mật mã sẽ được lưu dưới dạng văn bản thường trong Zimbra LDAP. Nếu bạn chọn không lưu mật mã, hệ thống sẽ hỏi lại bạn mỗi khi cần.';
-   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][25] = 'Nếu bạn chọn lưu khóa bí mật bên dưới, khóa bí mật sẽ được lưu trong vùng lưu trữ riêng trên trình duyệt trên máy bạn <a href=\"http://diveintohtml5.info/storage.html\" target=\"_blank\" >local storage</a>. Nếu bạn chọn không lưu khóa bí mật, hệ thống sẽ hỏi lại trong mỗi phiên làm việc.';
+   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][25] = 'Nếu bạn chọn lưu khóa bí mật bên dưới, khóa bí mật sẽ được mã hóa kiểu AES-256 và lưu trong <a href=\"http://diveintohtml5.info/storage.html\" target=\"_blank\" >vùng lưu trữ riêng</a> trên trình duyệt trong máy bạn. Nếu bạn chọn không lưu khóa bí mật, hệ thống sẽ hỏi lại trong mỗi phiên làm việc.';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][26] = 'Khóa công khai';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][27] = 'Quét địa chỉ';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][28] = 'Hãy ký thư bên dưới với khóa bí mật.';
