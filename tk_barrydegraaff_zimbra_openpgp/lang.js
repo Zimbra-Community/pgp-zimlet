@@ -127,7 +127,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][22] = '<li>Hieronder kunt u ASCII gecodeerde sleutels kopiëren en plakken.</li><li>U kunt ook het notities veld gebruiken in het Zimbra adresboek.</li><li>U kunt ook commentaar bij elke sleutel plaatsen, zolang de sleutel maar begint op een nieuwe regel.</li>';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][23] = 'Taal';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][24] = 'Indien u uw wachtwoordzin hieronder opslaat, wordt deze in platte tekst opgeslagen in de Zimbra LDAP. Indien u uw wachtwoordzin niet opslaat, zal de server hier telkens naar vragen indien nodig.';   
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][25] = 'Indien u hieronder uw privé sleutel opslaat, wordt deze bewaard in uw browser  <a href=\"http://diveintohtml5.info/storage.html\" target=\"_blank\" >lokale opslag</a>. Indien u uw privé sleutel niet opslaat, zal der server hiernaar vragen voor iedere sessie.';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][25] = 'Indien u hieronder uw privé sleutel opslaat, wordt deze met AES-256 versleuteld en opgeslagen in uw browsers  <a href=\"http://diveintohtml5.info/storage.html\" target=\"_blank\" >lokale opslag</a>. Indien u uw privé sleutel niet opslaat, zal der server hiernaar vragen voor iedere sessie.';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][26] = 'Publieke sleutel';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][27] = 'Scan contactpersonen';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][28] = 'Stel uw bericht op om te ondertekenen met uw privé sleutel.';
@@ -195,7 +195,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][22] = '<li>Copie-pegue la siguiente llave ASCII blindada. </li><li>Puede usar además el campo notas dentro de sus contactos en su Agenda de Zimbra.</li><li>Puede añadir comentarios antes de cada llave siempre que la llave pública empiece en una nueva línea.</li>';   
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][23] = 'Lenguaje';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][24] = 'Si guarda su clave aquí, se almacenará en texto plano en el LDAP Zimbra. Si no almacena la clave, el servidor le pedirá que la proporcione cada vez que sea necesario.';
-   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][25] = 'Si guarda su clave aquí, se almacenará en el almacenamiento local de su navegador, <a href=\"http://diveintohtml5.info/storage.html\" target=\"_blank\" >más info</a>. Si no almacena su llave privada, el servidor le pedirá que la proporcione en cada nueva sesión.';
+   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][25] = 'Si guarda su clave aquí, se almacenará en el almacenamiento local de su navegador usando encriptación AES-256, <a href=\"http://diveintohtml5.info/storage.html\" target=\"_blank\" >más info</a>. Si no almacena su llave privada, el servidor le pedirá que la proporcione en cada nueva sesión.';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][26] = 'Llave Pública';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][27] = 'Escanear Contactos';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][28] = 'Por favor, escriba un mensage a continuación que será firmado con su llave Privada.';
