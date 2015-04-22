@@ -263,7 +263,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][22] = '<li>Copia ed incolla le chiavi ASCII con armatura qui sotto. </li><li>Puoi anche usare il campo Note del contatto nella tua rubrica.</li><li>Puoi mettere comunque dei commenti prima di ogni chiave, purch&eacute; la chiave pubblica inizi su una nuova linea.</li>';   
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][23] = 'Lingua';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][24] = 'Se salvi la tua passphrase qui sotto verr&agrave; memorizzata in chiaro nell\'LDAP di Zimbra. Se non memorizzi la passphrase ti verr&agrave; richiesta ogni volta.';
-   tk_barrydegraaff_zimbra_openpgp.lang['italian'][25] = 'Se salvi la tua chiave privata qui sotto verr&agrave; memorizzata nel <a href=\"http://diveintohtml5.info/storage.html\" target=\"_blank\" >local storage</a> del tuo browser. Se non memorizzi la chiave privata ti verr&agrave; richiesta ad ogni sessione.';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][25] = 'Se salvi la tua chiave privata qui sotto verr&agrave; memorizzata nel <a href=\"http://diveintohtml5.info/storage.html\" target=\"_blank\" >local storage</a> del tuo browser cifrata in AES-256. Se non memorizzi la chiave privata ti verr&agrave; richiesta ad ogni sessione.';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][26] = 'Chiave pubblica';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][27] = 'Scansiona contatti';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][28] = 'Per favore componi il messaggio da firmare con la tua chiave privata qui sotto.';
