@@ -100,7 +100,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['english'][63] = 'Please select a file to be decrypted.';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][64] = 'Decrypt using';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][65] = 'File';
-
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][66] = 'Auto decrypt';
+   
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][0] = 'OpenPGP berichten uitbreiding voor Zimbra Collaboration Suite.';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][1] = 'Onderteken bericht';
@@ -168,6 +169,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][63] = 'Selecteer een bestand voor ontsleutelen.';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][64] = 'Ontsleutel met';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][65] = 'Bestand';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][66] = 'Auto decrypt';
 
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][0] = 'Extensión de mensajes OpenPGP para Zimbra Collaboration Suite.';
@@ -236,6 +238,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][63] = 'Por favor, seleccione el fichero que ser´desencriptado.';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][64] = 'Desencriptar usando';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][65] = 'Fichero';
+   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][66] = 'Auto decrypt';
    
    tk_barrydegraaff_zimbra_openpgp.lang['italian'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][0] = 'Estensione per messaggi OpenPGP per Zimbra Collaboration Suite.';
@@ -304,6 +307,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][63] = 'Per favore seleziona un file da decriptare.';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][64] = 'Decripta usando';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][65] = 'File';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][66] = 'Auto decrypt';
 
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][0] = 'Phần mở rộng thư OpenPGP cho Zimbra Collaboration Suite.';
@@ -372,4 +376,5 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][63] = 'Hãy chọn tệp tin để giải mã.';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][64] = 'Giải mã bằng';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][65] = 'Tệp tin';
+   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][66] = 'Auto decrypt';   
 }

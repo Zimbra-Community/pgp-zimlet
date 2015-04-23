@@ -65,14 +65,20 @@ tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
       //Load default values when no options are set (new user)
       tk_barrydegraaff_zimbra_openpgp.settings['enable_contacts_scanning'] = 'false';
       tk_barrydegraaff_zimbra_openpgp.settings['language'] = 'english';   
-   } 
-   
+   }
+
    //Some options are set, but not language, so set it to 'english' by default
    if(!tk_barrydegraaff_zimbra_openpgp.settings['language'])
    {
       tk_barrydegraaff_zimbra_openpgp.settings['language'] = 'english';
    }
-   
+
+   //Some options are set, but not auto_decrypt, so set it to 'true' by default
+   if(!tk_barrydegraaff_zimbra_openpgp.settings['auto_decrypt'])
+   {
+      tk_barrydegraaff_zimbra_openpgp.settings['auto_decrypt'] = 'true';
+   }
+
    this._zimletContext._panelActionMenu.args[0][0].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][1];
    this._zimletContext._panelActionMenu.args[0][1].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][2];
    this._zimletContext._panelActionMenu.args[0][2].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][3];
@@ -240,7 +246,10 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
       }
 
       //Please provide private key and passphrase for decryption
-      this.displayDialog(1, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][8], msg);
+      if (tk_barrydegraaff_zimbra_openpgp.settings['auto_decrypt'] == 'true')
+      {
+         this.displayDialog(1, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][8], msg);
+      }   
    }
    else {
       return;
@@ -560,6 +569,7 @@ function(id, title, message) {
       "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][20]+":</td><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][24]+"<input class=\"barrydegraaff_zimbra_openpgp-input\" id='privatePassInput' type='password' value='" + (this.getUserPropertyInfo("zimbra_openpgp_privatepass").value ? this.getUserPropertyInfo("zimbra_openpgp_privatepass").value : '') + "'></td></tr>" +
       "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][23]+":</td><td><br>" + langListHtml + "</td></tr>" +
       "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][27]+":</td><td><br><input type='checkbox' id='enable_contacts_scanning' name='enable_contacts_scanning' " + (tk_barrydegraaff_zimbra_openpgp.settings['enable_contacts_scanning']=='false' ? '' : 'checked') + " value='true'>" + "</td></tr>" +
+      "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][66]+":</td><td><br><input type='checkbox' id='auto_decrypt' name='auto_decrypt' " + (tk_barrydegraaff_zimbra_openpgp.settings['auto_decrypt']=='false' ? '' : 'checked') + " value='true'>" + "</td></tr>" +
       pubkeyListHtml + "</table></div>";
       this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       this._dialog.setContent(html);
@@ -1126,6 +1136,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.okBtnPubKeySave =
 function() {   
    //Per user configuration options are jsonified into a single Zimbra userProperty
    tk_barrydegraaff_zimbra_openpgp.settings['enable_contacts_scanning'] = (document.getElementById("enable_contacts_scanning").checked ? 'true' : 'false');
+   tk_barrydegraaff_zimbra_openpgp.settings['auto_decrypt'] = (document.getElementById("auto_decrypt").checked ? 'true' : 'false');
    tk_barrydegraaff_zimbra_openpgp.settings['language'] = (document.getElementById("zimbra_openpgp_language").value);
    tk_barrydegraaff_zimbra_openpgp.settings['aes_password'] = tk_barrydegraaff_zimbra_openpgp.prototype.pwgen();
    
