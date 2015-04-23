@@ -307,7 +307,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][63] = 'Per favore seleziona un file da decriptare.';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][64] = 'Decripta usando';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][65] = 'File';
-   tk_barrydegraaff_zimbra_openpgp.lang['italian'][66] = 'Auto decrypt';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][66] = 'Decriptazione automatica';
 
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][0] = 'Phần mở rộng thư OpenPGP cho Zimbra Collaboration Suite.';
