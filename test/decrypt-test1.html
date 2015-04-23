@@ -21,6 +21,9 @@ hmXmVKLcM/n48lrEt/dDFkWciRF6kFfIzR59
 =nCKf
 -----END PGP MESSAGE-----</textarea>
 <script type="text/javascript">
+   
+//openpgp.initWorker('scripts/openpgp.worker.js');   
+   
 var openpgp = window.openpgp;
 var mPubKey = '-----BEGIN PGP PUBLIC KEY BLOCK-----\n' +
 'Version: GnuPG v1\n' +
@@ -117,6 +120,47 @@ var mSecKey = '-----BEGIN PGP PRIVATE KEY BLOCK-----\n' +
 '=NGzy\n' +
 '-----END PGP PRIVATE KEY BLOCK-----';
 
+//A wrong secret key:
+var mSecKey = '-----BEGIN PGP PRIVATE KEY BLOCK-----\n' +
+'Version: OpenPGP.js v1.0.1\n' +
+'Comment: http://openpgpjs.org\n' +
+'\n' +
+'xcFGBFU4j4QBBADRn/rf05VTh2Vs2Je4JRRiaBtpTaEnQvqzRra9VdGPeoeJ\n' +
+'Rg13Tx3l4oLVe4dzjfjq+vffox75CvuMGyKjhzEEN6S9PcmyaKcY4OJJpSMD\n' +
+'S24GWFUiAV0r8uCmuscJpHsitHv+AMDPcCcNfq0BUPF1uTyFMSKMe2Z0YNpP\n' +
+'18NaPQARAQAB/gkDCB+/ha5kDej5YN+583prd+KcCbhjGdSB6ZbhLxYn/0dx\n' +
+'wiHsxxu5J9UMkm+FO7Tvu8BQrIppEqaJnmKTC4789W6CDCcJ5MFkMyKTPmdc\n' +
+'cFEvtxiKCx610h1RdnuLjS7/WAphr7GKnQ2GrGnvuilLKCmcVX/dMMDyHJNy\n' +
+'BUIPUCtdhNaHXN2vSuBPvjDwl4sa6kl8/cxkdIkDcxKv3TZfIuE0xeWZVqXv\n' +
+'YpcEORl5yIHOd9UhgU2J5as8t9DNQXYN29rzA9LcIjbgSGoElfG//j0XBAaN\n' +
+'SJZ903XnG9Yg2mxpOf+/cWW317kPSu7lDvakJN063ozzU1D4GNSpNsEtSCLi\n' +
+'oqsC2FpSL9uEf1hCHP/qS4TrVWADYFAr7BZGw8+4ZNp8QQpAVm0z3biVdc/m\n' +
+'RRwFIf4LeeTAfFXbuvfyV5d0IBEqyJAtF4ASSnMPfhlxLXnD+Jhkce20kjla\n' +
+'DDsHeFwDorHMNVs2i3hxjcHROqGc5goDgp/NJ2FkbWluQG15emltYnJhLmNv\n' +
+'bSA8YWRtaW5AbXl6aW1icmEuY29tPsKyBBABCAAmBQJVOI+EBgsJCAcDAgkQ\n' +
+'Y6ccNETgU/gEFQgCCgMWAgECGwMCHgEAAEYcA/48tjmKhOw3sTPHrHhWJ5ra\n' +
+'bL/BnALMpzhvM+6NTxLcEeLTYtdWGa5HImruP4DEmVUb1LDu2KNp06X54VF2\n' +
+'HLkNr7rts3HIT7lLa7Yh5ykHpwY6+xJqQPjQMZHB95k95TR7Bo/5eRJPukMx\n' +
+'o5PTUFnEHFh+hU+gOtsh/qNCSU8V9MfBRgRVOI+EAQQA5WhxyASWXpKT7YUh\n' +
+'qbJ/Ocpsx6ujG9EO/ozmutvmICeHXhvJkBwIdEbfCxZ/9YW/ZHqnCgcF01nL\n' +
+'eOgh+yu0NayYwxiVjhwNbwiB0jeyWGESEQ+RC0T7i3ihF3pwpbReu99dbJA8\n' +
+'lEF3FhLhwv393NXkJoIrG/xt1r+Jcjgf3mEAEQEAAf4JAwgEpALqheUjWWD8\n' +
+'3lKYM3WjjiFbrsOdQ/8JECqaE/EZvbHxOHAR7/5wWBYgiKder+8DC3npdVNM\n' +
+'HDD8JfWkhRNN3DDsmSwguK/tm6nbneWx+wpLkj2qiEGP4qaBIoTh/JPTy0Tr\n' +
+'BKK4CjkBItXmAa5UbGAXhu87HAyifL8hkwabIUVsARglgkUvfC4nrsoMxLDH\n' +
+'0MTgs/w32ecYv6YU14rCu+Vrpqaz7cfk5WsXdnBeNFW9CejJtMsJkxctf8C4\n' +
+'rv0U4nqp944mkKtf85ReX13W2zT9nIM7/dvShZlfqaZ1ppJZ2c7647edl25i\n' +
+'sGXLZUwRpLZvDl9Jys6pi54PKAoso2ECSmFp3JEiTNmW0LnZNnGYM+BCUXz+\n' +
+'i5fZjqdh4eocn34fMP7qTlmHr7sgGP2ve+jFtRGA3qnvJmXtA6p5OSkQb15p\n' +
+'QyXCmfCpSiK/aNg1eL1OXzE4UHkQcKCuRzMiaWu+S5NqebPaue3TfN+JS58/\n' +
+'Ej0fwp8EGAEIABMFAlU4j4QJEGOnHDRE4FP4AhsMAADHjAP+N/JVT/Qs+wGm\n' +
+'sMTOaFuAY8enmjHuDTEDujWwYf2KYmomAwv9tBqFAr/oCr6r6DK3GzOp4RFK\n' +
+'hDiyabwyohUCJ4NA951DYHpWmcbu1QMqllj0CraOD/FhqkDGROksWzNsLUye\n' +
+'klNQEhNAQx2ZRdU93DuUQS4sOcpNTeisX0Lp5Sc=\n' +
+'=3IiQ\n' +
+'-----END PGP PRIVATE KEY BLOCK-----\n';
+
+
 //Decrypt:
 
 var passphrase = 'dummy'; // Password of the private key.
@@ -128,12 +172,16 @@ var success = privKey.decrypt(passphrase);
 
 var message = openpgp.message.readArmored(document.getElementById('message').value);
 
-var myWindow = this;
 openpgp.decryptMessage(privKey, message).then(
+// I cannot place a `try` statement here
    function(decrypted) {
       console.log("my object: %o", decrypted);
       document.write('<pre>' + decrypted + '</pre>');
-   });
+   },
+            function(err) {
+               alert('Decryption failed!');
+            }
+   );
 </script>
 <pre>
 This file is part of the Zimbra OpenPGP Zimlet project.
