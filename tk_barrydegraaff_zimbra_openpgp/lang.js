@@ -376,5 +376,5 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][63] = 'Hãy chọn tệp tin để giải mã.';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][64] = 'Giải mã bằng';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][65] = 'Tệp tin';
-   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][66] = 'Auto decrypt';   
+   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][66] = 'Tự động giải mã';
 }
