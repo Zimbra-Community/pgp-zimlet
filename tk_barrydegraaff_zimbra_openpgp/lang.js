@@ -238,7 +238,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][63] = 'Por favor, seleccione el fichero que ser´desencriptado.';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][64] = 'Desencriptar usando';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][65] = 'Fichero';
-   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][66] = 'Auto decrypt';
+   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][66] = 'Desencriptar automáticamente';
    
    tk_barrydegraaff_zimbra_openpgp.lang['italian'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][0] = 'Estensione per messaggi OpenPGP per Zimbra Collaboration Suite.';
