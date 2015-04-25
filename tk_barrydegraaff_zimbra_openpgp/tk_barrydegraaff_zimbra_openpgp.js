@@ -244,12 +244,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
          //Still loading contacts, ignoring your addressbook
          this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][6], ZmStatusView.LEVEL_INFO);   
       }
-
       //Please provide private key and passphrase for decryption
-      if (tk_barrydegraaff_zimbra_openpgp.settings['auto_decrypt'] == 'true')
-      {
-         this.displayDialog(1, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][8], msg);
-      }   
+      this.displayDialog(1, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][8], msg);  
    }
    else {
       return;
@@ -524,8 +520,9 @@ function(id, title, message) {
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecrypt));
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       
-      //If a private key is available and a password is stored, auto decrypt the message
+      //If a private key is available and a password is stored, auto decrypt the message if option auto_decrypt is set to true
       if((tk_barrydegraaff_zimbra_openpgp.privateKeyCache.length > 10) && 
+      (tk_barrydegraaff_zimbra_openpgp.settings['auto_decrypt'] == 'true') &&
       ((this.getUserPropertyInfo("zimbra_openpgp_privatepass").value ? this.getUserPropertyInfo("zimbra_openpgp_privatepass").value : '').length > 0))
       {
          this.okBtnDecrypt();
