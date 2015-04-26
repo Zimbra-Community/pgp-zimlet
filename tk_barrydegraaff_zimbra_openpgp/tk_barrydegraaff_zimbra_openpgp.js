@@ -97,7 +97,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
       console.log('------------------------------------- OpenPGP init: Private key is in localstorage');
       var pgpPrivKeyRegEx = new RegExp('[\-]*BEGIN PGP PRIVATE KEY BLOCK[\-]*');
       if (localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()].match(pgpPrivKeyRegEx)) 
-      {	   
+      {      
          console.log('------------------------------------- OpenPGP init: Private key in localstorage looks like an unencrypted but valid key, encrypting with AES');
          if (!tk_barrydegraaff_zimbra_openpgp.settings['aes_password'])
          {
@@ -127,7 +127,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onShowView = function (view) {
 /* Make the Content-Type header available to this Zimlet to determine PGP Mime
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype._applyRequestHeaders =
-function() {	
+function() {   
    ZmMailMsg.requestHeaders["Content-Type"] = "Content-Type";
    ZmMailMsg.requestHeaders["Content-Transfer-Encoding"] = "Content-Transfer-Encoding";
 };
@@ -280,17 +280,17 @@ function(appName) {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype._resetApp=
 function(appName) {
-	app = appCtxt.getCurrentApp();
-	app.reset(false) ;
-	appCtxt.getAppController().activateApp("Mail") ;	
-	appCtxt.getAppChooser().getButton(tk_barrydegraaff_zimbra_openpgp.openPGPApp).setVisible(false);
+   app = appCtxt.getCurrentApp();
+   app.reset(false) ;
+   appCtxt.getAppController().activateApp("Mail") ;   
+   appCtxt.getAppChooser().getButton(tk_barrydegraaff_zimbra_openpgp.openPGPApp).setVisible(false);
 }   
 
 /* This method gets called by the Zimlet framework when double-click is performed.
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.doubleClicked =
 function() {
-	//Launch Manage keys
+   //Launch Manage keys
    this.displayDialog(3, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][3], null);
 };
 
@@ -298,30 +298,30 @@ function() {
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.menuItemSelected =
 function(itemId) {
-	switch (itemId) {
-	case "sign":
+   switch (itemId) {
+   case "sign":
       this.displayDialog(4, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][1], null);
-		break;
-	case "encrypt":
+      break;
+   case "encrypt":
       this.displayDialog(6, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][2], null);
-		break;
-	case "pubkeys":
+      break;
+   case "pubkeys":
       this.displayDialog(3, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][3], null);
-		break;
-	case "keypair":
+      break;
+   case "keypair":
       this.displayDialog(5, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][4], null);
-		break;
-	case "encrypt-file":
+      break;
+   case "encrypt-file":
       this.displayDialog(7, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][59], null);
-		break;
-	case "decrypt-file":
+      break;
+   case "decrypt-file":
       this.displayDialog(8, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][60], null);
-		break;      
-	case "help":
+      break;      
+   case "help":
       tk_barrydegraaff_zimbra_openpgp.openPGPApp = this.createApp('OpenPGP ' + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][11], "tk_barrydegraaff_zimbra_openpgp-panelIcon");
-      var app = appCtxt.getApp(tk_barrydegraaff_zimbra_openpgp.openPGPApp);	
+      var app = appCtxt.getApp(tk_barrydegraaff_zimbra_openpgp.openPGPApp);   
       app.launch();      
-		break;
+      break;
    case "help-new":
       window.open("/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html");
       break;
@@ -333,28 +333,28 @@ function(itemId) {
 tk_barrydegraaff_zimbra_openpgp.prototype.doDrop =
 function(zmObject) {
    //http://wiki.zimbra.com/wiki/Zimlet_cookbook_based_on_JavaScript_API#Download_Entire_Email
-	this.srcMsgObj = zmObject.srcObj;
-	if(this.srcMsgObj.type == "CONV"){
-		this.srcMsgObj = this.srcMsgObj.getFirstHotMsg();
-	}
-	var url = [];
-	var i = 0;
-	var proto = location.protocol;
-	var port = Number(location.port);
-	url[i++] = proto;
-	url[i++] = "//";
-	url[i++] = location.hostname;
-	if (port && ((proto == ZmSetting.PROTO_HTTP && port != ZmSetting.HTTP_DEFAULT_PORT) 
-		|| (proto == ZmSetting.PROTO_HTTPS && port != ZmSetting.HTTPS_DEFAULT_PORT))) {
-		url[i++] = ":";
-		url[i++] = port;
-	}
-	url[i++] = "/home/";
-	url[i++]= AjxStringUtil.urlComponentEncode(appCtxt.getActiveAccount().name);
-	url[i++] = "/message.txt?fmt=txt&id=";
-	url[i++] = this.srcMsgObj.id;
+   this.srcMsgObj = zmObject.srcObj;
+   if(this.srcMsgObj.type == "CONV"){
+      this.srcMsgObj = this.srcMsgObj.getFirstHotMsg();
+   }
+   var url = [];
+   var i = 0;
+   var proto = location.protocol;
+   var port = Number(location.port);
+   url[i++] = proto;
+   url[i++] = "//";
+   url[i++] = location.hostname;
+   if (port && ((proto == ZmSetting.PROTO_HTTP && port != ZmSetting.HTTP_DEFAULT_PORT) 
+      || (proto == ZmSetting.PROTO_HTTPS && port != ZmSetting.HTTPS_DEFAULT_PORT))) {
+      url[i++] = ":";
+      url[i++] = port;
+   }
+   url[i++] = "/home/";
+   url[i++]= AjxStringUtil.urlComponentEncode(appCtxt.getActiveAccount().name);
+   url[i++] = "/message.txt?fmt=txt&id=";
+   url[i++] = this.srcMsgObj.id;
 
-	var getUrl = url.join(""); 
+   var getUrl = url.join(""); 
 
    if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
    {
@@ -502,7 +502,7 @@ function(id, title, message) {
       if((tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead()) && (tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead() !== tk_barrydegraaff_zimbra_openpgp.privateKeyCache))
       {
          tk_barrydegraaff_zimbra_openpgp.privateKeyCache = tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead();
-	   } 
+      } 
       html = "<div style='width:650px; height: 180px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
       tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][8] + '. ' + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][18]+"<br><br>" +
       "</td></tr><tr><td>" +
@@ -565,7 +565,8 @@ function(id, title, message) {
       html = "<div style='width:650px; height: 500px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
       "<ul>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][22]+"</ul><br>" +
       "</td></tr>" +      
-      "<tr><td style=\"width:100px\">"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][19]+":</td><td style=\"width:500px\">"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][25]+"<textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='privateKeyInput'/>" + (tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead() ? tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead() : '') + "</textarea></td></tr>" +
+      "<tr><td style=\"width:100px\">"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][19]+":</td><td style=\"width:500px\">"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][25]+"<textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='privateKeyInput'/>" + (tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead() ? tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead() : '') + "</textarea>" +
+      "<input type='checkbox' id='set_new_aes_password' name='set_new_aes_password' value='true'>" + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][67] +
       "<tr><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][20]+":</td><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][24]+"<input class=\"barrydegraaff_zimbra_openpgp-input\" id='privatePassInput' type='password' value='" + (this.getUserPropertyInfo("zimbra_openpgp_privatepass").value ? this.getUserPropertyInfo("zimbra_openpgp_privatepass").value : '') + "'></td></tr>" +
       "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][23]+":</td><td><br>" + langListHtml + "</td></tr>" +
       "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][27]+":</td><td><br><input type='checkbox' id='enable_contacts_scanning' name='enable_contacts_scanning' " + (tk_barrydegraaff_zimbra_openpgp.settings['enable_contacts_scanning']=='false' ? '' : 'checked') + " value='true'>" + "</td></tr>" +
@@ -581,7 +582,7 @@ function(id, title, message) {
       if((tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead()) && (tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead() !== tk_barrydegraaff_zimbra_openpgp.privateKeyCache))
       {
          tk_barrydegraaff_zimbra_openpgp.privateKeyCache = tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead();
-	   }
+      }
       html = "<div style='width:650px; height: 350px; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
       tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][28] + " " + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][18]+"<br><br>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
@@ -641,7 +642,7 @@ function(id, title, message) {
       if((tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead()) && (tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead() !== tk_barrydegraaff_zimbra_openpgp.privateKeyCache))
       {
          tk_barrydegraaff_zimbra_openpgp.privateKeyCache = tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead();
-	   }      
+      }      
       html = "<div style='width:650px; height: 350; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
       tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][36]+" <a style='color:blue; text-decoration: underline;' onclick=\"tk_barrydegraaff_zimbra_openpgp.prototype.menuItemSelected('help-new')\">"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][11]+"</a>.<br><br>" +
       "</td></tr><tr><td>" +
@@ -669,7 +670,7 @@ function(id, title, message) {
       if((tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead()) && (tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead() !== tk_barrydegraaff_zimbra_openpgp.privateKeyCache))
       {
          tk_barrydegraaff_zimbra_openpgp.privateKeyCache = tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead();
-	   }      
+      }      
       html = "<div style='width:650px; height: 350; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
       tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][61]+"<br><br>" +
       "</td></tr><tr><td>" +
@@ -700,7 +701,7 @@ function(id, title, message) {
             tk_barrydegraaff_zimbra_openpgp.file = result[1];
             tk_barrydegraaff_zimbra_openpgp.filename = file.name;
          }
-         reader.readAsDataURL(file);			
+         reader.readAsDataURL(file);         
       });
       
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnEncryptFile));
@@ -710,7 +711,7 @@ function(id, title, message) {
       if((tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead()) && (tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead() !== tk_barrydegraaff_zimbra_openpgp.privateKeyCache))
       {
          tk_barrydegraaff_zimbra_openpgp.privateKeyCache = tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead();
-	   }      
+      }      
       html = "<div style='width:650px; height: 350; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
       tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][63]+"<br><br>" +
       "</td></tr><tr><td>" +
@@ -737,14 +738,14 @@ function(id, title, message) {
             tk_barrydegraaff_zimbra_openpgp.file = reader.result;
             tk_barrydegraaff_zimbra_openpgp.filename = file.name;
          }
-         reader.readAsText(file);			
+         reader.readAsText(file);         
       });
       
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecryptFile));
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;     
    }
-	this._dialog._setAllowSelection();
+   this._dialog._setAllowSelection();
    this._dialog.popup();
 };
 
@@ -1090,7 +1091,7 @@ function(aes_password, privatekey) {
    //Do not allow to store invalid private keys
    var pgpPrivKeyRegEx = new RegExp('[\-]*BEGIN PGP PRIVATE KEY BLOCK[\-]*');
    if (privatekey.match(pgpPrivKeyRegEx)) 
-   {	   
+   {      
       localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()] = Aes.Ctr.encrypt(privatekey, tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
       //localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()] = privatekey;
       tk_barrydegraaff_zimbra_openpgp.privateKeyCache=privatekey;
@@ -1112,7 +1113,7 @@ function() {
       console.log('------------------------------------- OpenPGP localStorageRead: Private key is in localstorage');
       var pgpPrivKeyRegEx = new RegExp('[\-]*BEGIN PGP PRIVATE KEY BLOCK[\-]*');
       if (localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()].match(pgpPrivKeyRegEx)) 
-      {	   
+      {      
          console.log('------------------------------------- OpenPGP localStorageRead: Private key in localstorage looks like an unencrypted but valid key');
          return localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()];
       }
@@ -1120,7 +1121,16 @@ function() {
       {
          //call decrypt function 
          console.log('------------------------------------- OpenPGP localStorageRead: Private key in localstorage looks like an encrypted key, decrypt');
-         return Aes.Ctr.decrypt(localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()], tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);         
+         var privkey = Aes.Ctr.decrypt(localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()], tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         if (privkey.match(pgpPrivKeyRegEx))
+         {
+            return privkey;
+         }
+         else
+         {
+            console.log('------------------------------------- OpenPGP localStorageRead: failed to decrypt localstorage');
+            return;
+         }   
       }
    }
    else
@@ -1138,8 +1148,10 @@ function() {
    tk_barrydegraaff_zimbra_openpgp.settings['enable_contacts_scanning'] = (document.getElementById("enable_contacts_scanning").checked ? 'true' : 'false');
    tk_barrydegraaff_zimbra_openpgp.settings['auto_decrypt'] = (document.getElementById("auto_decrypt").checked ? 'true' : 'false');
    tk_barrydegraaff_zimbra_openpgp.settings['language'] = (document.getElementById("zimbra_openpgp_language").value);
-   if (!tk_barrydegraaff_zimbra_openpgp.settings['aes_password'])
-   {
+   
+   if ((!tk_barrydegraaff_zimbra_openpgp.settings['aes_password']) ||
+   ((document.getElementById("set_new_aes_password").checked ? 'true' : 'false') == 'true')) 
+   {   
       tk_barrydegraaff_zimbra_openpgp.settings['aes_password'] = tk_barrydegraaff_zimbra_openpgp.prototype.pwgen();
    }   
    tk_barrydegraaff_zimbra_openpgp.prototype.localStorageSave(tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], document.getElementById("privateKeyInput").value);
@@ -1259,7 +1271,7 @@ function() {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnKeyPair =
 function() {
-	var userid = document.getElementById("uid").value;
+   var userid = document.getElementById("uid").value;
    var keyLength = document.getElementById("keyLength").value;
    var passphrase = document.getElementById("passphraseInput").value;
    var keyStore = document.getElementById("keyStore").checked;
@@ -1692,35 +1704,35 @@ function(app, toolbar, controller, viewId) {
    // bug fix #7192 - disable detach toolbar button
    toolbar.enable(ZmOperation.DETACH_COMPOSE, false);   
    
-	if(viewId.indexOf("COMPOSE") >=0){
+   if(viewId.indexOf("COMPOSE") >=0){
       if (toolbar.getButton('OPENPGPENCRYPT'))
       {
          //button already defined
          return;
       }
-		var buttonArgs = {
-			text    : tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][2],
-			tooltip: tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][2] + " " + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][53],
-			index: 4, //position of the button
-			image: "zimbraicon" //icon
-		};
-		var button = toolbar.createOp("OPENPGPENCRYPT", buttonArgs);
-		button.addSelectionListener(new AjxListener(this, this.composeEncryptHandler, controller));
+      var buttonArgs = {
+         text    : tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][2],
+         tooltip: tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][2] + " " + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][53],
+         index: 4, //position of the button
+         image: "zimbraicon" //icon
+      };
+      var button = toolbar.createOp("OPENPGPENCRYPT", buttonArgs);
+      button.addSelectionListener(new AjxListener(this, this.composeEncryptHandler, controller));
 
       if (toolbar.getButton('OPENPGPSIGN'))
       {
          //button already defined
          return;
       }
-		var buttonArgs = {
-			text    : tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][1],
-			tooltip: tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][1] + " " + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][53],
-			index: 5, //position of the button
-			image: "zimbraicon" //icon
-		};
-		var button = toolbar.createOp("OPENPGPSIGN", buttonArgs);
-		button.addSelectionListener(new AjxListener(this, this.composeSignHandler, controller));
-	}
+      var buttonArgs = {
+         text    : tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][1],
+         tooltip: tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][1] + " " + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][53],
+         index: 5, //position of the button
+         image: "zimbraicon" //icon
+      };
+      var button = toolbar.createOp("OPENPGPSIGN", buttonArgs);
+      button.addSelectionListener(new AjxListener(this, this.composeSignHandler, controller));
+   }
 };
 
 /* Compose window integration
@@ -1832,26 +1844,24 @@ tk_barrydegraaff_zimbra_openpgp.prototype.readAddressBook = function() {
    }
    
    tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress = true;
-   //OpenPGP scanning contacts in progress
-   console.log('------------------------------------- '+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][58]);
+   
+   var url = [];
+   var i = 0;
+   var proto = location.protocol;
+   var port = Number(location.port);
+   url[i++] = proto;
+   url[i++] = "//";
+   url[i++] = location.hostname;
+   if (port && ((proto == ZmSetting.PROTO_HTTP && port != ZmSetting.HTTP_DEFAULT_PORT) 
+      || (proto == ZmSetting.PROTO_HTTPS && port != ZmSetting.HTTPS_DEFAULT_PORT))) {
+      url[i++] = ":";
+      url[i++] = port;
+   }
+   url[i++] = "/home/";
+   url[i++]= AjxStringUtil.urlComponentEncode(appCtxt.getActiveAccount().name);
+   url[i++] = "/Contacts?fmt=txt&charset=UTF-8";
 
-	var url = [];
-	var i = 0;
-	var proto = location.protocol;
-	var port = Number(location.port);
-	url[i++] = proto;
-	url[i++] = "//";
-	url[i++] = location.hostname;
-	if (port && ((proto == ZmSetting.PROTO_HTTP && port != ZmSetting.HTTP_DEFAULT_PORT) 
-		|| (proto == ZmSetting.PROTO_HTTPS && port != ZmSetting.HTTPS_DEFAULT_PORT))) {
-		url[i++] = ":";
-		url[i++] = port;
-	}
-	url[i++] = "/home/";
-	url[i++]= AjxStringUtil.urlComponentEncode(appCtxt.getActiveAccount().name);
-	url[i++] = "/Contacts?fmt=txt&charset=UTF-8";
-
-	var getUrl = url.join(""); 
+   var getUrl = url.join(""); 
 
    //Now make an ajax request and read the contents of this mail, including all attachments as text
    //it should be base64 encoded
@@ -1872,8 +1882,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.readAddressBook = function() {
    });
 
    tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress = false;
-   //OpenPGP scanning contacts completed
-   console.log('------------------------------------- '+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][57]);
 };
 
 
