@@ -34,13 +34,6 @@ tk_barrydegraaff_zimbra_openpgp = function() {
    oScript.type = "text/javascript";
    oScript.src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.js";
    oHead.appendChild( oScript); 
-/*
-   var oHead = document.getElementsByTagName('HEAD').item(0);
-   var oScript= document.createElement("script");
-   oScript.type = "text/javascript";
-   oScript.src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/aes-ctr.js";
-   oHead.appendChild( oScript); 
-*/
 };
 
 tk_barrydegraaff_zimbra_openpgp.prototype = new ZmZimletBase;
@@ -334,75 +327,6 @@ function(itemId) {
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.doDrop =
 function(zmObject) {
-   //http://wiki.zimbra.com/wiki/Zimlet_cookbook_based_on_JavaScript_API#Download_Entire_Email
-   this.srcMsgObj = zmObject.srcObj;
-   if(this.srcMsgObj.type == "CONV"){
-      this.srcMsgObj = this.srcMsgObj.getFirstHotMsg();
-   }
-   var url = [];
-   var i = 0;
-   var proto = location.protocol;
-   var port = Number(location.port);
-   url[i++] = proto;
-   url[i++] = "//";
-   url[i++] = location.hostname;
-   if (port && ((proto == ZmSetting.PROTO_HTTP && port != ZmSetting.HTTP_DEFAULT_PORT) 
-      || (proto == ZmSetting.PROTO_HTTPS && port != ZmSetting.HTTPS_DEFAULT_PORT))) {
-      url[i++] = ":";
-      url[i++] = port;
-   }
-   url[i++] = "/home/";
-   url[i++]= AjxStringUtil.urlComponentEncode(appCtxt.getActiveAccount().name);
-   url[i++] = "/message.txt?fmt=txt&id=";
-   url[i++] = this.srcMsgObj.id;
-
-   var getUrl = url.join(""); 
-
-   if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
-   {
-      console.log(getUrl);
-   }   
-
-   //Now make an ajax request and read the contents of this mail, including all attachments as text
-   //it should be base64 encoded
-   var xmlHttp = null;   
-   xmlHttp = new XMLHttpRequest();
-   xmlHttp.open( "GET", getUrl, false );
-   xmlHttp.send( null );
-   
-   var msg = xmlHttp.responseText;   
-
-   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
-
-   if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
-   {
-      //Still loading contacts, ignoring your addressbook
-      this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][6], ZmStatusView.LEVEL_INFO);   
-   }
-
-   var clearSignedRegEx = new RegExp('[\-]*BEGIN PGP SIGNATURE[\-]*');
-   var pgpMessageRegEx = new RegExp('[\-]*BEGIN PGP MESSAGE[\-]*');
-   
-    if (msg.match(clearSignedRegEx)) {
-      try {
-         var message = openpgp.cleartext.readArmored(msg);
-      }
-      catch(err) {
-         //Could not read armored message!
-         this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][7], ZmStatusView.LEVEL_CRITICAL);
-         return;
-      }
-      this.verify(message);
-   }
-   else if (msg.match(pgpMessageRegEx)) {
-      //Please provide private key and passphrase for decryption
-      this.displayDialog(1, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][8], msg);
-   }
-   else {
-      //No PGP message detected.
-      this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][12], ZmStatusView.LEVEL_WARNING);
-      return;
-   }
 };
 
 /* verify method checks against known public keys and
