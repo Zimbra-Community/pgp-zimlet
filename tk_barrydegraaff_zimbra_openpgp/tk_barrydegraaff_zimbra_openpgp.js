@@ -1209,6 +1209,8 @@ function() {
    tk_barrydegraaff_zimbra_openpgp.privateKeyCache = privateKeyInput;
    var passphrase = document.getElementById("passphraseInput").value;
    var message = document.getElementById("message").value;
+   //Work-around bug: https://github.com/openpgpjs/openpgpjs/issues/311
+   message = message.trim();
    var returnType = document.getElementById("returnType").value; 
 
    try {
