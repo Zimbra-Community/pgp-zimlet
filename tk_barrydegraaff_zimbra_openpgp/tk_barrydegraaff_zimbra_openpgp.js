@@ -219,12 +219,14 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
       msgSearch=msg;
    }
    
-   if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
-   {
-      console.log(msg);
-   }
-
-   if (msgSearch.indexOf("BEGIN PGP SIGNED MESSAGE") > 0 ) {          
+   if (msgSearch.indexOf("BEGIN PGP SIGNED MESSAGE") > 0 ) {
+      if (msg.indexOf('quoted-printable') > 0 ) {
+         /*quoted-prinable decode, breaks PGP ASCII armor
+         to-do: find out if we can patch quoted-prinable decode function
+         so we can have larger (html) messages verified without
+         clicking view-entire-message in Zimbra */
+         msg = bp.node.content;
+      }         
       if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
       {
          //Still loading contacts, ignoring your addressbook
