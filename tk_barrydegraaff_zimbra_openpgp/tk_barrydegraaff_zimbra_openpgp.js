@@ -216,7 +216,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg) {
    if(msgSearch=='')
    {
       //In case of PGP mime, we look in the entire mail for PGP Message block
-      msgSearch=bp.node.content;
+      msgSearch=message;
    }
    
    if (msgSearch.indexOf("BEGIN PGP SIGNED MESSAGE") > 0 ) {
