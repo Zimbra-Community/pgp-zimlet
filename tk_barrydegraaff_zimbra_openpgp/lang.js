@@ -102,6 +102,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['english'][65] = 'File';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][66] = 'Auto decrypt';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][67] = 'Forget all other public keys (set new AES password)';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
    
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][0] = 'OpenPGP berichten uitbreiding voor Zimbra Collaboration Suite.';
@@ -171,7 +172,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][64] = 'Ontsleutel met';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][65] = 'Bestand';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][66] = 'Ontsleutel automatisch';
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][67] = 'Vergeet andere publieke sleutels (stel nieuw AES wachtwoord in)';   
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][67] = 'Vergeet andere publieke sleutels (stel nieuw AES wachtwoord in)';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
 
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][0] = 'Extensión de mensajes OpenPGP para Zimbra Collaboration Suite.';
@@ -242,6 +244,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][65] = 'Fichero';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][66] = 'Desencriptar automáticamente';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][67] = 'Olvidar todas las llaves públicas (especifica una nueva contraseña AES)';
+   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
    
    tk_barrydegraaff_zimbra_openpgp.lang['italian'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][0] = 'Estensione per messaggi OpenPGP per Zimbra Collaboration Suite.';
@@ -311,7 +314,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][64] = 'Decripta usando';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][65] = 'File';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][66] = 'Decriptazione automatica';
-   tk_barrydegraaff_zimbra_openpgp.lang['italian'][67] = 'Dimentica tutte le altre chiavi pubbliche (imposta una nuova password AES)'; 
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][67] = 'Dimentica tutte le altre chiavi pubbliche (imposta una nuova password AES)';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
    
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][0] = 'Phần mở rộng thư OpenPGP cho Zimbra Collaboration Suite.';
@@ -382,4 +386,5 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][65] = 'Tệp tin';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][66] = 'Tự động giải mã';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][67] = 'Forget all other public keys (set new AES password)'; 
+   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
 }

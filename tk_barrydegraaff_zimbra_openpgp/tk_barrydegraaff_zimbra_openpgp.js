@@ -72,6 +72,18 @@ tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
       tk_barrydegraaff_zimbra_openpgp.settings['auto_decrypt'] = 'true';
    }
 
+   /* The maximum email size ZmSetting.MAX_MESSAGE_SIZE, before Zimbra displays 'This message is too large to display'
+    * This limit only applies to clear-signed messages, as they are read via ZmMailMsg object that is also truncated.
+    * We still want to use ZmMailMsg object to avoid breaking ASCII Armored clear signed messages (decode utf-8 printed-quotable)
+    * 
+    * Encrypted messages are read via the REST API and are not limited in size. Since hardened to be only ASCII, they are never 
+    * utf-8 or otherwise encoded, so we can use REST for this.
+    */
+   if(tk_barrydegraaff_zimbra_openpgp.settings['max_message_size'])
+   {
+      appCtxt.set(ZmSetting.MAX_MESSAGE_SIZE, tk_barrydegraaff_zimbra_openpgp.settings['max_message_size']);
+   }
+
    this._zimletContext._panelActionMenu.args[0][0].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][1];
    this._zimletContext._panelActionMenu.args[0][1].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][2];
    this._zimletContext._panelActionMenu.args[0][2].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][3];
@@ -126,9 +138,12 @@ function() {
 };
 
 
-/*This method is called when a message is viewed in Zimbra
+/* This method is called when a message is viewed in Zimbra
+ * 
+ * See the comment above in init function on maximum email size ZmSetting.MAX_MESSAGE_SIZE on why onMsgView function is a bit complicated.
+ * 
  * */
-tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, view) {     
+tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg) {
    var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
    if (!bp)
    {
@@ -177,11 +192,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
 
    var getUrl = url.join(""); 
 
-   if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
-   {
-      console.log(getUrl);
-   }   
-
    //Now make an ajax request and read the contents of this mail, including all attachments as text
    //it should be base64 encoded
    var xmlHttp = null;   
@@ -192,34 +202,24 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
    try {
       if (msg.attrs['Content-Transfer-Encoding'].indexOf('quoted-printable') > -1)
       {
-         var msg = tk_barrydegraaff_zimbra_openpgp.prototype.quoted_printable_decode(xmlHttp.responseText);
+         var message = tk_barrydegraaff_zimbra_openpgp.prototype.quoted_printable_decode(xmlHttp.responseText);
       }
       else
       {
-         //Overwrite the msg variable here intentionally, since it is not complete for large emails
-         var msg = xmlHttp.responseText;      
+         var message = xmlHttp.responseText;      
       }
    } catch (err) {      
       //No Content-Transfer-Encoding Header
-      var msg = xmlHttp.responseText;
-   }   
-     
-
+      var message = xmlHttp.responseText;
+   }
 
    if(msgSearch=='')
    {
       //In case of PGP mime, we look in the entire mail for PGP Message block
-      msgSearch=msg;
+      msgSearch=bp.node.content;
    }
    
    if (msgSearch.indexOf("BEGIN PGP SIGNED MESSAGE") > 0 ) {
-      if (msg.indexOf('quoted-printable') > 0 ) {
-         /*quoted-prinable decode, breaks PGP ASCII armor
-         to-do: find out if we can patch quoted-prinable decode function
-         so we can have larger (html) messages verified without
-         clicking view-entire-message in Zimbra */
-         msg = bp.node.content;
-      }         
       if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
       {
          //Still loading contacts, ignoring your addressbook
@@ -227,7 +227,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
       }
 
       try {
-         var message = openpgp.cleartext.readArmored(msg);
+         var message = openpgp.cleartext.readArmored(bp.node.content);
       }
       catch(err) {
          //Could not read armored message!
@@ -243,7 +243,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, vie
          this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][6], ZmStatusView.LEVEL_INFO);   
       }
       //Please provide private key and passphrase for decryption
-      this.displayDialog(1, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][8], msg);  
+      this.displayDialog(1, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][8], message);  
    }
    else {
       return;
@@ -497,7 +497,10 @@ function(id, title, message) {
       "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][23]+":</td><td><br>" + langListHtml + "</td></tr>" +
       "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][27]+":</td><td><br><input type='checkbox' id='enable_contacts_scanning' name='enable_contacts_scanning' " + (tk_barrydegraaff_zimbra_openpgp.settings['enable_contacts_scanning']=='false' ? '' : 'checked') + " value='true'>" + "</td></tr>" +
       "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][66]+":</td><td><br><input type='checkbox' id='auto_decrypt' name='auto_decrypt' " + (tk_barrydegraaff_zimbra_openpgp.settings['auto_decrypt']=='false' ? '' : 'checked') + " value='true'>" + "</td></tr>" +
-      pubkeyListHtml + "</table></div>";
+      pubkeyListHtml + 
+      "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][68]+":</td><td><br><input type='number' id='max_message_size' name='max_message_size' value='" + (tk_barrydegraaff_zimbra_openpgp.settings['max_message_size'] > 0 ? tk_barrydegraaff_zimbra_openpgp.settings['max_message_size'] : '1000000') + "'</td></tr>" +
+      "<tr><td>User settings:</td><td><textarea readonly class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\">" + this.getUserProperty("zimbra_openpgp_options") + "</textarea></td></tr>" +
+      "</table></div>";
       this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       this._dialog.setContent(html);
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnPubKeySave));
@@ -1074,6 +1077,14 @@ function() {
    tk_barrydegraaff_zimbra_openpgp.settings['enable_contacts_scanning'] = (document.getElementById("enable_contacts_scanning").checked ? 'true' : 'false');
    tk_barrydegraaff_zimbra_openpgp.settings['auto_decrypt'] = (document.getElementById("auto_decrypt").checked ? 'true' : 'false');
    tk_barrydegraaff_zimbra_openpgp.settings['language'] = (document.getElementById("zimbra_openpgp_language").value);
+   tk_barrydegraaff_zimbra_openpgp.settings['max_message_size'] = (document.getElementById("max_message_size").value);
+   
+   if((tk_barrydegraaff_zimbra_openpgp.settings['max_message_size']) &&
+   (tk_barrydegraaff_zimbra_openpgp.settings['max_message_size'] > 100000) &&
+   (tk_barrydegraaff_zimbra_openpgp.settings['max_message_size'] < 100000000))
+   {
+      appCtxt.set(ZmSetting.MAX_MESSAGE_SIZE, tk_barrydegraaff_zimbra_openpgp.settings['max_message_size']);
+   } 
    
    if ((!tk_barrydegraaff_zimbra_openpgp.settings['aes_password']) ||
    ((document.getElementById("set_new_aes_password").checked ? 'true' : 'false') == 'true')) 
