@@ -1079,12 +1079,14 @@ function() {
    tk_barrydegraaff_zimbra_openpgp.settings['language'] = (document.getElementById("zimbra_openpgp_language").value);
    tk_barrydegraaff_zimbra_openpgp.settings['max_message_size'] = (document.getElementById("max_message_size").value);
    
-   if((tk_barrydegraaff_zimbra_openpgp.settings['max_message_size']) &&
-   (tk_barrydegraaff_zimbra_openpgp.settings['max_message_size'] > 100000) &&
-   (tk_barrydegraaff_zimbra_openpgp.settings['max_message_size'] < 100000000))
+   if((!tk_barrydegraaff_zimbra_openpgp.settings['max_message_size']) ||
+   (tk_barrydegraaff_zimbra_openpgp.settings['max_message_size'] < 100000) ||
+   (tk_barrydegraaff_zimbra_openpgp.settings['max_message_size'] > 100000000))
    {
-      appCtxt.set(ZmSetting.MAX_MESSAGE_SIZE, tk_barrydegraaff_zimbra_openpgp.settings['max_message_size']);
-   } 
+      tk_barrydegraaff_zimbra_openpgp.settings['max_message_size'] = 1000000;
+   }
+
+   appCtxt.set(ZmSetting.MAX_MESSAGE_SIZE, tk_barrydegraaff_zimbra_openpgp.settings['max_message_size']);   
    
    if ((!tk_barrydegraaff_zimbra_openpgp.settings['aes_password']) ||
    ((document.getElementById("set_new_aes_password").checked ? 'true' : 'false') == 'true')) 
