@@ -241,7 +241,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][64] = 'Desencriptar usando';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][65] = 'Fichero';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][66] = 'Desencriptar automáticamente';
-   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][67] = 'Forget all other public keys (set new AES password)';      
+   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][67] = 'Olvidar todas las llaves públicas (especifica una nueva contraseña AES)';
    
    tk_barrydegraaff_zimbra_openpgp.lang['italian'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][0] = 'Estensione per messaggi OpenPGP per Zimbra Collaboration Suite.';
