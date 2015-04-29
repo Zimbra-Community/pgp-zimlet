@@ -467,8 +467,8 @@ function(id, title, message) {
       //Manage keys
 
       // make supported languages list in HTML
-      langListName = ['English','Español','Italiano','Nederlands','Tiếng Việt'];
-      langListValue = ['english','spanish','italian','dutch','vietnamese'];
+      langListName = ['English','Español','Italiano','Nederlands','Português (Brasil)','Tiếng Việt'];
+      langListValue = ['english','spanish','italian','dutch','portuguese_brazil','vietnamese'];
       
       langListHtml = "<select id='zimbra_openpgp_language' name='zimbra_openpgp_language'>";
       for (i = 0; i < langListValue.length; i++) {
