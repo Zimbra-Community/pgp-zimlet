@@ -385,7 +385,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][64] = 'Giải mã bằng';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][65] = 'Tệp tin';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][66] = 'Tự động giải mã';
-   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][67] = 'Forget all other public keys (set new AES password)'; 
+   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][67] = 'Hủy tất cả các khóa công khai (đặt mật khẩu AES mới)'; 
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
 
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'] = [];
