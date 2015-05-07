@@ -1150,6 +1150,11 @@ function() {
    var message = document.getElementById("message").value;
    //Work-around bug: https://github.com/openpgpjs/openpgpjs/issues/311
    message = message.trim();
+   
+   /*Clear signing messages that have ----- in the body text, break PGP Armor,
+   Replacing '-' at the beginning of each line with '- -', GnuPG does something 
+   similar.*/
+   message = message.replace(/^\-/mg," - -");
    var returnType = document.getElementById("returnType").value; 
 
    try {
