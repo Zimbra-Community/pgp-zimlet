@@ -1151,6 +1151,9 @@ function() {
    //Work-around bug: https://github.com/openpgpjs/openpgpjs/issues/311
    message = message.trim();
    
+   //Remove Unicode Character 'ZERO WIDTH SPACE' (U+200B) from clear signed messages. To avoid breaking PGP Armor
+   message = message.replace(/\u200B/g,'');
+       
    /*Clear signing messages that have ----- in the body text, break PGP Armor,
    Replacing '-' at the beginning of each line with '- -', GnuPG does something 
    similar.*/
