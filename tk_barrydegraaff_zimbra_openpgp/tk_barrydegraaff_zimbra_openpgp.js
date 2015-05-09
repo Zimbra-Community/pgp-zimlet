@@ -498,6 +498,7 @@ function(id, title, message) {
       "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][27]+":</td><td><br><input type='checkbox' id='enable_contacts_scanning' name='enable_contacts_scanning' " + (tk_barrydegraaff_zimbra_openpgp.settings['enable_contacts_scanning']=='false' ? '' : 'checked') + " value='true'>" + "</td></tr>" +
       "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][66]+":</td><td><br><input type='checkbox' id='auto_decrypt' name='auto_decrypt' " + (tk_barrydegraaff_zimbra_openpgp.settings['auto_decrypt']=='false' ? '' : 'checked') + " value='true'>" + "</td></tr>" +
       pubkeyListHtml + 
+      "<tr><td colspan=\"2\"><br><b>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][69]+"</b></td></tr>" +
       "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][68]+":</td><td><br><input onkeypress='return event.charCode >= 48 && event.charCode <= 57' type='number' id='max_message_size' name='max_message_size' value='" + (tk_barrydegraaff_zimbra_openpgp.settings['max_message_size'] > 0 ? tk_barrydegraaff_zimbra_openpgp.settings['max_message_size'] : '1000000') + "'</td></tr>" +
       "<tr><td>User settings:</td><td><textarea readonly class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\">" + this.getUserProperty("zimbra_openpgp_options") + "</textarea></td></tr>" +
       "</table></div>";
@@ -1644,11 +1645,6 @@ function ()
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.initializeToolbar =
 function(app, toolbar, controller, viewId) {
-   if (controller._action != 'NEW_MESSAGE')
-   {
-      //only integrate this zimlet on new email messages, not forwarded messages
-      return;
-   }
    
    // bug fix #7192 - disable detach toolbar button
    toolbar.enable(ZmOperation.DETACH_COMPOSE, false);   
@@ -1692,9 +1688,11 @@ function(controller) {
    var composeMode = appCtxt.getCurrentView().getHtmlEditor().getMode();
    var message = controller._getBodyContent();
 
-   if(message.indexOf("__SIG_PRE__") > 0 ) { 
-      this.displayDialog(2, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54], tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][55]+": <br><br><img src='/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/no-signatures.png' alt=''>");
-      return;      
+   if(composeMode != 'text/plain')
+   {
+      //Please format as plain text and try again.
+      tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][70], ZmStatusView.LEVEL_INFO); 
+      return;
    }
    
    if(message.length < 1)
@@ -1703,18 +1701,7 @@ function(controller) {
       tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][56], ZmStatusView.LEVEL_INFO);
       return;
    }
-
-   
-   if(composeMode != 'text/plain')
-   {
-      var composeView = appCtxt.getCurrentView();   
-      composeView.getHtmlEditor().setContent('');    
-
-      controller._setFormat(Dwt.TEXT);
-      composeView.getHtmlEditor().setMode(Dwt.TEXT);   
-      composeView.getHtmlEditor().setContent(message);    
-   }
-   
+  
    this.displayDialog(6, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][2], message);
 };
 
@@ -1738,9 +1725,10 @@ function(controller) {
    var composeMode = appCtxt.getCurrentView().getHtmlEditor().getMode();
    var message = controller._getBodyContent();
    
-   if(message.indexOf("__SIG_PRE__") > 0 ) { 
-      this.displayDialog(2, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54], tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][55]+": <br><br><img src='/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/no-signatures.png' alt=''>");
-      return;      
+   if(composeMode != 'text/plain')
+   {
+      //Please format as plain text and try again.
+      tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][70], ZmStatusView.LEVEL_INFO); 
    }
    
    if(message.length < 1)
@@ -1748,17 +1736,6 @@ function(controller) {
       //Please compose message first
       tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][56], ZmStatusView.LEVEL_INFO);
       return;
-   }
-
-   
-   if(composeMode != 'text/plain')
-   {
-      var composeView = appCtxt.getCurrentView();   
-      composeView.getHtmlEditor().setContent('');    
-
-      controller._setFormat(Dwt.TEXT);
-      composeView.getHtmlEditor().setMode(Dwt.TEXT);   
-      composeView.getHtmlEditor().setContent(message);    
    }
    
    this.displayDialog(4, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][1], message);

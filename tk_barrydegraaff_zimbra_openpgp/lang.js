@@ -103,6 +103,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['english'][66] = 'Auto decrypt';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][67] = 'Forget all other public keys (set new AES password)';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][69] = 'Advanced settings';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][70] = 'Please format as plain text and try again.';   
    
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][0] = 'OpenPGP berichten uitbreiding voor Zimbra Collaboration Suite.';
@@ -174,6 +176,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][66] = 'Ontsleutel automatisch';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][67] = 'Vergeet andere publieke sleutels (stel nieuw AES wachtwoord in)';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][69] = 'Geavanceerde instellingen';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][70] = 'Kies voor opmaken als platte tekst en probeer opnieuw.'; 
 
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][0] = 'Extensión de mensajes OpenPGP para Zimbra Collaboration Suite.';
@@ -245,7 +249,9 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][66] = 'Desencriptar automáticamente';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][67] = 'Olvidar todas las llaves públicas (especifica una nueva contraseña AES)';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
-   
+   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][69] = 'Advanced settings';
+   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][70] = 'Please format as plain text and try again.'; 
+
    tk_barrydegraaff_zimbra_openpgp.lang['italian'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][0] = 'Estensione per messaggi OpenPGP per Zimbra Collaboration Suite.';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][1] = 'Firma messaggio';
@@ -316,7 +322,9 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][66] = 'Decriptazione automatica';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][67] = 'Dimentica tutte le altre chiavi pubbliche (imposta una nuova password AES)';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
-   
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][69] = 'Advanced settings';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][70] = 'Please format as plain text and try again.'; 
+
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][0] = 'Phần mở rộng thư OpenPGP cho Zimbra Collaboration Suite.';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][1] = 'Ký điện tử thư';
@@ -387,6 +395,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][66] = 'Tự động giải mã';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][67] = 'Hủy tất cả các khóa công khai (đặt mật khẩu AES mới)'; 
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
+   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][69] = 'Advanced settings';
+   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][70] = 'Please format as plain text and try again.'; 
 
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][0] = 'Extensão OpenPGP para Zimbra Collaboration Suite.';
@@ -457,5 +467,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][65] = 'Arquivo';
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][66] = 'Auto desencriptar';
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][67] = 'Esquecer todas as chaves públicas (defina uma nova senha AES)';
-   tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][68] = 'ZmSetting MAX_MESSAGE_SIZE';   
+   tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][68] = 'ZmSetting MAX_MESSAGE_SIZE';  
+   tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][69] = 'Advanced settings';
+   tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][70] = 'Please format as plain text and try again.'; 
 }
