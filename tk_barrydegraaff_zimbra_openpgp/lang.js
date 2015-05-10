@@ -249,8 +249,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][66] = 'Desencriptar automáticamente';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][67] = 'Olvidar todas las llaves públicas (especifica una nueva contraseña AES)';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
-   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][69] = 'Advanced settings';
-   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][70] = 'Please format as plain text and try again.'; 
+   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][69] = 'Opciones avanzadas';
+   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][70] = 'Por favor, crea el mensaje como Texto Plano e inténtalo de nuevo.'; 
 
    tk_barrydegraaff_zimbra_openpgp.lang['italian'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][0] = 'Estensione per messaggi OpenPGP per Zimbra Collaboration Suite.';
