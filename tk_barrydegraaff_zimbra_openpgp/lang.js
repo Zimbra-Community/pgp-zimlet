@@ -395,8 +395,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][66] = 'Tự động giải mã';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][67] = 'Hủy tất cả các khóa công khai (đặt mật khẩu AES mới)'; 
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
-   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][69] = 'Advanced settings';
-   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][70] = 'Please format as plain text and try again.'; 
+   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][69] = 'Thiết lập nâng cao';
+   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][70] = 'Hãy đặt định dạng văn bản thường và thử lại.';
 
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][0] = 'Extensão OpenPGP para Zimbra Collaboration Suite.';
