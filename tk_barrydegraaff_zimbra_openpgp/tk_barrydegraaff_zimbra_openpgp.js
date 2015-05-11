@@ -145,6 +145,7 @@ function() {
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg) {
    var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
+   var pgpmime = false;
    if (!bp)
    {
       try
@@ -154,6 +155,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg) {
          {
             //PGP Mime
             var msgSearch = '';
+            pgpmime =  true;
          }
          else
          {
@@ -165,58 +167,65 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg) {
       {
          // Content-Type header not found
          var msgSearch = '';
+         pgpmime =  true;
       }       
    }
    else
    {
-      //This is a plain-text message with PGP content
+      //Is this is a plain-text message with PGP content?
       var msgSearch = bp.node.content.substring(0,60);
    }   
 
-   var url = [];
-   var i = 0;
-   var proto = location.protocol;
-   var port = Number(location.port);
-   url[i++] = proto;
-   url[i++] = "//";
-   url[i++] = location.hostname;
-   if (port && ((proto == ZmSetting.PROTO_HTTP && port != ZmSetting.HTTP_DEFAULT_PORT) 
-      || (proto == ZmSetting.PROTO_HTTPS && port != ZmSetting.HTTPS_DEFAULT_PORT))) {
-      url[i++] = ":";
-      url[i++] = port;
-   }
-   url[i++] = "/home/";
-   url[i++]= AjxStringUtil.urlComponentEncode(appCtxt.getActiveAccount().name);
-   url[i++] = "/message.txt?fmt=txt&id=";
-   url[i++] = msg.id;
-
-   var getUrl = url.join(""); 
-
-   //Now make an ajax request and read the contents of this mail, including all attachments as text
-   //it should be base64 encoded
-   var xmlHttp = null;   
-   xmlHttp = new XMLHttpRequest();
-   xmlHttp.open( "GET", getUrl, false );
-   xmlHttp.send( null );
-   
-   try {
-      if (msg.attrs['Content-Transfer-Encoding'].indexOf('quoted-printable') > -1)
-      {
-         var message = tk_barrydegraaff_zimbra_openpgp.prototype.quoted_printable_decode(xmlHttp.responseText);
-      }
-      else
-      {
-         var message = xmlHttp.responseText;      
-      }
-   } catch (err) {      
-      //No Content-Transfer-Encoding Header
-      var message = xmlHttp.responseText;
-   }
-
-   if(msgSearch=='')
+   //Performance, do not GET the entire mail, if it is not PGP mail
+   if ((pgpmime) ||
+   (msgSearch.indexOf("BEGIN PGP SIGNED MESSAGE") > 0 ) ||
+   (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ))
    {
-      //In case of PGP mime, we look in the entire mail for PGP Message block
-      msgSearch=message;
+      var url = [];
+      var i = 0;
+      var proto = location.protocol;
+      var port = Number(location.port);
+      url[i++] = proto;
+      url[i++] = "//";
+      url[i++] = location.hostname;
+      if (port && ((proto == ZmSetting.PROTO_HTTP && port != ZmSetting.HTTP_DEFAULT_PORT) 
+         || (proto == ZmSetting.PROTO_HTTPS && port != ZmSetting.HTTPS_DEFAULT_PORT))) {
+         url[i++] = ":";
+         url[i++] = port;
+      }
+      url[i++] = "/home/";
+      url[i++]= AjxStringUtil.urlComponentEncode(appCtxt.getActiveAccount().name);
+      url[i++] = "/message.txt?fmt=txt&id=";
+      url[i++] = msg.id;
+   
+      var getUrl = url.join(""); 
+   
+      //Now make an ajax request and read the contents of this mail, including all attachments as text
+      //it should be base64 encoded
+      var xmlHttp = null;   
+      xmlHttp = new XMLHttpRequest();
+      xmlHttp.open( "GET", getUrl, false );
+      xmlHttp.send( null );
+      
+      try {
+         if (msg.attrs['Content-Transfer-Encoding'].indexOf('quoted-printable') > -1)
+         {
+            var message = tk_barrydegraaff_zimbra_openpgp.prototype.quoted_printable_decode(xmlHttp.responseText);
+         }
+         else
+         {
+            var message = xmlHttp.responseText;      
+         }
+      } catch (err) {      
+         //No Content-Transfer-Encoding Header
+         var message = xmlHttp.responseText;
+      }
+   
+      if(msgSearch=='')
+      {
+         //In case of PGP mime, we look in the entire mail for PGP Message block
+         msgSearch=message;
+      }   
    }
    
    if (msgSearch.indexOf("BEGIN PGP SIGNED MESSAGE") > 0 ) {
