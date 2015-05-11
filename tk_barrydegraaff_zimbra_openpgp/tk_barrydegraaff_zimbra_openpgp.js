@@ -1729,6 +1729,7 @@ function(controller) {
    {
       //Please format as plain text and try again.
       tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][70], ZmStatusView.LEVEL_INFO); 
+      return;
    }
    
    if(message.length < 1)
