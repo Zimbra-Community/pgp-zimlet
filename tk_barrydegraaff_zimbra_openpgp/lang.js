@@ -322,8 +322,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][66] = 'Decriptazione automatica';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][67] = 'Dimentica tutte le altre chiavi pubbliche (imposta una nuova password AES)';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
-   tk_barrydegraaff_zimbra_openpgp.lang['italian'][69] = 'Advanced settings';
-   tk_barrydegraaff_zimbra_openpgp.lang['italian'][70] = 'Please format as plain text and try again.'; 
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][69] = 'Impostazioni avanzate';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][70] = 'Per favore imposta la composizione in testo semplice e riprova.'; 
 
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][0] = 'Phần mở rộng thư OpenPGP cho Zimbra Collaboration Suite.';
