@@ -435,12 +435,12 @@ tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
             //Got a good signature
             //myWindow.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][14], ZmStatusView.LEVEL_INFO);
             sigStatus ='<b style="color:green">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][14]+'</b>';
-            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML= sigStatus;
+            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar').innerHTML= sigStatus;
          } else {
             //Got a BAD signature
             //myWindow.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][15], ZmStatusView.LEVEL_CRITICAL);
             sigStatus ='<b style="color:red">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][15]+'</b>';
-            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML= sigStatus;
+            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar').innerHTML= sigStatus;
          }
          if (message.text.indexOf('<html><body>') > -1 ) 
          {       
@@ -893,7 +893,8 @@ function() {
                   console.log('original message:' + original);
                }
 
-               document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML='<b>'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][41]+':</b> '+ sigStatus + '<br><br>'+ preOpen + decrypted.text + preClose +''
+               document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar').innerHTML='<b>'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][41]+':</b> '+ sigStatus;
+               document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML=preOpen + decrypted.text + preClose +'';
                myWindow.cancelBtn();
                /*
                myWindow._dialog.setPosition(DwtControl.ABSOLUTE_STYLE);
