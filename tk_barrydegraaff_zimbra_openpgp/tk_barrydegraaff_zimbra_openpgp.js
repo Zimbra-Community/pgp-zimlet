@@ -155,24 +155,24 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
 
    //Create new empty infobar for displaying pgp result
    var el = msgView.getHtmlElement();
-   var id = msgView.getHTMLElId()+"_tk_barrydegraaff_zimbra_openpgp";
+   
    var g=document.createElement('div');
    g.setAttribute("id", "tk_barrydegraaff_zimbra_openpgp_infobar");
    el.insertBefore(g, el.firstChild);
-   //document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar').innerHTML= 'tk_barrydegraaff_zimbra_openpgp_infobar '+msg.id;
 
    if(msgView._normalClass == 'ZmMailMsgCapsuleView')
    {
       var bodynode = document.getElementById('main_MSGC'+msg.id+'__body');
+      var attNode = document.getElementById('zv__CLV__main_MSGC'+msg.id+'_attLinks');
    }
    else
    {   
       var bodynode = document.getElementById('zv__TV-main__MSG__body');
+      var attNode = document.getElementById('zv__TV__TV-main_MSG_attLinks');
    }
    var g=document.createElement('div');
    g.setAttribute("id", "tk_barrydegraaff_zimbra_openpgp_infobar_body");
    el.insertBefore(g, bodynode);
-   //document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML= 'tk_barrydegraaff_zimbra_openpgp_infobar_body '+msg.id;
    
    //Detect what kind of message we have
    var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
@@ -282,6 +282,12 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
          //Still loading contacts, ignoring your addressbook
          this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][6], ZmStatusView.LEVEL_INFO);   
       }
+      
+      //Add an html infobar for displaying decrypted attachments
+      if(attNode)
+      {
+         attNode.innerHTML = '<div id="tk_barrydegraaff_zimbra_openpgp_infobar_att"></div>'+attNode.innerHTML;
+      }   
       //Please provide private key and passphrase for decryption
       this.displayDialog(1, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][8], message);  
    }
@@ -433,12 +439,10 @@ tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
          }
          if ( (goodsigs > 0) && (badsigs == 0) ) {
             //Got a good signature
-            //myWindow.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][14], ZmStatusView.LEVEL_INFO);
             sigStatus ='<b style="color:green">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][14]+'</b>';
             document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar').innerHTML= sigStatus;
          } else {
             //Got a BAD signature
-            //myWindow.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][15], ZmStatusView.LEVEL_CRITICAL);
             sigStatus ='<b style="color:red">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][15]+'</b>';
             document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar').innerHTML= sigStatus;
          }
@@ -821,12 +825,10 @@ function() {
                      {
                         //got a good signature
                         sigStatus ='<b style="color:green">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][14]+'</b>';
-                        //tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][14], ZmStatusView.LEVEL_INFO);
                      }
                      else
                      {
                         sigStatus ='<b style="color:red">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][15]+'</b>';
-                        //tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][15], ZmStatusView.LEVEL_CRITICAL);
                      }
                   }
                }
@@ -851,7 +853,7 @@ function() {
                            partArr[1] = partArr[1].split('=\n', 1);
                            partArr[1] = partArr[1] + '=';
                            partArr[1] = partArr[1].replace(/(\r\n|\n|\r)/gm,"");
-                           preClose = preClose + '<br><a onclick="tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(\''+filename[1]+'\',\'octet/stream\',\''+partArr[1]+'\')">'+filename[1]+'</a>';
+                           preClose = preClose + '<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/icon.png"> <a class="AttLink" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(\''+filename[1]+'\',\'octet/stream\',\''+partArr[1]+'\')">'+filename[1]+'</a><br>';
                         }                     
                         else if(partArr[0].indexOf('text/plain')> 0)
                         {
@@ -864,7 +866,9 @@ function() {
                      });
                      if(preClose.length > 0)
                      {
-                        preClose = '<br><br><hr style="border: none; height: 1px; background-color: #888888;"><b>'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][40]+'</b>'+preClose;   
+                        //Got attachments
+                        document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att').innerHTML = preClose + '<hr style="border: none; height: 1px; background-color: #888888;">';
+                        preClose='';
                      }
                      decrypted.text='';
                   } catch (err) {
@@ -896,15 +900,6 @@ function() {
                document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar').innerHTML='<b>'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][41]+':</b> '+ sigStatus;
                document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML=preOpen + decrypted.text + preClose +'';
                myWindow.cancelBtn();
-               /*
-               myWindow._dialog.setPosition(DwtControl.ABSOLUTE_STYLE);
-               myWindow._dialog.setSize("700px","450px");
-               myWindow._dialog.setLocation(Dwt.DEFAULT,"50px");
-               myWindow._dialog.setTitle(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][41]+' '+ sigStatus);
-               myWindow._dialog.setContent('<div style="width:650px; height: 400px; overflow-x: auto; overflow-y: auto; background-color:white; padding:5px;">'+ preOpen + decrypted.text + preClose +'</div>');
-               myWindow._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(myWindow, myWindow.cancelBtn));
-               myWindow._dialog.setButtonVisible(DwtDialog.OK_BUTTON, true);
-               */
             },
             function(err) {
                document.getElementById("message").style.backgroundImage = "url('')";
