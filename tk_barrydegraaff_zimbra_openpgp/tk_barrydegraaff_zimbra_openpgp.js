@@ -286,7 +286,14 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       //Add an html infobar for displaying decrypted attachments
       if(attNode)
       {
-         attNode.innerHTML = '<div id="tk_barrydegraaff_zimbra_openpgp_infobar_att"></div>'+attNode.innerHTML;
+         if (pgpmime)
+         {
+            attNode.innerHTML = '<div id="tk_barrydegraaff_zimbra_openpgp_infobar_att"></div>';
+         }
+         else
+         {
+            attNode.innerHTML = '<div id="tk_barrydegraaff_zimbra_openpgp_infobar_att"></div>'+attNode.innerHTML;
+         }   
       }   
       //Please provide private key and passphrase for decryption
       this.displayDialog(1, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][8], message);  
@@ -867,7 +874,7 @@ function() {
                      if(preClose.length > 0)
                      {
                         //Got attachments
-                        document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att').innerHTML = preClose + '<hr style="border: none; height: 1px; background-color: #888888;">';
+                        document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att').innerHTML = preClose;
                         preClose='';
                      }
                      decrypted.text='';
