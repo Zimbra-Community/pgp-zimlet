@@ -468,6 +468,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][66] = 'Auto desencriptar';
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][67] = 'Esquecer todas as chaves públicas (defina uma nova senha AES)';
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][68] = 'ZmSetting MAX_MESSAGE_SIZE';  
-   tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][69] = 'Advanced settings';
-   tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][70] = 'Please format as plain text and try again.'; 
+   tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][69] = 'Configurações avançadas';
+   tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][70] = 'Por favor use texto plano e tente de novo.';   
 }
