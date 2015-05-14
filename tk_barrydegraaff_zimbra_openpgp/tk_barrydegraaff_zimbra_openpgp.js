@@ -294,7 +294,13 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
          {
             attNode.innerHTML = '<div id="tk_barrydegraaff_zimbra_openpgp_infobar_att"></div>'+attNode.innerHTML;
          }   
-      }   
+      }
+      
+      if (!pgpmime)
+      {
+         //Hide the PGP MESSAGE block
+         bodynode.innerHTML = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][8];
+      }  
       //Please provide private key and passphrase for decryption
       this.displayDialog(1, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][8], message);  
    }
