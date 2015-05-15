@@ -274,6 +274,9 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
          this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][7], ZmStatusView.LEVEL_CRITICAL);
          return;
       }
+      //Hide PGP SIGNED MESSAGE block
+      var dispMessage = bp.node.content.replace(/(-----BEGIN PGP SIGNATURE-----)([^]+)(-----END PGP SIGNATURE-----)/m, "");
+      bodynode.innerHTML = '<pre style="margin:6px">'+dispMessage.replace(/-----BEGIN PGP SIGNED MESSAGE-----([^]+)Hash: .*/mi, "")+'</pre>';
       this.verify(message);
    }
    else if (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ) {
@@ -299,8 +302,10 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       if (!pgpmime)
       {
          //Hide the PGP MESSAGE block
-         bodynode.innerHTML = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][8];
+         bodynode.innerHTML = '';
       }  
+      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML=tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][8];
+      
       //Please provide private key and passphrase for decryption
       this.displayDialog(1, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][8], message);  
    }
