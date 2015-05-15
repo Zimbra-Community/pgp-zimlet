@@ -458,11 +458,11 @@ tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
          if ( (goodsigs > 0) && (badsigs == 0) ) {
             //Got a good signature
             sigStatus ='<b style="color:green">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][14]+'</b>';
-            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar').innerHTML= sigStatus;
+            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar').innerHTML= '<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/icon.png"> OpenPGP: '+sigStatus;
          } else {
             //Got a BAD signature
             sigStatus ='<b style="color:red">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][15]+'</b>';
-            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar').innerHTML= sigStatus;
+            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar').innerHTML= '<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/icon.png"> OpenPGP: '+sigStatus;
          }
          if (message.text.indexOf('<html><body>') > -1 ) 
          {       
@@ -871,7 +871,7 @@ function() {
                            partArr[1] = partArr[1].split('=\n', 1);
                            partArr[1] = partArr[1] + '=';
                            partArr[1] = partArr[1].replace(/(\r\n|\n|\r)/gm,"");
-                           preClose = preClose + '<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/icon.png"> <a class="AttLink" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(\''+filename[1]+'\',\'octet/stream\',\''+partArr[1]+'\')">'+filename[1]+'</a><br>';
+                           preClose = preClose + '<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/file-pgp-encrypted.png"> <a class="AttLink" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(\''+filename[1]+'\',\'octet/stream\',\''+partArr[1]+'\')">'+filename[1]+'</a><br>';
                         }                     
                         else if(partArr[0].indexOf('text/plain')> 0)
                         {
@@ -915,7 +915,7 @@ function() {
                   console.log('original message:' + original);
                }
 
-               document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar').innerHTML='<b>'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][41]+':</b> '+ sigStatus;
+               document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar').innerHTML='<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/icon.png"> OpenPGP: <b>'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][41]+', '+ sigStatus + '</b>';
                document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML=preOpen + decrypted.text + preClose +'';
                myWindow.cancelBtn();
             },
