@@ -888,6 +888,13 @@ function() {
                         document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att').innerHTML = preClose;
                         preClose='';
                      }
+                     else
+                     {
+                        //Got NO attachments, remove the attLinks div from UI
+                        preClose='';
+                        var e = document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_att");
+                        e.parentNode.parentNode.removeChild(e.parentNode);
+                     }
                      decrypted.text='';
                   } catch (err) {
                      console.log('multipart parser failed: ' + err);
