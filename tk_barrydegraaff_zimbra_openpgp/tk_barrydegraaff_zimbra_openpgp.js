@@ -99,11 +99,9 @@ tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
     */
    if(localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()])
    {
-      console.log('------------------------------------- OpenPGP init: Private key is in localstorage');
       var pgpPrivKeyRegEx = new RegExp('[\-]*BEGIN PGP PRIVATE KEY BLOCK[\-]*');
       if (localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()].match(pgpPrivKeyRegEx)) 
-      {      
-         console.log('------------------------------------- OpenPGP init: Private key in localstorage looks like an unencrypted but valid key, encrypting with AES');
+      {
          if (!tk_barrydegraaff_zimbra_openpgp.settings['aes_password'])
          {
             tk_barrydegraaff_zimbra_openpgp.settings['aes_password'] = tk_barrydegraaff_zimbra_openpgp.prototype.pwgen();
@@ -865,7 +863,8 @@ function() {
                var msgSearch = decrypted.text.substring(0,60);               
                if (msgSearch.indexOf("Content-Type: multipart/mixed;") > -1 ) {
                   try{
-                     var boundary = decrypted.text.match(/boundary="([^"\\]*(?:\\.[^"\\]*)*)"/i);                     
+                     var boundary = decrypted.text.match(/boundary="([^"\\]*(?:\\.[^"\\]*)*)"/i);
+                     boundary[1] = '--'+boundary[1];
                      var multipart = decrypted.text.split(boundary[1]);
                      multipart.forEach(function(part) {
                         var partArr=part.split('\n\n', 2);
@@ -879,10 +878,12 @@ function() {
                         }                     
                         else if(partArr[0].indexOf('text/plain')> 0)
                         {
+                           part = part.replace(/\n.*\nContent.*\n\n/m,'');
                            preOpen = '<pre>'+part+'</pre>';
                         }
                         else if(partArr[0].indexOf('text/html')> 0)
                         {
+                           part = part.replace(/\n.*\nContent.*\n\n/m,'');
                            preOpen = part;
                         }
                      });
@@ -1111,17 +1112,14 @@ tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead =
 function() {
    if(localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()])
    {
-      console.log('------------------------------------- OpenPGP localStorageRead: Private key is in localstorage');
       var pgpPrivKeyRegEx = new RegExp('[\-]*BEGIN PGP PRIVATE KEY BLOCK[\-]*');
       if (localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()].match(pgpPrivKeyRegEx)) 
       {      
-         console.log('------------------------------------- OpenPGP localStorageRead: Private key in localstorage looks like an unencrypted but valid key');
          return localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()];
       }
       else
       {
          //call decrypt function 
-         console.log('------------------------------------- OpenPGP localStorageRead: Private key in localstorage looks like an encrypted key, decrypt');
          var privkey = Aes.Ctr.decrypt(localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()], tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
          if (privkey.match(pgpPrivKeyRegEx))
          {
@@ -1129,14 +1127,13 @@ function() {
          }
          else
          {
-            console.log('------------------------------------- OpenPGP localStorageRead: failed to decrypt localstorage');
             return;
          }   
       }
    }
    else
    {
-      console.log('------------------------------------- OpenPGP localStorageRead: NO Private key is in localstorage');
+      return;
    }
 }
 
