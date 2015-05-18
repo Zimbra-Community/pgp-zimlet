@@ -170,13 +170,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
    }
    var g=document.createElement('div');
    g.setAttribute("id", "tk_barrydegraaff_zimbra_openpgp_infobar_body");
-   g.setAttribute("contenteditable", "true");
-   g.setAttribute("spellcheck", "false");
    el.insertBefore(g, bodynode);
 
-   bodynode.setAttribute("contenteditable", "true");
-   bodynode.setAttribute("spellcheck", "false");   
-   
    //Detect what kind of message we have
    var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
    var pgpmime = false;
