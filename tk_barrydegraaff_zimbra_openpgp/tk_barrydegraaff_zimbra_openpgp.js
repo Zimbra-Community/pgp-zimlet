@@ -878,12 +878,10 @@ function() {
                         }                     
                         else if(partArr[0].indexOf('text/plain')> 0)
                         {
-                           part = part.replace(/\n.*\nContent.*\n\n/m,'');
                            preOpen = '<pre>'+part+'</pre>';
                         }
                         else if(partArr[0].indexOf('text/html')> 0)
                         {
-                           part = part.replace(/\n.*\nContent.*\n\n/m,'');
                            preOpen = part;
                         }
                      });
