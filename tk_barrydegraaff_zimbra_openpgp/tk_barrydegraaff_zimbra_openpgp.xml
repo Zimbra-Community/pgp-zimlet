@@ -1,4 +1,4 @@
-<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="1.5.7" label="OpenPGP" description="Encrypt/Decrypt messages with OpenPGP">
+<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="1.6.7" label="OpenPGP" description="Encrypt/Decrypt messages with OpenPGP">
    <summary>
 Zimbra OpenPGP Zimlet
 
@@ -29,6 +29,8 @@ them here has no effect.
    <resource>icon.png</resource>
    <include>tk_barrydegraaff_zimbra_openpgp.js</include>
    <include>lang.js</include>
+   <include>aes.js</include>
+   <include>aes-ctr.js</include>
    <handlerObject>tk_barrydegraaff_zimbra_openpgp</handlerObject>
    <includeCSS>tk_barrydegraaff_zimbra_openpgp.css</includeCSS>
    <zimletPanelItem label="OpenPGP" icon="tk_barrydegraaff_zimbra_openpgp-panelIcon">
