@@ -164,10 +164,10 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       var attNode = document.getElementById('zv__CLV__main_MSGC'+msg.id+'_attLinks');
       var footerNode = document.getElementById('main_MSGC'+msg.id+'__footer');
 
+      //Space to add action links
       var g=document.createElement('div');
       g.setAttribute("id", "tk_barrydegraaff_zimbra_openpgp_infobar_footer");
       el.insertBefore(g, footerNode);
-      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_footer').innerHTML = '<a style="margin-left:6px" class="ConvLink Link" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.printdiv(\'main_MSGC'+msg.id+'\')">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54]+'</a>';
    }
    else
    {   
@@ -285,6 +285,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       this.verify(message);
    }
    else if (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ) {
+      //Allow to print decrypted message
+      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_footer').innerHTML = '<a style="margin-left:6px" class="ConvLink Link" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.printdiv(\'main_MSGC'+msg.id+'\')">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54]+'</a>';
       if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
       {
          //Still loading contacts, ignoring your addressbook
