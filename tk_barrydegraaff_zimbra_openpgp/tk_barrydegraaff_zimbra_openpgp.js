@@ -21,7 +21,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 //Constructor
 tk_barrydegraaff_zimbra_openpgp = function() {
    tk_barrydegraaff_zimbra_openpgp.privateKeyCache='';
-   tk_barrydegraaff_zimbra_openpgp.privatePassCache='';
+   tk_barrydegraaff_zimbra_openpgp.privatePassCache==(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value ? this.getUserPropertyInfo("zimbra_openpgp_privatepass").value : '');
    tk_barrydegraaff_zimbra_openpgp.addressBookPublicKeys = []; 
    tk_barrydegraaff_zimbra_openpgp.settings = {};
 
@@ -495,7 +495,7 @@ function(id, title, message) {
       if((tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead()) && (tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead() !== tk_barrydegraaff_zimbra_openpgp.privateKeyCache))
       {
          tk_barrydegraaff_zimbra_openpgp.privateKeyCache = tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead();
-      }
+      } 
       if((tk_barrydegraaff_zimbra_openpgp.prototype.localStorageReadPass()) && (tk_barrydegraaff_zimbra_openpgp.prototype.localStorageReadPass() !== tk_barrydegraaff_zimbra_openpgp.privatePassCache))
       {
          tk_barrydegraaff_zimbra_openpgp.privatePassCache = tk_barrydegraaff_zimbra_openpgp.prototype.localStorageReadPass();
@@ -1156,18 +1156,18 @@ function() {
 /* This method decrypts Private Key Passphrase from localStorage
  * It also encrypts localStorage that was created in previous versions of the Zimlet
  */
-tk_barrydegraaff_zimbra_openpgp.prototype.localStorageReadPass = 
+tk_barrydegraaff_zimbra_openpgp.prototype.localStorageReadPass =
 function() {
    if(localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()])
    {
       var pgpPrivKeyRegEx = new RegExp('[\-]*BEGIN PGP PRIVATE KEY BLOCK[\-]*');
-      if (localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()].match(pgpPrivKeyRegEx)) 
-      {      
+      if (localStorage['zimbra_openpgp_privatekey'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()].match(pgpPrivKeyRegEx))
+      {
          return localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()];
       }
       else
       {
-         //call decrypt function 
+         //call decrypt function
          return Aes.Ctr.decrypt(localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()], tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
       }
    }
@@ -1253,8 +1253,8 @@ function() {
    openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
    var privateKeyInput = document.getElementById("privateKeyInput").value;
    tk_barrydegraaff_zimbra_openpgp.privateKeyCache = privateKeyInput;
-   var passphraseInput = document.getElementById("passphraseInput").value;
-   tk_barrydegraaff_zimbra_openpgp.privatePassCache = passphraseInput;
+   var passphrase = document.getElementById("passphraseInput").value;
+   tk_barrydegraaff_zimbra_openpgp.privatePassCache = passphrase;
    var message = document.getElementById("message").value;
    //Work-around bug: https://github.com/openpgpjs/openpgpjs/issues/311
    message = message.trim();
