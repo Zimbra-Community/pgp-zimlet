@@ -286,7 +286,20 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
    }
    else if (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ) {
       //Allow to print decrypted message
-      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_footer').innerHTML = '<a style="margin-left:6px" class="ConvLink Link" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.printdiv(\'main_MSGC'+msg.id+'\')">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54]+'</a>';
+      if(msg.subject)
+      {
+         var subject = msg.subject.replace(/\*\*\*.*\*\*\*/,'');
+      }
+      else
+      {
+         var subject = 'Zimbra OpenPGP ' + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54];
+      }
+      
+      if(subject.length < 2)
+      {
+         subject = 'Zimbra OpenPGP ' + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54];
+      }
+      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_footer').innerHTML = '<a style="margin-left:6px" class="ConvLink Link" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.printdiv(\'main_MSGC'+msg.id+'\',\''+subject+'\')">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54]+'</a>';
       if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
       {
          //Still loading contacts, ignoring your addressbook
@@ -1994,11 +2007,11 @@ tk_barrydegraaff_zimbra_openpgp.prototype.urlify = function(text) {
     })  
 }
 
-tk_barrydegraaff_zimbra_openpgp.prototype.printdiv = function(printdivname) {
+tk_barrydegraaff_zimbra_openpgp.prototype.printdiv = function(printdivname, subject) {
    var divToPrint=document.getElementById(printdivname);
    var newWin=window.open('','Print-Window','width=800,height=600');
    newWin.document.open();
-   newWin.document.write('<html><head><title>Print-Window</title></head><body>'+divToPrint.innerHTML+'</body></html>');
+   newWin.document.write('<html><head><title>'+subject+'</title></head><body><h1>'+subject+'</h1>'+divToPrint.innerHTML+'</body></html>');
    newWin.document.close();
    newWin.focus();
    newWin.print();
