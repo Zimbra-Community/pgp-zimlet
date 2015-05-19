@@ -105,6 +105,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['english'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][69] = 'Advanced settings';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][70] = 'Please format as plain text and try again.';   
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][71] = 'Store private key passhrase locally';
    
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][0] = 'OpenPGP berichten uitbreiding voor Zimbra Collaboration Suite.';
@@ -178,6 +179,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][69] = 'Geavanceerde instellingen';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][70] = 'Kies voor opmaken als platte tekst en probeer opnieuw.'; 
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][71] = 'Store private key passhrase locally';
 
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][0] = 'Extensión de mensajes OpenPGP para Zimbra Collaboration Suite.';
@@ -251,6 +253,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][69] = 'Opciones avanzadas';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][70] = 'Por favor, crea el mensaje como Texto Plano e inténtalo de nuevo.'; 
+   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][71] = 'Store private key passhrase locally';
 
    tk_barrydegraaff_zimbra_openpgp.lang['italian'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][0] = 'Estensione per messaggi OpenPGP per Zimbra Collaboration Suite.';
@@ -324,6 +327,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][69] = 'Impostazioni avanzate';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][70] = 'Per favore imposta la composizione in testo semplice e riprova.'; 
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][71] = 'Store private key passhrase locally';
 
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][0] = 'Phần mở rộng thư OpenPGP cho Zimbra Collaboration Suite.';
@@ -397,6 +401,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][69] = 'Thiết lập nâng cao';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][70] = 'Hãy đặt định dạng văn bản thường và thử lại.';
+   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][71] = 'Lưu mật mã truy cập khóa riêng tại máy trạm';
 
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][0] = 'Extensão OpenPGP para Zimbra Collaboration Suite.';
@@ -470,4 +475,5 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][68] = 'ZmSetting MAX_MESSAGE_SIZE';  
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][69] = 'Configurações avançadas';
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][70] = 'Por favor use texto plano e tente de novo.';   
+   tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][71] = 'Store private key passhrase locally';
 }
