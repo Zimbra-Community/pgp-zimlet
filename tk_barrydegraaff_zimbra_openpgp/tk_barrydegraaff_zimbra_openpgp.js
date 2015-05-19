@@ -162,6 +162,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
    {
       var bodynode = document.getElementById('main_MSGC'+msg.id+'__body');
       var attNode = document.getElementById('zv__CLV__main_MSGC'+msg.id+'_attLinks');
+      var footerNode = document.getElementById('main_MSGC'+msg.id+'__footer');
+      footerNode.innerHTML = footerNode.innerHTML  + ' - <a class="ConvLink Link" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.printdiv(\'main_MSGC'+msg.id+'\')">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54]+'</a>';
    }
    else
    {   
@@ -1984,4 +1986,15 @@ tk_barrydegraaff_zimbra_openpgp.prototype.urlify = function(text) {
     return text.replace(urlRegex, function(url) {
       return text.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');
     })  
+}
+
+tk_barrydegraaff_zimbra_openpgp.prototype.printdiv = function(printdivname) {
+   var divToPrint=document.getElementById(printdivname);
+   var newWin=window.open('','Print-Window','width=800,height=600');
+   newWin.document.open();
+   newWin.document.write('<html><head><title>Print-Window</title></head><body onload="window.print()">'+divToPrint.innerHTML+'</body></html>');
+   newWin.document.close();
+   newWin.focus();
+   newWin.print();
+   newWin.close();
 }
