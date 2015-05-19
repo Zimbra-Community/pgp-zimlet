@@ -274,7 +274,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       }
       //Hide PGP SIGNED MESSAGE block
       var dispMessage = bp.node.content.replace(/(-----BEGIN PGP SIGNATURE-----)([^]+)(-----END PGP SIGNATURE-----)/m, "");
-      bodynode.innerHTML = '<pre style="margin:6px">'+dispMessage.replace(/-----BEGIN PGP SIGNED MESSAGE-----([^]+)Hash: .*/mi, "")+'</pre>';
+      bodynode.innerHTML = '';
+      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML='<pre style="margin:6px">'+dispMessage.replace(/-----BEGIN PGP SIGNED MESSAGE-----([^]+)Hash: .*/mi, "")+'</pre>';
       this.verify(message);
    }
    else if (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ) {
