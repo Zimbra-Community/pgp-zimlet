@@ -149,6 +149,9 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
    
    var elem = document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_body");
    elem.parentNode.removeChild(elem);
+
+   var elem = document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_footer");
+   elem.parentNode.removeChild(elem);   
    } catch (err) {}
 
    //Create new empty infobar for displaying pgp result
@@ -299,7 +302,10 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       {
          subject = 'Zimbra OpenPGP ' + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54];
       }
-      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_footer').innerHTML = '<a style="margin-left:6px" class="ConvLink Link" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.printdiv(\'main_MSGC'+msg.id+'\',\''+subject+'\')">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54]+'</a>';
+      if(document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_footer'))
+      {
+         document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_footer').innerHTML = '<a style="margin-left:6px" class="ConvLink Link" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.printdiv(\'main_MSGC'+msg.id+'\',\''+subject+'\')">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54]+'</a>';
+      }   
       if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
       {
          //Still loading contacts, ignoring your addressbook
