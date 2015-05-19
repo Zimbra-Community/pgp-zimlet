@@ -275,7 +275,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       //Hide PGP SIGNED MESSAGE block
       var dispMessage = bp.node.content.replace(/(-----BEGIN PGP SIGNATURE-----)([^]+)(-----END PGP SIGNATURE-----)/m, "");
       bodynode.innerHTML = '';
-      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML='<pre style="margin:6px">'+dispMessage.replace(/-----BEGIN PGP SIGNED MESSAGE-----([^]+)Hash: .*/mi, "")+'</pre>';
+      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML='<pre style="margin:6px">'+tk_barrydegraaff_zimbra_openpgp.prototype.urlify(dispMessage.replace(/-----BEGIN PGP SIGNED MESSAGE-----([^]+)Hash: .*/mi, ""))+'</pre>';
       this.verify(message);
    }
    else if (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ) {
@@ -927,7 +927,7 @@ function() {
                }
 
                document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar').innerHTML='<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/icon.png"> OpenPGP: <b>'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][41]+', '+ sigStatus + '</b>';
-               document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML=preOpen + decrypted.text + preClose +'';
+               document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML=tk_barrydegraaff_zimbra_openpgp.prototype.urlify(preOpen) + tk_barrydegraaff_zimbra_openpgp.prototype.urlify(decrypted.text) + preClose +'';
                myWindow.cancelBtn();
             },
             function(err) {
@@ -1975,4 +1975,13 @@ tk_barrydegraaff_zimbra_openpgp.prototype.quoted_printable_decode = function(str
       return String.fromCharCode(parseInt(sHex, 16));
     };
   return str.replace(RFC2045Decode1, '').replace(RFC2045Decode2IN, RFC2045Decode2OUT);
+}
+
+// Helper function to urlify links in the text.
+//https://gist.github.com/vinitkumar/10000895
+tk_barrydegraaff_zimbra_openpgp.prototype.urlify = function(text) {
+    var urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.replace(urlRegex, function(url) {
+      return text.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');
+    })  
 }
