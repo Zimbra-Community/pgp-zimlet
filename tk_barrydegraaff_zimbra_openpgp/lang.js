@@ -495,7 +495,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['french'][19] = 'Clé privée';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][20] = 'Phrase';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][21] = 'Message';
-   tk_barrydegraaff_zimbra_openpgp.lang['french'][22] = '<li>Commencer par copier/coller votre clé . </li><li> Vous pouvez aussi ajouter votre clé dans le champ Notes de votre fiche contact dans votre carnet d'adresse.</li><li> Vous pouvez aussi mettre des commentaires pour chaque clés du moment que vous commencez une nouvelle ligne pour une clé publique.</li>';   
+   tk_barrydegraaff_zimbra_openpgp.lang['french'][22] = '<li>Commencer par copier/coller votre clé . </li><li> Vous pouvez aussi ajouter votre clé dans le champ Notes de votre fiche contact dans votre carnet d\'adresse.</li><li> Vous pouvez aussi mettre des commentaires pour chaque clés du moment que vous commencez une nouvelle ligne pour une clé publique.</li>';   
    tk_barrydegraaff_zimbra_openpgp.lang['french'][23] = 'Langue';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][24] = 'Si vous sauvegarder votre phrase , celle ci sera conserver sur le serveur en clair . Si vous voulez plus de sécurité ne la sauvegarder pas , celle ci vous sera demandé à chaque fois.';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][25] = 'Si vous décider de sauvegarder votre clé privé ci-dessous, cette dernière sera stocké dans votre navigateur <a href=\'http://diveintohtml5.info/storage.html\' target=\'_blank\' >local storage</a> en utilisant le systme de cryptage  AES-256. Dans le cas contraire, la clé privé vous sera demandé à chaque session.';
