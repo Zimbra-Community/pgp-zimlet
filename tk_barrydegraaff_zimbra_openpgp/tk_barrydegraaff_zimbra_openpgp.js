@@ -150,12 +150,16 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
    var elem = document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_body");
    elem.parentNode.removeChild(elem);
 
-   var elem = document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_footer");
+   var elem = document.getElementById("tk_barrydegraaff_zimbra_openpgp_actionbar");
    elem.parentNode.removeChild(elem);   
    } catch (err) {}
 
    //Create new empty infobar for displaying pgp result
    var el = msgView.getHtmlElement();
+
+   var g=document.createElement('div');
+   g.setAttribute("id", "tk_barrydegraaff_zimbra_openpgp_actionbar");
+   el.insertBefore(g, el.firstChild);
    
    var g=document.createElement('div');
    g.setAttribute("id", "tk_barrydegraaff_zimbra_openpgp_infobar");
@@ -165,12 +169,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
    {
       var bodynode = document.getElementById('main_MSGC'+msg.id+'__body');
       var attNode = document.getElementById('zv__CLV__main_MSGC'+msg.id+'_attLinks');
-      var footerNode = document.getElementById('main_MSGC'+msg.id+'__footer');
-
-      //Space to add action links
-      var g=document.createElement('div');
-      g.setAttribute("id", "tk_barrydegraaff_zimbra_openpgp_infobar_footer");
-      el.insertBefore(g, footerNode);
    }
    else
    {   
@@ -302,9 +300,9 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       {
          subject = 'Zimbra OpenPGP ' + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54];
       }
-      if(document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_footer'))
+      if(document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar'))
       {
-         document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_footer').innerHTML = '<a style="margin-left:6px" class="ConvLink Link" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.printdiv(\'main_MSGC'+msg.id+'\',\''+subject+'\')">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54]+'</a>';
+         document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar').innerHTML = '<a style="text-decoration: none" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.printdiv(\'main_MSGC'+msg.id+'\',\''+subject+'\')"><img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/printButton.png"> '+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54]+'</a>';
       }   
       if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
       {
