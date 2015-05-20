@@ -2009,9 +2009,9 @@ tk_barrydegraaff_zimbra_openpgp.prototype.quoted_printable_decode = function(str
 //https://gist.github.com/vinitkumar/10000895
 tk_barrydegraaff_zimbra_openpgp.prototype.urlify = function(text) {
     var urlRegex = /(https?:\/\/[^\s]+)/g;
-    return text.replace(urlRegex, function(url) {
+    //return text.replace(urlRegex, function(url) {
       return text.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');
-    })  
+    //})  
 }
 
 tk_barrydegraaff_zimbra_openpgp.prototype.printdiv = function(printdivname, subject) {
