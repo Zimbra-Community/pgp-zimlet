@@ -282,7 +282,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       //Hide PGP SIGNED MESSAGE block
       var dispMessage = bp.node.content.replace(/(-----BEGIN PGP SIGNATURE-----)([^]+)(-----END PGP SIGNATURE-----)/m, "");
       bodynode.innerHTML = '';
-      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML='<pre style="margin:6px">'+tk_barrydegraaff_zimbra_openpgp.prototype.urlify(dispMessage.replace(/-----BEGIN PGP SIGNED MESSAGE-----([^]+)Hash: .*/mi, ""))+'</pre>';
+      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML='<pre style="white-space: pre-wrap;">'+tk_barrydegraaff_zimbra_openpgp.prototype.urlify(dispMessage.replace(/-----BEGIN PGP SIGNED MESSAGE-----([^]+)Hash: .*/mi, ""))+'</pre>';
       this.verify(message);
    }
    else if (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ) {
@@ -330,7 +330,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       {
          //Hide the PGP MESSAGE block
          bodynode.innerHTML = '';
-         document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML='<pre>'+bp.node.content+'</pre>';
+         document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML='<pre style="white-space: pre-wrap;">'+bp.node.content+'</pre>';
       }
       else
       {  
@@ -907,7 +907,7 @@ function() {
                         }                     
                         else if(partArr[0].indexOf('text/plain')> 0)
                         {
-                           preOpen = '<pre>'+part+'</pre>';
+                           preOpen = '<pre style="white-space: pre-wrap;">'+part+'</pre>';
                         }
                         else if(partArr[0].indexOf('text/html')> 0)
                         {
@@ -930,7 +930,7 @@ function() {
                      decrypted.text='';
                   } catch (err) {
                      console.log('multipart parser failed: ' + err);
-                     preOpen = '<pre>';
+                     preOpen = '<pre style="white-space: pre-wrap;">';
                      preClose = '</pre>';
                      decrypted.text=original;
                   }
@@ -940,7 +940,7 @@ function() {
                {               
                   if (decrypted.text.indexOf('<html><body>') < 0 ) 
                   {
-                     preOpen = '<pre>';
+                     preOpen = '<pre style="white-space: pre-wrap;">';
                      preClose = '</pre>';
                   }
                   else
