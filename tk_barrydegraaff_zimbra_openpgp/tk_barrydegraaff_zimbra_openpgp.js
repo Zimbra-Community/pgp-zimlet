@@ -698,21 +698,6 @@ function(id, title, message) {
          displayname = appCtxt.getActiveAccount().name;
       }  
 
-      // Get phassphrase
-      var decryptedPassphrase = '';
-      if (tk_barrydegraaff_zimbra_openpgp.settings['store_passphrase_locally'] == 'true')
-      {
-         decryptedPassphrase = Aes.Ctr.decrypt(localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()], tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
-      }
-      else
-      {
-         decryptedPassphrase = Aes.Ctr.decrypt(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value, tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
-      }
-      if (!decryptedPassphrase)
-      {
-         decryptedPassphrase = '';
-      }
-      
       html = "<div style='width:650px; height: 240px; overflow-x: hidden; overflow-y: hidden;'><table style='width:650px;'><tr><td colspan='2'>" +
       tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][29]+"<br><br>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
@@ -722,7 +707,7 @@ function(id, title, message) {
       "</td></tr><tr><td>" +
       tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][20]+":" +
       "</td><td>" +
-      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' value='" + (decryptedPassphrase=='' ? tk_barrydegraaff_zimbra_openpgp.prototype.pwgen() : decryptedPassphrase) + "'>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' value='" + tk_barrydegraaff_zimbra_openpgp.prototype.pwgen() + "'>" +
       "</td></tr><tr><td></td><td><button type=\"button\" onclick='document.getElementById(\"passphraseInput\").value=tk_barrydegraaff_zimbra_openpgp.prototype.pwgen()'>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][34]+"</button></td></tr><tr><td style=\"width:100px;\">" +
       tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][31]+":" +
       "</td><td style=\"width:500px\">" +
