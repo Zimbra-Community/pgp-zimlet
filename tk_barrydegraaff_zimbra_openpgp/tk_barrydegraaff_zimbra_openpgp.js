@@ -170,25 +170,15 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
    
       if(msgView._normalClass == 'ZmMailMsgCapsuleView')
       {
-         var bodynode = document.getElementById(msgView.__internalId+'__body');
-         var attNode = document.getElementById(msgView.__internalId+msg.id+'_attLinks');
+         var bodynode = document.getElementById('main_MSGC'+msg.id+'__body');
+         var attNode = document.getElementById('zv__CLV__main_MSGC'+msg.id+'_attLinks');
       }
       else
       {   
          var bodynode = document.getElementById('zv__TV-main__MSG__body');
          var attNode = document.getElementById('zv__TV__TV-main_MSG_attLinks');
       }
-      
-      if(!bodynode)
-      {
-         //Cannot display result in this message view
-         return;
-      }
-      
-      var g=document.createElement('div');
-      g.setAttribute("id", "tk_barrydegraaff_zimbra_openpgp_infobar_body");
-      el.insertBefore(g, bodynode);
-   
+       
       //Detect what kind of message we have
       var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
       var pgpmime = false;
@@ -221,6 +211,21 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
          //Is this is a plain-text message with PGP content?
          var msgSearch = bp.node.content.substring(0,60);
       }   
+
+      if((!bodynode) && (!pgpmime))
+      {
+         //Cannot display result in this message view
+         return;
+      }
+
+      try {
+      var g=document.createElement('div');
+      g.setAttribute("id", "tk_barrydegraaff_zimbra_openpgp_infobar_body");
+      el.insertBefore(g, bodynode);
+      } catch (err) {
+         return;   
+      }  
+     
    
       //Performance, do not GET the entire mail, if it is not PGP mail
       if ((pgpmime) ||
