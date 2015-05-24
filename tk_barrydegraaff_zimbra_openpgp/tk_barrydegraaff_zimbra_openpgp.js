@@ -142,207 +142,218 @@ function() {
  * 
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msgView) {
-   //Remove Zimlets infobar from previous message
-   try {
-   var elem = document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar");
-   elem.parentNode.removeChild(elem);
-   
-   var elem = document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_body");
-   elem.parentNode.removeChild(elem);
-
-   var elem = document.getElementById("tk_barrydegraaff_zimbra_openpgp_actionbar");
-   elem.parentNode.removeChild(elem);   
-   } catch (err) {}
-
-   //Create new empty infobar for displaying pgp result
-   var el = msgView.getHtmlElement();
-
-   var g=document.createElement('div');
-   g.setAttribute("id", "tk_barrydegraaff_zimbra_openpgp_actionbar");
-   el.insertBefore(g, el.firstChild);
-   
-   var g=document.createElement('div');
-   g.setAttribute("id", "tk_barrydegraaff_zimbra_openpgp_infobar");
-   el.insertBefore(g, el.firstChild);
-
-   if(msgView._normalClass == 'ZmMailMsgCapsuleView')
+   //Only integrate in Mail app. Not in search results (as long as we have bugs there)
+   if(appCtxt.getCurrentAppName()=='Mail')
    {
-      var bodynode = document.getElementById('main_MSGC'+msg.id+'__body');
-      var attNode = document.getElementById('zv__CLV__main_MSGC'+msg.id+'_attLinks');
-   }
-   else
-   {   
-      var bodynode = document.getElementById('zv__TV-main__MSG__body');
-      var attNode = document.getElementById('zv__TV__TV-main_MSG_attLinks');
-   }
-   var g=document.createElement('div');
-   g.setAttribute("id", "tk_barrydegraaff_zimbra_openpgp_infobar_body");
-   el.insertBefore(g, bodynode);
-
-   //Detect what kind of message we have
-   var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
-   var pgpmime = false;
-   if (!bp)
-   {
-      try
-      {
-         if ((msg.attrs['Content-Type'].indexOf('multipart/encrypted') > -1) ||
-         (msg.attrs['Content-Type'].indexOf('application/pgp-encrypted') > -1))
-         {
-            //PGP Mime
-            var msgSearch = '';
-            pgpmime =  true;
-         }
-         else
-         {
-            //not a plain text message and no PGP mime, means no PGP            
-            return;
-         }
-      }
-      catch (err) 
-      {
-         // Content-Type header not found
-         var msgSearch = '';
-         pgpmime =  true;
-      }       
-   }
-   else
-   {
-      //Is this is a plain-text message with PGP content?
-      var msgSearch = bp.node.content.substring(0,60);
-   }   
-
-   //Performance, do not GET the entire mail, if it is not PGP mail
-   if ((pgpmime) ||
-   (msgSearch.indexOf("BEGIN PGP SIGNED MESSAGE") > 0 ) ||
-   (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ))
-   {
-      var url = [];
-      var i = 0;
-      var proto = location.protocol;
-      var port = Number(location.port);
-      url[i++] = proto;
-      url[i++] = "//";
-      url[i++] = location.hostname;
-      if (port && ((proto == ZmSetting.PROTO_HTTP && port != ZmSetting.HTTP_DEFAULT_PORT) 
-         || (proto == ZmSetting.PROTO_HTTPS && port != ZmSetting.HTTPS_DEFAULT_PORT))) {
-         url[i++] = ":";
-         url[i++] = port;
-      }
-      url[i++] = "/home/";
-      url[i++]= AjxStringUtil.urlComponentEncode(appCtxt.getActiveAccount().name);
-      url[i++] = "/message.txt?fmt=txt&id=";
-      url[i++] = msg.id;
-   
-      var getUrl = url.join(""); 
-   
-      //Now make an ajax request and read the contents of this mail, including all attachments as text
-      //it should be base64 encoded
-      var xmlHttp = null;   
-      xmlHttp = new XMLHttpRequest();
-      xmlHttp.open( "GET", getUrl, false );
-      xmlHttp.send( null );
+      //Remove Zimlets infobar from previous message
+      try {
+      var elem = document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar");
+      elem.parentNode.removeChild(elem);
       
-      try {
-         if (msg.attrs['Content-Transfer-Encoding'].indexOf('quoted-printable') > -1)
-         {
-            var message = tk_barrydegraaff_zimbra_openpgp.prototype.quoted_printable_decode(xmlHttp.responseText);
-         }
-         else
-         {
-            var message = xmlHttp.responseText;      
-         }
-      } catch (err) {      
-         //No Content-Transfer-Encoding Header
-         var message = xmlHttp.responseText;
-      }
+      var elem = document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_body");
+      elem.parentNode.removeChild(elem);
    
-      if(msgSearch=='')
-      {
-         //In case of PGP mime, we look in the entire mail for PGP Message block
-         msgSearch=message;
-      }   
-   }
+      var elem = document.getElementById("tk_barrydegraaff_zimbra_openpgp_actionbar");
+      elem.parentNode.removeChild(elem);   
+      } catch (err) {}
    
-   if (msgSearch.indexOf("BEGIN PGP SIGNED MESSAGE") > 0 ) {
-      if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
+      //Create new empty infobar for displaying pgp result
+      var el = msgView.getHtmlElement();
+   
+      var g=document.createElement('div');
+      g.setAttribute("id", "tk_barrydegraaff_zimbra_openpgp_actionbar");
+      el.insertBefore(g, el.firstChild);
+      
+      var g=document.createElement('div');
+      g.setAttribute("id", "tk_barrydegraaff_zimbra_openpgp_infobar");
+      el.insertBefore(g, el.firstChild);
+   
+      if(msgView._normalClass == 'ZmMailMsgCapsuleView')
       {
-         //Still loading contacts, ignoring your addressbook
-         this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][6], ZmStatusView.LEVEL_INFO);   
+         var bodynode = document.getElementById(msgView.__internalId+'__body');
+         var attNode = document.getElementById(msgView.__internalId+msg.id+'_attLinks');
       }
-
-      try {
-         var message = openpgp.cleartext.readArmored(bp.node.content);
+      else
+      {   
+         var bodynode = document.getElementById('zv__TV-main__MSG__body');
+         var attNode = document.getElementById('zv__TV__TV-main_MSG_attLinks');
       }
-      catch(err) {
-         //Could not read armored message!
-         this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][7], ZmStatusView.LEVEL_CRITICAL);
+      
+      if(!bodynode)
+      {
+         //Cannot display result in this message view
          return;
       }
-      //Hide PGP SIGNED MESSAGE block
-      var dispMessage = bp.node.content.replace(/(-----BEGIN PGP SIGNATURE-----)([^]+)(-----END PGP SIGNATURE-----)/m, "");
-      bodynode.innerHTML = '';
-      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML='<pre style="white-space: pre-wrap;">'+tk_barrydegraaff_zimbra_openpgp.prototype.urlify(dispMessage.replace(/-----BEGIN PGP SIGNED MESSAGE-----([^]+)Hash: .*/mi, ""))+'</pre>';
-      this.verify(message);
-   }
-   else if (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ) {
-      //Allow to print decrypted message
-      if(msg.subject)
+      
+      var g=document.createElement('div');
+      g.setAttribute("id", "tk_barrydegraaff_zimbra_openpgp_infobar_body");
+      el.insertBefore(g, bodynode);
+   
+      //Detect what kind of message we have
+      var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
+      var pgpmime = false;
+      if (!bp)
       {
-         var subject = msg.subject.replace(/\*\*\*.*\*\*\*/,'');
+         try
+         {
+            if ((msg.attrs['Content-Type'].indexOf('multipart/encrypted') > -1) ||
+            (msg.attrs['Content-Type'].indexOf('application/pgp-encrypted') > -1))
+            {
+               //PGP Mime
+               var msgSearch = '';
+               pgpmime =  true;
+            }
+            else
+            {
+               //not a plain text message and no PGP mime, means no PGP            
+               return;
+            }
+         }
+         catch (err) 
+         {
+            // Content-Type header not found
+            var msgSearch = '';
+            pgpmime =  true;
+         }       
       }
       else
       {
-         var subject = 'Zimbra OpenPGP ' + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54];
-      }
-      
-      if(subject.length < 2)
-      {
-         subject = 'Zimbra OpenPGP ' + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54];
-      }
-      if(document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar'))
-      {
-         if(document.getElementById('main_MSGC'+msg.id))
-         {
-            document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar').innerHTML = '<a style="text-decoration: none" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.printdiv(\'main_MSGC'+msg.id+'\',\''+subject+'\')"><img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/printButton.png"> '+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54]+'</a>';
-         }
+         //Is this is a plain-text message with PGP content?
+         var msgSearch = bp.node.content.substring(0,60);
       }   
-      if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
+   
+      //Performance, do not GET the entire mail, if it is not PGP mail
+      if ((pgpmime) ||
+      (msgSearch.indexOf("BEGIN PGP SIGNED MESSAGE") > 0 ) ||
+      (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ))
       {
-         //Still loading contacts, ignoring your addressbook
-         this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][6], ZmStatusView.LEVEL_INFO);   
-      }
-      
-      //Add an html infobar for displaying decrypted attachments
-      if(attNode)
-      {
-         if (pgpmime)
-         {
-            attNode.innerHTML = '<div id="tk_barrydegraaff_zimbra_openpgp_infobar_att"></div>';
+         var url = [];
+         var i = 0;
+         var proto = location.protocol;
+         var port = Number(location.port);
+         url[i++] = proto;
+         url[i++] = "//";
+         url[i++] = location.hostname;
+         if (port && ((proto == ZmSetting.PROTO_HTTP && port != ZmSetting.HTTP_DEFAULT_PORT) 
+            || (proto == ZmSetting.PROTO_HTTPS && port != ZmSetting.HTTPS_DEFAULT_PORT))) {
+            url[i++] = ":";
+            url[i++] = port;
          }
-         else
+         url[i++] = "/home/";
+         url[i++]= AjxStringUtil.urlComponentEncode(appCtxt.getActiveAccount().name);
+         url[i++] = "/message.txt?fmt=txt&id=";
+         url[i++] = msg.id;
+      
+         var getUrl = url.join(""); 
+      
+         //Now make an ajax request and read the contents of this mail, including all attachments as text
+         //it should be base64 encoded
+         var xmlHttp = null;   
+         xmlHttp = new XMLHttpRequest();
+         xmlHttp.open( "GET", getUrl, false );
+         xmlHttp.send( null );
+         
+         try {
+            if (msg.attrs['Content-Transfer-Encoding'].indexOf('quoted-printable') > -1)
+            {
+               var message = tk_barrydegraaff_zimbra_openpgp.prototype.quoted_printable_decode(xmlHttp.responseText);
+            }
+            else
+            {
+               var message = xmlHttp.responseText;      
+            }
+         } catch (err) {      
+            //No Content-Transfer-Encoding Header
+            var message = xmlHttp.responseText;
+         }
+      
+         if(msgSearch=='')
          {
-            attNode.innerHTML = '<div id="tk_barrydegraaff_zimbra_openpgp_infobar_att"></div>'+attNode.innerHTML;
+            //In case of PGP mime, we look in the entire mail for PGP Message block
+            msgSearch=message;
          }   
       }
       
-      if (!pgpmime)
-      {
-         //Hide the PGP MESSAGE block
+      if (msgSearch.indexOf("BEGIN PGP SIGNED MESSAGE") > 0 ) {
+         if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
+         {
+            //Still loading contacts, ignoring your addressbook
+            this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][6], ZmStatusView.LEVEL_INFO);   
+         }
+   
+         try {
+            var message = openpgp.cleartext.readArmored(bp.node.content);
+         }
+         catch(err) {
+            //Could not read armored message!
+            this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][7], ZmStatusView.LEVEL_CRITICAL);
+            return;
+         }
+         //Hide PGP SIGNED MESSAGE block
+         var dispMessage = bp.node.content.replace(/(-----BEGIN PGP SIGNATURE-----)([^]+)(-----END PGP SIGNATURE-----)/m, "");
          bodynode.innerHTML = '';
-         document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML='<pre style="white-space: pre-wrap;">'+bp.node.content+'</pre>';
+         document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML='<pre style="white-space: pre-wrap;word-wrap: break-word;">'+tk_barrydegraaff_zimbra_openpgp.prototype.urlify(dispMessage.replace(/-----BEGIN PGP SIGNED MESSAGE-----([^]+)Hash: .*/mi, ""))+'</pre>';
+         this.verify(message);
       }
-      else
-      {  
-         document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML='<pre>This is an OpenPGP/MIME encrypted message (RFC 4880 and 3156)</pre>';
+      else if (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ) {
+         //Allow to print decrypted message
+         if(msg.subject)
+         {
+            var subject = msg.subject.replace(/\*\*\*.*\*\*\*/,'');
+         }
+         else
+         {
+            var subject = 'Zimbra OpenPGP ' + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54];
+         }
+         
+         if(subject.length < 2)
+         {
+            subject = 'Zimbra OpenPGP ' + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54];
+         }
+         if(document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar'))
+         {
+            if(document.getElementById('main_MSGC'+msg.id))
+            {
+               document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar').innerHTML = '<a style="text-decoration: none" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.printdiv(\'main_MSGC'+msg.id+'\',\''+subject+'\')"><img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/printButton.png"> '+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54]+'</a>';
+            }
+         }   
+         if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
+         {
+            //Still loading contacts, ignoring your addressbook
+            this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][6], ZmStatusView.LEVEL_INFO);   
+         }
+         
+         //Add an html infobar for displaying decrypted attachments
+         if(attNode)
+         {
+            if (pgpmime)
+            {
+               attNode.innerHTML = '<div id="tk_barrydegraaff_zimbra_openpgp_infobar_att"></div>';
+            }
+            else
+            {
+               attNode.innerHTML = '<div id="tk_barrydegraaff_zimbra_openpgp_infobar_att"></div>'+attNode.innerHTML;
+            }   
+         }
+         
+         if (!pgpmime)
+         {
+            //Hide the PGP MESSAGE block
+            bodynode.innerHTML = '';
+            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML='<pre style="white-space: pre-wrap;word-wrap: break-word;">'+bp.node.content+'</pre>';
+         }
+         else
+         {  
+            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML='<pre>This is an OpenPGP/MIME encrypted message (RFC 4880 and 3156)</pre>';
+         }   
+         
+         //Please provide private key and passphrase for decryption
+         this.displayDialog(1, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][8], message);  
+      }
+      else {
+         return;
       }   
-      
-      //Please provide private key and passphrase for decryption
-      this.displayDialog(1, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][8], message);  
    }
-   else {
-      return;
-   }   
 };   
 
 /* This method gets called by the Zimlet framework when single-click is performed.
@@ -907,7 +918,7 @@ function() {
                         }                     
                         else if(partArr[0].indexOf('text/plain')> 0)
                         {
-                           preOpen = '<pre style="white-space: pre-wrap;">'+part+'</pre>';
+                           preOpen = '<pre style="white-space: pre-wrap;word-wrap: break-word;">'+part+'</pre>';
                         }
                         else if(partArr[0].indexOf('text/html')> 0)
                         {
@@ -930,7 +941,7 @@ function() {
                      decrypted.text='';
                   } catch (err) {
                      console.log('multipart parser failed: ' + err);
-                     preOpen = '<pre style="white-space: pre-wrap;">';
+                     preOpen = '<pre style="white-space: pre-wrap;word-wrap: break-word;">';
                      preClose = '</pre>';
                      decrypted.text=original;
                   }
@@ -940,7 +951,7 @@ function() {
                {               
                   if (decrypted.text.indexOf('<html><body>') < 0 ) 
                   {
-                     preOpen = '<pre style="white-space: pre-wrap;">';
+                     preOpen = '<pre style="white-space: pre-wrap;word-wrap: break-word;">';
                      preClose = '</pre>';
                   }
                   else
