@@ -560,9 +560,13 @@ function(id, title, message) {
       {
          tk_barrydegraaff_zimbra_openpgp.privatePassCache = '';
       }
+      else if (decryptedPassphrase.indexOf('-openpgppassphrase-') > 1)
+      {
+         tk_barrydegraaff_zimbra_openpgp.privatePassCache = substring(decryptedPassphrase, 28);
+      }
       else
       {
-         tk_barrydegraaff_zimbra_openpgp.privatePassCache = decryptedPassphrase;
+         tk_barrydegraaff_zimbra_openpgp.privatePassCache = '';
       }
 
       html = "<div style='width:650px; height: 180px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td colspan='2'>" +
@@ -618,9 +622,13 @@ function(id, title, message) {
       {
          tk_barrydegraaff_zimbra_openpgp.privatePassCache = '';
       }
+      else if (decryptedPassphrase.indexOf('-openpgppassphrase-') > 1)
+      {
+         tk_barrydegraaff_zimbra_openpgp.privatePassCache = substring(decryptedPassphrase, 28);
+      }
       else
       {
-         tk_barrydegraaff_zimbra_openpgp.privatePassCache = decryptedPassphrase;
+         tk_barrydegraaff_zimbra_openpgp.privatePassCache = '';
       }
 
       // make supported languages list in HTML
@@ -684,9 +692,13 @@ function(id, title, message) {
       {
          tk_barrydegraaff_zimbra_openpgp.privatePassCache = '';
       }
+      else if (decryptedPassphrase.indexOf('-openpgppassphrase-') > 1)
+      {
+         tk_barrydegraaff_zimbra_openpgp.privatePassCache = substring(decryptedPassphrase, 28);
+      }
       else
       {
-         tk_barrydegraaff_zimbra_openpgp.privatePassCache = decryptedPassphrase;
+         tk_barrydegraaff_zimbra_openpgp.privatePassCache = '';
       }
 
       html = "<div style='width:650px; height: 350px; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
@@ -764,9 +776,13 @@ function(id, title, message) {
       {
          tk_barrydegraaff_zimbra_openpgp.privatePassCache = '';
       }
+      else if (decryptedPassphrase.indexOf('-openpgppassphrase-') > 1)
+      {
+         tk_barrydegraaff_zimbra_openpgp.privatePassCache = substring(decryptedPassphrase, 28);
+      }
       else
       {
-         tk_barrydegraaff_zimbra_openpgp.privatePassCache = decryptedPassphrase;
+         tk_barrydegraaff_zimbra_openpgp.privatePassCache = '';
       }
 
       html = "<div style='width:650px; height: 350; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
@@ -811,9 +827,13 @@ function(id, title, message) {
       {
          tk_barrydegraaff_zimbra_openpgp.privatePassCache = '';
       }
+      else if (decryptedPassphrase.indexOf('-openpgppassphrase-') > 1)
+      {
+         tk_barrydegraaff_zimbra_openpgp.privatePassCache = substring(decryptedPassphrase, 28);
+      }
       else
       {
-         tk_barrydegraaff_zimbra_openpgp.privatePassCache = decryptedPassphrase;
+         tk_barrydegraaff_zimbra_openpgp.privatePassCache = '';
       }
             
       html = "<div style='width:650px; height: 350; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
@@ -871,9 +891,13 @@ function(id, title, message) {
       {
          tk_barrydegraaff_zimbra_openpgp.privatePassCache = '';
       }
+      else if (decryptedPassphrase.indexOf('-openpgppassphrase-') > 1)
+      {
+         tk_barrydegraaff_zimbra_openpgp.privatePassCache = substring(decryptedPassphrase, 28);
+      }
       else
       {
-         tk_barrydegraaff_zimbra_openpgp.privatePassCache = decryptedPassphrase;
+         tk_barrydegraaff_zimbra_openpgp.privatePassCache = '';
       }
 
       html = "<div style='width:650px; height: 350; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
