@@ -567,11 +567,11 @@ function(id, title, message) {
       var decryptedPassphrase = '';
       if (tk_barrydegraaff_zimbra_openpgp.settings['store_passphrase_locally'] == 'true')
       {
-         decryptedPassphrase = Aes.Ctr.decrypt(substring(localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()], 16), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         decryptedPassphrase = Aes.Ctr.decrypt(localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()].substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
       }
       else
       {
-         decryptedPassphrase = Aes.Ctr.decrypt(substring(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value, 16), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         decryptedPassphrase = Aes.Ctr.decrypt(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
       }
       
       if (!decryptedPassphrase)
@@ -580,7 +580,7 @@ function(id, title, message) {
       }
       else if (decryptedPassphrase.indexOf('-openpgppassphrase-') > 1)
       {
-         tk_barrydegraaff_zimbra_openpgp.privatePassCache = substring(decryptedPassphrase, 28);
+         tk_barrydegraaff_zimbra_openpgp.privatePassCache = decryptedPassphrase.substring(28);
       }
       else
       {
@@ -630,11 +630,11 @@ function(id, title, message) {
       var decryptedPassphrase = '';
       if (tk_barrydegraaff_zimbra_openpgp.settings['store_passphrase_locally'] == 'true')
       {
-         decryptedPassphrase = Aes.Ctr.decrypt(substring(localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()], 16), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         decryptedPassphrase = Aes.Ctr.decrypt(localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()].substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
       }
       else
       {
-         decryptedPassphrase = Aes.Ctr.decrypt(substring(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value, 16), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         decryptedPassphrase = Aes.Ctr.decrypt(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
       }
       
       if (!decryptedPassphrase)
@@ -643,7 +643,7 @@ function(id, title, message) {
       }
       else if (decryptedPassphrase.indexOf('-openpgppassphrase-') > 1)
       {
-         tk_barrydegraaff_zimbra_openpgp.privatePassCache = substring(decryptedPassphrase, 28);
+         tk_barrydegraaff_zimbra_openpgp.privatePassCache = decryptedPassphrase.substring(28);
       }
       else
       {
@@ -701,11 +701,11 @@ function(id, title, message) {
       var decryptedPassphrase = '';
       if (tk_barrydegraaff_zimbra_openpgp.settings['store_passphrase_locally'] == 'true')
       {
-         decryptedPassphrase = Aes.Ctr.decrypt(substring(localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()], 16), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         decryptedPassphrase = Aes.Ctr.decrypt(localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()].substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
       }
       else
       {
-         decryptedPassphrase = Aes.Ctr.decrypt(substring(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value, 16), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         decryptedPassphrase = Aes.Ctr.decrypt(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
       }
       
       if (!decryptedPassphrase)
@@ -714,7 +714,7 @@ function(id, title, message) {
       }
       else if (decryptedPassphrase.indexOf('-openpgppassphrase-') > 1)
       {
-         tk_barrydegraaff_zimbra_openpgp.privatePassCache = substring(decryptedPassphrase, 28);
+         tk_barrydegraaff_zimbra_openpgp.privatePassCache = decryptedPassphrase.substring(28);
       }
       else
       {
@@ -786,11 +786,11 @@ function(id, title, message) {
       var decryptedPassphrase = '';
       if (tk_barrydegraaff_zimbra_openpgp.settings['store_passphrase_locally'] == 'true')
       {
-         decryptedPassphrase = Aes.Ctr.decrypt(substring(localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()], 16), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         decryptedPassphrase = Aes.Ctr.decrypt(localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()].substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
       }
       else
       {
-         decryptedPassphrase = Aes.Ctr.decrypt(substring(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value, 16), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         decryptedPassphrase = Aes.Ctr.decrypt(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
       }
       
       if (!decryptedPassphrase)
@@ -799,7 +799,7 @@ function(id, title, message) {
       }
       else if (decryptedPassphrase.indexOf('-openpgppassphrase-') > 1)
       {
-         tk_barrydegraaff_zimbra_openpgp.privatePassCache = substring(decryptedPassphrase, 28);
+         tk_barrydegraaff_zimbra_openpgp.privatePassCache = decryptedPassphrase.substring(28);
       }
       else
       {
@@ -838,11 +838,11 @@ function(id, title, message) {
       var decryptedPassphrase = '';
       if (tk_barrydegraaff_zimbra_openpgp.settings['store_passphrase_locally'] == 'true')
       {
-         decryptedPassphrase = Aes.Ctr.decrypt(substring(localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()], 16), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         decryptedPassphrase = Aes.Ctr.decrypt(localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()].substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
       }
       else
       {
-         decryptedPassphrase = Aes.Ctr.decrypt(substring(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value, 16), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         decryptedPassphrase = Aes.Ctr.decrypt(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
       }
       
       if (!decryptedPassphrase)
@@ -851,7 +851,7 @@ function(id, title, message) {
       }
       else if (decryptedPassphrase.indexOf('-openpgppassphrase-') > 1)
       {
-         tk_barrydegraaff_zimbra_openpgp.privatePassCache = substring(decryptedPassphrase, 28);
+         tk_barrydegraaff_zimbra_openpgp.privatePassCache = decryptedPassphrase.substring(28);
       }
       else
       {
@@ -903,11 +903,11 @@ function(id, title, message) {
       var decryptedPassphrase = '';
       if (tk_barrydegraaff_zimbra_openpgp.settings['store_passphrase_locally'] == 'true')
       {
-         decryptedPassphrase = Aes.Ctr.decrypt(substring(localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()], 16), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         decryptedPassphrase = Aes.Ctr.decrypt(localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()].substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
       }
       else
       {
-         decryptedPassphrase = Aes.Ctr.decrypt(substring(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value, 16), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         decryptedPassphrase = Aes.Ctr.decrypt(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
       }
       
       if (!decryptedPassphrase)
@@ -916,7 +916,7 @@ function(id, title, message) {
       }
       else if (decryptedPassphrase.indexOf('-openpgppassphrase-') > 1)
       {
-         tk_barrydegraaff_zimbra_openpgp.privatePassCache = substring(decryptedPassphrase, 28);
+         tk_barrydegraaff_zimbra_openpgp.privatePassCache = decryptedPassphrase.substring(28);
       }
       else
       {
