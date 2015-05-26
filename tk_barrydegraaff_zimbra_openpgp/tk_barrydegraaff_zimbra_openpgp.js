@@ -126,7 +126,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
       if (tk_barrydegraaff_zimbra_openpgp.settings['store_passphrase_locally'] == 'true')
       {
          localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()] = '---cryptedpp---' + encryptedPassphrase;
-         this.setUserProperty("zimbra_openpgp_privatepass", '', false);
+         this.setUserProperty("zimbra_openpgp_privatepass", '', true);
       }
       else
       {
@@ -1381,7 +1381,7 @@ function() {
    if (tk_barrydegraaff_zimbra_openpgp.settings['store_passphrase_locally'] == 'true') 
    {      
       localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()] = '---cryptedpp---' + encryptedPassphrase;
-      this.setUserProperty("zimbra_openpgp_privatepass", '', false);
+      this.setUserProperty("zimbra_openpgp_privatepass", '', true);
    }
    else
    {
@@ -1552,7 +1552,7 @@ function() {
             if (tk_barrydegraaff_zimbra_openpgp.settings['store_passphrase_locally'] == 'true') 
             {      
                localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()] = '---cryptedpp---' + encryptedPassphrase;
-               this.setUserProperty("zimbra_openpgp_privatepass", '', false);
+               this.setUserProperty("zimbra_openpgp_privatepass", '', true);
             }
             else
             {
