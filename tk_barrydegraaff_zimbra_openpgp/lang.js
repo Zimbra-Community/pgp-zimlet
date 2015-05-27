@@ -105,7 +105,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['english'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][69] = 'Advanced settings';
    tk_barrydegraaff_zimbra_openpgp.lang['english'][70] = 'Please format as plain text and try again.';   
-   tk_barrydegraaff_zimbra_openpgp.lang['english'][71] = 'Store passhrase in browsers local storage';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][71] = 'Store passphrase in browsers local storage';
    
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][0] = 'OpenPGP berichten uitbreiding voor Zimbra Collaboration Suite.';
@@ -311,7 +311,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][52] = 'Impossibile criptare il messaggio!';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][53] = 'con OpenPGP';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][54] = 'Stampa';
-   tk_barrydegraaff_zimbra_openpgp.lang['italian'][55] = 'show/hide';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][55] = 'mostra/nascondi';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][56] = 'Per favore prima componi il messaggio';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][57] = 'Scansione contatti per firme OpenPGP completata';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][58] = 'Scansione contatti per firme OpenPGP in corso';
@@ -327,7 +327,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][69] = 'Impostazioni avanzate';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][70] = 'Per favore imposta la composizione in testo semplice e riprova.'; 
-   tk_barrydegraaff_zimbra_openpgp.lang['italian'][71] = 'Store passhrase in browsers local storage';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][71] = 'Memorizza la passphrase nel "local storage" del browser';
 
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][0] = 'Phần mở rộng thư OpenPGP cho Zimbra Collaboration Suite.';
