@@ -533,7 +533,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['french'][52] = 'Impossible de crypter le message!';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][53] = 'avec OpenPGP';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][54] = 'Imprimer';
-   tk_barrydegraaff_zimbra_openpgp.lang['french'][55] = 'show/hide';
+   tk_barrydegraaff_zimbra_openpgp.lang['french'][55] = 'Voir/Cacher';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][56] = 'Veuillez écrire votre message avant';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][57] = 'OpenPGP a fini de scanner vos contacts';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][58] = 'OpenPGP scan vos contacts';
@@ -549,5 +549,5 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['french'][68] = 'ZmSetting MAX_MESSAGE_SIZE'; 
    tk_barrydegraaff_zimbra_openpgp.lang['french'][69] = 'Parametre avancé';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][70] = 'Passer en texte brut et réessayer.';
-   tk_barrydegraaff_zimbra_openpgp.lang['french'][71] = 'Store passhrase in browsers local storage';
+   tk_barrydegraaff_zimbra_openpgp.lang['french'][71] = 'Stocker la phrase en local sur votre navigateur';
 }
