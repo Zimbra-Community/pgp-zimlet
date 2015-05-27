@@ -1939,7 +1939,6 @@ function(addresses, message) {
    composeView.setAddress(AjxEmailAddress.TO, addresses);     
 }
 
-
 /* Compose window integration
  * Call the sign dialog after Sign button pressed in Compose window
  * */
@@ -1978,7 +1977,6 @@ function(message) {
 /* AddressBook integration
  * based on ajax call to export function
  * */
-
 tk_barrydegraaff_zimbra_openpgp.prototype.readAddressBook = function() {
    if (tk_barrydegraaff_zimbra_openpgp.settings['enable_contacts_scanning'] == 'false')
    {
@@ -2142,6 +2140,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.urlify = function(text) {
     //})  
 }
 
+// Function to open a browser print dialog of a certain div
 tk_barrydegraaff_zimbra_openpgp.prototype.printdiv = function(printdivname, subject) {
    var divToPrint=document.getElementById(printdivname);
    var newWin=window.open('','Print-Window','width=800,height=600');
@@ -2153,6 +2152,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.printdiv = function(printdivname, subj
    newWin.close();
 }
 
+// Function to handle a show/hide button for password type input fields
 tk_barrydegraaff_zimbra_openpgp.prototype.toggle_password = function (target) {
    var tag = document.getElementById(target);
    
