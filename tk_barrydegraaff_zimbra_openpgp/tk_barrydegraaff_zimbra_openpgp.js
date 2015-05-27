@@ -1268,8 +1268,6 @@ function(zimbra_openpgp_privatepassFromUserProperty) {
    {
       tk_barrydegraaff_zimbra_openpgp.privatePassCache = '';
    }
-   //substring required hierzo
-   // ugly expect to return a value, instead we set a global variable 
 }   
 
 /* This method is called when the dialog "OK" button is clicked after public keys have been maintained
