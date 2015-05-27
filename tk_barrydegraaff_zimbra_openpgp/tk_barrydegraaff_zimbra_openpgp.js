@@ -1243,7 +1243,10 @@ function(zimbra_openpgp_privatepassFromUserProperty) {
    var decryptedPassphrase = '';
    if (tk_barrydegraaff_zimbra_openpgp.settings['store_passphrase_locally'] == 'true')
    {
-      decryptedPassphrase = Aes.Ctr.decrypt(localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()].substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+      if(localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()])
+      {
+         decryptedPassphrase = Aes.Ctr.decrypt(localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()].substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+      }   
    }
    else
    {
@@ -1265,6 +1268,7 @@ function(zimbra_openpgp_privatepassFromUserProperty) {
    {
       tk_barrydegraaff_zimbra_openpgp.privatePassCache = '';
    }
+   //substring required hierzo
    // ugly expect to return a value, instead we set a global variable 
 }   
 
