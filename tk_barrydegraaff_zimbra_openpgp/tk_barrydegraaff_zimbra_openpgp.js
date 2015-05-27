@@ -119,7 +119,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
    }
    
    var zimbra_openpgp_privatepass = this.getUserProperty("zimbra_openpgp_privatepass");
-   if ((zimbra_openpgp_privatepass.length > 0)  && (zimbra_openpgp_privatepass.indexOf('-cryptedpp-') < 1))
+   if ((zimbra_openpgp_privatepass)  && (zimbra_openpgp_privatepass.indexOf('-cryptedpp-') < 1))
    {
       //found a zimbra_openpgp_privatepass on server that was stored in a previous version, encrypt it
       var encryptedPassphrase = Aes.Ctr.encrypt('-----openpgppassphrase-----'+zimbra_openpgp_privatepass, tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
@@ -634,7 +634,10 @@ function(id, title, message) {
       }
       else
       {
-         decryptedPassphrase = Aes.Ctr.decrypt(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         if(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value)
+         {
+            decryptedPassphrase = Aes.Ctr.decrypt(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         }   
       }
       
       if (!decryptedPassphrase)
@@ -705,7 +708,10 @@ function(id, title, message) {
       }
       else
       {
-         decryptedPassphrase = Aes.Ctr.decrypt(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         if(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value)
+         {
+            decryptedPassphrase = Aes.Ctr.decrypt(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         }   
       }
       
       if (!decryptedPassphrase)
@@ -754,7 +760,10 @@ function(id, title, message) {
       }
       else
       {
-         decryptedPassphrase = Aes.Ctr.decrypt(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         if(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value)
+         {
+            decryptedPassphrase = Aes.Ctr.decrypt(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         }   
       }
       
       if (!decryptedPassphrase)
@@ -816,7 +825,10 @@ function(id, title, message) {
       }
       else
       {
-         decryptedPassphrase = Aes.Ctr.decrypt(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         if(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value)
+         {
+            decryptedPassphrase = Aes.Ctr.decrypt(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         }   
       }
       
       if (!decryptedPassphrase)
@@ -868,7 +880,10 @@ function(id, title, message) {
       }
       else
       {
-         decryptedPassphrase = Aes.Ctr.decrypt(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         if(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value)
+         {
+            decryptedPassphrase = Aes.Ctr.decrypt(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         }   
       }
       
       if (!decryptedPassphrase)
@@ -933,7 +948,10 @@ function(id, title, message) {
       }
       else
       {
-         decryptedPassphrase = Aes.Ctr.decrypt(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         if(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value)
+         {
+            decryptedPassphrase = Aes.Ctr.decrypt(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value.substring(15), tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         }   
       }
       
       if (!decryptedPassphrase)

@@ -179,7 +179,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][69] = 'Geavanceerde instellingen';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][70] = 'Kies voor opmaken als platte tekst en probeer opnieuw.'; 
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][71] = 'Store private key passhrase locally';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][71] = 'Wachtwoordzin opslaan in lokale opslag';
 
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][0] = 'Extensión de mensajes OpenPGP para Zimbra Collaboration Suite.';
