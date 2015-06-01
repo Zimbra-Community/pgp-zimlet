@@ -459,7 +459,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][52] = 'Não foi possível encriptar a mensagem!';
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][53] = 'com OpenPGP';
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][54] = 'Imprimir';
-   tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][55] = 'show/hide';
+   tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][55] = 'mostrar/esconder';
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][56] = 'Por favor, escreva uma mensagem primeiro';
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][57] = 'Análise OpenPGP nos contatos, completada';
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][58] = 'Análise OpenPGP nos contatos, em andamento';
@@ -475,7 +475,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][68] = 'ZmSetting MAX_MESSAGE_SIZE';  
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][69] = 'Configurações avançadas';
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][70] = 'Por favor use texto plano e tente de novo.';   
-   tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][71] = 'Store passhrase in browsers local storage';
+   tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][71] = 'Armazenar senha localmente no navegador';
 
    tk_barrydegraaff_zimbra_openpgp.lang['french'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['french'][0] = 'OpenPGP est une extension pour Zimbra Collaboration Suite.';
