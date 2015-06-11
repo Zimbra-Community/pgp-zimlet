@@ -613,8 +613,8 @@ function(id, title, message) {
       tk_barrydegraaff_zimbra_openpgp.prototype.passphraseRead(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value);
 
       // make supported languages list in HTML
-      langListName = ['English','Español','Français','Italiano','Nederlands','Português (Brasil)','Tiếng Việt'];
-      langListValue = ['english','spanish','french','italian','dutch','portuguese_brazil','vietnamese'];
+      langListName = ['Deutsch','English','Español','Français','Italiano','Nederlands','Português (Brasil)','Tiếng Việt'];
+      langListValue = ['german','english','spanish','french','italian','dutch','portuguese_brazil','vietnamese'];
       
       langListHtml = "<select id='zimbra_openpgp_language' name='zimbra_openpgp_language'>";
       for (i = 0; i < langListValue.length; i++) {
