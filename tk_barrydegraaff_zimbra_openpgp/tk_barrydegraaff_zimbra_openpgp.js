@@ -318,10 +318,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
             this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][7], ZmStatusView.LEVEL_CRITICAL);
             return;
          }
-         //Hide PGP SIGNED MESSAGE block
-         var dispMessage = bp.node.content.replace(/(-----BEGIN PGP SIGNATURE-----)([^]+)(-----END PGP SIGNATURE-----)/m, "");
-         dispMessage = dispMessage.replace(/.*-----BEGIN PGP SIGNED MESSAGE-----\nHash:.*\n/mig, "");
-         dispMessage = dispMessage.replace(/-----BEGIN PGP SIGNED MESSAGE-----([^]+)Hash: .*/mi, "");
+         var dispMessage = bp.node.content;
          bodynode.innerHTML = '';
          document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML='<pre style="white-space: pre-wrap;word-wrap: break-word;">'+tk_barrydegraaff_zimbra_openpgp.prototype.urlify(dispMessage)+'</pre>';
          this.verify(message);
