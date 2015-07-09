@@ -388,9 +388,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.singleClicked =
 function() {  
-   if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
-   {
-   } 
+   //Launch Manage keys
+   this.displayDialog(3, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][3], null);
 };
 
 /* This method creates a Zimbra tab
