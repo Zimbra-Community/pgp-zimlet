@@ -6,7 +6,7 @@ If you find Zimbra OpenPGP Zimlet useful and want to support its continued devel
 - Bitcoin: 1BaRRyS7wvGarEGgDwmPgRCygzcvocyxJt
 - Bank transfer: IBAN NL55ABNA0623226413 ; BIC ABNANL2A
 
-Demo video: https://drive.google.com/file/d/0B5EwML8QuJ5_WGNnUmZQa3hIQU0/preview
+Demo video: https://www.youtube.com/watch?v=APLFSEO7QXg
 
 User manual: https://barrydegraaff.github.io/help/
 
