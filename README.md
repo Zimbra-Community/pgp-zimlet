@@ -57,13 +57,10 @@ When storing public keys > 5120 in ZCS 8.6:
 
 As root:
 
-nano /opt/zimbra/conf/attrs/zimbra-attrs.xml
-
-Find the line: name="zimbraZimletUserProperties" type="cstring" max="5120"
-
-and change it to: name="zimbraZimletUserProperties" type="cstring" max="15120"
-
-then as user zimbra: zmcontrol restart
+    nano /opt/zimbra/conf/attrs/zimbra-attrs.xml
+    Find the line: name="zimbraZimletUserProperties" type="cstring" max="5120"
+    and change it to: name="zimbraZimletUserProperties" type="cstring" max="15120"
+    then as user zimbra: zmcontrol restart
 
 "zimbraZimletUserProperties" will be increased by default in ZCS 8.7
 
