@@ -256,7 +256,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][69] = 'Opciones avanzadas';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][70] = 'Por favor, crea el mensaje como Texto Plano e inténtalo de nuevo.'; 
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][71] = 'Almacenar la passhrase en el almacenamiento local de los navegadores web';
-   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][72] = 'This should be your own public key, it is selected by default when encrypting.';   
+   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][72] = 'Esta debe ser su propia llave pública, será seleccionada por defecto cuando se cifra.';   
 
    tk_barrydegraaff_zimbra_openpgp.lang['italian'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][0] = 'Estensione per messaggi OpenPGP per Zimbra Collaboration Suite.';
@@ -482,7 +482,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][69] = 'Configurações avançadas';
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][70] = 'Por favor use texto plano e tente de novo.';   
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][71] = 'Armazenar senha localmente no navegador';
-   tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][72] = 'This should be your own public key, it is selected by default when encrypting.';   
+   tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][72] = 'Esta deve ser sua própria chave pública que é selecionada por padrão quando se encripta.';   
 
    tk_barrydegraaff_zimbra_openpgp.lang['french'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['french'][0] = 'OpenPGP est une extension pour Zimbra Collaboration Suite.';
