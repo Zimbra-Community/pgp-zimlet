@@ -407,7 +407,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][69] = 'Thiết lập nâng cao';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][70] = 'Hãy đặt định dạng văn bản thường và thử lại.';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][71] = 'Lưu mật mã truy cập khóa riêng tại máy trạm';
-   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][72] = 'This should be your own public key, it is selected by default when encrypting.';   
+   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][72] = 'Đây nên là khóa công khai của chính bạn, được chọn mặc định khi mã hóa.';
 
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][0] = 'Extensão OpenPGP para Zimbra Collaboration Suite.';
