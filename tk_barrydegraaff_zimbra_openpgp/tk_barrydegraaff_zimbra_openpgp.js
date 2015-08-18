@@ -1566,10 +1566,10 @@ function() {
                userid = entry[0].users[i].userId.userid.replace(/\</g,"&lt;");
                userid = userid.replace(/\>/g,"&gt;") ;
                var selected;
-               if(keycount == 0)
+               if((keycount == 0) && (publicKeys1.keys))
                {
-                  selected = 'selected id="selectme" onclick="this.id=\'nonotselect\'"';
-               } 
+                     selected = 'selected id="selectme" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.unSelectSelf();this.id=\'nonotselect\'"';
+               }
                else
                {
                   selected = 'onclick="tk_barrydegraaff_zimbra_openpgp.prototype.forceSelectSelf()"';
@@ -1598,7 +1598,12 @@ function() {
       document.getElementById('selectme').selected = true;
    } catch (err) { }   
 }   
-
+tk_barrydegraaff_zimbra_openpgp.prototype.unSelectSelf =
+function() {
+   try{
+      document.getElementById('selectme').selected = false;
+   } catch (err) { }   
+}
 /* This method is called when OK is pressed in encrypt dialog
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnEncrypt =
