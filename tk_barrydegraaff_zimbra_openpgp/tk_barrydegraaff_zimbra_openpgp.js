@@ -1560,7 +1560,7 @@ function() {
       
       var result = '<select class="barrydegraaff_zimbra_openpgp-input" id="pubKeySelect" multiple>';
       var keycount = 0;
-      combinedPublicKeys.forEach(function(entry) {         
+      combinedPublicKeys.forEach(function(entry) {
          if(entry[0]) {
             for (i = 0; i < entry[0].users.length; i++) {
                userid = entry[0].users[i].userId.userid.replace(/\</g,"&lt;");
@@ -1589,6 +1589,9 @@ function() {
    return result;
 }
 
+/* When a user encrypts a message, the zimlets selects the first public key by default (encrypt to self).
+ * If you do not want to encrypt to yourself, you must click your name, and then the recipient
+ */
 tk_barrydegraaff_zimbra_openpgp.prototype.forceSelectSelf =
 function() {
    try{
