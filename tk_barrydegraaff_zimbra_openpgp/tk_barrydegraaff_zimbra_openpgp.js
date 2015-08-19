@@ -1563,7 +1563,7 @@ function() {
          combinedPublicKeys = combinedPublicKeys.concat([pubKey.keys]);            
       });      
       
-      var result = '<select class="barrydegraaff_zimbra_openpgp-input" id="pubKeySelect" multiple>';
+      var result = '<select class="barrydegraaff_zimbra_openpgp-input" id="pubKeySelect" multiple onclick="tk_barrydegraaff_zimbra_openpgp.prototype.forceSelectSelf()">';
       var keycount = 0;
       combinedPublicKeys.forEach(function(entry) {
          if(entry[0]) {
@@ -1573,11 +1573,11 @@ function() {
                var selected;
                if((keycount == 0) && (publicKeys1.keys))
                {
-                     selected = 'selected id="selectme" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.unSelectSelf();this.id=\'nonotselect\'"';
+                     selected = 'selected id="selectme" ';
                }
                else
                {
-                  selected = 'onclick="tk_barrydegraaff_zimbra_openpgp.prototype.forceSelectSelf()"';
+                  selected = '';
                }                
                result = result + '<option ' + selected + ' title="fingerprint: '+entry[0].primaryKey.fingerprint+' \r\ncreated: '+entry[0].primaryKey.created+'" value="'+entry[0].armor()+'">'+userid+'</option>';
             }
@@ -1599,16 +1599,31 @@ function() {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.forceSelectSelf =
 function() {
-   try{
-      document.getElementById('selectme').selected = true;
-   } catch (err) { }   
+   var pubKeySelect = document.getElementById('pubKeySelect');
+   var selection = [];
+   var numberSelected = 0;
+   for (k=0; k < pubKeySelect.options.length ; k++) {
+      if (pubKeySelect.options[k].selected) {                  
+         selection[k]=k;
+         numberSelected++;
+      }   
+   }
+
+   if((selection[0]== 0) && (numberSelected == 1))
+   {
+      try{
+         document.getElementById('selectme').selected = false;
+         document.getElementById('selectme').id='nonotselect';
+      } catch (err) { }
+   }
+   else
+   {
+      try{
+         document.getElementById('selectme').selected = true;
+      } catch (err) { }
+   }
 }   
-tk_barrydegraaff_zimbra_openpgp.prototype.unSelectSelf =
-function() {
-   try{
-      document.getElementById('selectme').selected = false;
-   } catch (err) { }   
-}
+
 /* This method is called when OK is pressed in encrypt dialog
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnEncrypt =
