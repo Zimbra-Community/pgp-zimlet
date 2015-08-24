@@ -331,7 +331,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][69] = 'Impostazioni avanzate';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][70] = 'Per favore imposta la composizione in testo semplice e riprova.'; 
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][71] = 'Memorizza la passphrase nel "local storage" del browser';
-   tk_barrydegraaff_zimbra_openpgp.lang['italian'][72] = 'This should be your own public key, it is selected by default when encrypting.';   
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][72] = 'Questa dovrebbe essere la tua chiave pubblica, viene selezionata automaticamente in fase di crittazione.';   
    
 
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'] = [];
