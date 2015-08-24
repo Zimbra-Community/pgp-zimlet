@@ -615,7 +615,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['german'][52] = 'Konnte Nachricht nicht verschlüsseln';
    tk_barrydegraaff_zimbra_openpgp.lang['german'][53] = 'mit OpenPGP';
    tk_barrydegraaff_zimbra_openpgp.lang['german'][54] = 'Drucken';
-   tk_barrydegraaff_zimbra_openpgp.lang['german'][55] = '';
+   tk_barrydegraaff_zimbra_openpgp.lang['german'][55] =  'show/hide';
    tk_barrydegraaff_zimbra_openpgp.lang['german'][56] = 'Bitte verfassen Sie erst eine Nachricht.';
    tk_barrydegraaff_zimbra_openpgp.lang['german'][57] = 'OpenPGP hat den Scan Ihrer Kontakte beendet.';
    tk_barrydegraaff_zimbra_openpgp.lang['german'][58] = 'OpenPGP scannt gerade Ihre Kontakte';
@@ -630,6 +630,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['german'][67] = 'Alle anderen Public Keys löschen (Ein neues AES Passwort setzen)';
    tk_barrydegraaff_zimbra_openpgp.lang['german'][68] = 'ZmSetting MAX_MESSAGE_SIZE';
    tk_barrydegraaff_zimbra_openpgp.lang['german'][69] = 'Erweiterte Einstellungen';
-   tk_barrydegraaff_zimbra_openpgp.lang['german'][70] = 'Bitte als Plaintext formatieren und erneut versuchen.'; 
+   tk_barrydegraaff_zimbra_openpgp.lang['german'][70] = 'Bitte als Plaintext formatieren und erneut versuchen.';
+   tk_barrydegraaff_zimbra_openpgp.lang['german'][71] = 'Store passphrase in browsers local storage'; 
    tk_barrydegraaff_zimbra_openpgp.lang['german'][72] = 'This should be your own public key, it is selected by default when encrypting.';       
 }
