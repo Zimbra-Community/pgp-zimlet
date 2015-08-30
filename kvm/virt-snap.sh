@@ -15,7 +15,7 @@ virt-install \
 --noautoconsole \
 --name zimbra-dev \
 --disk path=/dev/vg_dev/zimbra-dev-snap,bus=virtio,cache=none \
---ram 2048 \
+--ram 6000 \
 --vcpus=4 \
 --vnc \
 --os-type linux \
