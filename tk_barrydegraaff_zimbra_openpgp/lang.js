@@ -557,7 +557,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['french'][69] = 'Parametre avancé';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][70] = 'Passer en texte brut et réessayer.';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][71] = 'Stocker la phrase en local sur votre navigateur';
-   tk_barrydegraaff_zimbra_openpgp.lang['french'][72] = 'This should be your own public key, it is selected by default when encrypting.';      
+   tk_barrydegraaff_zimbra_openpgp.lang['french'][72] = "Cela doit etre votre clé public . Celle ci est selectionner par defaut lors de l'encryption .";      
 
    tk_barrydegraaff_zimbra_openpgp.lang['german'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['german'][0] = 'OpenPGP Nachrichten-Erweiterung für Zimbra Collaboration Suite.';
