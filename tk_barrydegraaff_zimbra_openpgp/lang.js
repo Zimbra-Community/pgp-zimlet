@@ -668,7 +668,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['german'][69] = 'Erweiterte Einstellungen';
    tk_barrydegraaff_zimbra_openpgp.lang['german'][70] = 'Bitte als Plaintext formatieren und erneut versuchen.';
    tk_barrydegraaff_zimbra_openpgp.lang['german'][71] = 'Store passphrase in browsers local storage'; 
-   tk_barrydegraaff_zimbra_openpgp.lang['german'][72] = 'This should be your own public key, it is selected by default when encrypting.';      
+   tk_barrydegraaff_zimbra_openpgp.lang['german'][72] = 'Hier sollte Ihr Public Key stehen. Er wird standardmäßig zur Verschlüsselung genutzt.';      
    tk_barrydegraaff_zimbra_openpgp.lang['german'][73] = 'Import public key';   
    tk_barrydegraaff_zimbra_openpgp.lang['german'][74] = 'Do you wish to import this public key? Please <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">verify the fingerprint</a>.';   
    tk_barrydegraaff_zimbra_openpgp.lang['german'][75] = 'Imported';
