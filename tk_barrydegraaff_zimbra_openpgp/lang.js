@@ -110,6 +110,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['english'][73] = 'Import public key';   
    tk_barrydegraaff_zimbra_openpgp.lang['english'][74] = 'Do you wish to import this public key? Please <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">verify the fingerprint</a>.';   
    tk_barrydegraaff_zimbra_openpgp.lang['english'][75] = 'Imported';
+   tk_barrydegraaff_zimbra_openpgp.lang['english'][76] = 'Failed to import this public key';
    
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][0] = 'OpenPGP berichten uitbreiding voor Zimbra Collaboration Suite.';
@@ -187,7 +188,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][72] = 'Plaats hier uw eigen publieke sleutel, deze is standaard geselecteerd bij versleutelen.';   
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][73] = 'Import public key';   
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][74] = 'Do you wish to import this public key? Please <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">verify the fingerprint</a>.';   
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][75] = 'Imported';   
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][75] = 'Imported';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][76] = 'Failed to import this public key';   
 
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][0] = 'Extensión de mensajes OpenPGP para Zimbra Collaboration Suite.';
@@ -266,6 +268,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][73] = 'Import public key';   
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][74] = 'Do you wish to import this public key? Please <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">verify the fingerprint</a>.';   
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][75] = 'Imported';      
+   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][76] = 'Failed to import this public key';   
 
    tk_barrydegraaff_zimbra_openpgp.lang['italian'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][0] = 'Estensione per messaggi OpenPGP per Zimbra Collaboration Suite.';
@@ -344,6 +347,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][73] = 'Import public key';   
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][74] = 'Do you wish to import this public key? Please <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">verify the fingerprint</a>.';   
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][75] = 'Imported';     
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][76] = 'Failed to import this public key';   
    
 
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'] = [];
@@ -423,6 +427,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][73] = 'Import public key';   
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][74] = 'Do you wish to import this public key? Please <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">verify the fingerprint</a>.';   
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][75] = 'Imported';     
+   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][76] = 'Failed to import this public key';   
       
 
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'] = [];
@@ -501,9 +506,9 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][72] = 'Esta deve ser sua própria chave pública que é selecionada por padrão quando se encripta.';   
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][73] = 'Import public key';   
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][74] = 'Do you wish to import this public key? Please <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">verify the fingerprint</a>.';   
-   tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][75] = 'Imported';     
+   tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][75] = 'Imported'; 
+   tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][76] = 'Failed to import this public key';       
          
-
    tk_barrydegraaff_zimbra_openpgp.lang['french'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['french'][0] = 'OpenPGP est une extension pour Zimbra Collaboration Suite.';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][1] = 'Signer le message';
@@ -580,7 +585,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['french'][72] = 'Cela doit etre votre clé public . Celle ci est selectionner par defaut lors de l\'encryption .';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][73] = 'Import public key';   
    tk_barrydegraaff_zimbra_openpgp.lang['french'][74] = 'Do you wish to import this public key? Please <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">verify the fingerprint</a>.';   
-   tk_barrydegraaff_zimbra_openpgp.lang['french'][75] = 'Imported';     
+   tk_barrydegraaff_zimbra_openpgp.lang['french'][75] = 'Imported';
+   tk_barrydegraaff_zimbra_openpgp.lang['french'][76] = 'Failed to import this public key';            
 
    tk_barrydegraaff_zimbra_openpgp.lang['german'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['german'][0] = 'OpenPGP Nachrichten-Erweiterung für Zimbra Collaboration Suite.';
@@ -658,5 +664,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['german'][72] = 'This should be your own public key, it is selected by default when encrypting.';      
    tk_barrydegraaff_zimbra_openpgp.lang['german'][73] = 'Import public key';   
    tk_barrydegraaff_zimbra_openpgp.lang['german'][74] = 'Do you wish to import this public key? Please <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">verify the fingerprint</a>.';   
-   tk_barrydegraaff_zimbra_openpgp.lang['german'][75] = 'Imported';        
+   tk_barrydegraaff_zimbra_openpgp.lang['german'][75] = 'Imported';
+   tk_barrydegraaff_zimbra_openpgp.lang['german'][76] = 'Failed to import this public key';                    
 }

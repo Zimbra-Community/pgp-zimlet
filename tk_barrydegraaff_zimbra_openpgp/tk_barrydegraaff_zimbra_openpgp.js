@@ -206,69 +206,21 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       //Detect what kind of message we have
       var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
 
-      /* Create a toolbar button to import PGP Public Keys
-       * 
-       */
+      //Import PGP PUBLIC KEYS
       try {
          var app = appCtxt.getCurrentApp();
          var controller = app.getMailListController();
-         var toolbar = controller.getCurrentToolbar();
-         if (toolbar)
-         {
-            //When the user forwards emails as eml with attachments, there will be a toolbar, but that one
-            //has no getButton method... resulting in a pop-up where the attachments cannot be clicked
-            try {
-               var getButton = toolbar.getButton('Pgp_ZimletZimletButton')
-            } catch (err) {}
-            
-            if (getButton)
-            {
-               //button already defined
-               getButton.setEnabled(true); 
-            }
-            else
-            {
-               //create app button
-               var buttonArgs = {
-                  text    : tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][73],
-                  tooltip: tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][73],
-                  index: 8, //position of the button
-                  image: "zimbraicon", //icon
-                  enabled: true //default if undefined is true, defining it for documentation purpose
-               };
-               var button = toolbar.createOp("Pgp_ZimletZimletButton", buttonArgs);
-               button.addSelectionListener(new AjxListener(this, this.importPubKey, controller));
-            }
-         }      
-      } catch (err) {}
+      } catch (err) { }
               
-      //Enable or disable the button based on the detection of PGP PUBLIC KEY BLOCK
       try {
       var pubKeySearch = bp.node.content.substring(0,10000);
       } catch (err) { var pubKeySearch = ''; }
       
       if ((pubKeySearch.indexOf("BEGIN PGP PUBLIC KEY BLOCK") > 0 ) && (bp))
       {
-         //The code below is already default behavior in Zimbra
-         //var button = toolbar.getButton('Pgp_ZimletZimletButton');  
-         //button.setEnabled(true); 
+         this.importPubKey(controller);
+         return;
       }
-      else
-      {
-         if (toolbar)
-         {
-            try {
-               var getButton = toolbar.getButton('Pgp_ZimletZimletButton')
-            } catch (err) {}
-            
-            if (getButton)
-            {
-               getButton.setEnabled(false);
-            }
-         }
-      }            
-      /* End toolbar integration
-       * */
 
       var pgpmime = false;
       if (!bp)
@@ -953,7 +905,6 @@ function(id, title, message) {
       this._dialog.setContent(html);
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnImportPubKey, message));
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
-      //this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.okBtnImportPubKey(message)));
       break;
    }
    this._dialog._setAllowSelection();
@@ -1537,12 +1488,16 @@ function(controller) {
    } catch (err) { }
    
    var publicKey = openpgp.key.readArmored(pubKeyTxt);
-   if(publicKey.keys)
+   if((publicKey.keys) && (openslots[0]))
+   {
+         this.setUserProperty("zimbra_openpgp_pubkeys" + openslots[0], pubKeyTxt, true);
+         tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][75] + " " + tk_barrydegraaff_zimbra_openpgp.lang['english'][26] + " " + openslots[0], ZmStatusView.LEVEL_INFO); 
+   }
+   else
    {
       this.setUserProperty("zimbra_openpgp_pubkeys" + openslots[0], pubKeyTxt, true);
-   }
-   
-   tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][75] + " " + tk_barrydegraaff_zimbra_openpgp.lang['english'][26] + " " + openslots[0], ZmStatusView.LEVEL_INFO); 
+         tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][76], ZmStatusView.LEVEL_WARNING); 
+   }      
    
    try{
       this._dialog.setContent('');
