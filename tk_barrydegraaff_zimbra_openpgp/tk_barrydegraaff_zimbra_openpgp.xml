@@ -39,7 +39,7 @@ them here has no effect.
       <contextMenu>
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-sign" label="Sign message" id="sign" />
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-panelIcon" label="Encrypt message" id="encrypt" />
-         <menuItem icon="tk_barrydegraaff_zimbra_openpgp-pubkeys" label="Manage Keys" id="pubkeys" />         
+         <menuItem icon="tk_barrydegraaff_zimbra_openpgp-pubkeys" label="Manage Keys" id="pubkeys" />
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-keypair" label="Generate key pair" id="keypair" />
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-sendTo" label="Send To" id="sendTo" />
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-file-pgp-encrypted" label="Encrypt file" id="encrypt-file" />
