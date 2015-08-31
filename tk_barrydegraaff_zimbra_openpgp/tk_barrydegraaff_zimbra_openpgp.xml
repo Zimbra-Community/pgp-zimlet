@@ -1,4 +1,4 @@
-<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="1.7.5" label="OpenPGP" description="Encrypt/Decrypt messages with OpenPGP">
+<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="1.7.6" label="OpenPGP" description="Encrypt/Decrypt messages with OpenPGP">
    <summary>
 Zimbra OpenPGP Zimlet
 
@@ -39,8 +39,9 @@ them here has no effect.
       <contextMenu>
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-sign" label="Sign message" id="sign" />
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-panelIcon" label="Encrypt message" id="encrypt" />
-         <menuItem icon="tk_barrydegraaff_zimbra_openpgp-pubkeys" label="Manage Keys" id="pubkeys" />
+         <menuItem icon="tk_barrydegraaff_zimbra_openpgp-pubkeys" label="Manage Keys" id="pubkeys" />         
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-keypair" label="Generate key pair" id="keypair" />
+         <menuItem icon="tk_barrydegraaff_zimbra_openpgp-sendTo" label="Send To" id="sendTo" />
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-file-pgp-encrypted" label="Encrypt file" id="encrypt-file" />
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-attachment" label="Decrypt file" id="decrypt-file" />
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-help" label="Help / About" id="help" />
