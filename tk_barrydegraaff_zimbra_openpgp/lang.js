@@ -577,7 +577,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['french'][69] = 'Parametre avancé';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][70] = 'Passer en texte brut et réessayer.';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][71] = 'Stocker la phrase en local sur votre navigateur';
-   tk_barrydegraaff_zimbra_openpgp.lang['french'][72] = 'This should be your own public key, it is selected by default when encrypting.';  
+   tk_barrydegraaff_zimbra_openpgp.lang['french'][72] = 'Cela doit etre votre clé public . Celle ci est selectionner par defaut lors de l\'encryption .';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][73] = 'Import public key';   
    tk_barrydegraaff_zimbra_openpgp.lang['french'][74] = 'Do you wish to import this public key? Please <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">verify the fingerprint</a>.';   
    tk_barrydegraaff_zimbra_openpgp.lang['french'][75] = 'Imported';     
