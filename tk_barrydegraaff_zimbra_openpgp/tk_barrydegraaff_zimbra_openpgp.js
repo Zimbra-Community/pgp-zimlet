@@ -1494,13 +1494,12 @@ function(controller) {
    var publicKey = openpgp.key.readArmored(pubKeyTxt);
    if((publicKey.keys) && (openslots[0]))
    {
-         this.setUserProperty("zimbra_openpgp_pubkeys" + openslots[0], pubKeyTxt, true);
-         tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][75] + " " + tk_barrydegraaff_zimbra_openpgp.lang['english'][26] + " " + openslots[0], ZmStatusView.LEVEL_INFO); 
+      this.setUserProperty("zimbra_openpgp_pubkeys" + openslots[0], pubKeyTxt, true);
+      tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][75] + " " + tk_barrydegraaff_zimbra_openpgp.lang['english'][26] + " " + openslots[0], ZmStatusView.LEVEL_INFO); 
    }
    else
    {
-      this.setUserProperty("zimbra_openpgp_pubkeys" + openslots[0], pubKeyTxt, true);
-         tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][76], ZmStatusView.LEVEL_WARNING); 
+      tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][76], ZmStatusView.LEVEL_WARNING); 
    }      
    
    try{
