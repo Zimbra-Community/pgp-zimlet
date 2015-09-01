@@ -95,9 +95,10 @@ tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
    this._zimletContext._panelActionMenu.args[0][1].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][2];
    this._zimletContext._panelActionMenu.args[0][2].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][3];
    this._zimletContext._panelActionMenu.args[0][3].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][4];
-   this._zimletContext._panelActionMenu.args[0][4].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][59];
-   this._zimletContext._panelActionMenu.args[0][5].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][60];
-   this._zimletContext._panelActionMenu.args[0][6].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][5];
+   this._zimletContext._panelActionMenu.args[0][4].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][77];
+   this._zimletContext._panelActionMenu.args[0][5].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][59];
+   this._zimletContext._panelActionMenu.args[0][6].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][60];
+   this._zimletContext._panelActionMenu.args[0][7].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][5];
    
    tk_barrydegraaff_zimbra_openpgp.prototype.readAddressBook();
    
@@ -202,9 +203,26 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
          var bodynode = document.getElementById('zv__TV-main__MSG__body');
          var attNode = document.getElementById('zv__TV__TV-main_MSG_attLinks');
       }
-       
+      
       //Detect what kind of message we have
       var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
+
+      //Import PGP PUBLIC KEYS
+      try {
+         var app = appCtxt.getCurrentApp();
+         var controller = app.getMailListController();
+      } catch (err) { }
+              
+      try {
+      var pubKeySearch = bp.node.content.substring(0,10000);
+      } catch (err) { var pubKeySearch = ''; }
+      
+      if ((pubKeySearch.indexOf("BEGIN PGP PUBLIC KEY BLOCK") > 0 ) && (bp))
+      {
+         this.importPubKey(controller);
+         return;
+      }
+
       var pgpmime = false;
       if (!bp)
       {
@@ -254,7 +272,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       //Performance, do not GET the entire mail, if it is not PGP mail
       if ((pgpmime) ||
       (msgSearch.indexOf("BEGIN PGP SIGNED MESSAGE") > 0 ) ||
-      (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ))
+      (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ) ||
+      (msgSearch.indexOf("BEGIN PGP PUBLIC KEY BLOCK") > 0 ))
       {
          var url = [];
          var i = 0;
@@ -302,7 +321,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
             msgSearch=message;
          }   
       }
-      
+
       if (msgSearch.indexOf("BEGIN PGP SIGNED MESSAGE") > 0 ) {
          if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
          {
@@ -322,7 +341,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
          bodynode.innerHTML = '';
          document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML='<pre style="white-space: pre-wrap;word-wrap: break-word;">'+tk_barrydegraaff_zimbra_openpgp.prototype.urlify(dispMessage)+'</pre>';
          this.verify(message);
-      }
+      }   
       else if (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ) {
          //Allow to print decrypted message
          if(msg.subject)
@@ -435,6 +454,9 @@ function(itemId) {
       break;
    case "pubkeys":
       this.displayDialog(3, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][3], null);
+      break;
+   case "sendTo":
+      tk_barrydegraaff_zimbra_openpgp.prototype.sendTo(btoa(this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value));
       break;
    case "keypair":
       this.displayDialog(5, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][4], null);
@@ -844,6 +866,50 @@ function(id, title, message) {
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecryptFile));
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;     
+   case 9:
+      //Import public key
+      //Get selected mail message
+      var controller = message;
+      var items = controller.getSelection();
+      if(!items instanceof Array) {
+         return;
+      }
+      
+      var type = items[0].type;
+      var msg;
+      if (type == ZmId.ITEM_CONV) {
+         msg = items[0].getFirstHotMsg();
+      } else if(type == ZmId.ITEM_MSG) {
+         msg = items[0];
+      }
+      
+      var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);   
+      pubKeyTxt = bp.node.content.match(/(-----BEGIN PGP PUBLIC KEY BLOCK-----)([^]+)(-----END PGP PUBLIC KEY BLOCK-----)/g);
+      pubKeyTxt = pubKeyTxt[0];
+      
+      var publicKeys = openpgp.key.readArmored(pubKeyTxt);
+      
+      userid = publicKeys.keys[0].users[0].userId.userid;
+      userid = userid.replace(/\</g,"&lt;");
+      userid = userid.replace(/\>/g,"&gt;");
+      
+      publicKeyPacket = publicKeys.keys[0].primaryKey;
+      var keyLength = "";
+      if (publicKeyPacket != null) {
+         if (publicKeyPacket.mpi.length > 0) {
+            keyLength = (publicKeyPacket.mpi[0].byteLength() * 8);
+         }
+      }
+      
+      result = "<br><table style=\"padding: 5px;\"><tr><td>User ID[0]:</td><td>" + userid + "</td></tr><tr><td>Fingerprint:</td><td><b>" + publicKeyPacket.fingerprint + "</b></td></tr><tr><td> Primary key length:&nbsp;</td><td>" + keyLength + "</td></tr><tr><td>Created:<td>" + publicKeyPacket.created + "</td></tr></table>";
+
+      html = "<div style='width:650px; height: 100px; overflow-x: hidden; overflow-y: hidden;'>" +
+      tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][74]+ "<br>" + result + "</div>";
+      this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true  } );
+      this._dialog.setContent(html);
+      this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnImportPubKey, message));
+      this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
+      break;
    }
    this._dialog._setAllowSelection();
    this._dialog.popup();
@@ -1350,6 +1416,102 @@ function() {
    } catch (err) { }   
 };
 
+
+tk_barrydegraaff_zimbra_openpgp.prototype.importPubKey =
+function (controller) {
+   this.displayDialog(9, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][73], controller);  
+}   
+
+/* This method is called for importing a public key received via email
+ */
+tk_barrydegraaff_zimbra_openpgp.prototype.okBtnImportPubKey = 
+function(controller) {  
+   //Get selected mail message
+   var items = controller.getSelection();
+	if(!items instanceof Array) {
+		return;
+	}
+   
+   var type = items[0].type;
+	var msg;
+	if (type == ZmId.ITEM_CONV) {
+		msg = items[0].getFirstHotMsg();
+	} else if(type == ZmId.ITEM_MSG) {
+		msg = items[0];
+	}
+   
+   var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);   
+   pubKeyTxt = bp.node.content.match(/(-----BEGIN PGP PUBLIC KEY BLOCK-----)([^]+)(-----END PGP PUBLIC KEY BLOCK-----)/g);
+   pubKeyTxt = pubKeyTxt[0];
+   
+   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+   var freecount = 1;
+   var freekey= 0;
+   try {
+      var publicKeys1 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
+      var publicKeys2 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value);
+      var publicKeys3 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys3").value);
+      var publicKeys4 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys4").value);
+      var publicKeys5 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys5").value);
+      var publicKeys6 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys6").value);
+      var publicKeys7 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys7").value);
+      var publicKeys8 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys8").value);
+      var publicKeys9 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys9").value);
+      var publicKeys10 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys10").value);
+      var publicKeys11 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys11").value);
+      var publicKeys12 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys12").value);
+      var publicKeys13 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys13").value);
+      var publicKeys14 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys14").value);
+      var publicKeys15 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys15").value);
+      var publicKeys16 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys16").value);
+      var publicKeys17 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys17").value);
+      var publicKeys18 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys18").value);
+      var publicKeys19 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys19").value);
+      var publicKeys20 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys20").value);
+      var publicKeys21 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys21").value);
+      var publicKeys22 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys22").value);
+      var publicKeys23 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys23").value);
+      var publicKeys24 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys24").value);
+      var publicKeys25 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys25").value);
+      var publicKeys26 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys26").value);
+      var publicKeys27 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys27").value);
+      var publicKeys28 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys28").value);
+      var publicKeys29 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value);
+      var publicKeys30 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value);
+      var combinedPublicKeys = [publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys];
+
+      var openslots = [];
+      combinedPublicKeys.forEach(function(pubKey) {
+         if(!pubKey[0])
+         {
+            openslots[freekey]= freecount;
+            freekey++;
+         }         
+         freecount++;
+      });
+   } catch (err) { }
+   
+   var publicKey = openpgp.key.readArmored(pubKeyTxt);
+   if((publicKey.keys) && (openslots[0]))
+   {
+      this.setUserProperty("zimbra_openpgp_pubkeys" + openslots[0], pubKeyTxt, true);
+      tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][75] + " " + tk_barrydegraaff_zimbra_openpgp.lang['english'][26] + " " + openslots[0], ZmStatusView.LEVEL_INFO); 
+   }
+   else
+   {
+      tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][76], ZmStatusView.LEVEL_WARNING); 
+   }      
+   
+   try{
+      this._dialog.setContent('');
+      this._dialog.popdown();
+   }
+      catch (err) {
+   }
+
+   
+};
+
 /* This method is called for signing messages
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnSign =
@@ -1430,6 +1592,20 @@ function() {
       tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][44], ZmStatusView.LEVEL_WARNING);
    }
 };
+
+tk_barrydegraaff_zimbra_openpgp.prototype.sendTo =
+function(message) {
+   var composeController = AjxDispatcher.run("GetComposeController");
+   if(composeController) {
+      var appCtxt = window.top.appCtxt;
+      var zmApp = appCtxt.getApp();
+      var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
+      var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
+      toOverride:null, subjOverride:null, extraBodyText:atob(message), callback:null}
+      composeController.doAction(params); // opens asynchronously the window.
+   }
+};
+
 
 /* This method is called when the dialog "OK" button is clicked for key pair generation.
  */
@@ -1557,7 +1733,7 @@ function() {
       var publicKeys29 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value);
       var publicKeys30 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value);
       var combinedPublicKeys = [publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys];
-           
+
       tk_barrydegraaff_zimbra_openpgp.addressBookPublicKeys.forEach(function(pubKey) {
          var pubKey = openpgp.key.readArmored(pubKey);
          combinedPublicKeys = combinedPublicKeys.concat([pubKey.keys]);            

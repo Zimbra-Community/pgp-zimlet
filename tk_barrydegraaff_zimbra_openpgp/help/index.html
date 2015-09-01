@@ -53,6 +53,7 @@ border: 1px solid #888888;
 <li><a href="#contacts-scanning">Storing public keys to Zimbra contacts</a></li>
 <li><a href="#attachments">Working with attachments</a></li>
 <li><a href="#thunderbird-enigmail">Thunderbird/Enigmail compatibility</a></li>
+<li><a href="#fingerprint">Fingerprint</a></li>
 <li><a href="#about">About OpenPGP Zimlet</a></li>
 <li><a href="#licenses">License and third party FOSS libraries</a></li>
 </ul>
@@ -170,6 +171,17 @@ If you want to attach encrypted documents to your mail, you must first encrypt t
 <h1>Reading messages encrypted/signed with Thunderbird/Enigmail</h1>
 OpenPGP/MIME encrypted messages using RFC 3156 implemented in Thunderbird/Enigmail can be decrypted and verified by this Zimlet. This is beta functionality text/plain, text/html and attachment message parts are supported.<br>
 <br><img src="thunderbird-enigmail-support.png" alt=""><br><hr><br>
+
+
+
+<br><br></section><section id="fingerprint">
+<h1>Fingerprint</h1>
+Key fingerprint verification is actually much easier than it sounds.  In a nutshell, both sides should compare the fingerprints of the public key in question.  If the fingerprints match, then they can proceed to send a test message.  If they do not, then the key can NOT be trusted. 
+<br> <br> 
+The process of comparing fingerprints should be performed through a mechanism whereby the identity of the owner of the public key in question is known or trusted.  This may come in the form of a phone call to a trusted phone number, a face-to-face conversation, photo ID verification, or all of the above.   Obviously, the goal is to ensure that the person you are communicating with is who you think he or she is.  If you know the key’s owner and recognize their voice, it is easy enough to call them and verify the key’s fingerprint over the telephone.
+ <br> <br> 
+It is best to use a different communication method than the one that was used to send the key itself. A good combination is to send the key via e-mail, and the key fingerprint via a telephone conversation or received in person on a business card.<br> 
+<br> <hr><br>
 
 
 
