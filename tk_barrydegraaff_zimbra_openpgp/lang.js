@@ -347,11 +347,11 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][70] = 'Per favore imposta la composizione in testo semplice e riprova.'; 
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][71] = 'Memorizza la passphrase nel "local storage" del browser';
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][72] = 'Questa dovrebbe essere la tua chiave pubblica, viene selezionata automaticamente in fase di crittazione.';   
-   tk_barrydegraaff_zimbra_openpgp.lang['italian'][73] = 'Import public key';   
-   tk_barrydegraaff_zimbra_openpgp.lang['italian'][74] = 'Do you wish to import this public key? Please <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">verify the fingerprint</a>.';   
-   tk_barrydegraaff_zimbra_openpgp.lang['italian'][75] = 'Imported';     
-   tk_barrydegraaff_zimbra_openpgp.lang['italian'][76] = 'Failed to import this public key';  
-   tk_barrydegraaff_zimbra_openpgp.lang['italian'][77] = 'Send someone my public key';       
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][73] = 'Importa chiave pubblica';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][74] = 'Desideri importare questa chiave pubblica? Per favore <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">verifica il fingerprint GPG</a>.';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][75] = 'Importata';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][76] = 'Importazione chiave pubblica non riuscita';
+   tk_barrydegraaff_zimbra_openpgp.lang['italian'][77] = 'Invia la mia chiave pubbblica';
    
 
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'] = [];
