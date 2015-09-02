@@ -187,11 +187,11 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][70] = 'Kies voor opmaken als platte tekst en probeer opnieuw.'; 
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][71] = 'Wachtwoordzin opslaan in browsers lokale opslag';
    tk_barrydegraaff_zimbra_openpgp.lang['dutch'][72] = 'Plaats hier uw eigen publieke sleutel, deze is standaard geselecteerd bij versleutelen.';   
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][73] = 'Import public key';   
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][74] = 'Do you wish to import this public key? Please <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">verify the fingerprint</a>.';   
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][75] = 'Imported';
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][76] = 'Failed to import this public key';   
-   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][77] = 'Send someone my public key';   
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][73] = 'Importeer publieke sleutel';   
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][74] = 'Wilt u deze publieke sleutel importeren? A.u.b. <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">vingerafdruk verifiëren</a>.';   
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][75] = 'Geïmporteerd:';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][76] = 'Fout bij het importeren van publieke sleutel';
+   tk_barrydegraaff_zimbra_openpgp.lang['dutch'][77] = 'Stuur iemand mijn publieke sleutel';
 
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][0] = 'Extensión de mensajes OpenPGP para Zimbra Collaboration Suite.';
@@ -670,7 +670,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['german'][71] = 'Passwort lokal im Browser speichern'; 
    tk_barrydegraaff_zimbra_openpgp.lang['german'][72] = 'Hier sollte Ihr Public Key stehen. Er wird standardmäßig zur Verschlüsselung genutzt.';      
    tk_barrydegraaff_zimbra_openpgp.lang['german'][73] = 'Public Key importieren';   
-   tk_barrydegraaff_zimbra_openpgp.lang['german'][74] = 'Möchten Sie diesem Public Key importieren? Please <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">Bitte verifizieren Sie Fingerabdruck</a>.';   
+   tk_barrydegraaff_zimbra_openpgp.lang['german'][74] = 'Möchten Sie diesem Public Key importieren? Bitte <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">verifizieren Sie die Fingerabdruck</a>.';   
    tk_barrydegraaff_zimbra_openpgp.lang['german'][75] = 'Public Key importieren';
    tk_barrydegraaff_zimbra_openpgp.lang['german'][76] = 'Fehler beim Importieren des Public Keys';
    tk_barrydegraaff_zimbra_openpgp.lang['german'][77] = 'Jemandem meinen Public Key zuschicken';                                    
