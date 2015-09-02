@@ -428,11 +428,11 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][70] = 'Hãy đặt định dạng văn bản thường và thử lại.';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][71] = 'Lưu mật mã truy cập khóa riêng tại máy trạm';
    tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][72] = 'Đây nên là khóa công khai của chính bạn, được chọn mặc định khi mã hóa.';
-   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][73] = 'Import public key';   
-   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][74] = 'Do you wish to import this public key? Please <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">verify the fingerprint</a>.';   
-   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][75] = 'Imported';     
-   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][76] = 'Failed to import this public key'; 
-   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][77] = 'Send someone my public key';         
+   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][73] = 'Nhập khóa công khai';   
+   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][74] = 'Bạn có muốn nhập khóa công khai này không? Hãy <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint"> kiểm tra fingerprint</a>.';   
+   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][75] = 'Nhập xong';     
+   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][76] = 'Lỗi nhập khóa công khai này'; 
+   tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][77] = 'Gửi khóa công khai của tôi';         
       
 
    tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'] = [];
