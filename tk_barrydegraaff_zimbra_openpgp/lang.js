@@ -267,11 +267,11 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][70] = 'Por favor, crea el mensaje como Texto Plano e inténtalo de nuevo.'; 
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][71] = 'Almacenar la passhrase en el almacenamiento local de los navegadores web';
    tk_barrydegraaff_zimbra_openpgp.lang['spanish'][72] = 'Esta debe ser su propia llave pública, será seleccionada por defecto cuando se cifra.';   
-   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][73] = 'Import public key';   
-   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][74] = 'Do you wish to import this public key? Please <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">verify the fingerprint</a>.';   
-   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][75] = 'Imported';      
-   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][76] = 'Failed to import this public key';   
-   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][77] = 'Send someone my public key';      
+   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][73] = 'Importar llave pública';   
+   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][74] = '¿Quiere importar esta llave pública? Por favor <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">verifica la huella digital</a>.';   
+   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][75] = 'Importada';
+   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][76] = 'Fallo al importar esta llave pública';   
+   tk_barrydegraaff_zimbra_openpgp.lang['spanish'][77] = 'Enviar mi llave pública a un contacto';       
 
    tk_barrydegraaff_zimbra_openpgp.lang['italian'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['italian'][0] = 'Estensione per messaggi OpenPGP per Zimbra Collaboration Suite.';
