@@ -529,7 +529,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['french'][10] = 'Version';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][11] = 'Aide';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][12] = 'pas de message PGP détecter';
-   tk_barrydegraaff_zimbra_openpgp.lang['french'][13] = 'Impossible d\'analyser la clé public de confiance!';
+   tk_barrydegraaff_zimbra_openpgp.lang['french'][13] = 'Impossible d\'analyser la clé publique de confiance!';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][14] = 'C\'est une bonne signature';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][15] = 'C\'est une mauvaise signature';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][16] = 'Message ';
@@ -588,16 +588,12 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lang = function () {
    tk_barrydegraaff_zimbra_openpgp.lang['french'][69] = 'Parametre avancé';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][70] = 'Passer en texte brut et réessayer.';
    tk_barrydegraaff_zimbra_openpgp.lang['french'][71] = 'Stocker la phrase en local sur votre navigateur';
-<<<<<<< HEAD
-   tk_barrydegraaff_zimbra_openpgp.lang['french'][72] = "Cela doit etre votre clé public . Celle ci est selectionner par defaut lors de l'encryption .";      
-=======
-   tk_barrydegraaff_zimbra_openpgp.lang['french'][72] = 'Cela doit etre votre clé public . Celle ci est selectionner par defaut lors de l\'encryption .';
-   tk_barrydegraaff_zimbra_openpgp.lang['french'][73] = 'Import public key';   
-   tk_barrydegraaff_zimbra_openpgp.lang['french'][74] = 'Do you wish to import this public key? Please <a target="_blank" href="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint">verify the fingerprint</a>.';   
-   tk_barrydegraaff_zimbra_openpgp.lang['french'][75] = 'Imported';
-   tk_barrydegraaff_zimbra_openpgp.lang['french'][76] = 'Failed to import this public key';            
-   tk_barrydegraaff_zimbra_openpgp.lang['french'][77] = 'Send someone my public key';                
->>>>>>> upstream/master
+   tk_barrydegraaff_zimbra_openpgp.lang['french'][72] = 'Ca doit etre votre clé publique . Celle ci est selectionner par defaut lors de l\'encryption .';
+   tk_barrydegraaff_zimbra_openpgp.lang['french'][73] = 'Importer la clé publique';
+   tk_barrydegraaff_zimbra_openpgp.lang['french'][74] = "Voulez vous importez cette clef public ? Vérifiez <a target='_blank' href='/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html#fingerprint'>cette empreinte</a> s'il vous plait .";
+   tk_barrydegraaff_zimbra_openpgp.lang['french'][75] = 'Importé';
+   tk_barrydegraaff_zimbra_openpgp.lang['french'][76] = "Impossible d'importer la clef public";
+   tk_barrydegraaff_zimbra_openpgp.lang['french'][77] = "Envoyer à quelqu'un ma clef public"; 
 
    tk_barrydegraaff_zimbra_openpgp.lang['german'] = [];
    tk_barrydegraaff_zimbra_openpgp.lang['german'][0] = 'OpenPGP Nachrichten-Erweiterung für Zimbra Collaboration Suite.';
