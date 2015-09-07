@@ -112,7 +112,7 @@ tk_barrydegraaff_zimbra_openpgp.lang['english'][74] = 'Do you wish to import thi
 tk_barrydegraaff_zimbra_openpgp.lang['english'][75] = 'Imported';
 tk_barrydegraaff_zimbra_openpgp.lang['english'][76] = 'Failed to import this public key';
 tk_barrydegraaff_zimbra_openpgp.lang['english'][77] = 'Send someone my public key';
-tk_barrydegraaff_zimbra_openpgp.lang['english'][78] = 'Public key already in your list with trusted keys';
+tk_barrydegraaff_zimbra_openpgp.lang['english'][78] = 'Public key already in your list of trusted keys';
 
 
 tk_barrydegraaff_zimbra_openpgp.lang['dutch'] = [];
@@ -194,7 +194,7 @@ tk_barrydegraaff_zimbra_openpgp.lang['dutch'][74] = 'Wilt u deze publieke sleute
 tk_barrydegraaff_zimbra_openpgp.lang['dutch'][75] = 'Geïmporteerd:';
 tk_barrydegraaff_zimbra_openpgp.lang['dutch'][76] = 'Fout bij het importeren van publieke sleutel';
 tk_barrydegraaff_zimbra_openpgp.lang['dutch'][77] = 'Stuur iemand mijn publieke sleutel';
-tk_barrydegraaff_zimbra_openpgp.lang['dutch'][78] = 'Public key already in your list with trusted keys'; 
+tk_barrydegraaff_zimbra_openpgp.lang['dutch'][78] = 'Publieke sleutel bestaat al in de lijst met vertrouwde publieke sleutels'; 
 
 
 tk_barrydegraaff_zimbra_openpgp.lang['spanish'] = [];
@@ -276,7 +276,7 @@ tk_barrydegraaff_zimbra_openpgp.lang['spanish'][74] = '¿Quiere importar esta ll
 tk_barrydegraaff_zimbra_openpgp.lang['spanish'][75] = 'Importada';
 tk_barrydegraaff_zimbra_openpgp.lang['spanish'][76] = 'Fallo al importar esta llave pública'; 
 tk_barrydegraaff_zimbra_openpgp.lang['spanish'][77] = 'Enviar mi llave pública a un contacto'; 
-tk_barrydegraaff_zimbra_openpgp.lang['spanish'][78] = 'Public key already in your list with trusted keys';
+tk_barrydegraaff_zimbra_openpgp.lang['spanish'][78] = 'Public key already in your list of trusted keys';
 
 
 tk_barrydegraaff_zimbra_openpgp.lang['italian'] = [];
@@ -440,7 +440,7 @@ tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][74] = 'Bạn có muốn nhậ
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][75] = 'Nhập xong'; 
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][76] = 'Lỗi nhập khóa công khai này'; 
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][77] = 'Gửi khóa công khai của tôi';
-tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][78] = 'Public key already in your list with trusted keys';
+tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][78] = 'Public key already in your list of trusted keys';
  
 
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'] = [];
@@ -522,7 +522,7 @@ tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][74] = 'Você quer impo
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][75] = 'Importada';
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][76] = 'Falha ao importar essa chave pública'; 
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][77] = 'Enviar minha chave pública para alguém';
-tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][78] = 'Public key already in your list with trusted keys';
+tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][78] = 'Public key already in your list of trusted keys';
  
  
 tk_barrydegraaff_zimbra_openpgp.lang['french'] = [];
@@ -604,7 +604,7 @@ tk_barrydegraaff_zimbra_openpgp.lang['french'][74] = 'Voulez vous importez cette
 tk_barrydegraaff_zimbra_openpgp.lang['french'][75] = 'Importé';
 tk_barrydegraaff_zimbra_openpgp.lang['french'][76] = 'Impossible d\'importer la clef public';
 tk_barrydegraaff_zimbra_openpgp.lang['french'][77] = 'Envoyer à quelqu\'un ma clef public'; 
-tk_barrydegraaff_zimbra_openpgp.lang['french'][78] = 'Public key already in your list with trusted keys';
+tk_barrydegraaff_zimbra_openpgp.lang['french'][78] = 'Public key already in your list of trusted keys';
 
 
 tk_barrydegraaff_zimbra_openpgp.lang['german'] = [];
@@ -686,7 +686,7 @@ tk_barrydegraaff_zimbra_openpgp.lang['german'][74] = 'Möchten Sie diesem Public
 tk_barrydegraaff_zimbra_openpgp.lang['german'][75] = 'Public Key importieren';
 tk_barrydegraaff_zimbra_openpgp.lang['german'][76] = 'Fehler beim Importieren des Public Keys';
 tk_barrydegraaff_zimbra_openpgp.lang['german'][77] = 'Jemandem meinen Public Key zuschicken'; 
-tk_barrydegraaff_zimbra_openpgp.lang['german'][78] = 'Public key already in your list with trusted keys'; 
+tk_barrydegraaff_zimbra_openpgp.lang['german'][78] = 'Public Key bereits in Ihrer Liste der vertrauwnswürdigen Keys'
 
 
 }
