@@ -1445,6 +1445,8 @@ function(controller) {
    pubKeyTxt = pubKeyTxt[0];
    
    openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+   
+   //Find an open/free Trusted Public Key field to store our import
    var freecount = 2;
    var freekey= 0;
    try {
@@ -1480,18 +1482,42 @@ function(controller) {
       var combinedPublicKeys = [publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys];
 
       var openslots = [];
+      var fingerprints = [];
       combinedPublicKeys.forEach(function(pubKey) {
          if(!pubKey[0])
          {
-            openslots[freekey]= freecount;
+            openslots[freekey]= freecount;                     
             freekey++;
-         }         
+         }
+         else
+         {
+            var publicKeyPacket = pubKey[0].primaryKey;
+            if (publicKeyPacket != null) {
+            fingerprints[publicKeyPacket.fingerprint] = publicKeyPacket.fingerprint;
+            }
+         }
          freecount++;
       });
+
+      //Place our own Public Key in the list of known fingerprints
+      var publicKeys1= openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
+      fingerprints[publicKeys1.keys[0].primaryKey.fingerprint] = publicKeys1.keys[0].primaryKey.fingerprint;
+
    } catch (err) { }
    
-   var publicKey = openpgp.key.readArmored(pubKeyTxt);
-   if((publicKey.keys) && (openslots[0]))
+   //Check the fingerprint of the key we are importing   
+   try {
+      var publicKey = openpgp.key.readArmored(pubKeyTxt);
+      var publicKeyPacket = publicKey.keys[0].primaryKey;
+      var importFingerprint = publicKeyPacket.fingerprint;
+   } catch (err) { }
+  
+   //Find out if the fingerprint of the key we are importing is already trusted and avoid dupes
+   if((publicKey.keys[0]) && (importFingerprint == fingerprints[importFingerprint]))
+   {
+      tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][78], ZmStatusView.LEVEL_INFO);       
+   }
+   else if((publicKey.keys[0]) && (openslots[0]))
    {
       this.setUserProperty("zimbra_openpgp_pubkeys" + openslots[0], pubKeyTxt, true);
       tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][75] + " " + tk_barrydegraaff_zimbra_openpgp.lang['english'][26] + " " + openslots[0], ZmStatusView.LEVEL_INFO); 
