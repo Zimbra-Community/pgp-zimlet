@@ -358,7 +358,7 @@ tk_barrydegraaff_zimbra_openpgp.lang['italian'][74] = 'Desideri importare questa
 tk_barrydegraaff_zimbra_openpgp.lang['italian'][75] = 'Importata';
 tk_barrydegraaff_zimbra_openpgp.lang['italian'][76] = 'Importazione chiave pubblica non riuscita';
 tk_barrydegraaff_zimbra_openpgp.lang['italian'][77] = 'Invia la mia chiave pubbblica';
-tk_barrydegraaff_zimbra_openpgp.lang['italian'][78] = 'Public key already in your list with trusted keys';
+tk_barrydegraaff_zimbra_openpgp.lang['italian'][78] = 'Chiave pubblica già presente tra quelle fidate';
 
 
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'] = [];
