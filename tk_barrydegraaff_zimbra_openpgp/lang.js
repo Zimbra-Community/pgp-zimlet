@@ -522,7 +522,7 @@ tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][74] = 'Você quer impo
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][75] = 'Importada';
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][76] = 'Falha ao importar essa chave pública'; 
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][77] = 'Enviar minha chave pública para alguém';
-tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][78] = 'Public key already in your list of trusted keys';
+tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][78] = 'Chave pública já existe na sua lista de chaves confiáveis';
  
  
 tk_barrydegraaff_zimbra_openpgp.lang['french'] = [];
