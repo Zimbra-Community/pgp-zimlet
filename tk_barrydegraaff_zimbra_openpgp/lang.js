@@ -440,7 +440,7 @@ tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][74] = 'Bạn có muốn nhậ
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][75] = 'Nhập xong'; 
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][76] = 'Lỗi nhập khóa công khai này'; 
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][77] = 'Gửi khóa công khai của tôi';
-tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][78] = 'Public key already in your list of trusted keys';
+tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][78] = 'Khóa công khai đã tồn tại trong danh sách khóa tin cậy';
  
 
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'] = [];
