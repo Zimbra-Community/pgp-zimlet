@@ -276,7 +276,7 @@ tk_barrydegraaff_zimbra_openpgp.lang['spanish'][74] = '¿Quiere importar esta ll
 tk_barrydegraaff_zimbra_openpgp.lang['spanish'][75] = 'Importada';
 tk_barrydegraaff_zimbra_openpgp.lang['spanish'][76] = 'Fallo al importar esta llave pública'; 
 tk_barrydegraaff_zimbra_openpgp.lang['spanish'][77] = 'Enviar mi llave pública a un contacto'; 
-tk_barrydegraaff_zimbra_openpgp.lang['spanish'][78] = 'Public key already in your list of trusted keys';
+tk_barrydegraaff_zimbra_openpgp.lang['spanish'][78] = 'La llave pública ya se encuentra en su lista de Llaves seguras';
 
 
 tk_barrydegraaff_zimbra_openpgp.lang['italian'] = [];
