@@ -50,7 +50,7 @@ fi
 echo "Create translations"
 cat <<EOF > tk_barrydegraaff_zimbra_openpgp/lang.js
 /* When adding a language for translation, you may git clone and copy paste from a language in the lang/ folder OR
-* download a language from the lang/ folder do your translations and send your copy to maxxer@ufficyo.com 
+* download a language from the lang/ folder do your translations and send your copy to lorenzo.milesi@yetopen.it
 * 
 * When editing, please open files in Geany http://www.geany.org/ or use and UTF-8 aware editor
 * mode = Unix LF
