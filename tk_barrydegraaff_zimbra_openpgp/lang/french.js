@@ -77,4 +77,4 @@ tk_barrydegraaff_zimbra_openpgp.lang['french'][74] = 'Voulez vous importez cette
 tk_barrydegraaff_zimbra_openpgp.lang['french'][75] = 'Importé';
 tk_barrydegraaff_zimbra_openpgp.lang['french'][76] = 'Impossible d\'importer la clef public';
 tk_barrydegraaff_zimbra_openpgp.lang['french'][77] = 'Envoyer à quelqu\'un ma clef public'; 
-tk_barrydegraaff_zimbra_openpgp.lang['french'][78] = 'Public key already in your list of trusted keys';
+tk_barrydegraaff_zimbra_openpgp.lang['french'][78] = 'La clé public est déja dans votre magasin de clés';
