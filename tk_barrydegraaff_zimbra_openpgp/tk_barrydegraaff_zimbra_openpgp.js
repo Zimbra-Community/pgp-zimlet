@@ -871,10 +871,11 @@ function(id, title, message) {
       //Get selected mail message
       var controller = message;
       var items = controller.getSelection();
-      if(!items instanceof Array) {
+      if (!items[0])
+      {
          return;
       }
-      
+
       var type = items[0].type;
       var msg;
       if (type == ZmId.ITEM_CONV) {
@@ -1428,9 +1429,10 @@ tk_barrydegraaff_zimbra_openpgp.prototype.okBtnImportPubKey =
 function(controller) {  
    //Get selected mail message
    var items = controller.getSelection();
-	if(!items instanceof Array) {
-		return;
-	}
+   if (!items[0])
+   {
+      return;
+   }
    
    var type = items[0].type;
 	var msg;
@@ -1620,15 +1622,37 @@ function() {
 
 tk_barrydegraaff_zimbra_openpgp.prototype.sendTo =
 function(message) {
-   var composeController = AjxDispatcher.run("GetComposeController");
-   if(composeController) {
-      var appCtxt = window.top.appCtxt;
-      var zmApp = appCtxt.getApp();
-      var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
-      var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
-      toOverride:null, subjOverride:null, extraBodyText:"-\r\n\r\n\r\n\r\n\r\n\r\n"+atob(message), callback:null}
-      composeController.doAction(params); // opens asynchronously the window.
+
+   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js')
+   var publicKeys = openpgp.key.readArmored(atob(message));
+   if(publicKeys.keys[0])
+   {
+      userid = publicKeys.keys[0].users[0].userId.userid;
+      
+      publicKeyPacket = publicKeys.keys[0].primaryKey;
+      var keyLength = "";
+      if (publicKeyPacket != null) {
+         if (publicKeyPacket.mpi.length > 0) {
+            keyLength = (publicKeyPacket.mpi[0].byteLength() * 8);
+         }
+      }
+      
+      result = "User ID[0]: " + userid + "\r\nFingerprint: " + publicKeyPacket.fingerprint + "\r\nPrimary key length: " + keyLength + "\r\nCreated: " + publicKeyPacket.created + "\r\n\r\n";
+   
+      var composeController = AjxDispatcher.run("GetComposeController");
+      if(composeController) {
+         var appCtxt = window.top.appCtxt;
+         var zmApp = appCtxt.getApp();
+         var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
+         var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
+         toOverride:null, subjOverride:null, extraBodyText:"-\r\n\r\n\r\n\r\n\r\n\r\n"+result + atob(message), callback:null}
+         composeController.doAction(params); // opens asynchronously the window.
+      }
    }
+   else {
+      tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][13], ZmStatusView.LEVEL_WARNING); 
+   }   
+   
 };
 
 
