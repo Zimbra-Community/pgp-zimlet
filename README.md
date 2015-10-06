@@ -16,9 +16,6 @@ Adding PGP support to Zimbra Collaboration Suite, currently tested on:
 
 This Zimlet ONLY WORKS with Zimbra version 8.5 and above.
 
-If you are looking for a version that works with Zimbra 8.0 go here:
-https://github.com/barrydegraaff/pgp-zimlet/tree/1.1.5
-
 This Zimlet is not available for use in Zimbra Desktop.
 
 Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues
