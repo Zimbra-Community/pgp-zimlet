@@ -63,6 +63,10 @@ As root:
 
 "zimbraZimletUserProperties" will be increased by default in ZCS 8.7
 
+### This zimlet does not work when composing in a new window
+See: https://bugzilla.zimbra.com/show_bug.cgi?id=97496
+
+
 ### License
 
 Copyright (C) 2014-2015  Barry de Graaff
