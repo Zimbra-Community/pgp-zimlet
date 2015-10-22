@@ -237,8 +237,21 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
             }
             else
             {
-               //not a plain text message and no PGP mime, means no PGP            
-               return;
+               //support multipart/alternative mime used by Gmail / Mailvelope
+               if(msg.attrs['Content-Type'].indexOf('multipart/alternative') > -1)
+               {
+                  var msgSearch = '';
+                  pgpmime =  true;
+                  if(bodynode)
+                  {
+                     bodynode.innerHTML = '';
+                  }
+               }
+               else
+               {
+                  //not a plain text message and no PGP mime, means no PGP            
+                  return;
+               }   
             }
          }
          catch (err) 
