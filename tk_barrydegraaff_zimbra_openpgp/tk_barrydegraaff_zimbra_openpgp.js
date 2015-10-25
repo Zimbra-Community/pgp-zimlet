@@ -242,13 +242,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
                {
                   var msgSearch = '';
                   pgpmime =  true;
-                  if(bodynode)
-                  {
-                     if ( bodynode.innerHTML.indexOf("BEGIN PGP MESSAGE") > 0 )
-                     {
-                        bodynode.innerHTML = '';
-                     }   
-                  }
                }
                else
                {
