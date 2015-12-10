@@ -18,7 +18,7 @@ This Zimlet ONLY WORKS with Zimbra version 8.5 and above.
 
 This Zimlet is not available for use in Zimbra Desktop.
 
-Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues
+Bugs and feedback: https://github.com/Zimbra-Community/pgp-zimlet/issues
 
 ========================================================================
 
@@ -27,7 +27,7 @@ Bugs and feedback: https://github.com/barrydegraaff/pgp-zimlet/issues
     su zimbra
     cd /tmp
     rm tk_barrydegraaff_zimbra_openpgp*
-    wget https://github.com/barrydegraaff/pgp-zimlet-binaries/raw/master/1.8.2/tk_barrydegraaff_zimbra_openpgp.zip
+    wget https://github.com/Zimbra-Community/pgp-zimlet-binaries/raw/master/1.8.2/tk_barrydegraaff_zimbra_openpgp.zip
     zmzimletctl deploy tk_barrydegraaff_zimbra_openpgp.zip
     (wait 15 minutes for the deploy to propagate; or zmprov fc all && zmmailboxdctl restart)
     
