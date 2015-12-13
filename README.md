@@ -22,21 +22,27 @@ Bugs and feedback: https://github.com/Zimbra-Community/pgp-zimlet/issues
 
 ========================================================================
 
-### Installing
+### Install Zimbra OpenPGP Zimlet
 
-    su zimbra
-    cd /tmp
-    rm tk_barrydegraaff_zimbra_openpgp*
-    wget https://github.com/Zimbra-Community/pgp-zimlet-binaries/raw/master/1.8.2/tk_barrydegraaff_zimbra_openpgp.zip
-    zmzimletctl deploy tk_barrydegraaff_zimbra_openpgp.zip
-    (wait 15 minutes for the deploy to propagate; or zmprov fc all && zmmailboxdctl restart)
+The recommended method is to deploy using git. (I no longer support zmzimletctl, although that still works.)
+
+    [root@myzimbra ~]# su zimbra
+    [zimbra@myzimbra ~]# zmzimletctl undeploy tk_barrydegraaff_zimbra_openpgp
+    [zimbra@myzimbra ~]# exit
+    [root@myzimbra ~]# yum install -y git 
+    [root@myzimbra ~]# apt-get -y install git
+    [root@myzimbra ~]# cd ~
+    [root@myzimbra ~]# rm pgp-zimlet -Rf
+    [root@myzimbra ~]# git clone https://github.com/Zimbra-Community/pgp-zimlet
+    [root@myzimbra ~]# cd pgp-zimlet
+    [root@myzimbra pgp-zimlet]# git checkout 1.8.3
+    [root@myzimbra pgp-zimlet]# chmod +rx install-dev.sh
+    [root@myzimbra pgp-zimlet]# ./install-dev.sh
+    [root@myzimbra pgp-zimlet]# su zimbra
+    [zimbra@myzimbra pgp-zimlet] zmprov mc default zimbraPrefZimletTreeOpen TRUE
+    [zimbra@myzimbra pgp-zimlet] zmcontrol restart
     
-    Modify the default COS to expand the Zimlets menu by default:
-    zmprov mc default zimbraPrefZimletTreeOpen TRUE
-
 Please be warned, if you undeploy this Zimlet after some time Zimbra will truncate your users preferences (public keys) of this Zimlet.
-
-For debugging in production I recommend to disable the Zimlet via user preferences or via COS.
 
 ========================================================================
 
@@ -69,7 +75,7 @@ See: https://bugzilla.zimbra.com/show_bug.cgi?id=97496
 
 ### License
 
-Copyright (C) 2014-2015  Barry de Graaff
+Copyright (C) 2014-2016  Barry de Graaff
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

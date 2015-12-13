@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This file is part of the Zimbra OpenPGP Zimlet project.
-# Copyright (C) 2014-2015  Barry de Graaff
+# Copyright (C) 2014-2016  Barry de Graaff
 # 
 # Bugs and feedback: https://github.com/Zimbra-Community/pgp-zimlet/issues
 # 
@@ -62,7 +62,7 @@ cat <<EOF > tk_barrydegraaff_zimbra_openpgp/lang.js
 
 /*
 This file is part of the Zimbra OpenPGP Zimlet project.
-Copyright (C) 2014-2015 Barry de Graaff
+Copyright (C) 2014-2016 Barry de Graaff
 
 Bugs and feedback: https://github.com/Zimbra-Community/pgp-zimlet/issues
 
