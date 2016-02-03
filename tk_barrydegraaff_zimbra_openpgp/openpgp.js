@@ -1,65 +1,10 @@
-!function(e){"object"==typeof exports?module.exports=e():"function"==typeof define&&define.amd?define(e):"undefined"!=typeof window?window.openpgp=e():"undefined"!=typeof global?global.openpgp=e():"undefined"!=typeof self&&(self.openpgp=e())}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-// shim for using process in browser
-
-var process = module.exports = {};
-
-process.nextTick = (function () {
-    var canSetImmediate = typeof window !== 'undefined'
-    && window.setImmediate;
-    var canPost = typeof window !== 'undefined'
-    && window.postMessage && window.addEventListener
-    ;
-
-    if (canSetImmediate) {
-        return function (f) { return window.setImmediate(f) };
-    }
-
-    if (canPost) {
-        var queue = [];
-        window.addEventListener('message', function (ev) {
-            var source = ev.source;
-            if ((source === window || source === null) && ev.data === 'process-tick') {
-                ev.stopPropagation();
-                if (queue.length > 0) {
-                    var fn = queue.shift();
-                    fn();
-                }
-            }
-        }, true);
-
-        return function nextTick(fn) {
-            queue.push(fn);
-            window.postMessage('process-tick', '*');
-        };
-    }
-
-    return function nextTick(fn) {
-        setTimeout(fn, 0);
-    };
-})();
-
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-}
-
-// TODO(shtylman)
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-
-},{}],2:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.openpgp = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 "use strict";
 var Promise = require("./promise/promise").Promise;
 var polyfill = require("./promise/polyfill").polyfill;
 exports.Promise = Promise;
 exports.polyfill = polyfill;
-},{"./promise/polyfill":6,"./promise/promise":7}],3:[function(require,module,exports){
+},{"./promise/polyfill":5,"./promise/promise":6}],2:[function(require,module,exports){
 "use strict";
 /* global toString */
 
@@ -153,8 +98,9 @@ function all(promises) {
 }
 
 exports.all = all;
-},{"./utils":11}],4:[function(require,module,exports){
-var process=require("__browserify_process"),global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};"use strict";
+},{"./utils":10}],3:[function(require,module,exports){
+(function (process,global){
+"use strict";
 var browserGlobal = (typeof window !== 'undefined') ? window : {};
 var BrowserMutationObserver = browserGlobal.MutationObserver || browserGlobal.WebKitMutationObserver;
 var local = (typeof global !== 'undefined') ? global : (this === undefined? window:this);
@@ -215,7 +161,8 @@ function asap(callback, arg) {
 }
 
 exports.asap = asap;
-},{"__browserify_process":1}],5:[function(require,module,exports){
+}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"_process":11}],4:[function(require,module,exports){
 "use strict";
 var config = {
   instrument: false
@@ -231,8 +178,9 @@ function configure(name, value) {
 
 exports.config = config;
 exports.configure = configure;
-},{}],6:[function(require,module,exports){
-var global=typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {};"use strict";
+},{}],5:[function(require,module,exports){
+(function (global){
+"use strict";
 /*global self*/
 var RSVPPromise = require("./promise").Promise;
 var isFunction = require("./utils").isFunction;
@@ -270,7 +218,8 @@ function polyfill() {
 }
 
 exports.polyfill = polyfill;
-},{"./promise":7,"./utils":11}],7:[function(require,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./promise":6,"./utils":10}],6:[function(require,module,exports){
 "use strict";
 var config = require("./config").config;
 var configure = require("./config").configure;
@@ -482,7 +431,7 @@ function publishRejection(promise) {
 }
 
 exports.Promise = Promise;
-},{"./all":3,"./asap":4,"./config":5,"./race":8,"./reject":9,"./resolve":10,"./utils":11}],8:[function(require,module,exports){
+},{"./all":2,"./asap":3,"./config":4,"./race":7,"./reject":8,"./resolve":9,"./utils":10}],7:[function(require,module,exports){
 "use strict";
 /* global toString */
 var isArray = require("./utils").isArray;
@@ -572,7 +521,7 @@ function race(promises) {
 }
 
 exports.race = race;
-},{"./utils":11}],9:[function(require,module,exports){
+},{"./utils":10}],8:[function(require,module,exports){
 "use strict";
 /**
   `RSVP.reject` returns a promise that will become rejected with the passed
@@ -620,7 +569,7 @@ function reject(reason) {
 }
 
 exports.reject = reject;
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 "use strict";
 function resolve(value) {
   /*jshint validthis:true */
@@ -636,7 +585,7 @@ function resolve(value) {
 }
 
 exports.resolve = resolve;
-},{}],11:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 function objectOrFunction(x) {
   return isFunction(x) || (typeof x === "object" && x !== null);
@@ -659,6 +608,99 @@ exports.objectOrFunction = objectOrFunction;
 exports.isFunction = isFunction;
 exports.isArray = isArray;
 exports.now = now;
+},{}],11:[function(require,module,exports){
+// shim for using process in browser
+
+var process = module.exports = {};
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = setTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    clearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        setTimeout(drainQueue, 0);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
 },{}],12:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
@@ -838,7 +880,7 @@ function verifyHeaders(headers, packetlist) {
       }
     }
     return true;
-  }
+  };
   var oneHeader = null;
   var hashAlgos = [];
   for (var i = 0; i < headers.length; i++) {
@@ -892,7 +934,7 @@ function Ha(e,d,c){var f,a,b=0,k,m,g,p,v=e.length;m=0;p=c.length;a:for(;m<p;m++)
 function oa(e,d){var c=e.length,f=new ja(572),a=new (C?Uint8Array:Array)(c),b,k,m,g,p;if(!C)for(g=0;g<c;g++)a[g]=0;for(g=0;g<c;++g)0<e[g]&&f.push(g,e[g]);b=Array(f.length/2);k=new (C?Uint32Array:Array)(f.length/2);if(1===b.length)return a[f.pop().index]=1,a;g=0;for(p=f.length/2;g<p;++g)b[g]=f.pop(),k[g]=b[g].value;m=Ja(k,k.length,d);g=0;for(p=b.length;g<p;++g)a[b[g].index]=m[g];return a}
 function Ja(e,d,c){function f(a){var b=g[a][p[a]];b===d?(f(a+1),f(a+1)):--k[b];++p[a]}var a=new (C?Uint16Array:Array)(c),b=new (C?Uint8Array:Array)(c),k=new (C?Uint8Array:Array)(d),m=Array(c),g=Array(c),p=Array(c),v=(1<<c)-d,x=1<<c-1,l,h,q,t,w;a[c-1]=d;for(h=0;h<c;++h)v<x?b[h]=0:(b[h]=1,v-=x),v<<=1,a[c-2-h]=(a[c-1-h]/2|0)+d;a[0]=b[0];m[0]=Array(a[0]);g[0]=Array(a[0]);for(h=1;h<c;++h)a[h]>2*a[h-1]+b[h]&&(a[h]=2*a[h-1]+b[h]),m[h]=Array(a[h]),g[h]=Array(a[h]);for(l=0;l<d;++l)k[l]=c;for(q=0;q<a[c-1];++q)m[c-
 1][q]=e[q],g[c-1][q]=q;for(l=0;l<c;++l)p[l]=0;1===b[c-1]&&(--k[0],++p[c-1]);for(h=c-2;0<=h;--h){t=l=0;w=p[h+1];for(q=0;q<a[h];q++)t=m[h+1][w]+m[h+1][w+1],t>e[l]?(m[h][q]=t,g[h][q]=d,w+=2):(m[h][q]=e[l],g[h][q]=l,++l);p[h]=0;1===b[h]&&f(h)}return k}
-function pa(e){var d=new (C?Uint16Array:Array)(e.length),c=[],f=[],a=0,b,k,m,g;b=0;for(k=e.length;b<k;b++)c[e[b]]=(c[e[b]]|0)+1;b=1;for(k=16;b<=k;b++)f[b]=a,a+=c[b]|0,a<<=1;b=0;for(k=e.length;b<k;b++){a=f[e[b]];f[e[b]]+=1;m=d[b]=0;for(g=e[b];m<g;m++)d[b]=d[b]<<1|a&1,a>>>=1}return d};ba("Zlib.RawDeflate",ka);ba("Zlib.RawDeflate.prototype.compress",ka.prototype.h);var Ka={NONE:0,FIXED:1,DYNAMIC:ma},V,La,$,Ma;if(Object.keys)V=Object.keys(Ka);else for(La in V=[],$=0,Ka)V[$++]=La;$=0;for(Ma=V.length;$<Ma;++$)La=V[$],ba("Zlib.RawDeflate.CompressionType."+La,Ka[La]);}).call(this); //@ sourceMappingURL=rawdeflate.min.js.map
+function pa(e){var d=new (C?Uint16Array:Array)(e.length),c=[],f=[],a=0,b,k,m,g;b=0;for(k=e.length;b<k;b++)c[e[b]]=(c[e[b]]|0)+1;b=1;for(k=16;b<=k;b++)f[b]=a,a+=c[b]|0,a<<=1;b=0;for(k=e.length;b<k;b++){a=f[e[b]];f[e[b]]+=1;m=d[b]=0;for(g=e[b];m<g;m++)d[b]=d[b]<<1|a&1,a>>>=1}return d};ba("Zlib.RawDeflate",ka);ba("Zlib.RawDeflate.prototype.compress",ka.prototype.h);var Ka={NONE:0,FIXED:1,DYNAMIC:ma},V,La,$,Ma;if(Object.keys)V=Object.keys(Ka);else for(La in V=[],$=0,Ka)V[$++]=La;$=0;for(Ma=V.length;$<Ma;++$)La=V[$],ba("Zlib.RawDeflate.CompressionType."+La,Ka[La]);}).call(this); 
 
 },{}],14:[function(require,module,exports){
 /** @license zlib.js 2012 - imaya [ https://github.com/imaya/zlib.js ] The MIT License */(function() {'use strict';var l=this;function p(b,e){var a=b.split("."),c=l;!(a[0]in c)&&c.execScript&&c.execScript("var "+a[0]);for(var d;a.length&&(d=a.shift());)!a.length&&void 0!==e?c[d]=e:c=c[d]?c[d]:c[d]={}};var q="undefined"!==typeof Uint8Array&&"undefined"!==typeof Uint16Array&&"undefined"!==typeof Uint32Array&&"undefined"!==typeof DataView;function t(b){var e=b.length,a=0,c=Number.POSITIVE_INFINITY,d,f,g,h,k,m,r,n,s,J;for(n=0;n<e;++n)b[n]>a&&(a=b[n]),b[n]<c&&(c=b[n]);d=1<<a;f=new (q?Uint32Array:Array)(d);g=1;h=0;for(k=2;g<=a;){for(n=0;n<e;++n)if(b[n]===g){m=0;r=h;for(s=0;s<g;++s)m=m<<1|r&1,r>>=1;J=g<<16|n;for(s=m;s<d;s+=k)f[s]=J;++h}++g;h<<=1;k<<=1}return[f,a,c]};function u(b,e){this.g=[];this.h=32768;this.c=this.f=this.d=this.k=0;this.input=q?new Uint8Array(b):b;this.l=!1;this.i=v;this.q=!1;if(e||!(e={}))e.index&&(this.d=e.index),e.bufferSize&&(this.h=e.bufferSize),e.bufferType&&(this.i=e.bufferType),e.resize&&(this.q=e.resize);switch(this.i){case w:this.a=32768;this.b=new (q?Uint8Array:Array)(32768+this.h+258);break;case v:this.a=0;this.b=new (q?Uint8Array:Array)(this.h);this.e=this.v;this.m=this.s;this.j=this.t;break;default:throw Error("invalid inflate mode");
@@ -908,7 +950,7 @@ u.prototype.t=function(b,e){var a=this.b,c=this.a;this.n=b;for(var d=a.length,f,
 u.prototype.e=function(){var b=new (q?Uint8Array:Array)(this.a-32768),e=this.a-32768,a,c,d=this.b;if(q)b.set(d.subarray(32768,b.length));else{a=0;for(c=b.length;a<c;++a)b[a]=d[a+32768]}this.g.push(b);this.k+=b.length;if(q)d.set(d.subarray(e,e+32768));else for(a=0;32768>a;++a)d[a]=d[e+a];this.a=32768;return d};
 u.prototype.v=function(b){var e,a=this.input.length/this.d+1|0,c,d,f,g=this.input,h=this.b;b&&("number"===typeof b.o&&(a=b.o),"number"===typeof b.r&&(a+=b.r));2>a?(c=(g.length-this.d)/this.n[2],f=258*(c/2)|0,d=f<h.length?h.length+f:h.length<<1):d=h.length*a;q?(e=new Uint8Array(d),e.set(h)):e=h;return this.b=e};
 u.prototype.m=function(){var b=0,e=this.b,a=this.g,c,d=new (q?Uint8Array:Array)(this.k+(this.a-32768)),f,g,h,k;if(0===a.length)return q?this.b.subarray(32768,this.a):this.b.slice(32768,this.a);f=0;for(g=a.length;f<g;++f){c=a[f];h=0;for(k=c.length;h<k;++h)d[b++]=c[h]}f=32768;for(g=this.a;f<g;++f)d[b++]=e[f];this.g=[];return this.buffer=d};
-u.prototype.s=function(){var b,e=this.a;q?this.q?(b=new Uint8Array(e),b.set(this.b.subarray(0,e))):b=this.b.subarray(0,e):(this.b.length>e&&(this.b.length=e),b=this.b);return this.buffer=b};p("Zlib.RawInflate",u);p("Zlib.RawInflate.prototype.decompress",u.prototype.u);var T={ADAPTIVE:v,BLOCK:w},U,V,W,X;if(Object.keys)U=Object.keys(T);else for(V in U=[],W=0,T)U[W++]=V;W=0;for(X=U.length;W<X;++W)V=U[W],p("Zlib.RawInflate.BufferType."+V,T[V]);}).call(this); //@ sourceMappingURL=rawinflate.min.js.map
+u.prototype.s=function(){var b,e=this.a;q?this.q?(b=new Uint8Array(e),b.set(this.b.subarray(0,e))):b=this.b.subarray(0,e):(this.b.length>e&&(this.b.length=e),b=this.b);return this.buffer=b};p("Zlib.RawInflate",u);p("Zlib.RawInflate.prototype.decompress",u.prototype.u);var T={ADAPTIVE:v,BLOCK:w},U,V,W,X;if(Object.keys)U=Object.keys(T);else for(V in U=[],W=0,T)U[W++]=V;W=0;for(X=U.length;W<X;++W)V=U[W],p("Zlib.RawInflate.BufferType."+V,T[V]);}).call(this); 
 
 },{}],15:[function(require,module,exports){
 /** @license zlib.js 2012 - imaya [ https://github.com/imaya/zlib.js ] The MIT License */(function() {'use strict';function l(d){throw d;}var v=void 0,x=!0,aa=this;function D(d,a){var c=d.split("."),e=aa;!(c[0]in e)&&e.execScript&&e.execScript("var "+c[0]);for(var b;c.length&&(b=c.shift());)!c.length&&a!==v?e[b]=a:e=e[b]?e[b]:e[b]={}};var F="undefined"!==typeof Uint8Array&&"undefined"!==typeof Uint16Array&&"undefined"!==typeof Uint32Array&&"undefined"!==typeof DataView;function H(d,a){this.index="number"===typeof a?a:0;this.i=0;this.buffer=d instanceof(F?Uint8Array:Array)?d:new (F?Uint8Array:Array)(32768);2*this.buffer.length<=this.index&&l(Error("invalid index"));this.buffer.length<=this.index&&this.f()}H.prototype.f=function(){var d=this.buffer,a,c=d.length,e=new (F?Uint8Array:Array)(c<<1);if(F)e.set(d);else for(a=0;a<c;++a)e[a]=d[a];return this.buffer=e};
@@ -949,7 +991,7 @@ T.prototype.t=function(){var d=0,a=this.a,c=this.l,e,b=new (F?Uint8Array:Array)(
 T.prototype.I=function(){var d,a=this.b;F?this.C?(d=new Uint8Array(a),d.set(this.a.subarray(0,a))):d=this.a.subarray(0,a):(this.a.length>a&&(this.a.length=a),d=this.a);return this.buffer=d};function jb(d){if("string"===typeof d){var a=d.split(""),c,e;c=0;for(e=a.length;c<e;c++)a[c]=(a[c].charCodeAt(0)&255)>>>0;d=a}for(var b=1,f=0,g=d.length,h,k=0;0<g;){h=1024<g?1024:g;g-=h;do b+=d[k++],f+=b;while(--h);b%=65521;f%=65521}return(f<<16|b)>>>0};function kb(d,a){var c,e;this.input=d;this.c=0;if(a||!(a={}))a.index&&(this.c=a.index),a.verify&&(this.N=a.verify);c=d[this.c++];e=d[this.c++];switch(c&15){case lb:this.method=lb;break;default:l(Error("unsupported compression method"))}0!==((c<<8)+e)%31&&l(Error("invalid fcheck flag:"+((c<<8)+e)%31));e&32&&l(Error("fdict flag is not supported"));this.B=new T(d,{index:this.c,bufferSize:a.bufferSize,bufferType:a.bufferType,resize:a.resize})}
 kb.prototype.p=function(){var d=this.input,a,c;a=this.B.p();this.c=this.B.c;this.N&&(c=(d[this.c++]<<24|d[this.c++]<<16|d[this.c++]<<8|d[this.c++])>>>0,c!==jb(a)&&l(Error("invalid adler-32 checksum")));return a};var lb=8;function mb(d,a){this.input=d;this.a=new (F?Uint8Array:Array)(32768);this.h=$.k;var c={},e;if((a||!(a={}))&&"number"===typeof a.compressionType)this.h=a.compressionType;for(e in a)c[e]=a[e];c.outputBuffer=this.a;this.A=new ia(this.input,c)}var $=na;
 mb.prototype.j=function(){var d,a,c,e,b,f,g,h=0;g=this.a;d=lb;switch(d){case lb:a=Math.LOG2E*Math.log(32768)-8;break;default:l(Error("invalid compression method"))}c=a<<4|d;g[h++]=c;switch(d){case lb:switch(this.h){case $.NONE:b=0;break;case $.r:b=1;break;case $.k:b=2;break;default:l(Error("unsupported compression type"))}break;default:l(Error("invalid compression method"))}e=b<<6|0;g[h++]=e|31-(256*c+e)%31;f=jb(this.input);this.A.b=h;g=this.A.j();h=g.length;F&&(g=new Uint8Array(g.buffer),g.length<=
-h+4&&(this.a=new Uint8Array(g.length+4),this.a.set(g),g=this.a),g=g.subarray(0,h+4));g[h++]=f>>24&255;g[h++]=f>>16&255;g[h++]=f>>8&255;g[h++]=f&255;return g};function nb(d,a){var c,e,b,f;if(Object.keys)c=Object.keys(a);else for(e in c=[],b=0,a)c[b++]=e;b=0;for(f=c.length;b<f;++b)e=c[b],D(d+"."+e,a[e])};D("Zlib.Inflate",kb);D("Zlib.Inflate.prototype.decompress",kb.prototype.p);nb("Zlib.Inflate.BufferType",{ADAPTIVE:Ba.D,BLOCK:Ba.F});D("Zlib.Deflate",mb);D("Zlib.Deflate.compress",function(d,a){return(new mb(d,a)).j()});D("Zlib.Deflate.prototype.compress",mb.prototype.j);nb("Zlib.Deflate.CompressionType",{NONE:$.NONE,FIXED:$.r,DYNAMIC:$.k});}).call(this); //@ sourceMappingURL=zlib.min.js.map
+h+4&&(this.a=new Uint8Array(g.length+4),this.a.set(g),g=this.a),g=g.subarray(0,h+4));g[h++]=f>>24&255;g[h++]=f>>16&255;g[h++]=f>>8&255;g[h++]=f&255;return g};function nb(d,a){var c,e,b,f;if(Object.keys)c=Object.keys(a);else for(e in c=[],b=0,a)c[b++]=e;b=0;for(f=c.length;b<f;++b)e=c[b],D(d+"."+e,a[e])};D("Zlib.Inflate",kb);D("Zlib.Inflate.prototype.decompress",kb.prototype.p);nb("Zlib.Inflate.BufferType",{ADAPTIVE:Ba.D,BLOCK:Ba.F});D("Zlib.Deflate",mb);D("Zlib.Deflate.compress",function(d,a){return(new mb(d,a)).j()});D("Zlib.Deflate.prototype.compress",mb.prototype.j);nb("Zlib.Deflate.CompressionType",{NONE:$.NONE,FIXED:$.r,DYNAMIC:$.k});}).call(this); 
 
 },{}],16:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
@@ -989,13 +1031,16 @@ module.exports = {
   prefer_hash_algorithm: enums.hash.sha256,
   encryption_cipher: enums.symmetric.aes256,
   compression: enums.compression.zip,
+  // use integrity protection for symmetric encryption
   integrity_protect: true,
+  // fail on decrypt if message is not integrity protected
+  ignore_mdc_error: false,
   rsa_blinding: true,
   useWebCrypto: true,
 
   show_version: true,
   show_comment: true,
-  versionstring: "OpenPGP.js v1.4.0",
+  versionstring: "OpenPGP.js v1.5.7",
   commentstring: "http://openpgpjs.org",
 
   keyserver: "https://keyserver.ubuntu.com",
@@ -2878,6 +2923,7 @@ module.exports.keySize = cast5.prototype.keySize = 16;
  * @module crypto/cipher/des
  */
 
+'use strict';
 
 function des(keys, message, encrypt, mode, iv, padding) {
   //declaring this locally speeds things up a bit
@@ -2954,8 +3000,8 @@ function des(keys, message, encrypt, mode, iv, padding) {
   }
 
   //store the result here
-  result = "";
-  tempresult = "";
+  var result = "";
+  var tempresult = "";
 
   if (mode == 1) { //CBC mode
     cbcleft = (iv.charCodeAt(m++) << 24) | (iv.charCodeAt(m++) << 16) | (iv.charCodeAt(m++) << 8) | iv.charCodeAt(m++);
@@ -3007,7 +3053,7 @@ function des(keys, message, encrypt, mode, iv, padding) {
     for (j = 0; j < iterations; j += 3) {
       endloop = looping[j + 1];
       loopinc = looping[j + 2];
-      //now go through and perform the encryption or decryption  
+      //now go through and perform the encryption or decryption
       for (i = looping[j]; i != endloop; i += loopinc) { //for efficiency
         right1 = right ^ keys[i];
         right2 = ((right >>> 4) | (right << 28)) ^ keys[i + 1];
@@ -3084,33 +3130,33 @@ function des(keys, message, encrypt, mode, iv, padding) {
 
 function des_createKeys(key) {
   //declaring this locally speeds things up a bit
-  pc2bytes0 = new Array(0, 0x4, 0x20000000, 0x20000004, 0x10000, 0x10004, 0x20010000, 0x20010004, 0x200, 0x204,
+  var pc2bytes0 = new Array(0, 0x4, 0x20000000, 0x20000004, 0x10000, 0x10004, 0x20010000, 0x20010004, 0x200, 0x204,
     0x20000200, 0x20000204, 0x10200, 0x10204, 0x20010200, 0x20010204);
-  pc2bytes1 = new Array(0, 0x1, 0x100000, 0x100001, 0x4000000, 0x4000001, 0x4100000, 0x4100001, 0x100, 0x101, 0x100100,
+  var pc2bytes1 = new Array(0, 0x1, 0x100000, 0x100001, 0x4000000, 0x4000001, 0x4100000, 0x4100001, 0x100, 0x101, 0x100100,
     0x100101, 0x4000100, 0x4000101, 0x4100100, 0x4100101);
-  pc2bytes2 = new Array(0, 0x8, 0x800, 0x808, 0x1000000, 0x1000008, 0x1000800, 0x1000808, 0, 0x8, 0x800, 0x808,
+  var pc2bytes2 = new Array(0, 0x8, 0x800, 0x808, 0x1000000, 0x1000008, 0x1000800, 0x1000808, 0, 0x8, 0x800, 0x808,
     0x1000000, 0x1000008, 0x1000800, 0x1000808);
-  pc2bytes3 = new Array(0, 0x200000, 0x8000000, 0x8200000, 0x2000, 0x202000, 0x8002000, 0x8202000, 0x20000, 0x220000,
+  var pc2bytes3 = new Array(0, 0x200000, 0x8000000, 0x8200000, 0x2000, 0x202000, 0x8002000, 0x8202000, 0x20000, 0x220000,
     0x8020000, 0x8220000, 0x22000, 0x222000, 0x8022000, 0x8222000);
-  pc2bytes4 = new Array(0, 0x40000, 0x10, 0x40010, 0, 0x40000, 0x10, 0x40010, 0x1000, 0x41000, 0x1010, 0x41010, 0x1000,
+  var pc2bytes4 = new Array(0, 0x40000, 0x10, 0x40010, 0, 0x40000, 0x10, 0x40010, 0x1000, 0x41000, 0x1010, 0x41010, 0x1000,
     0x41000, 0x1010, 0x41010);
-  pc2bytes5 = new Array(0, 0x400, 0x20, 0x420, 0, 0x400, 0x20, 0x420, 0x2000000, 0x2000400, 0x2000020, 0x2000420,
+  var pc2bytes5 = new Array(0, 0x400, 0x20, 0x420, 0, 0x400, 0x20, 0x420, 0x2000000, 0x2000400, 0x2000020, 0x2000420,
     0x2000000, 0x2000400, 0x2000020, 0x2000420);
-  pc2bytes6 = new Array(0, 0x10000000, 0x80000, 0x10080000, 0x2, 0x10000002, 0x80002, 0x10080002, 0, 0x10000000,
+  var pc2bytes6 = new Array(0, 0x10000000, 0x80000, 0x10080000, 0x2, 0x10000002, 0x80002, 0x10080002, 0, 0x10000000,
     0x80000, 0x10080000, 0x2, 0x10000002, 0x80002, 0x10080002);
-  pc2bytes7 = new Array(0, 0x10000, 0x800, 0x10800, 0x20000000, 0x20010000, 0x20000800, 0x20010800, 0x20000, 0x30000,
+  var pc2bytes7 = new Array(0, 0x10000, 0x800, 0x10800, 0x20000000, 0x20010000, 0x20000800, 0x20010800, 0x20000, 0x30000,
     0x20800, 0x30800, 0x20020000, 0x20030000, 0x20020800, 0x20030800);
-  pc2bytes8 = new Array(0, 0x40000, 0, 0x40000, 0x2, 0x40002, 0x2, 0x40002, 0x2000000, 0x2040000, 0x2000000, 0x2040000,
+  var pc2bytes8 = new Array(0, 0x40000, 0, 0x40000, 0x2, 0x40002, 0x2, 0x40002, 0x2000000, 0x2040000, 0x2000000, 0x2040000,
     0x2000002, 0x2040002, 0x2000002, 0x2040002);
-  pc2bytes9 = new Array(0, 0x10000000, 0x8, 0x10000008, 0, 0x10000000, 0x8, 0x10000008, 0x400, 0x10000400, 0x408,
+  var pc2bytes9 = new Array(0, 0x10000000, 0x8, 0x10000008, 0, 0x10000000, 0x8, 0x10000008, 0x400, 0x10000400, 0x408,
     0x10000408, 0x400, 0x10000400, 0x408, 0x10000408);
-  pc2bytes10 = new Array(0, 0x20, 0, 0x20, 0x100000, 0x100020, 0x100000, 0x100020, 0x2000, 0x2020, 0x2000, 0x2020,
+  var pc2bytes10 = new Array(0, 0x20, 0, 0x20, 0x100000, 0x100020, 0x100000, 0x100020, 0x2000, 0x2020, 0x2000, 0x2020,
     0x102000, 0x102020, 0x102000, 0x102020);
-  pc2bytes11 = new Array(0, 0x1000000, 0x200, 0x1000200, 0x200000, 0x1200000, 0x200200, 0x1200200, 0x4000000, 0x5000000,
+  var pc2bytes11 = new Array(0, 0x1000000, 0x200, 0x1000200, 0x200000, 0x1200000, 0x200200, 0x1200200, 0x4000000, 0x5000000,
     0x4000200, 0x5000200, 0x4200000, 0x5200000, 0x4200200, 0x5200200);
-  pc2bytes12 = new Array(0, 0x1000, 0x8000000, 0x8001000, 0x80000, 0x81000, 0x8080000, 0x8081000, 0x10, 0x1010,
+  var pc2bytes12 = new Array(0, 0x1000, 0x8000000, 0x8001000, 0x80000, 0x81000, 0x8080000, 0x8081000, 0x10, 0x1010,
     0x8000010, 0x8001010, 0x80010, 0x81010, 0x8080010, 0x8081010);
-  pc2bytes13 = new Array(0, 0x4, 0x100, 0x104, 0, 0x4, 0x100, 0x104, 0x1, 0x5, 0x101, 0x105, 0x1, 0x5, 0x101, 0x105);
+  var pc2bytes13 = new Array(0, 0x4, 0x100, 0x104, 0, 0x4, 0x100, 0x104, 0x1, 0x5, 0x101, 0x105, 0x1, 0x5, 0x101, 0x105);
 
   //how many iterations (1 for des, 3 for triple des)
   var iterations = key.length > 8 ? 3 : 1; //changed by Paul 16/6/2007 to use Triple DES for 9+ byte keys
@@ -3124,8 +3170,8 @@ function des_createKeys(key) {
     temp;
 
   for (var j = 0; j < iterations; j++) { //either 1 or 3 iterations
-    left = (key.charCodeAt(m++) << 24) | (key.charCodeAt(m++) << 16) | (key.charCodeAt(m++) << 8) | key.charCodeAt(m++);
-    right = (key.charCodeAt(m++) << 24) | (key.charCodeAt(m++) << 16) | (key.charCodeAt(m++) << 8) | key.charCodeAt(m++);
+    var left = (key.charCodeAt(m++) << 24) | (key.charCodeAt(m++) << 16) | (key.charCodeAt(m++) << 8) | key.charCodeAt(m++);
+    var right = (key.charCodeAt(m++) << 24) | (key.charCodeAt(m++) << 16) | (key.charCodeAt(m++) << 8) | key.charCodeAt(m++);
 
     temp = ((left >>> 4) ^ right) & 0x0f0f0f0f;
     right ^= temp;
@@ -3156,7 +3202,7 @@ function des_createKeys(key) {
     right = temp;
 
     //now go through and perform these shifts on the left and right keys
-    for (i = 0; i < shifts.length; i++) {
+    for (var i = 0; i < shifts.length; i++) {
       //shift the keys either one or two bits to the left
       if (shifts[i]) {
         left = (left << 2) | (left >>> 26);
@@ -3170,7 +3216,7 @@ function des_createKeys(key) {
 
       //now apply PC-2, in such a way that E is easier when encrypting or decrypting
       //this conversion will look like PC-2 except only the last 6 bits of each byte are used
-      //rather than 48 consecutive bits and the order of lines will be according to 
+      //rather than 48 consecutive bits and the order of lines will be according to
       //how the S selection functions will be applied: S2, S4, S6, S8, S1, S3, S5, S7
       lefttemp = pc2bytes0[left >>> 28] | pc2bytes1[(left >>> 24) & 0xf] | pc2bytes2[(left >>> 20) & 0xf] | pc2bytes3[(
         left >>> 16) & 0xf] | pc2bytes4[(left >>> 12) & 0xf] | pc2bytes5[(left >>> 8) & 0xf] | pc2bytes6[(left >>> 4) &
@@ -5486,8 +5532,8 @@ var indexes = [
 ];
 
 function compress(MDbuf, X) {
-  blockA = [];
-  blockB = [];
+  var blockA = [];
+  var blockB = [];
 
   var retBlock;
 
@@ -9096,7 +9142,7 @@ function RSA() {
         keyGenOpt = {
           name: 'RSA-OAEP',
           modulusLength: B, // the specified keysize in bits
-          publicExponent: Euint8.subarray(0, 3), // take three bytes (max 65537)
+          publicExponent: Euint8.subarray(0, 3) // take three bytes (max 65537)
         };
         keys = webCrypto.generateKey(keyGenOpt, true, ['encrypt', 'decrypt']);
       }
@@ -9112,7 +9158,7 @@ function RSA() {
         };
         
         keys = webCrypto.generateKey(keyGenOpt, true, ['sign', 'verify']);
-        if (!(keys instanceof Promise)) { // IE11 KeyOperation
+        if (!(typeof keys.then === 'function')) { // IE11 KeyOperation
           keys = convertKeyOperation(keys, 'Error generating RSA key pair.');
         }
       }
@@ -9130,7 +9176,7 @@ function RSA() {
       // export the generated keys as JsonWebKey (JWK)
       // https://tools.ietf.org/html/draft-ietf-jose-json-web-key-33
       var key = webCrypto.exportKey('jwk', keypair.privateKey);
-      if (!(key instanceof Promise)) { // IE11 KeyOperation
+      if (!(typeof key.then === 'function')) { // IE11 KeyOperation
         key = convertKeyOperation(key, 'Error exporting RSA key pair.');
       }
       return key;
@@ -9159,10 +9205,10 @@ function RSA() {
       return new Promise(function(resolve, reject) {
         keyop.onerror = function (err) { 
           reject(new Error(errmsg));
-        }
+        };
         keyop.oncomplete = function (e) {
           resolve(e.target.result);
-        }
+        };
       });
     }
 
@@ -9415,7 +9461,7 @@ RandomBuffer.prototype.get = function(buf) {
   }
 };
 
-},{"../type/mpi.js":74,"crypto":false}],40:[function(require,module,exports){
+},{"../type/mpi.js":74,"crypto":"crypto"}],40:[function(require,module,exports){
 /**
  * @requires crypto/hash
  * @requires crypto/pkcs1
@@ -9577,14 +9623,14 @@ function getType(text) {
   // BEGIN PGP MESSAGE, PART X/Y
   // Used for multi-part messages, where the armor is split amongst Y
   // parts, and this is the Xth part out of Y.
-  if (header[1].match(/MESSAGE, PART \d+\/\d+/)) {
+  if (/MESSAGE, PART \d+\/\d+/.test(header[1])) {
     return enums.armor.multipart_section;
   } else
   // BEGIN PGP MESSAGE, PART X
   // Used for multi-part messages, where this is the Xth part of an
   // unspecified number of parts. Requires the MESSAGE-ID Armor
   // Header to be used.
-  if (header[1].match(/MESSAGE, PART \d+/)) {
+  if (/MESSAGE, PART \d+/.test(header[1])) {
     return enums.armor.multipart_last;
 
   } else
@@ -9592,25 +9638,25 @@ function getType(text) {
   // Used for detached signatures, OpenPGP/MIME signatures, and
   // cleartext signatures. Note that PGP 2.x uses BEGIN PGP MESSAGE
   // for detached signatures.
-  if (header[1].match(/SIGNED MESSAGE/)) {
+  if (/SIGNED MESSAGE/.test(header[1])) {
     return enums.armor.signed;
 
   } else
   // BEGIN PGP MESSAGE
   // Used for signed, encrypted, or compressed files.
-  if (header[1].match(/MESSAGE/)) {
+  if (/MESSAGE/.test(header[1])) {
     return enums.armor.message;
 
   } else
   // BEGIN PGP PUBLIC KEY BLOCK
   // Used for armoring public keys.
-  if (header[1].match(/PUBLIC KEY BLOCK/)) {
+  if (/PUBLIC KEY BLOCK/.test(header[1])) {
     return enums.armor.public_key;
 
   } else
   // BEGIN PGP PRIVATE KEY BLOCK
   // Used for armoring private keys.
-  if (header[1].match(/PRIVATE KEY BLOCK/)) {
+  if (/PRIVATE KEY BLOCK/.test(header[1])) {
     return enums.armor.private_key;
   }
 }
@@ -9768,8 +9814,8 @@ function splitHeaders(text) {
  */
 function verifyHeaders(headers) {
   for (var i = 0; i < headers.length; i++) {
-    if (!headers[i].match(/^(Version|Comment|MessageID|Hash|Charset): .+$/)) {
-      throw new Error('Improperly formatted armor header: ' + headers[i]);;
+    if (!/^(Version|Comment|MessageID|Hash|Charset): .+$/.test(headers[i])) {
+      throw new Error('Improperly formatted armor header: ' + headers[i]);
     }
   }
 }
@@ -9844,7 +9890,7 @@ function dearmor(text) {
     var sig_sum = splitChecksum(sig.body);
 
     result = {
-      text:  msg.body.replace(/\n$/, '').replace(/\n/g, "\r\n"),
+      text: msg.body.replace(/\n$/, '').replace(/\n/g, "\r\n"),
       data: base64.decode(sig_sum.body),
       headers: msg.headers,
       type: type
@@ -10398,14 +10444,10 @@ var config = require('../config');
  * @constructor
  * @param {String}    keyServerBaseUrl  (optional) The HKP key server base url including
  *   the protocol to use e.g. https://pgp.mit.edu
- * @param {function}  fetch             (optional) The fetch function is an easier way
- *   to make web requests and handle responses than using an XMLHttpRequest. You can
- *   pass in a custom implementaion or just leave the parameter empty to fall back to
- *   window.fetch (https://fetch.spec.whatwg.org).
  */
-function HKP(keyServerBaseUrl, fetch) {
+function HKP(keyServerBaseUrl) {
   this._baseUrl = keyServerBaseUrl ? keyServerBaseUrl : config.keyserver;
-  this._fetch = fetch ? fetch : typeof window !== 'undefined' && window.fetch;
+  this._fetch = typeof window !== 'undefined' ? window.fetch : require('node-fetch');
 }
 
 /**
@@ -10420,15 +10462,18 @@ HKP.prototype.lookup = function(options) {
     fetch = this._fetch;
 
   if (options.keyId) {
-    uri += '0x' + options.keyId;
+    uri += '0x' + encodeURIComponent(options.keyId);
   } else if (options.query) {
-    uri += options.query;
+    uri += encodeURIComponent(options.query);
   } else {
     throw new Error('You must provide a query parameter!');
   }
 
   return fetch(uri).then(function(response) {
-    return response.text();
+    if (response.status === 200) {
+      return response.text();
+    }
+
   }).then(function(publicKeyArmored) {
     if (!publicKeyArmored || publicKeyArmored.indexOf('-----END PGP PUBLIC KEY BLOCK-----') < 0) {
       return;
@@ -10454,8 +10499,7 @@ HKP.prototype.upload = function(publicKeyArmored) {
     body: 'keytext=' + encodeURIComponent(publicKeyArmored)
   });
 };
-
-},{"../config":17}],45:[function(require,module,exports){
+},{"../config":17,"node-fetch":"node-fetch"}],45:[function(require,module,exports){
 /**
  * @see module:hkp/hkp
  * @module hkp
@@ -11451,7 +11495,8 @@ function readArmored(armoredText) {
  * @param {module:enums.publicKey} [options.keyType=module:enums.publicKey.rsa_encrypt_sign]    to indicate what type of key to make.
  *                             RSA is 1. See {@link http://tools.ietf.org/html/rfc4880#section-9.1}
  * @param {Integer} options.numBits    number of bits for the key creation.
- * @param {String}  options.userId     assumes already in form of "User Name <username@email.com>"
+ * @param {String|Array<String>}  options.userId     assumes already in form of "User Name <username@email.com>"
+                                                     If array is used, the first userId is set as primary user Id
  * @param {String}  options.passphrase The passphrase used to encrypt the resulting private key
  * @param {Boolean} [options.unlocked=false]    The secret part of the generated key is unlocked
  * @return {module:key~Key}
@@ -11468,6 +11513,9 @@ function generate(options) {
   // Key without passphrase is unlocked by definition
   if (!options.passphrase) {
     options.unlocked = true;
+  }
+  if (String.prototype.isPrototypeOf(options.userId) || typeof options.userId === 'string') {
+    options.userId = [options.userId];
   }
 
   // generate
@@ -11496,35 +11544,47 @@ function generate(options) {
 
     packetlist = new packet.List();
 
-    userIdPacket = new packet.Userid();
-    userIdPacket.read(options.userId);
+    packetlist.push(secretKeyPacket);
 
-    dataToSign = {};
-    dataToSign.userid = userIdPacket;
-    dataToSign.key = secretKeyPacket;
-    signaturePacket = new packet.Signature();
-    signaturePacket.signatureType = enums.signature.cert_generic;
-    signaturePacket.publicKeyAlgorithm = options.keyType;
-    signaturePacket.hashAlgorithm = config.prefer_hash_algorithm;
-    signaturePacket.keyFlags = [enums.keyFlags.certify_keys | enums.keyFlags.sign_data];
-    signaturePacket.preferredSymmetricAlgorithms = [];
-    signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.aes256);
-    signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.aes192);
-    signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.aes128);
-    signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.cast5);
-    signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.tripledes);
-    signaturePacket.preferredHashAlgorithms = [];
-    signaturePacket.preferredHashAlgorithms.push(enums.hash.sha256);
-    signaturePacket.preferredHashAlgorithms.push(enums.hash.sha1);
-    signaturePacket.preferredHashAlgorithms.push(enums.hash.sha512);
-    signaturePacket.preferredCompressionAlgorithms = [];
-    signaturePacket.preferredCompressionAlgorithms.push(enums.compression.zlib);
-    signaturePacket.preferredCompressionAlgorithms.push(enums.compression.zip);
-    if (config.integrity_protect) {
-      signaturePacket.features = [];
-      signaturePacket.features.push(1); // Modification Detection
-    }
-    signaturePacket.sign(secretKeyPacket, dataToSign);
+    options.userId.forEach(function(userId, index) {
+
+      userIdPacket = new packet.Userid();
+      userIdPacket.read(userId);
+
+      dataToSign = {};
+      dataToSign.userid = userIdPacket;
+      dataToSign.key = secretKeyPacket;
+      signaturePacket = new packet.Signature();
+      signaturePacket.signatureType = enums.signature.cert_generic;
+      signaturePacket.publicKeyAlgorithm = options.keyType;
+      signaturePacket.hashAlgorithm = config.prefer_hash_algorithm;
+      signaturePacket.keyFlags = [enums.keyFlags.certify_keys | enums.keyFlags.sign_data];
+      signaturePacket.preferredSymmetricAlgorithms = [];
+      signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.aes256);
+      signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.aes192);
+      signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.aes128);
+      signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.cast5);
+      signaturePacket.preferredSymmetricAlgorithms.push(enums.symmetric.tripledes);
+      signaturePacket.preferredHashAlgorithms = [];
+      signaturePacket.preferredHashAlgorithms.push(enums.hash.sha256);
+      signaturePacket.preferredHashAlgorithms.push(enums.hash.sha1);
+      signaturePacket.preferredHashAlgorithms.push(enums.hash.sha512);
+      signaturePacket.preferredCompressionAlgorithms = [];
+      signaturePacket.preferredCompressionAlgorithms.push(enums.compression.zlib);
+      signaturePacket.preferredCompressionAlgorithms.push(enums.compression.zip);
+      if (index === 0) {
+        signaturePacket.isPrimaryUserID = true;
+      }
+      if (config.integrity_protect) {
+        signaturePacket.features = [];
+        signaturePacket.features.push(1); // Modification Detection
+      }
+      signaturePacket.sign(secretKeyPacket, dataToSign);
+
+      packetlist.push(userIdPacket);
+      packetlist.push(signaturePacket);
+
+    });
 
     dataToSign = {};
     dataToSign.key = secretKeyPacket;
@@ -11536,9 +11596,6 @@ function generate(options) {
     subkeySignaturePacket.keyFlags = [enums.keyFlags.encrypt_communication | enums.keyFlags.encrypt_storage];
     subkeySignaturePacket.sign(secretKeyPacket, dataToSign);
 
-    packetlist.push(secretKeyPacket);
-    packetlist.push(userIdPacket);
-    packetlist.push(signaturePacket);
     packetlist.push(secretSubkeyPacket);
     packetlist.push(subkeySignaturePacket);
 
@@ -11723,12 +11780,14 @@ KeyArray.prototype.getForAddress = function(email) {
  * @return {Boolean} True if the email address is defined in the specified key
  */
 function emailCheck(email, key) {
+  email = email.toLowerCase();
   // escape email before using in regular expression
-  email = email.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  var emailRegex = new RegExp('<' + email + '>');
-  var keyEmails = key.getUserIds();
-  for (var i = 0; i < keyEmails.length; i++) {
-    if (emailRegex.test(keyEmails[i].toLowerCase())) {
+  var emailEsc = email.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  var emailRegex = new RegExp('<' + emailEsc + '>');
+  var userIds = key.getUserIds();
+  for (var i = 0; i < userIds.length; i++) {
+    var userId = userIds[i].toLowerCase();
+    if (email === userId || emailRegex.test(userId)) {
       return true;
     }
   }
@@ -11919,13 +11978,17 @@ LocalStore.prototype.storePrivate = function (keys) {
 
 function storeKeys(storage, itemname, keys) {
   var armoredKeys = [];
-  for (var i = 0; i < keys.length; i++) {
-    armoredKeys.push(keys[i].armor());
+  if (keys.length) {
+    for (var i = 0; i < keys.length; i++) {
+      armoredKeys.push(keys[i].armor());
+    }
+    storage.setItem(itemname, JSON.stringify(armoredKeys));
+  } else {
+    storage.removeItem(itemname);
   }
-  storage.setItem(itemname, JSON.stringify(armoredKeys));
 }
 
-},{"../config":17,"../key.js":47,"../util.js":76,"node-localstorage":false}],51:[function(require,module,exports){
+},{"../config":17,"../key.js":47,"../util.js":76,"node-localstorage":"node-localstorage"}],51:[function(require,module,exports){
 // GPG4Browsers - An OpenPGP implementation in javascript
 // Copyright (C) 2011 Recurity Labs GmbH
 //
@@ -12174,7 +12237,7 @@ Message.prototype.sign = function(privateKeys) {
   var literalFormat = enums.write(enums.literal, literalDataPacket.format);
   var signatureType = literalFormat == enums.literal.binary ?
                       enums.signature.binary : enums.signature.text;
-  var i;
+  var i, signingKeyPacket;
   for (i = 0; i < privateKeys.length; i++) {
     if (privateKeys[i].isPublic()) {
       throw new Error('Need private key for signing');
@@ -12183,7 +12246,7 @@ Message.prototype.sign = function(privateKeys) {
     onePassSig.type = signatureType;
     //TODO get preferred hashg algo from key signature
     onePassSig.hashAlgorithm = config.prefer_hash_algorithm;
-    var signingKeyPacket = privateKeys[i].getSigningKeyPacket();
+    signingKeyPacket = privateKeys[i].getSigningKeyPacket();
     if (!signingKeyPacket) {
       throw new Error('Could not find valid key packet for signing in key ' + privateKeys[i].primaryKey.getKeyId().toHex());
     }
@@ -12273,8 +12336,7 @@ function readArmored(armoredText) {
   var input = armor.decode(armoredText).data;
   var packetlist = new packet.List();
   packetlist.read(input);
-  var newMessage = new Message(packetlist);
-  return newMessage;
+  return new Message(packetlist);
 }
 
 /**
@@ -12289,8 +12351,7 @@ function readSignedContent(content, detachedSignature) {
   packetlist.push(literalDataPacket);
   var input = armor.decode(detachedSignature).data;
   packetlist.read(input);
-  var newMessage = new Message(packetlist);
-  return newMessage;
+  return new Message(packetlist);
 }
 
 /**
@@ -12305,23 +12366,25 @@ function fromText(text) {
   literalDataPacket.setText(text);
   var literalDataPacketlist = new packet.List();
   literalDataPacketlist.push(literalDataPacket);
-  var newMessage = new Message(literalDataPacketlist);
-  return newMessage;
+  return new Message(literalDataPacketlist);
 }
 
 /**
  * creates new message object from binary data
  * @param {String} bytes
+ * @param {String} filename
  * @return {module:message~Message} new message object
  * @static
  */
-function fromBinary(bytes) {
+function fromBinary(bytes, filename) {
   var literalDataPacket = new packet.Literal();
+  if (filename) {
+    literalDataPacket.setFilename(filename);
+  }
   literalDataPacket.setBytes(bytes, enums.read(enums.literal, enums.literal.binary));
   var literalDataPacketlist = new packet.List();
   literalDataPacketlist.push(literalDataPacket);
-  var newMessage = new Message(literalDataPacketlist);
-  return newMessage;
+  return new Message(literalDataPacketlist);
 }
 
 exports.Message = Message;
@@ -12374,10 +12437,7 @@ var armor = require('./encoding/armor.js'),
   util = require('./util'),
   AsyncProxy = require('./worker/async_proxy.js');
 
-if (typeof Promise === 'undefined') {
-  // load ES6 Promises polyfill
-  require('es6-promise').polyfill();
-}
+require('es6-promise').polyfill(); // load ES6 Promises polyfill
 
 var asyncProxy = null; // instance of the asyncproxy
 
@@ -12650,7 +12710,7 @@ exports.decryptAndVerifyMessage = decryptAndVerifyMessage;
 exports.signClearMessage = signClearMessage;
 exports.verifyClearSignedMessage = verifyClearSignedMessage;
 exports.generateKeyPair = generateKeyPair;
-},{"./cleartext.js":12,"./encoding/armor.js":41,"./enums.js":43,"./key.js":47,"./message.js":51,"./util":76,"./worker/async_proxy.js":77,"es6-promise":2}],53:[function(require,module,exports){
+},{"./cleartext.js":12,"./encoding/armor.js":41,"./enums.js":43,"./key.js":47,"./message.js":51,"./util":76,"./worker/async_proxy.js":77,"es6-promise":1}],53:[function(require,module,exports){
 /**
  * @requires enums
  * @module packet
@@ -12707,7 +12767,7 @@ module.exports = {
    * @returns {Object} new packet object with data from packet clone
    */
   fromStructuredClone: function(packetClone) {
-    var tagName = enums.read(enums.packet, packetClone.tag)
+    var tagName = enums.read(enums.packet, packetClone.tag);
     var packet = this.newPacketFromTag(tagName);
     for (var attr in packetClone) {
         if (packetClone.hasOwnProperty(attr)) {
@@ -15473,7 +15533,8 @@ SymEncryptedSessionKey.prototype.postCloneTypeFix = function() {
 module.exports = SymmetricallyEncrypted;
 
 var crypto = require('../crypto'),
-  enums = require('../enums.js');
+  enums = require('../enums.js'),
+  config = require('../config');
 
 /**
  * @constructor
@@ -15484,6 +15545,7 @@ function SymmetricallyEncrypted() {
   /** Decrypted packets contained within. 
    * @type {module:packet/packetlist} */
   this.packets =  null;
+  this.ignore_mdc_error = config.ignore_mdc_error;
 }
 
 SymmetricallyEncrypted.prototype.read = function (bytes) {
@@ -15504,10 +15566,15 @@ SymmetricallyEncrypted.prototype.write = function () {
  *            algorithm
  */
 SymmetricallyEncrypted.prototype.decrypt = function (sessionKeyAlgorithm, key) {
-  var decrypted = crypto.cfb.decrypt(
-    sessionKeyAlgorithm, key, this.encrypted, true);
-
-  this.packets.read(decrypted.join(''))
+  var decrypted = crypto.cfb.decrypt(sessionKeyAlgorithm, key, this.encrypted, true);
+  // for modern cipher (blocklength != 64 bit, except for Twofish) MDC is required
+  if (!this.ignore_mdc_error &&
+      (sessionKeyAlgorithm === 'aes128' ||
+       sessionKeyAlgorithm === 'aes192' ||
+       sessionKeyAlgorithm === 'aes256')) {
+    throw new Error('Decryption failed due to missing MDC in combination with modern cipher.')
+  }
+  this.packets.read(decrypted.join(''));
 };
 
 SymmetricallyEncrypted.prototype.encrypt = function (algo, key) {
@@ -15517,7 +15584,7 @@ SymmetricallyEncrypted.prototype.encrypt = function (algo, key) {
     crypto.getPrefixRandom(algo), algo, data, key, true);
 };
 
-},{"../crypto":32,"../enums.js":43}],70:[function(require,module,exports){
+},{"../config":17,"../crypto":32,"../enums.js":43}],70:[function(require,module,exports){
 /**
  * @requires enums
  * @module packet/trust
@@ -16806,7 +16873,5 @@ AsyncProxy.prototype.decryptKeyPacket = function(privateKey, keyIds, password) {
 
 module.exports = AsyncProxy;
 
-},{"../crypto":32,"../key.js":47,"../packet":55,"../type/keyid.js":73}]},{},[46])
-(46)
+},{"../crypto":32,"../key.js":47,"../packet":55,"../type/keyid.js":73}]},{},[46])(46)
 });
-;
