@@ -905,8 +905,7 @@ function(id, title, message) {
       var publicKeys = openpgp.key.readArmored(pubKeyTxt);
       
       userid = publicKeys.keys[0].users[0].userId.userid;
-      userid = userid.replace(/\</g,"&lt;");
-      userid = userid.replace(/\>/g,"&gt;");
+      userid = tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(userid);
       
       publicKeyPacket = publicKeys.keys[0].primaryKey;
       var keyLength = "";
@@ -1060,7 +1059,7 @@ function() {
                            partArr[1] = partArr[1].split('=\n', 1);
                            partArr[1] = partArr[1] + '=';
                            partArr[1] = partArr[1].replace(/(\r\n|\n|\r)/gm,"");
-                           preClose = preClose + '<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/file-pgp-encrypted.png"> <a class="AttLink" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(\''+filename[1]+'\',\'octet/stream\',\''+partArr[1]+'\')">'+filename[1]+'</a><br>';
+                           preClose = preClose + '<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/file-pgp-encrypted.png"> <a class="AttLink" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(\''+tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(filename[1])+'\',\'octet/stream\',\''+partArr[1]+'\')">'+tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(filename[1])+'</a><br>';
                         }                     
                         else if(partArr[0].indexOf('text/plain')> 0)
                         {
@@ -1739,8 +1738,7 @@ function(pubkey) {
       var publicKeys = openpgp.key.readArmored(pubkey);
       
       userid = publicKeys.keys[0].users[0].userId.userid;
-      userid = userid.replace(/\</g,"&lt;");
-      userid = userid.replace(/\>/g,"&gt;");
+      userid = tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(userid);
       
       publicKeyPacket = publicKeys.keys[0].primaryKey;
       var keyLength = "";
