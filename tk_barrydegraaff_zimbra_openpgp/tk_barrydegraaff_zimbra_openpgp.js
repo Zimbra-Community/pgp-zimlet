@@ -396,7 +396,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
          {
             //Hide the PGP MESSAGE block
             bodynode.innerHTML = '';
-            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML='<pre style="white-space: pre-wrap;word-wrap: break-word;">'+tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(bp.node.content)+'</pre>';
+            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body').innerHTML=tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(bp.node.content);
          }
          else
          {  
@@ -1092,19 +1092,7 @@ function() {
                   }
                   
                }
-               else
-               {               
-                  if (decrypted.text.indexOf('<html><body>') < 0 ) 
-                  {
-                     preOpen = '<pre style="white-space: pre-wrap;word-wrap: break-word;">';
-                     preClose = '</pre>';
-                  }
-                  else
-                  {
-                     preOpen = '';
-                     preClose = '';
-                  }
-               }
+
                if(myWindow.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
                {
                   console.log('original message:' + original);

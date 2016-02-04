@@ -107,3 +107,9 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 {
    margin: 6px;
 }
+#tk_barrydegraaff_zimbra_openpgp_infobar_body
+{
+font-family: monospace;
+white-space: pre-wrap;
+word-wrap: break-word;
+}
