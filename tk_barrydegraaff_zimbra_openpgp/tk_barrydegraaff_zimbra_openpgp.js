@@ -1063,11 +1063,12 @@ function() {
                         }                     
                         else if(partArr[0].indexOf('text/plain')> 0)
                         {
-                           preOpen = '<pre style="white-space: pre-wrap;word-wrap: break-word;">'+part+'</pre>';
+                           preOpen = tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(part);
                         }
                         else if(partArr[0].indexOf('text/html')> 0)
                         {
-                           preOpen = part;
+                           //rendering html messages is currently not supported
+                           preOpen = tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(part);
                         }
                      });
                      if(preClose.length > 0)
