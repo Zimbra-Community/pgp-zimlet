@@ -1067,8 +1067,11 @@ function() {
                         }
                         else if(partArr[0].indexOf('text/html')> 0)
                         {
-                           //rendering html messages is currently not supported
-                           preOpen = tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(part);
+                           //rendering html messages is currently not supported, this is a not so nice attempt to display html as text
+                           var temp = document.createElement("div");
+                           temp.innerHTML = part;
+                           preOpen = tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(temp.textContent || temp.innerText || "");
+                           temp = "";
                         }
                      });
                      if(preClose.length > 0)
