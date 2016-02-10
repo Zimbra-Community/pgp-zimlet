@@ -740,9 +740,13 @@ function(id, title, message) {
       html = "<div style='width:650px; height: 240px; overflow-x: hidden; overflow-y: hidden;'><table style='width:650px;'><tr><td colspan='2'>" +
       tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][29]+"<br><br>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
-      tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][30]+":" +
+      tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][79]+":" +
       "</td><td style=\"width:500px\">" +
-      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='uid' value='" + displayname + ' <' +appCtxt.getActiveAccount().name+">'>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='uidName' value='" + displayname +"'>" +
+      "</td></tr><tr><tr><td style=\"width:100px;\">" +
+      tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][80]+":" +
+      "</td><td style=\"width:500px\">" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='uidEmail' value='" + appCtxt.getActiveAccount().name+"'>" +
       "</td></tr><tr><td>" +
       tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][20]+":" +
       "</td><td>" +
@@ -1665,18 +1669,20 @@ function(message) {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnKeyPair =
 function() {
-   var userid = document.getElementById("uid").value;
+   var uidName = document.getElementById("uidName").value;
+   var uidEmail = document.getElementById("uidEmail").value;
    var keyLength = document.getElementById("keyLength").value;
    var passphrase = document.getElementById("passphraseInput").value;
    var keyStore = document.getElementById("keyStore").checked;
 
-   if ((!userid) || (!passphrase)) {
+   if ((!uidName) || (!uidEmail) || (!passphrase)) {
       //You must provide a user ID and passphrase
       this.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][46], ZmStatusView.LEVEL_WARNING);
       return;
    }
 
-   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+   //to-do fails in 2.0.0-dev openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+
    this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.cancelBtn));
    this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, false);
    this._dialog.setButtonVisible(DwtDialog.OK_BUTTON, false);
@@ -1685,40 +1691,45 @@ function() {
    this._dialog.setTitle(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][47]);
    this._dialog.setContent('<div style="width:650px; height: 240px; overflow-x: hidden; overflow-y: hidden;">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][48]+'<br><br><br><br><img src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/loading.gif" style="width:48px; height:48px; display: block; margin-left: auto; margin-right: auto" alt="loading"></div>');
 
-   var opt = {numBits: keyLength, userId: userid, passphrase: passphrase};
    var myWindow = this;
-   openpgp.generateKeyPair(opt).then(function(key) {
-      if((key.privateKeyArmored) && (key.publicKeyArmored))
+   var options = {
+       userIds: [{ name:uidName, email:uidEmail }], // multiple user IDs
+       numBits: keyLength,                          // RSA key size
+       passphrase: passphrase                       // protects the private key
+   };
+     
+   openpgp.generateKey(options).then(function(key)
+   {
+      if(keyStore)
       {
-         if(keyStore)
+         if (!tk_barrydegraaff_zimbra_openpgp.settings['aes_password'])
          {
-            if (!tk_barrydegraaff_zimbra_openpgp.settings['aes_password'])
-            {
-               tk_barrydegraaff_zimbra_openpgp.settings['aes_password'] = tk_barrydegraaff_zimbra_openpgp.prototype.pwgen();            
-            }   
-            myWindow.setUserProperty("zimbra_openpgp_options", JSON.stringify(tk_barrydegraaff_zimbra_openpgp.settings), false);
-            tk_barrydegraaff_zimbra_openpgp.prototype.localStorageSave(tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], key.privateKeyArmored);
-            tk_barrydegraaff_zimbra_openpgp.privateKeyCache=key.privateKeyArmored;
-            var encryptedPassphrase = Aes.Ctr.encrypt('-----openpgppassphrase-----'+passphrase, tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
-            if (tk_barrydegraaff_zimbra_openpgp.settings['store_passphrase_locally'] == 'true') 
-            {      
-               localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()] = '---cryptedpp---' + encryptedPassphrase;
-               myWindow.setUserProperty("zimbra_openpgp_privatepass", '', false);
-            }
-            else
-            {
-               localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()] = '';
-               myWindow.setUserProperty("zimbra_openpgp_privatepass", '---cryptedpp---' + encryptedPassphrase, false);
-            }
-            tk_barrydegraaff_zimbra_openpgp.privatePassCache = passphrase;
-            myWindow.setUserProperty("zimbra_openpgp_pubkeys1", key.publicKeyArmored, true);
+            tk_barrydegraaff_zimbra_openpgp.settings['aes_password'] = tk_barrydegraaff_zimbra_openpgp.prototype.pwgen();            
+         }   
+         myWindow.setUserProperty("zimbra_openpgp_options", JSON.stringify(tk_barrydegraaff_zimbra_openpgp.settings), false);
+         tk_barrydegraaff_zimbra_openpgp.prototype.localStorageSave(tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], key.privateKeyArmored);
+         tk_barrydegraaff_zimbra_openpgp.privateKeyCache=key.privateKeyArmored;
+         var encryptedPassphrase = Aes.Ctr.encrypt('-----openpgppassphrase-----'+passphrase, tk_barrydegraaff_zimbra_openpgp.settings['aes_password'], 256);
+         if (tk_barrydegraaff_zimbra_openpgp.settings['store_passphrase_locally'] == 'true') 
+         {      
+            localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()] = '---cryptedpp---' + encryptedPassphrase;
+            myWindow.setUserProperty("zimbra_openpgp_privatepass", '', false);
          }
-         //Your new key pair
-         myWindow._dialog.setTitle(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][50]);
-         myWindow._dialog.setContent('<div style="width:650px; height: 240px; overflow-x: hidden; overflow-y: auto;"><table style="width:650px;">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][49]+':<br><br><textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:200px;">Passphrase ' + passphrase + ' for ' + userid + '\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored+'\r\n\r\nlength: '+keyLength+' ' + '\r\nfingerprint: '+key.key.primaryKey.fingerprint+' \r\ncreated: '+key.key.primaryKey.created+'</textarea></div>');
-         myWindow._dialog.setButtonVisible(DwtDialog.OK_BUTTON, true);
-      }       
-   });
+         else
+         {
+            localStorage['zimbra_openpgp_privatepass'+tk_barrydegraaff_zimbra_openpgp.prototype.getUsername()] = '';
+            myWindow.setUserProperty("zimbra_openpgp_privatepass", '---cryptedpp---' + encryptedPassphrase, false);
+         }
+         tk_barrydegraaff_zimbra_openpgp.privatePassCache = passphrase;
+         myWindow.setUserProperty("zimbra_openpgp_pubkeys1", key.publicKeyArmored, true);
+      }
+      //Your new key pair
+      myWindow._dialog.setTitle(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][50]);
+      myWindow._dialog.setContent('<div style="width:650px; height: 240px; overflow-x: hidden; overflow-y: auto;"><table style="width:650px;">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][49]+':<br><br><textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:200px;">Passphrase ' + passphrase + ' for ' + uidName + ' <' + uidEmail + '>' + '\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored+'\r\n\r\nlength: '+keyLength+' ' + '\r\nfingerprint: '+key.key.primaryKey.fingerprint+' \r\ncreated: '+key.key.primaryKey.created+'</textarea></div>');
+      myWindow._dialog.setButtonVisible(DwtDialog.OK_BUTTON, true);
+   }).catch(function(error) {
+      // failure generating key
+   });       
 };
 
 /* This method gets public key details
