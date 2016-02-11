@@ -46,11 +46,16 @@ var key = '-----BEGIN PGP PUBLIC KEY BLOCK-----\n' +
 '=ldYW\n' +
 '-----END PGP PUBLIC KEY BLOCK-----';
 
-var pubKeys = openpgp.key.readArmored(key);
-openpgp.encryptMessage(pubKeys.keys, document.getElementById('message').value).then(
-   function(pgpMessage) {
-      document.write('<pre>'+pgpMessage+'</pre>');
-   });
+options = {
+    data: document.getElementById('message').value,           // input as string
+    publicKeys: openpgp.key.readArmored(key).keys,            // for encryption
+    armor: true                                               // ASCII armor
+};
+
+openpgp.encrypt(options).then(message => {
+    console.log(message.data);
+    document.write('<pre>'+message.data+'</pre>');
+});
 
 </script>
 <pre>
