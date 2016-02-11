@@ -80,3 +80,4 @@ tk_barrydegraaff_zimbra_openpgp.lang['english'][77] = 'Send someone my public ke
 tk_barrydegraaff_zimbra_openpgp.lang['english'][78] = 'Public key already in your list of trusted keys';
 tk_barrydegraaff_zimbra_openpgp.lang['english'][79] = 'Name';
 tk_barrydegraaff_zimbra_openpgp.lang['english'][80] = 'Email address';
+tk_barrydegraaff_zimbra_openpgp.lang['english'][81] = 'You can specify multiple email addresses, separated by comma (,)';
