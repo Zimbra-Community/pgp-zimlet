@@ -502,7 +502,7 @@ function(zmObject) {
  * will update the status bar with the result (good/bad signature).
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
-   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+   openpgp.initWorker({ path:'/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js' });
    try {
       var publicKeys1 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
       var publicKeys2 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value);
@@ -1132,7 +1132,7 @@ function() {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnDecryptFile =
 function() {
-   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+   openpgp.initWorker({ path:'/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js' });
    this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, false);
    this._dialog.setButtonVisible(DwtDialog.OK_BUTTON, false);
    document.getElementById("privateKeyInput").style.backgroundImage = "url('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/loading.gif')";
@@ -1455,7 +1455,7 @@ function(controller) {
    pubKeyTxt = bp.node.content.match(/(-----BEGIN PGP PUBLIC KEY BLOCK-----)([^]+)(-----END PGP PUBLIC KEY BLOCK-----)/g);
    pubKeyTxt = pubKeyTxt[0];
    
-   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+   openpgp.initWorker({ path:'/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js' });
    
    //Find an open/free Trusted Public Key field to store our import
    var freecount = 2;
@@ -1555,7 +1555,7 @@ function() {
    this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, false);
    this._dialog.setButtonVisible(DwtDialog.OK_BUTTON, false);
    document.getElementById("message").style.backgroundImage = "url('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/loading.gif')";
-   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+   openpgp.initWorker({ path:'/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js' });
    var privateKeyInput = document.getElementById("privateKeyInput").value;
    tk_barrydegraaff_zimbra_openpgp.privateKeyCache = privateKeyInput;
    var passphrase = document.getElementById("passphraseInput").value;
@@ -1681,7 +1681,7 @@ function() {
       return;
    }
 
-   //to-do fails in 2.0.0-dev openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+   openpgp.initWorker({ path:'/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js' });
 
    this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.cancelBtn));
    this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, false);
@@ -1736,7 +1736,7 @@ function() {
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.pubkeyInfo =
 function(pubkey) {
-   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+   openpgp.initWorker({ path:'/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js' });
    try {
       var publicKeys = openpgp.key.readArmored(pubkey);
       
@@ -1764,7 +1764,7 @@ function(pubkey) {
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.pubKeySelect =
 function() {
-   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+   openpgp.initWorker({ path:'/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js' });
    try {
       var publicKeys1 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
       var publicKeys2 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value);
@@ -1872,7 +1872,7 @@ function() {
    this._dialog.setButtonVisible(DwtDialog.OK_BUTTON, false);
    document.getElementById("message").style.backgroundImage = "url('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/loading.gif')";
  
-   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+   openpgp.initWorker({ path:'/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js' });
    var pubKeySelect = document.getElementById("pubKeySelect");
    var msg = document.getElementById("message").value;
    var returnType = document.getElementById("returnType").value;
@@ -2013,7 +2013,7 @@ function() {
    this._dialog.setButtonVisible(DwtDialog.OK_BUTTON, false);
    document.getElementById("privateKeyInput").style.backgroundImage = "url('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/loading.gif')";
  
-   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js');
+   openpgp.initWorker({ path:'/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js' });
    var pubKeySelect = document.getElementById("pubKeySelect");
    
    var msg = tk_barrydegraaff_zimbra_openpgp.file;
