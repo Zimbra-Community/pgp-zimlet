@@ -78,3 +78,6 @@ tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][75] = 'Nhập xong';
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][76] = 'Lỗi nhập khóa công khai này'; 
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][77] = 'Gửi khóa công khai của tôi';
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][78] = 'Khóa công khai đã tồn tại trong danh sách khóa tin cậy';
+tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][79] = 'Name';
+tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][80] = 'Email address';
+tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][81] = 'You can specify multiple email addresses, separated by comma (,)';
