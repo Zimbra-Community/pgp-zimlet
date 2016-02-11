@@ -1594,36 +1594,41 @@ function() {
 
    if (success) {
       var myWindow = this;
-        openpgp.signClearMessage(privKey, message).then(
-           function(signed) {        
-              if (returnType == 'existing-compose-window')
-              {                 
-                 tk_barrydegraaff_zimbra_openpgp.prototype.composeSign(signed);
-              }
-              else
-              {
-                 var composeController = AjxDispatcher.run("GetComposeController");
-                 if(composeController) {
-                    var appCtxt = window.top.appCtxt;
-                    var zmApp = appCtxt.getApp();
-                    var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
-                    var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
-                    toOverride:null, subjOverride:null, extraBodyText:signed, callback:null}
-                    composeController.doAction(params); // opens asynchronously the window.
-                 }
-              }   
-              try {
-                 myWindow._dialog.popdown();
-              } catch (err) { }   
-           },
-           function(err) {
-              myWindow._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, true);
-              myWindow._dialog.setButtonVisible(DwtDialog.OK_BUTTON, true);
-              document.getElementById("message").style.backgroundImage = "url('')";
-              //Signing failed!
-              tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][45], ZmStatusView.LEVEL_WARNING);
-           }
-        );
+      options = {
+          data: message,             // parse encrypted bytes
+          privateKeys: privKey,      // for signing
+          armor: true,
+      };
+      
+      openpgp.sign(options).then(plaintext => {
+         var signed = plaintext.data;
+         if (returnType == 'existing-compose-window')
+         {                 
+            tk_barrydegraaff_zimbra_openpgp.prototype.composeSign(signed);
+         }
+         else
+         {
+            var composeController = AjxDispatcher.run("GetComposeController");
+            if(composeController) {
+               var appCtxt = window.top.appCtxt;
+               var zmApp = appCtxt.getApp();
+               var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
+               var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
+               toOverride:null, subjOverride:null, extraBodyText:signed, callback:null}
+               composeController.doAction(params); // opens asynchronously the window.
+            }
+         }   
+         try {
+            myWindow._dialog.popdown();
+         } catch (err) { }   
+      },
+      function(err) {
+         myWindow._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, true);
+         myWindow._dialog.setButtonVisible(DwtDialog.OK_BUTTON, true);
+         document.getElementById("message").style.backgroundImage = "url('')";
+         //Signing failed!
+         tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][45], ZmStatusView.LEVEL_WARNING);
+      });
    }
    else {
       this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, true);
