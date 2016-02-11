@@ -11,6 +11,7 @@
 Urna venenatis eu. Potenti arcu nullam. Lacus ullamcorper adipiscing ac et nullam a vitae pede eleifend exercitation nec at et dignissim id saepe ante elit ligula dolor. Neque amet vivamus proin officia maecenas ad sit magna. A pulvinar dapibus ipsum orci tempor. Conubia nec in vivamus rhoncus sed. Vel sed posuere. Nulla phasellus vulputate posuere tincidunt interdum. Fusce vulputate dolor. Amet nibh suspendisse rutrum lacus rhoncus. Nulla ante risus nam nunc ornare. Diam tempor aliquam ipsum etiam a. Vel bibendum mauris erat nullam sollicitudin. Eget diam penatibus. Phasellus pellentesque pede orci wisi auctor. Eu in dolor nunc quis euismod massa congue et. Cras ipsum morbi nisl sed volutpat. Justo egestas suspendisse. Dolor id nec. Faucibus cursus suspendisse et a ante. Id adipiscing maecenas. Eros laoreet nascetur in fusce vel morbi non donec cras et eros ullamcorper id vel. Sed amet tincidunt. Sit etiam nulla in justo a. Dignissim lacinia morbi. Porttitor tristique facilisis volutpat mus magna in massa lacus. Lectus ac aliquet. Quam id porttitor consectetuer donec a quis urna vestibulum. Rutrum imperdiet et vel taciti fringilla. Integer tortor mauris.
 
 Congue imperdiet arcu. Et scelerisque consequat. Ac metus pellentesque placerat orci aliquam. Congue suspendisse duis integer pellentesque lectus. Pellentesque at pellentesque. Varius ut faucibus. Dui magnis nullam ante tincidunt tellus. Vehicula massa vel nullam ac sagittis quis ullamcorper eu eros quisque etiam ut elit porttitor. Pede praesent venenatis. Ultricies nisl laoreet a dis integer. Non vestibulum neque. Posuere nibh aenean quae et nec egestas nulla diam praesent suspendisse tellus habitant justo risus nibh semper scelerisque pharetra aptent aliquet. Per nulla sit. Tellus nec ut dictum eleifend eu. Accumsan venenatis arcu.</textarea>
+<textarea id="output" rows="20" cols="100"></textarea>
 <script type="text/javascript">
 var openpgp = window.openpgp;
 var key = '-----BEGIN PGP PUBLIC KEY BLOCK-----\n' +
@@ -52,9 +53,9 @@ options = {
     armor: true                                               // ASCII armor
 };
 
-openpgp.encrypt(options).then(message => {
+openpgp.encrypt(options).then(function (message) {
     console.log(message.data);
-    document.write('<pre>'+message.data+'</pre>');
+    document.getElementById('output').value = message.data;
 });
 
 </script>

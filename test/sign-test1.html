@@ -6,6 +6,7 @@
 </head>
 <body>
 <h1>OpenPGP.js - Sign test for Zimbra OpenPGP Zimlet</h1>
+<textarea id="output" rows="20" cols="100"></textarea>
 <script type="text/javascript">
 var openpgp = window.openpgp;
 var mPubKey = '-----BEGIN PGP PUBLIC KEY BLOCK-----\n' +
@@ -118,8 +119,8 @@ options = {
     armor: true,
 };
 
-openpgp.sign(options).then(plaintext => {
-    document.write('<pre>' + plaintext.data + '</pre>');
+openpgp.sign(options).then(function (plaintext) {
+    document.getElementById('output').value = plaintext.data;
 });
      
 </script>

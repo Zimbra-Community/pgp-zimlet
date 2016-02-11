@@ -23,6 +23,7 @@ rymF5oqaGHmh0ZjVwgzlS/XpYBwmXWHSlPtX7uxhFuXGasx8OuHRRrgvlvZv
 TfC3Vb/cdzjgMe2ohn4gXyc=
 =+1To
 -----END PGP SIGNATURE-----</textarea>
+<textarea id="output" rows="20" cols="100"></textarea>
 <script type="text/javascript">
 var openpgp = window.openpgp;
 var mPubKey = '-----BEGIN PGP PUBLIC KEY BLOCK-----\n' +
@@ -130,17 +131,17 @@ options = {
     publicKeys: publicKeys.keys,   // for signing
 };
 
-openpgp.verify(options).then(verified => {
-
+openpgp.verify(options).then(function (verified) {
    console.log("my object: %o", verified);
   
    if(verified.signatures[0].valid==true)
    {
-      document.write('<pre>Got a good signature.</pre>');
+      //document.write does not work in IE11 in this context
+      document.getElementById('output').value = 'Got a good signature.';
    }
    else
    {
-      document.write('<pre>SIGNATURE FAILED!'+verified.signatures[0].valid+'</pre>');
+      document.getElementById('output').value = 'SIGNATURE FAILED!'+verified.signatures[0].valid;
    }
 });
 

@@ -6,6 +6,7 @@
 </head>
 <body>
 <h1>OpenPGP.js - Keygen test for Zimbra OpenPGP Zimlet</h1>
+<textarea id="output" rows="20" cols="100"></textarea>
 <script>
 //for version v2.0.0-dev of openpgp.js
 var options = {
@@ -19,7 +20,7 @@ openpgp.generateKey(options).then(function(key) {
     // success
     var privkey = key.privateKeyArmored;
     var pubkey = key.publicKeyArmored;
-    document.write('<textarea rows="20" cols="200">Your new key pair for testing only uid=`Jon Smith jon@example.com and passphrase: `super long and hard to guess secret`:\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored+'</textarea>');
+    document.getElementById('output').value = 'Your new key pair for testing only uid=`Jon Smith jon@example.com and passphrase: `super long and hard to guess secret`:\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored;
 }).catch(function(error) {
     // failure
 });

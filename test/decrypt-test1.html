@@ -20,6 +20,7 @@ tdJFATj2xSUpRwozbqZ4c1jjlx8IpDgurdimWUaTAe6zIsA75bon+I/QDN0l
 hmXmVKLcM/n48lrEt/dDFkWciRF6kFfIzR59
 =nCKf
 -----END PGP MESSAGE-----</textarea>
+<textarea id="output" rows="20" cols="100"></textarea>
 <script type="text/javascript">
    
 var openpgp = window.openpgp;
@@ -178,8 +179,8 @@ options = {
     privateKey: privKey,        // for decryption
 };
 
-openpgp.decrypt(options).then(plaintext => {
-    document.write('<pre>' + plaintext.data + '</pre>');
+openpgp.decrypt(options).then(function (plaintext) {
+    document.getElementById('output').value = plaintext.data;
 });
    
 </script>
