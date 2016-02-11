@@ -1227,43 +1227,48 @@ function() {
       // There should be a cleaner way to do this than stashing 
       // the parent in myWindow but I've not worked it out yet!
       var myWindow = this;
-        openpgp.decryptAndVerifyMessage(privKey, pubKey, message).then(
-           function(decrypted) {               
-               try 
-               {
-                  if(decrypted.text+decrypted.signatures[0].valid)
-                  {
-                     if(decrypted.signatures[0].valid==true)
-                     {                        
-                        //Got a good signature.
-                        tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][14], ZmStatusView.LEVEL_INFO);
-                     }
-                     else
-                     {                      
-                        //Got a BAD signature.
-                        tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][15], ZmStatusView.LEVEL_CRITICAL);
-                     }
-                  }
+      options = {
+          message: message,           // parse encrypted bytes
+          publicKeys: pubKey,         // for verification (optional)
+          privateKey: privKey,        // for decryption
+      };
+      
+      openpgp.decrypt(options).then(function (plaintext) {
+         try 
+         {
+            if(plaintext.data+plaintext.signatures[0].valid)
+            {
+               if(plaintext.signatures[0].valid==true)
+               {                        
+                  //Got a good signature.
+                  tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][14], ZmStatusView.LEVEL_INFO);
                }
-               catch (err) 
-               {
-               }                 
-               
-               tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(tk_barrydegraaff_zimbra_openpgp.filename,'',decrypted.text);
-               //Free memory
-               tk_barrydegraaff_zimbra_openpgp.file = '';
-               try {
-                  myWindow._dialog.popdown();
-               } catch (err) { }   
-            },
-            function(err) {
-               myWindow._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, true);
-               myWindow._dialog.setButtonVisible(DwtDialog.OK_BUTTON, true);
-               document.getElementById("privateKeyInput").style.backgroundImage = "url('')";
-               //Decryption failed!
-               tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][43], ZmStatusView.LEVEL_WARNING);
+               else
+               {                      
+                  //Got a BAD signature.
+                  tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][15], ZmStatusView.LEVEL_CRITICAL);
+               }
             }
-        );
+         }
+         catch (err) 
+         {
+         }                 
+         
+         tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(tk_barrydegraaff_zimbra_openpgp.filename,'',plaintext.data);
+         //Free memory
+         tk_barrydegraaff_zimbra_openpgp.file = '';
+         try {
+            myWindow._dialog.popdown();
+         } catch (err) { }   
+         },
+         function(err) {
+         myWindow._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, true);
+         myWindow._dialog.setButtonVisible(DwtDialog.OK_BUTTON, true);
+         document.getElementById("privateKeyInput").style.backgroundImage = "url('')";
+         //Decryption failed!
+         tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][43], ZmStatusView.LEVEL_WARNING);
+         }
+     );
    }
    else {
       this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, true);
@@ -2109,8 +2114,7 @@ function() {
       };
       
       openpgp.encrypt(options).then(function (message) {
-         var pgpMessage = message.data;
-         tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob('PGP-'+tk_barrydegraaff_zimbra_openpgp.filename,'zimbra/pgp',pgpMessage);
+         tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob('PGP-'+tk_barrydegraaff_zimbra_openpgp.filename,'zimbra/pgp',message.data);
          //Free memory
          tk_barrydegraaff_zimbra_openpgp.file = '';
          try {
@@ -2127,9 +2131,14 @@ function() {
    }
    else
    {   
-      openpgp.encryptMessage(pubKeys, msg, addresses).then(
-         function(pgpMessage) {  
-            tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob('PGP-'+tk_barrydegraaff_zimbra_openpgp.filename,'zimbra/pgp',pgpMessage);
+      options = {
+         data: msg,             // input as string
+         publicKeys: pubKeys,   // for encryption
+         armor: true            // ASCII armor
+      };
+      
+      openpgp.encrypt(options).then(function (message) {
+            tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob('PGP-'+tk_barrydegraaff_zimbra_openpgp.filename,'zimbra/pgp',message.data);
             //Free memory
             tk_barrydegraaff_zimbra_openpgp.file = '';
             try { 
