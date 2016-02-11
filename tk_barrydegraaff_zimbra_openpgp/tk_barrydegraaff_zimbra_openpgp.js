@@ -548,35 +548,40 @@ tk_barrydegraaff_zimbra_openpgp.prototype.verify = function(message) {
       return;
    }
    var myWindow = this;
-   openpgp.verifyClearSignedMessage(combinedPublicKeys, message).then(
-      function(signature) {
-         var goodsigs = 0;
-         var badsigs = 0;
-         var sigStatus = '';
-         for (var s=0 ; s < signature.signatures.length ; s++) {
-            if (signature.signatures[s].valid == true) {
-               goodsigs++;
-            } else {
-               badsigs++;
-            }
-         }
-         if ( (goodsigs > 0) && (badsigs == 0) ) {
-            //Got a good signature
-            sigStatus ='<b style="color:green">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][14]+'</b>';
-            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar').innerHTML= '<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/icon.png"> OpenPGP: '+sigStatus;
+
+   options = {
+      message: message,                 // parse encrypted bytes
+      publicKeys: combinedPublicKeys,   // for signing
+   };
+
+   openpgp.verify(options).then(signature => {
+      var goodsigs = 0;
+      var badsigs = 0;
+      var sigStatus = '';
+      for (var s=0 ; s < signature.signatures.length ; s++) {
+         if (signature.signatures[s].valid == true) {
+            goodsigs++;
          } else {
-            //Got a BAD signature
-            sigStatus ='<b style="color:red">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][15]+'</b>';
-            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar').innerHTML= '<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/icon.png"> OpenPGP: '+sigStatus;
+            badsigs++;
          }
-         if (message.text.indexOf('<html><body>') > -1 ) 
-         {       
-            myWindow.displayDialog(2, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][16] + ': ' + sigStatus, '<div style="width:650px; height: 350px; overflow-x: auto; overflow-y: auto; background-color:white; padding:5px;">'+message.text+'</div>');
-         }
-      },
-      function (err) {
-         //Error verifying signature
-         myWindow.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][17], ZmStatusView.LEVEL_WARNING);
+      }
+      if ( (goodsigs > 0) && (badsigs == 0) ) {
+         //Got a good signature
+         sigStatus ='<b style="color:green">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][14]+'</b>';
+         document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar').innerHTML= '<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/icon.png"> OpenPGP: '+sigStatus;
+      } else {
+         //Got a BAD signature
+         sigStatus ='<b style="color:red">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][15]+'</b>';
+         document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar').innerHTML= '<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/icon.png"> OpenPGP: '+sigStatus;
+      }
+      if (message.text.indexOf('<html><body>') > -1 ) 
+      {       
+         myWindow.displayDialog(2, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][16] + ': ' + sigStatus, '<div style="width:650px; height: 350px; overflow-x: auto; overflow-y: auto; background-color:white; padding:5px;">'+message.text+'</div>');
+      }
+   },
+   function (err) {
+      //Error verifying signature
+      myWindow.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][17], ZmStatusView.LEVEL_WARNING);
    });
 }
 
