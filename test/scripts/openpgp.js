@@ -3874,7 +3874,7 @@ exports.default = {
   debug: false,
   show_version: true,
   show_comment: true,
-  versionstring: "OpenPGP.js v2.0.0-dev",
+  versionstring: "OpenPGP.js v2.0.0",
   commentstring: "http://openpgpjs.org",
   keyserver: "https://keyserver.ubuntu.com",
   node_store: './openpgp.store'
@@ -13862,9 +13862,9 @@ function readArmored(armoredText) {
 }
 
 /**
- * reads an OpenPGP binary string message and returns a message object
- * @param {Uint8Array} binary message
- * @return {module:message~Message} new message object
+ * reads an OpenPGP message as byte array and returns a message object
+ * @param {Uint8Array} input   binary message
+ * @return {Message}           new message object
  * @static
  */
 function read(input) {
@@ -13949,6 +13949,15 @@ function fromBinary(bytes, filename) {
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+/**
+ * @requires message
+ * @requires cleartext
+ * @requires key
+ * @requires config
+ * @requires util
+ * @module openpgp
+ */
 
 /**
  * @fileoverview The openpgp base module should provide all of the functionality
@@ -14075,8 +14084,7 @@ function generateKey() {
   var _ref2$unlocked = _ref2.unlocked;
   var unlocked = _ref2$unlocked === undefined ? false : _ref2$unlocked;
 
-  var options = { userIds: userIds, passphrase: passphrase, numBits: numBits, unlocked: unlocked };
-  formatUserIds(options);
+  var options = formatUserIds({ userIds: userIds, passphrase: passphrase, numBits: numBits, unlocked: unlocked });
 
   if (!_util2.default.getWebCrypto() && asyncProxy) {
     // use web worker if web crypto apis are not supported
@@ -14149,7 +14157,7 @@ function decryptKey(_ref3) {
  * @param  {String|Array<String>} passwords   (optional) array of passwords or a single password to encrypt the message
  * @param  {String} filename                  (optional) a filename for the literal data packet
  * @param  {Boolean} armor                    (optional) if the return value should be ascii armored or the message object
- * @return {Promise<String|Message>}          encrypted ASCII armored message, or Message if 'armor' is true
+ * @return {Promise<String|Message>}          encrypted ASCII armored message, or the full Message object if 'armor' is false
  * @static
  */
 function encrypt(_ref4) {
@@ -14409,7 +14417,7 @@ function checkCleartextMessage(message) {
  */
 function formatUserIds(options) {
   if (!options.userIds) {
-    return;
+    return options;
   }
   options.userIds = toArray(options.userIds); // normalize to array
   options.userIds = options.userIds.map(function (id) {
@@ -14419,7 +14427,7 @@ function formatUserIds(options) {
     if (_util2.default.isUserId(id)) {
       return id; // user id is already in correct format... no conversion necessary
     }
-    // name and email address can be empty but must be of type the correct type
+    // name and email address can be empty but must be of the correct type
     id.name = id.name || '';
     id.email = id.email || '';
     if (!_util2.default.isString(id.name) || id.email && !_util2.default.isEmailAddress(id.email)) {
@@ -14427,6 +14435,7 @@ function formatUserIds(options) {
     }
     return id.name + ' <' + id.email + '>';
   });
+  return options;
 }
 
 /**
