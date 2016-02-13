@@ -909,20 +909,40 @@ function(id, title, message) {
       
       var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);   
       pubKeyTxt = bp.node.content.match(/(-----BEGIN PGP PUBLIC KEY BLOCK-----)([^]+)(-----END PGP PUBLIC KEY BLOCK-----)/g);
-      pubKeyTxt = pubKeyTxt[0];
-      
-      var publicKeys = openpgp.key.readArmored(pubKeyTxt);
-      
-      userid = publicKeys.keys[0].users[0].userId.userid;
-      userid = tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(userid);
-      
-      publicKeyPacket = publicKeys.keys[0].primaryKey;
-      var keyLength = "";
-      if (publicKeyPacket != null) {
-         if (publicKeyPacket.mpi.length > 0) {
-            keyLength = (publicKeyPacket.mpi[0].byteLength() * 8);
+      if(pubKeyTxt)
+      {
+         if(pubKeyTxt[0])
+         {
+            pubKeyTxt = pubKeyTxt[0];
          }
+         else
+         {
+            return;
+         }   
       }
+      else
+      {
+         return;
+      }
+      
+      try {
+         var publicKeys = openpgp.key.readArmored(pubKeyTxt);
+         
+         userid = publicKeys.keys[0].users[0].userId.userid;
+         userid = tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(userid);
+         
+         publicKeyPacket = publicKeys.keys[0].primaryKey;
+         var keyLength = "";
+         if (publicKeyPacket != null) {
+            if (publicKeyPacket.mpi.length > 0) {
+               keyLength = (publicKeyPacket.mpi[0].byteLength() * 8);
+            }
+         }
+      } catch(err){
+         //Could not read armored message!
+         tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][7], ZmStatusView.LEVEL_WARNING);
+         return;
+      }   
       
       result = "<br><table style=\"padding: 5px;\"><tr><td>User ID[0]:</td><td>" + userid + "</td></tr><tr><td>Fingerprint:</td><td><b>" + publicKeyPacket.fingerprint + "</b></td></tr><tr><td> Primary key length:&nbsp;</td><td>" + keyLength + "</td></tr><tr><td>Created:<td>" + publicKeyPacket.created + "</td></tr></table>";
 
