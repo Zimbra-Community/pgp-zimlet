@@ -752,7 +752,8 @@ function(id, title, message) {
       tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][80]+":" +
       "</td><td style=\"width:500px\">" +
       "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='uidEmail' value='" + appCtxt.getActiveAccount().name+"'>" +
-      "</td></tr><tr><td>" +
+      "</td></tr><tr><td></td><td>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][81]+
+      "</td></tr><tr><td>"+
       tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][20]+":" +
       "</td><td>" +
       "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value='" + (tk_barrydegraaff_zimbra_openpgp.privatePassCache ? tk_barrydegraaff_zimbra_openpgp.privatePassCache : tk_barrydegraaff_zimbra_openpgp.prototype.pwgen()) + "'>" +
@@ -1732,8 +1733,20 @@ function() {
    this._dialog.setContent('<div style="width:650px; height: 240px; overflow-x: hidden; overflow-y: hidden;">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][48]+'<br><br><br><br><img src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/loading.gif" style="width:48px; height:48px; display: block; margin-left: auto; margin-right: auto" alt="loading"></div>');
 
    var myWindow = this;
+
+   //Parsing the email list (multiple emails separated by comma)
+   var userIdsArr = new Array();
+   var startPos = 0;
+   var indexPos = uidEmail.indexOf(",", startPos);
+   while ( indexPos != -1 ) {
+      userIdsArr.push({ name:uidName, email:uidEmail.substring(startPos, indexPos) });
+      startPos = indexPos + 1;
+      indexPos = uidEmail.indexOf(",", startPos);
+   }
+   userIdsArr.push({ name:uidName, email:uidEmail.substring(startPos, uidEmail.length) });
+   
    var options = {
-       userIds: [{ name:uidName, email:uidEmail }], // multiple user IDs
+       userIds: [userIdsArr], // multiple user IDs
        numBits: keyLength,                          // RSA key size
        passphrase: passphrase                       // protects the private key
    };
