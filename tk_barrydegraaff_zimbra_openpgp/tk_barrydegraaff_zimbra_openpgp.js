@@ -744,7 +744,6 @@ function(id, title, message) {
 
       var aliases = appCtxt.get(ZmSetting.MAIL_ALIASES);
       var aliasesString = '';
-      tk_barrydegraaff_zimbra_openpgp.prototype.uniq
       if(aliases)
       {
          aliases = tk_barrydegraaff_zimbra_openpgp.prototype.uniq(aliases);
