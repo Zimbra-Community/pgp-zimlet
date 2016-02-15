@@ -1696,8 +1696,7 @@ function() {
 
 tk_barrydegraaff_zimbra_openpgp.prototype.sendTo =
 function(message) {
-
-   openpgp.initWorker('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js')
+   openpgp.initWorker({ path:'/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js' });
    var publicKeys = openpgp.key.readArmored(atob(message));
    if(publicKeys.keys[0])
    {
