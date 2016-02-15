@@ -20,9 +20,8 @@ tdJFATj2xSUpRwozbqZ4c1jjlx8IpDgurdimWUaTAe6zIsA75bon+I/QDN0l
 hmXmVKLcM/n48lrEt/dDFkWciRF6kFfIzR59
 =nCKf
 -----END PGP MESSAGE-----</textarea>
+<textarea id="output" rows="20" cols="100"></textarea>
 <script type="text/javascript">
-   
-//openpgp.initWorker('scripts/openpgp.worker.js');   
    
 var openpgp = window.openpgp;
 var mPubKey = '-----BEGIN PGP PUBLIC KEY BLOCK-----\n' +
@@ -121,6 +120,7 @@ var mSecKey = '-----BEGIN PGP PRIVATE KEY BLOCK-----\n' +
 '-----END PGP PRIVATE KEY BLOCK-----';
 
 //A wrong secret key:
+/*
 var mSecKey = '-----BEGIN PGP PRIVATE KEY BLOCK-----\n' +
 'Version: OpenPGP.js v1.0.1\n' +
 'Comment: http://openpgpjs.org\n' +
@@ -159,7 +159,7 @@ var mSecKey = '-----BEGIN PGP PRIVATE KEY BLOCK-----\n' +
 'klNQEhNAQx2ZRdU93DuUQS4sOcpNTeisX0Lp5Sc=\n' +
 '=3IiQ\n' +
 '-----END PGP PRIVATE KEY BLOCK-----\n';
-
+*/
 
 //Decrypt:
 
@@ -172,16 +172,17 @@ var success = privKey.decrypt(passphrase);
 
 var message = openpgp.message.readArmored(document.getElementById('message').value);
 
-openpgp.decryptMessage(privKey, message).then(
-// I cannot place a `try` statement here
-   function(decrypted) {
-      console.log("my object: %o", decrypted);
-      document.write('<pre>' + decrypted + '</pre>');
-   },
-            function(err) {
-               alert('Decryption failed!');
-            }
-   );
+
+options = {
+    message: message,           // parse encrypted bytes
+    publicKeys: publicKeys,     // for verification (optional)
+    privateKey: privKey,        // for decryption
+};
+
+openpgp.decrypt(options).then(function (plaintext) {
+    document.getElementById('output').value = plaintext.data;
+});
+   
 </script>
 <pre>
 This file is part of the Zimbra OpenPGP Zimlet project.

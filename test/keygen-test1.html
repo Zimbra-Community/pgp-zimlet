@@ -6,12 +6,24 @@
 </head>
 <body>
 <h1>OpenPGP.js - Keygen test for Zimbra OpenPGP Zimlet</h1>
+<textarea id="output" rows="20" cols="100"></textarea>
 <script>
-//for version 0.8 of openpgp.js
- var opt = {numBits: 512, userId: 'test', passphrase: '123'};
- openpgp.generateKeyPair(opt).then(function(key) {
-    document.write('<textarea rows="20" cols="200">Your new key pair for testing only uid=`test` and passphrase: `123`:\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored+'</textarea>');
- });
+//for version v2.0.0-dev of openpgp.js
+var options = {
+    userIds: [{ name:'Jon Smith', email:'jon@example.com' }], // multiple user IDs
+    numBits: 4096,                                            // RSA key size
+    passphrase: 'super long and hard to guess secret'         // protects the private key
+};
+//openpgp.initWorker('scripts/openpgp.worker.js');
+//Uncaught Error: Unhandled error in openpgp worker: undefined (undefined:undefined)AsyncProxy.worker.onerror @ openpgp.js:19158
+openpgp.generateKey(options).then(function(key) {
+    // success
+    var privkey = key.privateKeyArmored;
+    var pubkey = key.publicKeyArmored;
+    document.getElementById('output').value = 'Your new key pair for testing only uid=`Jon Smith jon@example.com and passphrase: `super long and hard to guess secret`:\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored;
+}).catch(function(error) {
+    // failure
+});
 
 </script>
 <pre>

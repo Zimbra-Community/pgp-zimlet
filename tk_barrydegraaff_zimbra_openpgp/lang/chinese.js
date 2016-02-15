@@ -78,3 +78,6 @@ tk_barrydegraaff_zimbra_openpgp.lang['chinese'][75] = '已导入';
 tk_barrydegraaff_zimbra_openpgp.lang['chinese'][76] = '导入公钥失败';
 tk_barrydegraaff_zimbra_openpgp.lang['chinese'][77] = '发送我的公钥给某人';
 tk_barrydegraaff_zimbra_openpgp.lang['chinese'][78] = '公钥已经在您的信任密钥列表里';
+tk_barrydegraaff_zimbra_openpgp.lang['chinese'][79] = 'Name';
+tk_barrydegraaff_zimbra_openpgp.lang['chinese'][80] = 'Email address';
+tk_barrydegraaff_zimbra_openpgp.lang['chinese'][81] = 'You can specify multiple email addresses, separated by comma (,)';

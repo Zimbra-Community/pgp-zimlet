@@ -23,6 +23,7 @@ rymF5oqaGHmh0ZjVwgzlS/XpYBwmXWHSlPtX7uxhFuXGasx8OuHRRrgvlvZv
 TfC3Vb/cdzjgMe2ohn4gXyc=
 =+1To
 -----END PGP SIGNATURE-----</textarea>
+<textarea id="output" rows="20" cols="100"></textarea>
 <script type="text/javascript">
 var openpgp = window.openpgp;
 var mPubKey = '-----BEGIN PGP PUBLIC KEY BLOCK-----\n' +
@@ -122,26 +123,25 @@ var mSecKey = '-----BEGIN PGP PRIVATE KEY BLOCK-----\n' +
 
 //Verify:
 
-var passphrase = 'dummy'; // Password of the private key.
-var privKeys = openpgp.key.readArmored(mSecKey);
 var publicKeys = openpgp.key.readArmored(mPubKey);
-
-var privKey = privKeys.keys[0];
-var success = privKey.decrypt(passphrase);
-
 var message = openpgp.cleartext.readArmored(document.getElementById('message').value);
 
-openpgp.verifyClearSignedMessage(publicKeys.keys, message).then(
-function(verified) {
+options = {
+    message: message,              // parse encrypted bytes
+    publicKeys: publicKeys.keys,   // for signing
+};
+
+openpgp.verify(options).then(function (verified) {
    console.log("my object: %o", verified);
-   
+  
    if(verified.signatures[0].valid==true)
    {
-      document.write('<pre>Got a good signature.</pre>');
+      //document.write does not work in IE11 in this context
+      document.getElementById('output').value = 'Got a good signature.';
    }
    else
    {
-      document.write('<pre>SIGNATURE FAILED!'+verified.signatures[0].valid+'</pre>');
+      document.getElementById('output').value = 'SIGNATURE FAILED!'+verified.signatures[0].valid;
    }
 });
 

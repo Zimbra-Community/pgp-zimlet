@@ -78,3 +78,6 @@ tk_barrydegraaff_zimbra_openpgp.lang['french'][75] = 'Importé';
 tk_barrydegraaff_zimbra_openpgp.lang['french'][76] = 'Impossible d\'importer la clef publique';
 tk_barrydegraaff_zimbra_openpgp.lang['french'][77] = 'Envoyer à quelqu\'un ma clef publique'; 
 tk_barrydegraaff_zimbra_openpgp.lang['french'][78] = 'La clé publique est déjà dans votre magasin de clés';
+tk_barrydegraaff_zimbra_openpgp.lang['french'][79] = 'Name';
+tk_barrydegraaff_zimbra_openpgp.lang['french'][80] = 'Email address';
+tk_barrydegraaff_zimbra_openpgp.lang['french'][81] = 'You can specify multiple email addresses, separated by comma (,)';
