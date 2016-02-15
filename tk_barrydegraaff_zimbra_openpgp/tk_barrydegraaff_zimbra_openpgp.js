@@ -1746,7 +1746,7 @@ function() {
    userIdsArr.push({ name:uidName, email:uidEmail.substring(startPos, uidEmail.length) });
    
    var options = {
-       userIds: [userIdsArr], // multiple user IDs
+       userIds: userIdsArr, // multiple user IDs
        numBits: keyLength,                          // RSA key size
        passphrase: passphrase                       // protects the private key
    };
