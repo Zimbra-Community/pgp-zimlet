@@ -1,10 +1,12 @@
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-/*  AES Counter-mode implementation in JavaScript       (c) Chris Veness 2005-2014 / MIT Licence  */
+/*  AES counter-mode (CTR) implementation in JavaScript               (c) Chris Veness 2005-2016  */
+/*                                                                                   MIT Licence  */
+/* www.movable-type.co.uk/scripts/aes.html                                                        */
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
-/* jshint node:true *//* global define, escape, unescape, btoa, atob */
+/* eslint no-redeclare: 0 *//* global WorkerGlobalScope */
 'use strict';
-if (typeof module!='undefined' && module.exports) var Aes = require('./aes'); // CommonJS (Node.js)
+if (typeof module!='undefined' && module.exports) var Aes = require('./aes.js'); // ≡ import Aes from 'aes.js'
 
 
 /**
@@ -26,12 +28,12 @@ Aes.Ctr = {};
  * Unicode multi-byte character safe
  *
  * @param   {string} plaintext - Source text to be encrypted.
- * @param   {string} password - The password to use to generate a key.
+ * @param   {string} password - The password to use to generate a key for encryption.
  * @param   {number} nBits - Number of bits to be used in the key; 128 / 192 / 256.
  * @returns {string} Encrypted text.
  *
  * @example
- *   var encr = Aes.Ctr.encrypt('big secret', 'pāşšŵōřđ', 256); // encr: 'lwGl66VVwVObKIr6of8HVqJr'
+ *   var encr = Aes.Ctr.encrypt('big secret', 'pāşšŵōřđ', 256); // 'lwGl66VVwVObKIr6of8HVqJr'
  */
 Aes.Ctr.encrypt = function(plaintext, password, nBits) {
     var blockSize = 16;  // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
@@ -71,7 +73,7 @@ Aes.Ctr.encrypt = function(plaintext, password, nBits) {
     var keySchedule = Aes.keyExpansion(key);
 
     var blockCount = Math.ceil(plaintext.length/blockSize);
-    var ciphertxt = new Array(blockCount);  // ciphertext as array of strings
+    var ciphertext = '';
 
     for (var b=0; b<blockCount; b++) {
         // set counter (block #) in last 8 bytes of counter block (leaving nonce in 1st 8 bytes)
@@ -85,16 +87,20 @@ Aes.Ctr.encrypt = function(plaintext, password, nBits) {
         var blockLength = b<blockCount-1 ? blockSize : (plaintext.length-1)%blockSize+1;
         var cipherChar = new Array(blockLength);
 
-        for (var i=0; i<blockLength; i++) {  // -- xor plaintext with ciphered counter char-by-char --
+        for (var i=0; i<blockLength; i++) {
+            // -- xor plaintext with ciphered counter char-by-char --
             cipherChar[i] = cipherCntr[i] ^ plaintext.charCodeAt(b*blockSize+i);
             cipherChar[i] = String.fromCharCode(cipherChar[i]);
         }
-        ciphertxt[b] = cipherChar.join('');
+        ciphertext += cipherChar.join('');
+
+        // if within web worker, announce progress every 1000 blocks (roughly every 50ms)
+        if (typeof WorkerGlobalScope != 'undefined' && self instanceof WorkerGlobalScope) {
+            if (b%1000 == 0) self.postMessage({ progress: b/blockCount });
+        }
     }
 
-    // use Array.join() for better performance than repeated string appends
-    var ciphertext = ctrTxt + ciphertxt.join('');
-    ciphertext = ciphertext.base64Encode();
+    ciphertext =  (ctrTxt+ciphertext).base64Encode();
 
     return ciphertext;
 };
@@ -103,13 +109,13 @@ Aes.Ctr.encrypt = function(plaintext, password, nBits) {
 /**
  * Decrypt a text encrypted by AES in counter mode of operation
  *
- * @param   {string} ciphertext - Source text to be encrypted.
- * @param   {string} password - Password to use to generate a key.
+ * @param   {string} ciphertext - Cipher text to be decrypted.
+ * @param   {string} password - Password to use to generate a key for decryption.
  * @param   {number} nBits - Number of bits to be used in the key; 128 / 192 / 256.
  * @returns {string} Decrypted text
  *
  * @example
- *   var decr = Aes.Ctr.encrypt('lwGl66VVwVObKIr6of8HVqJr', 'pāşšŵōřđ', 256); // decr: 'big secret'
+ *   var decr = Aes.Ctr.decrypt('lwGl66VVwVObKIr6of8HVqJr', 'pāşšŵōřđ', 256); // 'big secret'
  */
 Aes.Ctr.decrypt = function(ciphertext, password, nBits) {
     var blockSize = 16;  // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
@@ -141,7 +147,7 @@ Aes.Ctr.decrypt = function(ciphertext, password, nBits) {
     ciphertext = ct;  // ciphertext is now array of block-length strings
 
     // plaintext will get generated block-by-block into array of block-length strings
-    var plaintxt = new Array(ciphertext.length);
+    var plaintext = '';
 
     for (var b=0; b<nBlocks; b++) {
         // set counter (block #) in last 8 bytes of counter block (leaving nonce in 1st 8 bytes)
@@ -152,15 +158,18 @@ Aes.Ctr.decrypt = function(ciphertext, password, nBits) {
 
         var plaintxtByte = new Array(ciphertext[b].length);
         for (var i=0; i<ciphertext[b].length; i++) {
-            // -- xor plaintxt with ciphered counter byte-by-byte --
+            // -- xor plaintext with ciphered counter byte-by-byte --
             plaintxtByte[i] = cipherCntr[i] ^ ciphertext[b].charCodeAt(i);
             plaintxtByte[i] = String.fromCharCode(plaintxtByte[i]);
         }
-        plaintxt[b] = plaintxtByte.join('');
+        plaintext += plaintxtByte.join('');
+
+        // if within web worker, announce progress every 1000 blocks (roughly every 50ms)
+        if (typeof WorkerGlobalScope != 'undefined' && self instanceof WorkerGlobalScope) {
+            if (b%1000 == 0) self.postMessage({ progress: b/nBlocks });
+        }
     }
 
-    // join array of blocks into single plaintext string
-    var plaintext = plaintxt.join('');
     plaintext = plaintext.utf8Decode();  // decode from UTF8 back to Unicode multi-byte chars
 
     return plaintext;
@@ -169,16 +178,17 @@ Aes.Ctr.decrypt = function(ciphertext, password, nBits) {
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
-
-/** Extend String object with method to encode multi-byte string to utf8
- *  - monsur.hossa.in/2012/07/20/utf-8-in-javascript.html */
+/* Extend String object with method to encode multi-byte string to utf8
+ * - monsur.hossa.in/2012/07/20/utf-8-in-javascript.html
+ * - note utf8Encode is an identity function with 7-bit ascii strings, but not with 8-bit strings;
+ * - utf8Encode('x') = 'x', but utf8Encode('ça') = 'Ã§a', and utf8Encode('Ã§a') = 'ÃÂ§a'*/
 if (typeof String.prototype.utf8Encode == 'undefined') {
     String.prototype.utf8Encode = function() {
         return unescape( encodeURIComponent( this ) );
     };
 }
 
-/** Extend String object with method to decode utf8 string to multi-byte */
+/* Extend String object with method to decode utf8 string to multi-byte */
 if (typeof String.prototype.utf8Decode == 'undefined') {
     String.prototype.utf8Decode = function() {
         try {
@@ -189,28 +199,27 @@ if (typeof String.prototype.utf8Decode == 'undefined') {
     };
 }
 
-
-/** Extend String object with method to encode base64
- *  - developer.mozilla.org/en-US/docs/Web/API/window.btoa, nodejs.org/api/buffer.html
- *  note: if btoa()/atob() are not available (eg IE9-), try github.com/davidchambers/Base64.js */
+/* Extend String object with method to encode base64
+ * - developer.mozilla.org/en-US/docs/Web/API/window.btoa, nodejs.org/api/buffer.html
+ * - note: btoa & Buffer/binary work on single-byte Unicode (C0/C1), so ok for utf8 strings, not for general Unicode...
+ * - note: if btoa()/atob() are not available (eg IE9-), try github.com/davidchambers/Base64.js */
 if (typeof String.prototype.base64Encode == 'undefined') {
     String.prototype.base64Encode = function() {
         if (typeof btoa != 'undefined') return btoa(this); // browser
-        if (typeof Buffer != 'undefined') return new Buffer(this, 'utf8').toString('base64'); // Node.js
+        if (typeof Buffer != 'undefined') return new Buffer(this, 'binary').toString('base64'); // Node.js
         throw new Error('No Base64 Encode');
     };
 }
 
-/** Extend String object with method to decode base64 */
+/* Extend String object with method to decode base64 */
 if (typeof String.prototype.base64Decode == 'undefined') {
     String.prototype.base64Decode = function() {
         if (typeof atob != 'undefined') return atob(this); // browser
-        if (typeof Buffer != 'undefined') return new Buffer(this, 'base64').toString('utf8'); // Node.js
+        if (typeof Buffer != 'undefined') return new Buffer(this, 'base64').toString('binary'); // Node.js
         throw new Error('No Base64 Decode');
     };
 }
 
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-if (typeof module != 'undefined' && module.exports) module.exports = Aes.Ctr; // CommonJs export
-if (typeof define == 'function' && define.amd) define(['Aes'], function() { return Aes.Ctr; }); // AMD
+if (typeof module != 'undefined' && module.exports) module.exports = Aes.Ctr; // ≡ export default Aes.Ctr
