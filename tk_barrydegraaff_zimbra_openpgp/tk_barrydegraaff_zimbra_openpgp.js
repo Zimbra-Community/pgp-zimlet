@@ -2536,7 +2536,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.printdiv = function(printdivname, subj
    var divToPrint=document.getElementById(printdivname);
    var newWin=window.open('','Print-Window','width=800,height=600');
    newWin.document.open();
-   newWin.document.write('<html><head><title>'+tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(subject)+'</title></head><body><h1>'+tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(subject)+'</h1>'+tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(divToPrint.innerHTML)+'</body></html>');
+   newWin.document.write('<html><head><title>'+tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(subject)+'</title></head><body><h1>'+tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(subject)+'</h1><pre>'+divToPrint.innerHTML+'</pre></body></html>');
    newWin.document.close();
    newWin.focus();
    newWin.print();
