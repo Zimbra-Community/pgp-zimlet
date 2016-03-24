@@ -145,6 +145,24 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onContactEdit = function (view, contac
 }
 
 tk_barrydegraaff_zimbra_openpgp.prototype.onShowView = function (view) {
+
+   /* PGP Zimlet was written to work with dialogs, at one point it was decided to integrated in the mail view and search results
+    * Since we do not keep track of what is shown to the user (and where) we create a few DOM elements for this Zimlet in
+    * the currently viewed mail... but that can be multple at the same time. (On in the Mail tab, one in the Search tab and so on).
+    * With onShowView we remove existing DOM elements, so the DOM elements are consistent OR not displayed at all. This means a
+    * user must perform an onMsgView when switching tabs. This can be considered a flaw.
+   */
+   try {
+      var elem = document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar");
+      elem.parentNode.removeChild(elem);
+      
+      var elem = document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_body");
+      elem.parentNode.removeChild(elem);
+   
+      var elem = document.getElementById("tk_barrydegraaff_zimbra_openpgp_actionbar");
+      elem.parentNode.removeChild(elem);   
+   } catch (err) { }   
+   
    if ((tk_barrydegraaff_zimbra_openpgp.prototype.editAddressBookEvent == true) && ( view.indexOf('CN') < 0 ))
    {
       tk_barrydegraaff_zimbra_openpgp.prototype.editAddressBookEvent = false;
@@ -159,7 +177,6 @@ function() {
    ZmMailMsg.requestHeaders["Content-Type"] = "Content-Type";
    ZmMailMsg.requestHeaders["Content-Transfer-Encoding"] = "Content-Transfer-Encoding";
 };
-
 
 /* This method is called when a message is viewed in Zimbra
  * 
@@ -417,7 +434,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
             {
                document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar').innerHTML = '<a style="text-decoration: none" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.printdiv(\'tk_barrydegraaff_zimbra_openpgp_infobar_body\',\''+tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(subject)+'\')"><img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/printButton.png"> '+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54]+'</a>';
             }
-         }   
+         }
+            
          if (tk_barrydegraaff_zimbra_openpgp.prototype.addressBookReadInProgress == true)
          {
             //Still loading contacts, ignoring your addressbook
