@@ -262,13 +262,9 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
             return;
          }   
          
-         if(publicKeys)
-         {
-            document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar').innerHTML= '<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/icon.png"> OpenPGP: <b>'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][73] + "</b><br><table style=\"margin: 15px;\"><tr><td>User ID[0]:</td><td>" + userid + "</td></tr><tr><td>Fingerprint:</td><td><b>" + publicKeyPacket.fingerprint + "</b></td></tr><tr><td> Primary key length:&nbsp;</td><td>" + keyLength + "</td></tr><tr><td>Created:<td>" + publicKeyPacket.created + '</td></tr><tr><td colspan="2"><br><button id="btnImport" onclick="#">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][73]+'</button><td></tr></table>';
-         
+            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar').innerHTML= '<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/icon.png"> OpenPGP: <b>'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][73] + "</b><br><table style=\"margin: 15px;\"><tr><td>User ID[0]:</td><td>" + userid + "</td></tr><tr><td>Fingerprint:</td><td><b>" + publicKeyPacket.fingerprint + "</b></td></tr><tr><td> Primary key length:&nbsp;</td><td>" + keyLength + "</td></tr><tr><td>Created:<td>" + publicKeyPacket.created + '</td></tr><tr><td colspan="2"><br><button id="btnImport" onclick="#">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][73]+'</button><td></tr></table>';       
             var btnImport = document.getElementById("btnImport");
             btnImport.onclick = AjxCallback.simpleClosure(this.importPubKey, this, publicKeys);
-         }   
          
          return;
       }
