@@ -37,7 +37,7 @@ Aes.Ctr = {};
  */
 Aes.Ctr.encrypt = function(plaintext, password, nBits) {
     var blockSize = 16;  // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
-    if (!(nBits==128 || nBits==192 || nBits==256)) return ''; // standard allows 128/192/256 bit keys
+    if (!(nBits==128 || nBits==192 || nBits==256)) throw new Error('Key size is not 128 / 192 / 256');
     plaintext = String(plaintext).utf8Encode();
     password = String(password).utf8Encode();
 
@@ -46,7 +46,7 @@ Aes.Ctr.encrypt = function(plaintext, password, nBits) {
     var nBytes = nBits/8;  // no bytes in key (16/24/32)
     var pwBytes = new Array(nBytes);
     for (var i=0; i<nBytes; i++) {  // use 1st 16/24/32 chars of password for key
-        pwBytes[i] = isNaN(password.charCodeAt(i)) ? 0 : password.charCodeAt(i);
+        pwBytes[i] = i<password.length ?  password.charCodeAt(i) : 0;
     }
     var key = Aes.cipher(pwBytes, Aes.keyExpansion(pwBytes)); // gives us 16-byte key
     key = key.concat(key.slice(0, nBytes-16));  // expand key to 16/24/32 bytes long
@@ -119,7 +119,7 @@ Aes.Ctr.encrypt = function(plaintext, password, nBits) {
  */
 Aes.Ctr.decrypt = function(ciphertext, password, nBits) {
     var blockSize = 16;  // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
-    if (!(nBits==128 || nBits==192 || nBits==256)) return ''; // standard allows 128/192/256 bit keys
+    if (!(nBits==128 || nBits==192 || nBits==256)) throw new Error('Key size is not 128 / 192 / 256');
     ciphertext = String(ciphertext).base64Decode();
     password = String(password).utf8Encode();
 
@@ -127,7 +127,7 @@ Aes.Ctr.decrypt = function(ciphertext, password, nBits) {
     var nBytes = nBits/8;  // no bytes in key
     var pwBytes = new Array(nBytes);
     for (var i=0; i<nBytes; i++) {
-        pwBytes[i] = isNaN(password.charCodeAt(i)) ? 0 : password.charCodeAt(i);
+        pwBytes[i] = i<password.length ?  password.charCodeAt(i) : 0;
     }
     var key = Aes.cipher(pwBytes, Aes.keyExpansion(pwBytes));
     key = key.concat(key.slice(0, nBytes-16));  // expand key to 16/24/32 bytes long
