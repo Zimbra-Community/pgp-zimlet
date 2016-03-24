@@ -228,7 +228,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       if(appCtxt.getCurrentAppName()=='Search')
       {
          var bodynode = document.getElementById(msgView.__internalId+'__body');
-         var attNode = document.getElementById(msgView.__internalId+'_attLinks');
+         var attNode = document.getElementById('zv__CLV__'+msgView.__internalId+'_attLinks');
       }
       
       //Detect what kind of message we have
