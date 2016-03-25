@@ -197,7 +197,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       else if(appCtxt.getCurrentAppName()=='Search')
       {
          //Conversation view top item
-         if(msgView._normalClass == 'ZmMailMsgCapsuleView')
+         if(msgView.parent._className  == 'ZmConvView2')
          {
             var bodynode = document.getElementById(msgView.__internalId+'__body');
             var attNode = document.getElementById('zv__CLV__'+msgView.__internalId+'_attLinks');
