@@ -168,36 +168,56 @@ function() {
 tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msgView) {
    //Only integrate in Mail, Drafts and Search app.
    if((appCtxt.getCurrentAppName()=='Mail') || (appCtxt.getCurrentAppName()=='Search'))
-   {    
+   {
       if(appCtxt.getCurrentAppName()=='Mail')
       {
-         //Conversation view
-         if(msgView._normalClass == 'ZmMailMsgCapsuleView')
+         //Conversation view top item
+         if(msgView.parent._className == 'ZmConvView2')
          {
             var bodynode = document.getElementById('main_MSGC'+msg.id+'__body');
             var attNode = document.getElementById('zv__CLV__main_MSGC'+msg.id+'_attLinks');
          }
+         //Conversation view expanded item
+         else if  (msgView.parent._className == 'ZmConvDoublePaneView'){
+            var bodynode = document.getElementById('zv__CLV-main__MSG__body');
+            var attNode = document.getElementById('zv__CLV__main_MSG_attLinks');
+         }
          //By-message view
-         else
-         {   
+         else if (msgView.parent._className == 'ZmTradView')
+         {  
             var bodynode = document.getElementById('zv__TV-main__MSG__body');
             var attNode = document.getElementById('zv__TV__TV-main_MSG_attLinks');
+         }
+         else
+         {
+            console.log('unsupported view');
+            return;
          }
       }
       else if(appCtxt.getCurrentAppName()=='Search')
       {
-         //Conversation view         
+         //Conversation view top item
          if(msgView._normalClass == 'ZmMailMsgCapsuleView')
          {
             var bodynode = document.getElementById(msgView.__internalId+'__body');
             var attNode = document.getElementById('zv__CLV__'+msgView.__internalId+'_attLinks');
          }
-         else
-         {
-            //By-message view
+         //Conversation view expanded item
+         else if  (msgView.parent._className == 'ZmConvDoublePaneView'){
+            var bodynode = document.getElementById(msgView.__internalId+'__body');
+            var attNode = document.getElementById('zv__CLV__'+msgView.__internalId+'_attLinks');
+         }
+         //By-message view
+         else if (msgView.parent._className == 'ZmTradView')
+         { 
             var bodynode = document.getElementById(msgView.__internalId+'__body');
             var attNode = document.getElementById('zv__'+msgView.__internalId.replace('zv','TV').replace('_MSG','MSG')+'_attLinks');
          } 
+         else
+         {
+            console.log('unsupported view');
+            return;
+         }
       }
 
       //Create new empty infobar for displaying pgp result
