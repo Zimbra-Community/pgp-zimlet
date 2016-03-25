@@ -205,11 +205,21 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       var g=document.createElement('div');
       g.setAttribute("id", 'tk_barrydegraaff_zimbra_openpgp_actionbar'+appCtxt.getCurrentAppName()+msg.id);
       g.setAttribute("class", 'tk_barrydegraaff_zimbra_openpgp_actionbar');
+      if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
+      {
+         g.setAttribute("title", 'tk_barrydegraaff_zimbra_openpgp_actionbar'+appCtxt.getCurrentAppName()+msg.id);
+         g.setAttribute("style", 'border: 1px solid red');
+      }
       el.insertBefore(g, el.firstChild);
       
       var g=document.createElement('div');
       g.setAttribute("id", 'tk_barrydegraaff_zimbra_openpgp_infobar'+appCtxt.getCurrentAppName()+msg.id);
       g.setAttribute("class", 'tk_barrydegraaff_zimbra_openpgp_infobar');
+      if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
+      {
+         g.setAttribute("title", 'tk_barrydegraaff_zimbra_openpgp_infobar'+appCtxt.getCurrentAppName()+msg.id);
+         g.setAttribute("style", 'border: 1px solid green');
+      }   
       el.insertBefore(g, el.firstChild); 
       
       //Detect what kind of message we have
@@ -316,6 +326,11 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       var g=document.createElement('div');
       g.setAttribute("id", 'tk_barrydegraaff_zimbra_openpgp_infobar_body'+appCtxt.getCurrentAppName()+msg.id);
       g.setAttribute("class", 'tk_barrydegraaff_zimbra_openpgp_infobar_body');
+      if(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
+      {
+         g.setAttribute("title", 'tk_barrydegraaff_zimbra_openpgp_infobar_body'+appCtxt.getCurrentAppName()+msg.id);
+         g.setAttribute("style", 'border: 1px solid blue');
+      }   
       el.insertBefore(g, bodynode);
       } catch (err) {
          return;   
