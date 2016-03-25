@@ -103,11 +103,11 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
    background: url("") center top no-repeat;
 }
 
-#tk_barrydegraaff_zimbra_openpgp_infobar_body, #tk_barrydegraaff_zimbra_openpgp_infobar, #tk_barrydegraaff_zimbra_openpgp_actionbar
+.tk_barrydegraaff_zimbra_openpgp_infobar_body, .tk_barrydegraaff_zimbra_openpgp_infobar, .tk_barrydegraaff_zimbra_openpgp_actionbar
 {
    margin: 6px;
 }
-#tk_barrydegraaff_zimbra_openpgp_infobar_body
+.tk_barrydegraaff_zimbra_openpgp_infobar_body
 {
 font-family: monospace;
 white-space: pre-wrap;
