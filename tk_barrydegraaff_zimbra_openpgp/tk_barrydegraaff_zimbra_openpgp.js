@@ -212,27 +212,32 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
    
       if(appCtxt.getCurrentAppName()=='Mail')
       {
+         //Conversation view
          if(msgView._normalClass == 'ZmMailMsgCapsuleView')
          {
             var bodynode = document.getElementById('main_MSGC'+msg.id+'__body');
             var attNode = document.getElementById('zv__CLV__main_MSGC'+msg.id+'_attLinks');
          }
+         //By-message view
          else
          {   
             var bodynode = document.getElementById('zv__TV-main__MSG__body');
             var attNode = document.getElementById('zv__TV__TV-main_MSG_attLinks');
          }
       }
-      
-      //Find the mail body dom element when doing searches
-      if(appCtxt.getCurrentAppName()=='Search')
+      else if(appCtxt.getCurrentAppName()=='Search')
       {
-         var bodynode = document.getElementById(msgView.__internalId+'__body');
-         var attNode = document.getElementById('zv__'+msgView.__internalId.replace('zv','TV').replace('_MSG','MSG')+'_attLinks');
-         if (!attNode)
+         //Conversation view         
+         if(msgView._normalClass == 'ZmMailMsgCapsuleView')
          {
-            //With conversation view
+            var bodynode = document.getElementById(msgView.__internalId+'__body');
             var attNode = document.getElementById('zv__CLV__'+msgView.__internalId+'_attLinks');
+         }
+         else
+         {
+            //By-message view
+            var bodynode = document.getElementById(msgView.__internalId+'__body');
+            var attNode = document.getElementById('zv__'+msgView.__internalId.replace('zv','TV').replace('_MSG','MSG')+'_attLinks');
          } 
       }
       
