@@ -705,7 +705,7 @@ function(id, title, message) {
       "</td></tr></table></div>";
       this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       this._dialog.setContent(html);
-      this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecrypt));
+      this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecrypt));//hierzo
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       
       //If a private key is available and a password is stored, auto decrypt the message if option auto_decrypt is set to true
@@ -1004,7 +1004,17 @@ function (a) {
 /* This method is called when the dialog "OK" button is clicked after private key has been entered.
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnDecrypt =
-function(arguments) { 
+function(arguments) {
+   //Create arguments for some legacy code that does not yet pass arguments to this function
+   if(!arguments[0])
+   {
+      var arguments = [];
+      arguments[0] = document.getElementById("message").value;
+      var argumentsRegEx = /.*,.*$/;
+      var match = argumentsRegEx.exec(document.getElementById("message").value);
+      arguments[1] = match[0].substring(1);
+   } 
+   
    openpgp.initWorker({ path:'/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.worker.js' });
    this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, false);
    this._dialog.setButtonVisible(DwtDialog.OK_BUTTON, false);
