@@ -247,13 +247,13 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       if ((pubKeySearch.indexOf("BEGIN PGP PUBLIC KEY BLOCK") > 0 ) && (bp))
       {
          //Import public key
-            
          pubKeyTxt = bp.node.content.match(/(-----BEGIN PGP PUBLIC KEY BLOCK-----)([^]+)(-----END PGP PUBLIC KEY BLOCK-----)/g);
          if(pubKeyTxt)
          {
             if(pubKeyTxt[0])
             {
-               pubKeyTxt = pubKeyTxt[0];
+               this.displayDialog(9, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][73],pubKeyTxt[0]);  
+               return;
             }
             else
             {
@@ -264,14 +264,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
          {
             return;
          }
-         
-         try {
-            var publicKeys = openpgp.key.readArmored(pubKeyTxt);
-         } catch(err){
-            return;
-         }   
-         this.displayDialog(9, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][73],publicKeys);  
-         return;
       }
 
       var pgpmime = false;
@@ -964,10 +956,8 @@ function(id, title, message) {
    case 9:
       //Import public key
       //Get selected mail message
-
       try {
-         var publicKeys = message;
-         
+         var publicKeys = openpgp.key.readArmored(message);
          userid = publicKeys.keys[0].users[0].userId.userid;
          userid = tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(userid);
          
@@ -990,7 +980,7 @@ function(id, title, message) {
       tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][74]+ "<br>" + result + "</div>";
       this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true  } );
       this._dialog.setContent(html);
-      this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnImportPubKey, message));
+      this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnImportPubKey, publicKeys));
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
    }
