@@ -35,11 +35,7 @@ The recommended method is to deploy using git. (I no longer support zmzimletctl,
     [root@myzimbra ~]# rm pgp-zimlet -Rf
     [root@myzimbra ~]# git clone https://github.com/Zimbra-Community/pgp-zimlet
     [root@myzimbra ~]# cd pgp-zimlet
-<<<<<<< HEAD
     [root@myzimbra pgp-zimlet]# git checkout 2.0.7
-=======
-    [root@myzimbra pgp-zimlet]# git checkout 2.0.6
->>>>>>> stable
     [root@myzimbra pgp-zimlet]# chmod +rx install-dev.sh
     [root@myzimbra pgp-zimlet]# ./install-dev.sh
     [root@myzimbra pgp-zimlet]# su zimbra
