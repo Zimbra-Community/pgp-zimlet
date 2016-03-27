@@ -1594,7 +1594,7 @@ function(publicKey) {
    }
    else if((publicKey.keys[0]) && (openslots[0]))
    {
-      this.setUserProperty('zimbra_openpgp_pubkeys'+openslots[0], publicKey.keys[0].armor(), true);//hierzo
+      this.setUserProperty('zimbra_openpgp_pubkeys'+openslots[0], publicKey.keys[0].armor(), true);
       tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][75] + " " + tk_barrydegraaff_zimbra_openpgp.lang['english'][26] + " " + openslots[0], ZmStatusView.LEVEL_INFO); 
    }
    else
