@@ -1600,7 +1600,15 @@ function(publicKey) {
    else
    {
       tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][76], ZmStatusView.LEVEL_WARNING); 
-   }        
+   } 
+
+   try{
+      this._dialog.setContent('');
+      this._dialog.popdown();
+   }
+      catch (err) {
+   }
+          
 };
 
 /* This method is called for signing messages
