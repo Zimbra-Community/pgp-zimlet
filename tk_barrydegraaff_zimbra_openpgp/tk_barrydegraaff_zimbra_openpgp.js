@@ -435,11 +435,11 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
          {
             if (pgpmime)
             {
-               attNode.innerHTML = '<div id="tk_barrydegraaff_zimbra_openpgp_infobar_att"></div>';
+               attNode.innerHTML = '<div id="tk_barrydegraaff_zimbra_openpgp_infobar_att'+appCtxt.getCurrentAppName()+msg.id+'"></div>';
             }
             else
             {
-               attNode.innerHTML = '<div id="tk_barrydegraaff_zimbra_openpgp_infobar_att"></div>'+attNode.innerHTML;
+               attNode.innerHTML = '<div id="tk_barrydegraaff_zimbra_openpgp_infobar_att'+appCtxt.getCurrentAppName()+msg.id+'"></div>'+attNode.innerHTML;
             }   
          }
          
@@ -1167,14 +1167,15 @@ function(arguments) {
                if(preClose.length > 0)
                {
                   //Got attachments
-                  document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att').innerHTML = preClose;
+                  
+                  document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.arguments[1]).innerHTML = preClose;
                   preClose='';
                }
                else
                {
                   //Got NO attachments, remove the attLinks div from UI
                   preClose='';
-                  var e = document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_att");
+                  var e = document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_att"+myWindow.arguments[1]);
                   e.parentNode.parentNode.removeChild(e.parentNode);
                }
                plaintext.data='';
