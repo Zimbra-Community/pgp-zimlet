@@ -83,3 +83,5 @@ tk_barrydegraaff_zimbra_openpgp.lang['spanish'][80] = 'Dirección de correo elec
 tk_barrydegraaff_zimbra_openpgp.lang['spanish'][81] = 'Puede especificar múltiples direcciones de correo electrónico, separadas por una coma (,)';
 tk_barrydegraaff_zimbra_openpgp.lang['spanish'][82] = 'Reply';
 tk_barrydegraaff_zimbra_openpgp.lang['spanish'][83] = 'Reply All';
+tk_barrydegraaff_zimbra_openpgp.lang['spanish'][84] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!! <br>Click <span style="color: red">CANCEL</span>!!</b><br><br>Perhaps you wanted to send your public key?';
+tk_barrydegraaff_zimbra_openpgp.lang['spanish'][85] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!!</b>';

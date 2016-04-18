@@ -83,3 +83,5 @@ tk_barrydegraaff_zimbra_openpgp.lang['dutch'][80] = 'Email adres';
 tk_barrydegraaff_zimbra_openpgp.lang['dutch'][81] = 'U kunt meerdere email addessen gebruiken, gebruik komma (,) als scheidingsteken';
 tk_barrydegraaff_zimbra_openpgp.lang['dutch'][82] = 'Beantwoorden';
 tk_barrydegraaff_zimbra_openpgp.lang['dutch'][83] = 'Iedereen antwoorden';
+tk_barrydegraaff_zimbra_openpgp.lang['dutch'][84] = '<b>WAARSCHUWING: PRIVATE KEY VIA EMAIL VERZENDEN IS NIET OK!! <br>Klik <span style="color: red">ANNULEREN</span>!!</b><br><br>U kunt als volgt uw public key versturen.';
+tk_barrydegraaff_zimbra_openpgp.lang['dutch'][85] = '<b>WAARSCHUWING: PRIVATE KEY VIA EMAIL VERZENDEN IS NIET OK!!</b>';

@@ -83,3 +83,5 @@ tk_barrydegraaff_zimbra_openpgp.lang['chinese'][80] = 'Email 地址';
 tk_barrydegraaff_zimbra_openpgp.lang['chinese'][81] = '您可以指定多个 Email 地址，以英文逗号(,)分隔';
 tk_barrydegraaff_zimbra_openpgp.lang['chinese'][82] = 'Reply';
 tk_barrydegraaff_zimbra_openpgp.lang['chinese'][83] = 'Reply All';
+tk_barrydegraaff_zimbra_openpgp.lang['chinese'][84] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!! <br>Click <span style="color: red">CANCEL</span>!!</b><br><br>Perhaps you wanted to send your public key?';
+tk_barrydegraaff_zimbra_openpgp.lang['chinese'][85] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!!</b>';

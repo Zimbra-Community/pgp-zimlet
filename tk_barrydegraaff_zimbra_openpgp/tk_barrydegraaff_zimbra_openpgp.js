@@ -468,6 +468,26 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
    }
 };   
 
+/* Whenever a user tries to send a private key, warns them it is NOT a good idea. */
+tk_barrydegraaff_zimbra_openpgp.prototype.emailErrorCheck =
+function(mail, boolAndErrorMsgArray) {  
+   if (mail.textBodyContent.match(/----BEGIN PGP PRIVATE KEY BLOCK----/i))
+   {
+      var errParams = {
+         hasError:true,
+         errorMsg: tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][84]+'<br><br><img src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/send-public-key.png">',
+         zimletName:'OpenPGP Zimlet'
+      };
+      return boolAndErrorMsgArray.push(errParams);         
+   }
+   else
+   {
+      return null;
+   }
+};
+
+/* Function to escape any HTML prior to putting it in the DOM
+ * */
 tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml =
 function (unsafe) {
     return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
@@ -1962,6 +1982,14 @@ function() {
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.okBtnEncrypt =
 function() {
+
+   if (document.getElementById("message").value.match(/----BEGIN PGP PRIVATE KEY BLOCK----/i))
+   {
+      tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][85], ZmStatusView.LEVEL_WARNING);
+      return;         
+   }
+
+
    this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, false);
    this._dialog.setButtonVisible(DwtDialog.OK_BUTTON, false);
    document.getElementById("message").style.backgroundImage = "url('/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/loading.gif')";
