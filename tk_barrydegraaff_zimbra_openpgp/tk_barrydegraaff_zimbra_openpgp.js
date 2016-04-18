@@ -2562,19 +2562,19 @@ tk_barrydegraaff_zimbra_openpgp.prototype.reply = function(msg, decrypted, actio
       var index=0;
       var to = '';
       for (index = 0; index < msg._addrs.TO._array.length; ++index) {
-          to =  to  + '"'+msg._addrs.TO._array[index].dispName+'" <'+msg._addrs.TO._array[index].address+'>, ';
+          to =  to  + '"'+msg._addrs.TO._array[index].name+'" <'+msg._addrs.TO._array[index].address+'>, ';
       }
       to = to.substring(0, to.length-2);
 
       var index=0;
       var cc = '';
       for (index = 0; index < msg._addrs.CC._array.length; ++index) {
-          cc =  cc  + '"'+msg._addrs.CC._array[index].dispName+'" <'+msg._addrs.CC._array[index].address+'>, ';
+          cc =  cc  + '"'+msg._addrs.CC._array[index].name+'" <'+msg._addrs.CC._array[index].address+'>, ';
       }
       cc = cc.substring(0, cc.length-2);
-   
+
       var header = '----- Original Message -----\r\n' +
-      '​​​​From: "'+msg._addrs.FROM._array[0].dispName+'" <'+msg._addrs.FROM._array[0].address+'>\r\n' +
+      '​​​​From: "'+msg._addrs.FROM._array[0].name+'" <'+msg._addrs.FROM._array[0].address+'>\r\n' +
       'To: '+to+'\r\n' +
       'Cc: '+cc+'\r\n' +
       'Sent: '+sendDate+'\r\n' +
@@ -2592,7 +2592,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.reply = function(msg, decrypted, actio
       var zmApp = appCtxt.getApp();
       var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
       var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
-      toOverride:'"'+msg._addrs.FROM._array[0].dispName+'" <'+msg._addrs.FROM._array[0].address+'>\r\n', ccOverride:ccOverride, subjOverride:msg.subject.replace(/\*\*\*.*\*\*\*/,''), extraBodyText:'-\r\n\r\n\r\n\r\n'+header+document.getElementById(decrypted).dataset.decrypted, callback:null}
+      toOverride:'"'+msg._addrs.FROM._array[0].name+'" <'+msg._addrs.FROM._array[0].address+'>\r\n', ccOverride:ccOverride, subjOverride:msg.subject.replace(/\*\*\*.*\*\*\*/,''), extraBodyText:'-\r\n\r\n\r\n\r\n'+header+document.getElementById(decrypted).dataset.decrypted, callback:null}
       composeController.doAction(params); // opens asynchronously the window.
    }
 }
