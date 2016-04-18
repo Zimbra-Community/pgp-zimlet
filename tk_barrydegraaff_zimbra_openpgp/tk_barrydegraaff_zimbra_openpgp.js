@@ -1199,6 +1199,7 @@ function(arguments) {
          }
          document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar'+myWindow.arguments[1]).innerHTML='<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/icon.png"> OpenPGP: <b>'+ sigStatus + '</b>';
          document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments[1]).innerHTML=tk_barrydegraaff_zimbra_openpgp.prototype.urlify(tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(preOpen)) + tk_barrydegraaff_zimbra_openpgp.prototype.urlify(tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(plaintext.data)) + preClose +'';
+         document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments[1]).setAttribute('data-decrypted',plaintext.data);
          myWindow.cancelBtn();
       },
       function(err) {
@@ -2587,12 +2588,11 @@ tk_barrydegraaff_zimbra_openpgp.prototype.reply = function(msg, decrypted, actio
       {
          var ccOverride = null;
       }
- 
       var appCtxt = window.top.appCtxt;
       var zmApp = appCtxt.getApp();
       var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
       var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
-      toOverride:'"'+msg._addrs.FROM._array[0].dispName+'" <'+msg._addrs.FROM._array[0].address+'>\r\n', ccOverride:ccOverride, subjOverride:msg.subject.replace(/\*\*\*.*\*\*\*/,''), extraBodyText:'-\r\n\r\n\r\n\r\n'+header+document.getElementById(decrypted).innerHTML, callback:null}
+      toOverride:'"'+msg._addrs.FROM._array[0].dispName+'" <'+msg._addrs.FROM._array[0].address+'>\r\n', ccOverride:ccOverride, subjOverride:msg.subject.replace(/\*\*\*.*\*\*\*/,''), extraBodyText:'-\r\n\r\n\r\n\r\n'+header+document.getElementById(decrypted).dataset.decrypted, callback:null}
       composeController.doAction(params); // opens asynchronously the window.
    }
 }
