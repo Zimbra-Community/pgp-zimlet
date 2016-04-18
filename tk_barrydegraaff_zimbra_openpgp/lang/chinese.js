@@ -81,3 +81,5 @@ tk_barrydegraaff_zimbra_openpgp.lang['chinese'][78] = '公钥已经在您的信�
 tk_barrydegraaff_zimbra_openpgp.lang['chinese'][79] = '姓名';
 tk_barrydegraaff_zimbra_openpgp.lang['chinese'][80] = 'Email 地址';
 tk_barrydegraaff_zimbra_openpgp.lang['chinese'][81] = '您可以指定多个 Email 地址，以英文逗号(,)分隔';
+tk_barrydegraaff_zimbra_openpgp.lang['chinese'][82] = 'Reply';
+tk_barrydegraaff_zimbra_openpgp.lang['chinese'][83] = 'Reply All';
