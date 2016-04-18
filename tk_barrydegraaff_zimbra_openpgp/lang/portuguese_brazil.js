@@ -81,3 +81,5 @@ tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][78] = 'Chave pública 
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][79] = 'Nome';
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][80] = 'Endereço de email';
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][81] = 'Você pode definir múltiplos endereços de email separando-os com vírgulas (,)';
+tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][82] = 'Reply';
+tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][83] = 'Reply All';

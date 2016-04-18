@@ -81,3 +81,5 @@ tk_barrydegraaff_zimbra_openpgp.lang['italian'][78] = 'Chiave pubblica già pres
 tk_barrydegraaff_zimbra_openpgp.lang['italian'][79] = 'Nome';
 tk_barrydegraaff_zimbra_openpgp.lang['italian'][80] = 'Indirizzo email';
 tk_barrydegraaff_zimbra_openpgp.lang['italian'][81] = 'Puoi specificare pi&ugrave; indirizzi email, separati da virgola (,)';
+tk_barrydegraaff_zimbra_openpgp.lang['italian'][82] = 'Reply';
+tk_barrydegraaff_zimbra_openpgp.lang['italian'][83] = 'Reply All';

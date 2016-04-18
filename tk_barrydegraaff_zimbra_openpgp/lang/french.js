@@ -81,3 +81,5 @@ tk_barrydegraaff_zimbra_openpgp.lang['french'][78] = 'La clé publique est déj�
 tk_barrydegraaff_zimbra_openpgp.lang['french'][79] = 'Name';
 tk_barrydegraaff_zimbra_openpgp.lang['french'][80] = 'Email address';
 tk_barrydegraaff_zimbra_openpgp.lang['french'][81] = 'You can specify multiple email addresses, separated by comma (,)';
+tk_barrydegraaff_zimbra_openpgp.lang['french'][82] = 'Reply';
+tk_barrydegraaff_zimbra_openpgp.lang['french'][83] = 'Reply All';

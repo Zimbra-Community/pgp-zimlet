@@ -81,3 +81,5 @@ tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][78] = 'Khóa công khai đã 
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][79] = 'Tên';
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][80] = 'Địa chỉ thư';
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][81] = 'Bạn có thể nhập nhiều địa chỉ thư ngăn cách bằng dấu phẩy (,)';
+tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][82] = 'Reply';
+tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][83] = 'Reply All';

@@ -81,3 +81,5 @@ tk_barrydegraaff_zimbra_openpgp.lang['russian'][78] = 'Открытый ключ
 tk_barrydegraaff_zimbra_openpgp.lang['russian'][79] = 'Имя';
 tk_barrydegraaff_zimbra_openpgp.lang['russian'][80] = 'Адрес электронной почты';
 tk_barrydegraaff_zimbra_openpgp.lang['russian'][81] = 'Вы можете задать несколько электронных адресов, разделенных запятой (,)';
+tk_barrydegraaff_zimbra_openpgp.lang['russian'][82] = 'Reply';
+tk_barrydegraaff_zimbra_openpgp.lang['russian'][83] = 'Reply All';

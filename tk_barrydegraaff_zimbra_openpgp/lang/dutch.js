@@ -81,3 +81,5 @@ tk_barrydegraaff_zimbra_openpgp.lang['dutch'][78] = 'Publieke sleutel bestaat al
 tk_barrydegraaff_zimbra_openpgp.lang['dutch'][79] = 'Naam';
 tk_barrydegraaff_zimbra_openpgp.lang['dutch'][80] = 'Email adres';
 tk_barrydegraaff_zimbra_openpgp.lang['dutch'][81] = 'U kunt meerdere email addessen gebruiken, gebruik komma (,) als scheidingsteken';
+tk_barrydegraaff_zimbra_openpgp.lang['dutch'][82] = 'Beantwoorden';
+tk_barrydegraaff_zimbra_openpgp.lang['dutch'][83] = 'Iedereen antwoorden';

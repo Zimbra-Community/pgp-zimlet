@@ -81,3 +81,5 @@ tk_barrydegraaff_zimbra_openpgp.lang['spanish'][78] = 'La llave pública ya se e
 tk_barrydegraaff_zimbra_openpgp.lang['spanish'][79] = 'Nombre';
 tk_barrydegraaff_zimbra_openpgp.lang['spanish'][80] = 'Dirección de correo electrónico';
 tk_barrydegraaff_zimbra_openpgp.lang['spanish'][81] = 'Puede especificar múltiples direcciones de correo electrónico, separadas por una coma (,)';
+tk_barrydegraaff_zimbra_openpgp.lang['spanish'][82] = 'Reply';
+tk_barrydegraaff_zimbra_openpgp.lang['spanish'][83] = 'Reply All';
