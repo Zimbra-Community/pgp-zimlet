@@ -418,9 +418,14 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
          {
             if(document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+appCtxt.getCurrentAppName()+msg.id))
             {
-               document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar'+appCtxt.getCurrentAppName()+msg.id).innerHTML = '<a id="btnPrint'+msg.id+'" style="text-decoration: none" onclick="#"><img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/printButton.png"> '+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54]+'</a>';
-               var btnPrint = document.getElementById("btnPrint"+msg.id);
+               document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar'+appCtxt.getCurrentAppName()+msg.id).innerHTML = '<a id="btnReply'+msg.id+'" style="text-decoration: none" onclick="#"><img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/reply-sender.png"> '+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][82]+'</a>&nbsp;&nbsp;<a id="btnReplyAll'+msg.id+'" style="text-decoration: none" onclick="#"><img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/reply-all.png"> '+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][83]+'</a>&nbsp;&nbsp;<a id="btnPrint'+msg.id+'" style="text-decoration: none" onclick="#"><img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/printButton.png"> '+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][54]+'</a>&nbsp;&nbsp;';
+               var btnPrint = document.getElementById("btnPrint"+msg.id);               
                btnPrint.onclick = AjxCallback.simpleClosure(this.printdiv, this, 'tk_barrydegraaff_zimbra_openpgp_infobar_body'+appCtxt.getCurrentAppName()+msg.id, tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(subject));
+
+               var btnReply = document.getElementById("btnReply"+msg.id);
+               btnReply.onclick = AjxCallback.simpleClosure(this.reply, this, msg, 'tk_barrydegraaff_zimbra_openpgp_infobar_body'+appCtxt.getCurrentAppName()+msg.id, 'reply');
+               var btnReplyAll = document.getElementById("btnReplyAll"+msg.id);
+               btnReplyAll.onclick = AjxCallback.simpleClosure(this.reply, this, msg, 'tk_barrydegraaff_zimbra_openpgp_infobar_body'+appCtxt.getCurrentAppName()+msg.id, 'replyAll');               
             }
          }
             
@@ -2544,6 +2549,66 @@ tk_barrydegraaff_zimbra_openpgp.prototype.printdiv = function(printdivname, subj
    newWin.focus();
    newWin.print();
    newWin.close();
+}
+
+// Reply(All) decrypted message (from reading pane)
+tk_barrydegraaff_zimbra_openpgp.prototype.reply = function(msg, decrypted, action) {
+   var composeController = AjxDispatcher.run("GetComposeController");
+   if(composeController) {
+      var sendDate = String(msg.sentDate);
+      sendDate = tk_barrydegraaff_zimbra_openpgp.prototype.timeConverter(sendDate.substring(0,10))
+
+      var index=0;
+      var to = '';
+      for (index = 0; index < msg._addrs.TO._array.length; ++index) {
+          to =  to  + '"'+msg._addrs.TO._array[index].dispName+'" <'+msg._addrs.TO._array[index].address+'>, ';
+      }
+      to = to.substring(0, to.length-2);
+
+      var index=0;
+      var cc = '';
+      for (index = 0; index < msg._addrs.CC._array.length; ++index) {
+          cc =  cc  + '"'+msg._addrs.CC._array[index].dispName+'" <'+msg._addrs.CC._array[index].address+'>, ';
+      }
+      cc = cc.substring(0, cc.length-2);
+   
+      var header = '----- Original Message -----\r\n' +
+      '​​​​From: "'+msg._addrs.FROM._array[0].dispName+'" <'+msg._addrs.FROM._array[0].address+'>\r\n' +
+      'To: '+to+'\r\n' +
+      'Cc: '+cc+'\r\n' +
+      'Sent: '+sendDate+'\r\n' +
+      'Subject: '+msg.subject.replace(/\*\*\*.*\*\*\*/,'')+'\r\n\r\n';
+
+      if (action == 'replyAll')
+      {
+         var ccOverride =  to + ', ' + cc;
+      }
+      else
+      {
+         var ccOverride = null;
+      }
+ 
+      var appCtxt = window.top.appCtxt;
+      var zmApp = appCtxt.getApp();
+      var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
+      var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
+      toOverride:'"'+msg._addrs.FROM._array[0].dispName+'" <'+msg._addrs.FROM._array[0].address+'>\r\n', ccOverride:ccOverride, subjOverride:msg.subject.replace(/\*\*\*.*\*\*\*/,''), extraBodyText:'-\r\n\r\n\r\n\r\n'+header+document.getElementById(decrypted).innerHTML, callback:null}
+      composeController.doAction(params); // opens asynchronously the window.
+   }
+}
+
+// http://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
+tk_barrydegraaff_zimbra_openpgp.prototype.timeConverter = function (UNIX_timestamp) {
+  var a = new Date(UNIX_timestamp * 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  var hour = a.getHours();
+  var min = a.getMinutes();
+  var sec = a.getSeconds();
+  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+  return time;
 }
 
 // Function to handle a show/hide button for password type input fields
