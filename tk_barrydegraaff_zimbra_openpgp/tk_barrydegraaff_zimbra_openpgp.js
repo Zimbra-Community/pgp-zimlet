@@ -151,7 +151,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.addAttachmentHandler = function(mime)
 
    tk_barrydegraaff_zimbra_openpgp.mime = [
    'application/pgp-encrypted',
-   'text/plain'
    ];
    tk_barrydegraaff_zimbra_openpgp.mime.forEach(function(mime) 
    {
@@ -160,9 +159,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.addAttachmentHandler = function(mime)
       ZmMimeTable._table[ZmMimeTable.MISSMIME]={desc:ZmMsg.unknownBinaryType,image:"UnknownDoc",imageLarge:"UnknownDoc_48"};      
    });
 
-	for (var mimeType in ZmMimeTable._table) {
-		this._msgController._listView[viewType].addAttachmentLinkHandler(mimeType,"tk_barrydegraaff_zimbra_openpgp",this.addPGPLink);
-	}
+   this._msgController._listView[viewType].addAttachmentLinkHandler('application/pgp-encrypted',"tk_barrydegraaff_zimbra_openpgp",this.addPGPLink);
 };
 
 /* Provide a link in the mail view to decrypt attachment sent via regular mime
