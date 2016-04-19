@@ -637,7 +637,6 @@ function(itemId) {
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.doDrop =
 function(zmObject) {
-console.log(zmObject);
 };
 
 /* verify method checks against known public keys and
