@@ -470,7 +470,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
 
 /* Whenever a user tries to send a private key, warns them it is NOT a good idea. */
 tk_barrydegraaff_zimbra_openpgp.prototype.emailErrorCheck =
-function(mail, boolAndErrorMsgArray) {  
+function(mail, boolAndErrorMsgArray) {
+   console.log(mail);     
    if (mail.textBodyContent.match(/----BEGIN PGP PRIVATE KEY BLOCK----/i))
    {
       var errParams = {
@@ -478,6 +479,11 @@ function(mail, boolAndErrorMsgArray) {
          errorMsg: tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][84]+'<br><br><img src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/send-public-key.png">',
          zimletName:'OpenPGP Zimlet'
       };
+      //Whatever the user does, just refuse to send the email, 
+      var composeView = appCtxt.getCurrentView();
+      composeView.setAddress(AjxEmailAddress.TO, '');
+      composeView.setAddress(AjxEmailAddress.CC, '');
+      composeView.setAddress(AjxEmailAddress.BCC, '');
       return boolAndErrorMsgArray.push(errParams);         
    }
    else
