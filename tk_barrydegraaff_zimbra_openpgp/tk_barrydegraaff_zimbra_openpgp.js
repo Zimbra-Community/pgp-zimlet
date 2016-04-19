@@ -471,7 +471,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
 /* Whenever a user tries to send a private key, warns them it is NOT a good idea. */
 tk_barrydegraaff_zimbra_openpgp.prototype.emailErrorCheck =
 function(mail, boolAndErrorMsgArray) {
-   console.log(mail);     
    if (mail.textBodyContent.match(/----BEGIN PGP PRIVATE KEY BLOCK----/i))
    {
       var errParams = {
