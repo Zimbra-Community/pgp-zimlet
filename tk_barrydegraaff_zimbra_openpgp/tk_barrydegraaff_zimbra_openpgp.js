@@ -932,11 +932,11 @@ function(id, title, message) {
          var file = fileInput.files[0];
          var reader = new FileReader();
          reader.onload = function(e) {
-            var result = reader.result.split(",");
-            tk_barrydegraaff_zimbra_openpgp.file = result[1];
+//            var result = reader.result.split(",");
+            tk_barrydegraaff_zimbra_openpgp.file =  reader.result;
             tk_barrydegraaff_zimbra_openpgp.filename = file.name;
          }
-         reader.readAsDataURL(file);         
+         reader.readAsArrayBuffer(file);         
       });
       
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnEncryptFile));
@@ -977,7 +977,7 @@ function(id, title, message) {
             tk_barrydegraaff_zimbra_openpgp.file = reader.result;
             tk_barrydegraaff_zimbra_openpgp.filename = file.name;
          }
-         reader.readAsText(file);         
+         reader.readAsArrayBuffer(file);         
       });
       
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecryptFile));
@@ -1274,7 +1274,7 @@ function() {
 
    if (success) {
       try {
-         var message = openpgp.message.readArmored(msg);
+         var message = openpgp.message.read(new Uint8Array(msg));
       }
       catch(err) {
          this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, true);
@@ -1337,6 +1337,7 @@ function() {
           message: message,           // parse encrypted bytes
           publicKeys: pubKey,         // for verification (optional)
           privateKey: privKey,        // for decryption
+          format: 'binary'
       };
       
       openpgp.decrypt(options).then(function (plaintext) {
@@ -1360,7 +1361,13 @@ function() {
          {
          }                 
          
-         tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(tk_barrydegraaff_zimbra_openpgp.filename,'',plaintext.data);
+         //Remove .asc from decrypted file
+         if (tk_barrydegraaff_zimbra_openpgp.filename.substring(tk_barrydegraaff_zimbra_openpgp.filename.length -4) == '.asc')
+         {
+            tk_barrydegraaff_zimbra_openpgp.filename = tk_barrydegraaff_zimbra_openpgp.filename.substring(0, tk_barrydegraaff_zimbra_openpgp.filename.length -4);
+         }
+         
+         tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(tk_barrydegraaff_zimbra_openpgp.filename,'zimbra/pgp',plaintext.data);
          //Free memory
          tk_barrydegraaff_zimbra_openpgp.file = '';
          try {
@@ -2212,16 +2219,18 @@ function() {
          tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][44], ZmStatusView.LEVEL_WARNING);
          return;
       }
-      
+
       options = {
-         data: msg,             // input as string
+         data: new Uint8Array(msg), 
          publicKeys: pubKeys,   // for encryption
          privateKeys: privKey,  // for signing (optional)
-         armor: true            // ASCII armor
+         armor: false 
       };
       
       openpgp.encrypt(options).then(function (message) {
-         tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob('PGP-'+tk_barrydegraaff_zimbra_openpgp.filename,'zimbra/pgp',message.data);
+         
+         tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(tk_barrydegraaff_zimbra_openpgp.filename + '.asc','zimbra/pgp',message.message.packets.write());
+      
          //Free memory
          tk_barrydegraaff_zimbra_openpgp.file = '';
          try {
@@ -2239,13 +2248,13 @@ function() {
    else
    {   
       options = {
-         data: msg,             // input as string
+         data: new Uint8Array(msg), 
          publicKeys: pubKeys,   // for encryption
-         armor: true            // ASCII armor
+         armor: false 
       };
       
       openpgp.encrypt(options).then(function (message) {
-            tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob('PGP-'+tk_barrydegraaff_zimbra_openpgp.filename,'zimbra/pgp',message.data);
+            tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(tk_barrydegraaff_zimbra_openpgp.filename + '.asc','zimbra/pgp',message.message.packets.write());
             //Free memory
             tk_barrydegraaff_zimbra_openpgp.file = '';
             try { 
