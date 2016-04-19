@@ -932,8 +932,7 @@ function(id, title, message) {
          var file = fileInput.files[0];
          var reader = new FileReader();
          reader.onload = function(e) {
-//            var result = reader.result.split(",");
-            tk_barrydegraaff_zimbra_openpgp.file =  reader.result;
+            tk_barrydegraaff_zimbra_openpgp.file = reader.result;
             tk_barrydegraaff_zimbra_openpgp.filename = file.name;
          }
          reader.readAsArrayBuffer(file);         
