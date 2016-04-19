@@ -81,7 +81,7 @@ tk_barrydegraaff_zimbra_openpgp.lang['russian'][78] = 'Открытый ключ
 tk_barrydegraaff_zimbra_openpgp.lang['russian'][79] = 'Имя';
 tk_barrydegraaff_zimbra_openpgp.lang['russian'][80] = 'Адрес электронной почты';
 tk_barrydegraaff_zimbra_openpgp.lang['russian'][81] = 'Вы можете задать несколько электронных адресов, разделенных запятой (,)';
-tk_barrydegraaff_zimbra_openpgp.lang['russian'][82] = 'Reply';
-tk_barrydegraaff_zimbra_openpgp.lang['russian'][83] = 'Reply All';
-tk_barrydegraaff_zimbra_openpgp.lang['russian'][84] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!! <br>Click <span style="color: red">CANCEL</span>!!</b><br><br>Perhaps you wanted to send your public key?';
-tk_barrydegraaff_zimbra_openpgp.lang['russian'][85] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!!</b>';
+tk_barrydegraaff_zimbra_openpgp.lang['russian'][82] = 'Ответить';
+tk_barrydegraaff_zimbra_openpgp.lang['russian'][83] = 'Ответить всем';
+tk_barrydegraaff_zimbra_openpgp.lang['russian'][84] = '<b>ВНИМАНИЕ: НЕ ОТПРАВЛЯЙТЕ ВАШ СЕКРЕТНЫЙ КЛЮЧ ПО ЭЛЕКТРОННОЙ ПОЧТЕ!! <br>Нажмите <span style="color: red">ОТМЕНИТЬ</span>!!</b><br><br>Может быть, вы хотели послать свой открытый ключ?';
+tk_barrydegraaff_zimbra_openpgp.lang['russian'][85] = '<b>ВНИМАНИЕ: НЕ ОТПРАВЛЯЙТЕ ВАШ СЕКРЕТНЫЙ КЛЮЧ ПО ЭЛЕКТРОННОЙ ПОЧТЕ!!</b>';
