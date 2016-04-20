@@ -195,9 +195,8 @@ function(name, url) {
    };
 };
 
-
-/* Called by framework when attach popup called
- */
+/*
+// Called by framework when attach popup called
 tk_barrydegraaff_zimbra_openpgp.prototype.initializeAttachPopup = 
 function(menu, controller) {
    controller._createAttachMenuItem(menu, 'OpenPGP', this.showAttachmentDialog.bind(this), "ATTACH_MENU_PGP");
@@ -233,16 +232,15 @@ function(contentDiv) {
    }
 };
 
-/**
- * @class
- * The attach mail tab view.
- * 
- * @param	{DwtTabView}	parant		the tab view
- * @param	{hash}	zimlet				the zimlet
- * @param	{string}	className		the class name
- * 
- * @extends		DwtTabViewPage
- */
+//@class
+//The attach mail tab view.
+//
+//@param	{DwtTabView}	parant		the tab view
+//@param	{hash}	zimlet				the zimlet
+//@param	{string}	className		the class name
+//
+//@extends		DwtTabViewPage
+
 PGPTabView =
 function(parent, zimlet, className) {
    this.zimlet = zimlet;
@@ -263,8 +261,7 @@ PGPTabView.prototype.toString = function() {
    return "PGPTabView";
 };
 
-/* Creates HTML for for the attach OpenPGP Encrypt files tab UI.
- */
+// Creates HTML for for the attach OpenPGP Encrypt files tab UI.
 PGPTabView.prototype._createHtml1 =
 function(zimlet) {
    try{
@@ -280,14 +277,14 @@ function(zimlet) {
    this.setContent(html);
 };
 
-/* Uploads the files.
- */
+// Uploads the files.
 PGPTabView.prototype._uploadFiles = 
 function(attachmentDlg) 
 { 
    console.log('A work in progress'); 
    attachmentDlg.popdown();
 };
+*/
 
 /* The Zimlet API does not provide an onContactSave event, but we need to read the address book on changes.
  * So we combine onContactEdit and onShowView to have an event when a user edits the address book.
@@ -1034,9 +1031,19 @@ function(id, title, message) {
       "</td></tr><tr><td>" +
       tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][21]+":" +
       "</td><td>" +
-      "<textarea class=\"barrydegraaff_zimbra_openpgp-msg\" id='message'>"+ (message ? message : '' ) +"</textarea>" +
-      "</td></tr><tr><td colspan='2'><br><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][37]+"<br><br></td></tr><tr><td>" +
-      tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][19]+":" +
+      "<textarea class=\"barrydegraaff_zimbra_openpgp-msg\" id='message'>"+ (message ? message : '' ) +"</textarea><br><br>" +
+      "</td></tr>" +
+      "<tr><td colspan='2'>OpenPGP " + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][40] + "<br></td></tr>" +
+      "<tr><td></td><td><input type='file' id='fileInput1'></td></tr>" +
+      "<tr><td></td><td><input type='file' id='fileInput2'></td></tr>" +
+      "<tr><td></td><td><input type='file' id='fileInput3'></td></tr>" +
+      "<tr><td></td><td><input type='file' id='fileInput4'></td></tr>" +  
+      "<tr><td></td><td><input type='file' id='fileInput5'></td></tr>" +
+      "<tr><td></td><td><input type='file' id='fileInput6'></td></tr>" +
+      "<tr><td></td><td><input type='file' id='fileInput3'></td></tr>" +
+      "<tr><td></td><td><input type='file' id='fileInput4'></td></tr>" +      
+      "<tr><td colspan='2'><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][37]+"</td></tr><tr><td>" +
+      "<tr><td>" + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][19]+":" +
       "</td><td>" +
       "<textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"20\" id='privateKeyInput'/>" + tk_barrydegraaff_zimbra_openpgp.privateKeyCache + "</textarea>" +
       "</td></tr><tr><td>" +
