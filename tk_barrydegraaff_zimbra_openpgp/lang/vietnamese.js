@@ -81,7 +81,7 @@ tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][78] = 'Khóa công khai đã 
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][79] = 'Tên';
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][80] = 'Địa chỉ thư';
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][81] = 'Bạn có thể nhập nhiều địa chỉ thư ngăn cách bằng dấu phẩy (,)';
-tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][82] = 'Reply';
-tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][83] = 'Reply All';
-tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][84] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!! <br>Click <span style="color: red">CANCEL</span>!!</b><br><br>Perhaps you wanted to send your public key?';
-tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][85] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!!</b>';
+tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][82] = 'Trả lời';
+tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][83] = 'Trả lời tất cả';
+tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][84] = '<b>LƯU Ý: KHÔNG GỬI KHÓA BÍ MẬT CỦA BẠN QUA EMAIL!! <br>Nhấn <span style="color: red">BỎ QUA</span>!!</b><br><br>Có lẽ, bạn muốn gửi khóa công khai?';
+tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][85] = '<b>LƯU Ý: KHÔNG GỬI KHÓA BÍ MẬT CỦA BẠN QUA EMAIL!!</b>';
