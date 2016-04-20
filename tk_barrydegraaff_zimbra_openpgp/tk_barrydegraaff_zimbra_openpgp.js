@@ -1040,8 +1040,8 @@ function(id, title, message) {
       "<tr><td></td><td><input type='file' id='fileInput4'></td></tr>" +  
       "<tr><td></td><td><input type='file' id='fileInput5'></td></tr>" +
       "<tr><td></td><td><input type='file' id='fileInput6'></td></tr>" +
-      "<tr><td></td><td><input type='file' id='fileInput3'></td></tr>" +
-      "<tr><td></td><td><input type='file' id='fileInput4'></td></tr>" +      
+      "<tr><td></td><td><input type='file' id='fileInput7'></td></tr>" +
+      "<tr><td></td><td><input type='file' id='fileInput8'></td></tr>" +      
       "<tr><td colspan='2'><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][37]+"</td></tr><tr><td>" +
       "<tr><td>" + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][19]+":" +
       "</td><td>" +
