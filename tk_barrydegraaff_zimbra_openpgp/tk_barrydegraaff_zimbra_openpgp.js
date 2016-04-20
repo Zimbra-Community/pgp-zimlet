@@ -141,6 +141,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
 	}
 }
 
+
 /* Provide a link in the mail view to decrypt attachment sent via regular mime
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.addAttachmentHandler = function(mime)
@@ -176,7 +177,7 @@ function(attachment) {
 	return html;
 };
 
-/* Get clicked attachment
+/* Link next to attachment clicked
  * */
 tk_barrydegraaff_zimbra_openpgp.prototype.decryptAttachment =
 function(name, url) {
@@ -192,6 +193,100 @@ function(name, url) {
       var zimletInstance = appCtxt._zimletMgr.getZimletByName('tk_barrydegraaff_zimbra_openpgp').handlerObject;
       zimletInstance.displayDialog(10, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][60], [xmlHttp.response, name]);
    };
+};
+
+
+/* Called by framework when attach popup called
+ */
+tk_barrydegraaff_zimbra_openpgp.prototype.initializeAttachPopup = 
+function(menu, controller) {
+   controller._createAttachMenuItem(menu, 'OpenPGP', this.showAttachmentDialog.bind(this), "ATTACH_MENU_PGP");
+};
+
+tk_barrydegraaff_zimbra_openpgp.prototype.showAttachmentDialog =
+function() {
+   var zimlet = this;
+   var attachDialog = zimlet._attachDialog = appCtxt.getAttachDialog();
+   attachDialog.setTitle('OpenPGP ' + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][40]);
+   zimlet.removePrevAttDialogContent(attachDialog._getContentDiv().firstChild);
+   if (!zimlet.AttachContactsView || !zimlet.AttachContactsView.attachDialog){
+      zimlet.AMV = new PGPTabView(zimlet._attachDialog, this);
+   }
+   
+   zimlet.AMV.reparentHtmlElement(attachDialog._getContentDiv().childNodes[0], 0);
+   zimlet.AMV.attachDialog = attachDialog;
+   attachDialog.setOkListener(new AjxCallback(zimlet.AMV, zimlet.AMV._uploadFiles));
+   
+   var view = appCtxt.getCurrentView();
+   var callback = new AjxCallback(view, view._attsDoneCallback, [true]);
+   attachDialog.setUploadCallback(callback);
+   
+   zimlet.AMV.attachDialog.popup();
+   zimlet._addedToMainWindow = true;
+};
+
+tk_barrydegraaff_zimbra_openpgp.prototype.removePrevAttDialogContent = 
+function(contentDiv) {
+   var elementNode =  contentDiv && contentDiv.firstChild;
+   if (elementNode && elementNode.className == "DwtComposite" ){
+      contentDiv.removeChild(elementNode);
+   }
+};
+
+/**
+ * @class
+ * The attach mail tab view.
+ * 
+ * @param	{DwtTabView}	parant		the tab view
+ * @param	{hash}	zimlet				the zimlet
+ * @param	{string}	className		the class name
+ * 
+ * @extends		DwtTabViewPage
+ */
+PGPTabView =
+function(parent, zimlet, className) {
+   this.zimlet = zimlet;
+   DwtComposite.call(this,parent,className,Dwt.STATIC_STYLE);
+   var acct = appCtxt.multiAccounts ? appCtxt.getAppViewMgr().getCurrentView().getFromAccount() : appCtxt.getActiveAccount();
+   if (this.prevAccount && (acct.id == this.prevAccount.id)) {
+      this.setSize(Dwt.DEFAULT, "275");
+      return;
+   }
+   this.prevAccount = acct;
+   this._createHtml1(zimlet);
+};
+
+PGPTabView.prototype = new DwtComposite;
+PGPTabView.prototype.constructor = PGPTabView;
+
+PGPTabView.prototype.toString = function() {
+   return "PGPTabView";
+};
+
+/* Creates HTML for for the attach OpenPGP Encrypt files tab UI.
+ */
+PGPTabView.prototype._createHtml1 =
+function(zimlet) {
+   try{
+      var ZmAttachDialog = document.getElementsByClassName("ZmAttachDialog");
+      ZmAttachDialog[0].style.width = "700px";
+      
+      var WindowInnerContainer = document.getElementsByClassName("WindowInnerContainer");
+      WindowInnerContainer[0].style.width = "700px";
+      
+   } catch (err) { }
+   
+   html = 'Content here';   
+   this.setContent(html);
+};
+
+/* Uploads the files.
+ */
+PGPTabView.prototype._uploadFiles = 
+function(attachmentDlg) 
+{ 
+   console.log('A work in progress'); 
+   attachmentDlg.popdown();
 };
 
 /* The Zimlet API does not provide an onContactSave event, but we need to read the address book on changes.
