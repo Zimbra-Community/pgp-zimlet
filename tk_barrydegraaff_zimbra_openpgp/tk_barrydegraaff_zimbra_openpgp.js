@@ -1104,9 +1104,13 @@ function(id, title, message) {
 // Add another attachment file picker to the UI
 tk_barrydegraaff_zimbra_openpgp.prototype.addFileInputPgpAttach = 
 function () {
-   document.getElementById('fileInputPgpAttach').innerHTML = document.getElementById('fileInputPgpAttach').innerHTML + "<div><input type='file' class='fileInputPgpAttach'><button onclick='tk_barrydegraaff_zimbra_openpgp.prototype.clearFileInputPgpAttach(this)'>-</button><button onclick='tk_barrydegraaff_zimbra_openpgp.prototype.addFileInputPgpAttach()'>+</button><div>";
+   var parentDiv = document.getElementById("fileInputPgpAttach");
+   var newfileInputPgpAttach = document.createElement('div');
+   newfileInputPgpAttach.insertAdjacentHTML('afterbegin',"<input type='file' class='fileInputPgpAttach'><button onclick='tk_barrydegraaff_zimbra_openpgp.prototype.clearFileInputPgpAttach(this)'>-</button><button onclick='tk_barrydegraaff_zimbra_openpgp.prototype.addFileInputPgpAttach()'>+</button>");
+   parentDiv.parentNode.insertBefore(newfileInputPgpAttach, parentDiv);
 }
 
+// Remove attachment file picker from the UI, in case there is only one file picker, clear that one.
 tk_barrydegraaff_zimbra_openpgp.prototype.clearFileInputPgpAttach = 
 function (obj) {
    var fileSelectors = document.getElementsByClassName("fileInputPgpAttach");
@@ -1114,6 +1118,11 @@ function (obj) {
    {
       obj.parentNode.innerHTML = '';
    }
+   else
+   {
+      obj.parentNode.innerHTML = '';
+      tk_barrydegraaff_zimbra_openpgp.prototype.addFileInputPgpAttach();
+   }   
 }
 
 // Remove Duplicates from JavaScript Array, allow string and objects to be deduped
