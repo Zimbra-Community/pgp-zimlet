@@ -1957,7 +1957,7 @@ function() {
    }
    catch(err) {
       //Could not parse your trusted public keys!
-      tk_barrydegraaff_zimbra_openpgp.prototype.status(err + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][13], ZmStatusView.LEVEL_WARNING);
+      tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][13], ZmStatusView.LEVEL_WARNING);
       return;
    }
    return result;
