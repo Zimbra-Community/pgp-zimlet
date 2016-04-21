@@ -1930,8 +1930,9 @@ function() {
          combinedPublicKeys = combinedPublicKeys.concat([pubKey.keys]);            
       });      
       
-      var result = '<select class="barrydegraaff_zimbra_openpgp-input" id="pubKeySelect" multiple onclick="tk_barrydegraaff_zimbra_openpgp.prototype.forceSelectSelf()">';
+      var result = '';
       var keycount = 0;
+      var userIdCount = 0;
       combinedPublicKeys.forEach(function(entry) {
          if(entry[0]) {
             for (i = 0; i < entry[0].users.length; i++) {
@@ -1940,7 +1941,8 @@ function() {
                var selected;
                if((keycount == 0) && (publicKeys1.keys))
                {
-                     selected = 'selected id="selectme" ';
+                     selected = 'selected class="selectme" ';
+                     userIdCount++;
                }
                else
                {
@@ -1951,11 +1953,11 @@ function() {
          }
          keycount++;
       });
-      result = result + '</select>';
+      result = '<select class="barrydegraaff_zimbra_openpgp-input" id="pubKeySelect" multiple onclick="tk_barrydegraaff_zimbra_openpgp.prototype.forceSelectSelf('+userIdCount+')">' + result + '</select>';
    }
    catch(err) {
       //Could not parse your trusted public keys!
-      tk_barrydegraaff_zimbra_openpgp.prototype.status(tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][13], ZmStatusView.LEVEL_WARNING);
+      tk_barrydegraaff_zimbra_openpgp.prototype.status(err + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][13], ZmStatusView.LEVEL_WARNING);
       return;
    }
    return result;
@@ -1965,7 +1967,7 @@ function() {
  * If you do not want to encrypt to yourself, you must click your name, and then the recipient
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.forceSelectSelf =
-function() {
+function(userIdCount) {
    var pubKeySelect = document.getElementById('pubKeySelect');
    var selection = [];
    var numberSelected = 0;
@@ -1978,15 +1980,21 @@ function() {
 
    if((selection[0]== 0) && (numberSelected == 1))
    {
-      try{
-         document.getElementById('selectme').selected = false;
-         document.getElementById('selectme').id='nonotselect';
+      try{         
+         var selectme = document.getElementsByClassName("selectme");
+         for (var index = 0; index < selectme.length; index++) {
+            selectme[index].selected = false;
+            selectme[index].className = 'nonotselect';
+         }
       } catch (err) { }
    }
    else
    {
       try{
-         document.getElementById('selectme').selected = true;
+         var selectme = document.getElementsByClassName("selectme");
+         for (var index = 0; index < selectme.length; index++) {
+            selectme[index].selected = true;
+         }
       } catch (err) { }
    }
 }   
