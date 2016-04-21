@@ -934,47 +934,6 @@ function(id, title, message) {
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnEncrypt));
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
-   case 8:
-      //Decrypt file
-      if((tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead()) && (tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead() !== tk_barrydegraaff_zimbra_openpgp.privateKeyCache))
-      {
-         tk_barrydegraaff_zimbra_openpgp.privateKeyCache = tk_barrydegraaff_zimbra_openpgp.prototype.localStorageRead();
-      }      
-
-      tk_barrydegraaff_zimbra_openpgp.prototype.passphraseRead(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value);
-
-      html = "<div style='width:650px; height: 350; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
-      tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][63]+"<br><br>" +
-      "</td></tr><tr><td>" +
-      tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][65]+":" +
-      "</td><td>" +
-      "<input type='file' id='fileInput'>" +
-      "</td></tr><tr><td colspan='2'><br><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][64]+":<br><br></td></tr><tr><td>" +
-      tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][19]+":" +
-      "</td><td>" +
-      "<textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"20\" id='privateKeyInput'/>" + tk_barrydegraaff_zimbra_openpgp.privateKeyCache + "</textarea>" +
-      "</td></tr><tr><td>" +
-      tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][20]+":" +
-      "</td><td>" +
-      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value='" + tk_barrydegraaff_zimbra_openpgp.privatePassCache + "'>" +
-      "</td></tr></table></div>";      
-      this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
-      this._dialog.setContent(html);
-
-      var fileInput = document.getElementById('fileInput');
-      fileInput.addEventListener('change', function(e) {
-         var file = fileInput.files[0];
-         var reader = new FileReader();
-         reader.onload = function(e) {
-            tk_barrydegraaff_zimbra_openpgp.file = reader.result;
-            tk_barrydegraaff_zimbra_openpgp.filename = file.name;
-         }
-         reader.readAsArrayBuffer(file);         
-      });
-      
-      this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecryptFile));
-      this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
-      break; 
    case 9:
       //Import public key
       //Get selected mail message
@@ -1032,7 +991,14 @@ function(id, title, message) {
       
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnDecryptFile));
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
-      break; 
+
+      //If a private key is available and a password is stored, auto decrypt the message if option auto_decrypt is set to true
+      if((tk_barrydegraaff_zimbra_openpgp.privateKeyCache.length > 10) && 
+      (tk_barrydegraaff_zimbra_openpgp.settings['auto_decrypt'] == 'true') &&
+      (tk_barrydegraaff_zimbra_openpgp.privatePassCache.length > 0))
+      {
+         this.okBtnDecryptFile();
+      }
       break;   
    }
    try {
