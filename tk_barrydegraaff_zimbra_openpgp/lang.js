@@ -464,14 +464,14 @@ tk_barrydegraaff_zimbra_openpgp.lang['german'][74] = 'Möchten Sie diesem Public
 tk_barrydegraaff_zimbra_openpgp.lang['german'][75] = 'Public Key importieren';
 tk_barrydegraaff_zimbra_openpgp.lang['german'][76] = 'Fehler beim Importieren des Public Keys';
 tk_barrydegraaff_zimbra_openpgp.lang['german'][77] = 'Jemandem meinen Public Key zuschicken'; 
-tk_barrydegraaff_zimbra_openpgp.lang['german'][78] = 'Public Key bereits in Ihrer Liste der vertrauwnswürdigen Keys';
+tk_barrydegraaff_zimbra_openpgp.lang['german'][78] = 'Public Key bereits in Ihrer Liste der vertrauenswürdigen Keys';
 tk_barrydegraaff_zimbra_openpgp.lang['german'][79] = 'Name';
-tk_barrydegraaff_zimbra_openpgp.lang['german'][80] = 'Email address';
-tk_barrydegraaff_zimbra_openpgp.lang['german'][81] = 'You can specify multiple email addresses, separated by comma (,)';
-tk_barrydegraaff_zimbra_openpgp.lang['german'][82] = 'Reply';
-tk_barrydegraaff_zimbra_openpgp.lang['german'][83] = 'Reply All';
-tk_barrydegraaff_zimbra_openpgp.lang['german'][84] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!! <br>Click <span style="color: red">CANCEL</span>!!</b><br><br>Perhaps you wanted to send your public key?';
-tk_barrydegraaff_zimbra_openpgp.lang['german'][85] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!!</b>';
+tk_barrydegraaff_zimbra_openpgp.lang['german'][80] = 'E-Mail Adresse';
+tk_barrydegraaff_zimbra_openpgp.lang['german'][81] = 'Sie können mehrere kommaseparierte (,) E-Mail Adressen angeben';
+tk_barrydegraaff_zimbra_openpgp.lang['german'][82] = 'Antworten';
+tk_barrydegraaff_zimbra_openpgp.lang['german'][83] = 'Allen Antworten';
+tk_barrydegraaff_zimbra_openpgp.lang['german'][84] = '<b>ACHTUNG: SENDEN SIE NICHT IHREN PRIVATE KEY VIA E-MAIL!! <br>Klick <span style="color: red">Abbruch</span>!!</b><br><br>Wollten Sie vielleicht Ihren Public Key senden?';
+tk_barrydegraaff_zimbra_openpgp.lang['german'][85] = '<b>ACHTUNG: SENDEN SIE NICHT IHREN PRIVATE KEY VIA E-MAIL</b>';
 tk_barrydegraaff_zimbra_openpgp.lang['italian'] = [];
 tk_barrydegraaff_zimbra_openpgp.lang['italian'][0] = 'Estensione per messaggi OpenPGP per Zimbra Collaboration Suite.';
 tk_barrydegraaff_zimbra_openpgp.lang['italian'][1] = 'Firma messaggio';
@@ -555,10 +555,10 @@ tk_barrydegraaff_zimbra_openpgp.lang['italian'][78] = 'Chiave pubblica già pres
 tk_barrydegraaff_zimbra_openpgp.lang['italian'][79] = 'Nome';
 tk_barrydegraaff_zimbra_openpgp.lang['italian'][80] = 'Indirizzo email';
 tk_barrydegraaff_zimbra_openpgp.lang['italian'][81] = 'Puoi specificare pi&ugrave; indirizzi email, separati da virgola (,)';
-tk_barrydegraaff_zimbra_openpgp.lang['italian'][82] = 'Reply';
-tk_barrydegraaff_zimbra_openpgp.lang['italian'][83] = 'Reply All';
-tk_barrydegraaff_zimbra_openpgp.lang['italian'][84] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!! <br>Click <span style="color: red">CANCEL</span>!!</b><br><br>Perhaps you wanted to send your public key?';
-tk_barrydegraaff_zimbra_openpgp.lang['italian'][85] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!!</b>';
+tk_barrydegraaff_zimbra_openpgp.lang['italian'][82] = 'Rispondi';
+tk_barrydegraaff_zimbra_openpgp.lang['italian'][83] = 'Rispondi a tutti';
+tk_barrydegraaff_zimbra_openpgp.lang['italian'][84] = '<b>ATTENZIONE: NON INVIARE LA TUA CHIAVE PRIVATA VIA EMAIL!! <br>Clicca <span style="color: red">ANNULLA</span>!!</b><br><br>Probabilmente intendevi inviare la tua chiave pubblica?';
+tk_barrydegraaff_zimbra_openpgp.lang['italian'][85] = '<b>ATTENZIONE: NON INVIARE LA TUA CHIAVE PRIVATA VIA EMAIL!!</b>';
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'] = [];
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][0] = 'Extensão OpenPGP para Zimbra Collaboration Suite.';
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][1] = 'Assinar mensagem';
@@ -642,10 +642,10 @@ tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][78] = 'Chave pública 
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][79] = 'Nome';
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][80] = 'Endereço de email';
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][81] = 'Você pode definir múltiplos endereços de email separando-os com vírgulas (,)';
-tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][82] = 'Reply';
-tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][83] = 'Reply All';
-tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][84] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!! <br>Click <span style="color: red">CANCEL</span>!!</b><br><br>Perhaps you wanted to send your public key?';
-tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][85] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!!</b>';
+tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][82] = 'Responder';
+tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][83] = 'Responder Todos';
+tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][84] = '<b>ALERTA: NÃO ENVIE SUA CHAVE PRIVADA POR EMAIL!! <br>Clique <span style="color: red">CANCELAR</span>!!</b><br><br>Talvez você queira enviar sua chave publica?';
+tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][85] = '<b>ALERTA: NÃO ENVIE SUA CHAVE PRIVADA POR EMAIL!!</b>';
 tk_barrydegraaff_zimbra_openpgp.lang['russian'] = [];
 tk_barrydegraaff_zimbra_openpgp.lang['russian'][0] = 'Сообщения расширения OpenPGP для Zimbra Collaboration Suite.';
 tk_barrydegraaff_zimbra_openpgp.lang['russian'][1] = 'Подписать сообщение';
@@ -729,10 +729,10 @@ tk_barrydegraaff_zimbra_openpgp.lang['russian'][78] = 'Открытый ключ
 tk_barrydegraaff_zimbra_openpgp.lang['russian'][79] = 'Имя';
 tk_barrydegraaff_zimbra_openpgp.lang['russian'][80] = 'Адрес электронной почты';
 tk_barrydegraaff_zimbra_openpgp.lang['russian'][81] = 'Вы можете задать несколько электронных адресов, разделенных запятой (,)';
-tk_barrydegraaff_zimbra_openpgp.lang['russian'][82] = 'Reply';
-tk_barrydegraaff_zimbra_openpgp.lang['russian'][83] = 'Reply All';
-tk_barrydegraaff_zimbra_openpgp.lang['russian'][84] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!! <br>Click <span style="color: red">CANCEL</span>!!</b><br><br>Perhaps you wanted to send your public key?';
-tk_barrydegraaff_zimbra_openpgp.lang['russian'][85] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!!</b>';
+tk_barrydegraaff_zimbra_openpgp.lang['russian'][82] = 'Ответить';
+tk_barrydegraaff_zimbra_openpgp.lang['russian'][83] = 'Ответить всем';
+tk_barrydegraaff_zimbra_openpgp.lang['russian'][84] = '<b>ВНИМАНИЕ: НЕ ОТПРАВЛЯЙТЕ ВАШ СЕКРЕТНЫЙ КЛЮЧ ПО ЭЛЕКТРОННОЙ ПОЧТЕ!! <br>Нажмите <span style="color: red">ОТМЕНИТЬ</span>!!</b><br><br>Может быть, вы хотели послать свой открытый ключ?';
+tk_barrydegraaff_zimbra_openpgp.lang['russian'][85] = '<b>ВНИМАНИЕ: НЕ ОТПРАВЛЯЙТЕ ВАШ СЕКРЕТНЫЙ КЛЮЧ ПО ЭЛЕКТРОННОЙ ПОЧТЕ!!</b>';
 tk_barrydegraaff_zimbra_openpgp.lang['spanish'] = [];
 tk_barrydegraaff_zimbra_openpgp.lang['spanish'][0] = 'Extensión de mensajes OpenPGP para Zimbra Collaboration Suite.';
 tk_barrydegraaff_zimbra_openpgp.lang['spanish'][1] = 'Firmar mensaje';
@@ -816,10 +816,10 @@ tk_barrydegraaff_zimbra_openpgp.lang['spanish'][78] = 'La llave pública ya se e
 tk_barrydegraaff_zimbra_openpgp.lang['spanish'][79] = 'Nombre';
 tk_barrydegraaff_zimbra_openpgp.lang['spanish'][80] = 'Dirección de correo electrónico';
 tk_barrydegraaff_zimbra_openpgp.lang['spanish'][81] = 'Puede especificar múltiples direcciones de correo electrónico, separadas por una coma (,)';
-tk_barrydegraaff_zimbra_openpgp.lang['spanish'][82] = 'Reply';
-tk_barrydegraaff_zimbra_openpgp.lang['spanish'][83] = 'Reply All';
-tk_barrydegraaff_zimbra_openpgp.lang['spanish'][84] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!! <br>Click <span style="color: red">CANCEL</span>!!</b><br><br>Perhaps you wanted to send your public key?';
-tk_barrydegraaff_zimbra_openpgp.lang['spanish'][85] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!!</b>';
+tk_barrydegraaff_zimbra_openpgp.lang['spanish'][82] = 'Responder';
+tk_barrydegraaff_zimbra_openpgp.lang['spanish'][83] = 'Responder a todos';
+tk_barrydegraaff_zimbra_openpgp.lang['spanish'][84] = '<b>ADVERTENCIA: NO ENVÍE SU LLAVE PRIVADA VÍA EMAIL!!<br>Haga click en <span style="color: red">CANCELAR</span>!!</b><br><br>¿Quizá quería enviar su llave pública?';
+tk_barrydegraaff_zimbra_openpgp.lang['spanish'][85] = '<b>ADVERTENCIA: NO ENVÍE SU LLAVE PRIVADA VÍA EMAIL!!</b>';
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'] = [];
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][0] = 'Phần mở rộng thư OpenPGP cho Zimbra Collaboration Suite.';
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][1] = 'Ký điện tử thư';
@@ -903,10 +903,10 @@ tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][78] = 'Khóa công khai đã 
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][79] = 'Tên';
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][80] = 'Địa chỉ thư';
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][81] = 'Bạn có thể nhập nhiều địa chỉ thư ngăn cách bằng dấu phẩy (,)';
-tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][82] = 'Reply';
-tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][83] = 'Reply All';
-tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][84] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!! <br>Click <span style="color: red">CANCEL</span>!!</b><br><br>Perhaps you wanted to send your public key?';
-tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][85] = '<b>WARNING: DO NOT SEND YOUR PRIVATE KEY VIA EMAIL!!</b>';
+tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][82] = 'Trả lời';
+tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][83] = 'Trả lời tất cả';
+tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][84] = '<b>LƯU Ý: KHÔNG GỬI KHÓA BÍ MẬT CỦA BẠN QUA EMAIL!! <br>Nhấn <span style="color: red">BỎ QUA</span>!!</b><br><br>Có lẽ, bạn muốn gửi khóa công khai?';
+tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][85] = '<b>LƯU Ý: KHÔNG GỬI KHÓA BÍ MẬT CỦA BẠN QUA EMAIL!!</b>';
 
 
 }

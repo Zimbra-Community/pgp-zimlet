@@ -70,7 +70,10 @@ PGP stands for "Pretty Good Privacy," and it's most often used for two things:
 PGP uses a system involving Private Keys and Public Keys. The tutorial below shows you how to get started with PGP in Zimbra web mail.<br><br>
 
 <img src="../icon.png" alt="" style="float: left; margin-top:13px; padding-right:5px; border:0px;"><h1>OpenPGP Zimlet</h1>
-Works best if Zimbra is set to `By Message` view and Reading Pane `On The Right`.<br><br>
+
+<video controls autoplay src="Zimbra OpenPGP Zimlet version 2.2.0.m4v" width="1280" height="720">
+<br><br>
+Zimbra OpenPGP Zimlet works best if Zimbra is set to `By Message` view and Reading Pane `On The Right`.<br><br>
 <img src="by-message-reading-pane.png" alt=""><br><br>
 <p>Find the OpenPGP menu under Zimlets in your Zimbra web mail. Right click on OpenPGP and select "Manage keys".
 
@@ -142,13 +145,19 @@ In the "Encrypt message" window:
 <ol>
 <li>Select one or more recipients using (CTRL+click). You may wish to select yourself so you can read the message afterwards</li>
 </ol>
-In case the private key and passphrase are set, your encrypted message will also be signed. Click OK when you are done.<br>
-<br><img src="2-encrypt-dialog.png" alt=""><br><hr><br>
+In case the private key and passphrase are set, your encrypted message will also be signed.<br>
+<br><img src="2-encrypt-dialog.png" alt=""><br><hr>
+
+<section id="attachments">
+<h2>Adding attachments</h2>
+If you want to attach encrypted documents to your mail, select them using the Choose Files button. You can select multiple files from your computer and/or use the + and - button to add and remove attachments to your message. Please note that filenames are NOT encrypted.<br>
+<br><img src="5-encrypt-attachments.png" alt=""><br><hr><br>
+</section>
 
 You will now see the Zimbra compose window with your encrypted message. Enter a subject and verify the recipients like a normal mail and click Send when you are done.<br>
 <br><img src="3-encrypt-result.png" alt=""><br><hr><br>
 
-Go to your Sent folder and click the mail you just sent. You should see "Got a good signature.", in case you selected yourself as one of the recipients you should now also see your message text.<br>
+Go to your Sent folder and click the mail you just sent. You should see "Got a good signature.", in case you selected yourself as one of the recipients you should now also see your message text. You can also open attachments by clicking the Decrypt file link.<br>
 <br><img src="4-decrypted.png" alt=""><br><hr><br>
 
 <br><br></section><section id="contacts-scanning">
@@ -158,21 +167,14 @@ Optionally you can store public keys in Contacts, the Zimbra Addressbook. First 
 <br><img src="scan-contacts-book.png" alt=""><br><hr><br>
 
 
-<br><br></section><section id="attachments">
-<h1>Working with attachments</h1>
-If you want to attach encrypted documents to your mail, you must first encrypt them using the Zimlet menu 'Encrypt file'.<br>
-<br><img src="file-encrypt-menu.png" alt=""><br>
-<br>Select a file from your local computer and select recipients. The resulting file can be attached to an email via the normal attach option when composing mail in Zimbra.<br>
-<br><img src="file-encrypt-dialog.png" alt=""><br>
-<br>If you receive an attachment that was encrypted using Zimbra OpenPGP Zimlet, you must first download the attachment to your local computer. Then use the Zimlet menu 'Decrypt file'.<br>
-<br><img src="file-decrypt-dialog.png" alt=""><br>
-<br>Attachments encrypted by this Zimlet can be decrypted by Thunderbird/Enigmail users, right click the attachment and click `Decrypt and Open`.<br>
-<br><img src="attachment-decrypt-enigmail.png" alt=""><br>
-
 <br><br></section><section id="thunderbird-enigmail">
 <h1>Reading messages encrypted/signed with Thunderbird/Enigmail</h1>
 OpenPGP/MIME encrypted messages using RFC 3156 implemented in Thunderbird/Enigmail can be decrypted and verified by this Zimlet. This is beta functionality. Plain text messages and attachments are supported. HTML formatted messages are converted to plain text.<br>
 <br><img src="thunderbird-enigmail-support.png" alt=""><br><hr><br>
+
+Attachments encrypted by Zimbra OpenPGP Zimlet can be decrypted by Thunderbird/Enigmail users, right click the attachment and click `Decrypt and Open`.<br>
+<br><img src="attachment-decrypt-enigmail.png" alt=""><br><hr><br>
+
 
 
 
