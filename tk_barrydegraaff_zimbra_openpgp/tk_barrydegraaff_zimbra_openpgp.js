@@ -292,7 +292,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       
       //Detect what kind of message we have
       var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
-
+      
       //Import PGP PUBLIC KEYS
       try {
       var pubKeySearch = bp.node.content.substring(0,10000);
@@ -386,6 +386,14 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ) ||
       (msgSearch.indexOf("BEGIN PGP PUBLIC KEY BLOCK") > 0 ))
       {
+         if(!pgpmime)
+         {
+            var part = "&part="+bp.part;
+         }
+         else
+         {
+            var part = "";
+         }
          var url = [];
          var i = 0;
          var proto = location.protocol;
@@ -400,7 +408,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
          }
          url[i++] = "/home/";
          url[i++]= AjxStringUtil.urlComponentEncode(appCtxt.getActiveAccount().name);
-         url[i++] = "/message.txt?fmt=txt&id=";
+         url[i++] = "/message.txt?fmt=txt"+part+"&id=";
          url[i++] = msg.id;
       
          var getUrl = url.join(""); 
