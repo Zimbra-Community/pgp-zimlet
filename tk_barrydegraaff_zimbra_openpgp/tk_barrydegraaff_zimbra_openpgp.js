@@ -2100,6 +2100,16 @@ function() {
          }
       }      
       
+      if (numberOfAttachments > 0)
+      {
+         var attBubble = document.getElementsByClassName("attBubbleContainer");
+         for (var index = 0; index < attBubble.length; index++) {
+            attBubble[index].style.backgroundImage = 'url(\'/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/progressround.gif\')';
+            attBubble[index].style.backgroundRepeat = "no-repeat";
+            attBubble[index].style.backgroundPosition = "right"; 
+         }
+      }
+      
       for (var inputIndex = 0; inputIndex < fileInputs.length; inputIndex++) 
       {                
          for (var multiselectIndex = 0; multiselectIndex < fileInputs[inputIndex].files.length; multiselectIndex++)           
@@ -2141,6 +2151,11 @@ function() {
                                  var attachment_list = myWindow.attachment_ids.join(",");
                                  var controller = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
                                  controller.saveDraft(ZmComposeController.DRAFT_TYPE_MANUAL, attachment_list);
+                                 
+                                 var attBubble = document.getElementsByClassName("attBubbleContainer");
+                                 for (var index = 0; index < attBubble.length; index++) {
+                                    attBubble[index].style.backgroundImage = 'url(\'\')';
+                                 }   
                               }
                            }
                         }
