@@ -292,7 +292,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       
       //Detect what kind of message we have
       var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
-
+      
       //Import PGP PUBLIC KEYS
       try {
       var pubKeySearch = bp.node.content.substring(0,10000);
@@ -386,6 +386,14 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ) ||
       (msgSearch.indexOf("BEGIN PGP PUBLIC KEY BLOCK") > 0 ))
       {
+         if(!pgpmime)
+         {
+            var part = "&part="+bp.part;
+         }
+         else
+         {
+            var part = "";
+         }
          var url = [];
          var i = 0;
          var proto = location.protocol;
@@ -400,7 +408,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
          }
          url[i++] = "/home/";
          url[i++]= AjxStringUtil.urlComponentEncode(appCtxt.getActiveAccount().name);
-         url[i++] = "/message.txt?fmt=txt&id=";
+         url[i++] = "/message.txt?fmt=txt"+part+"&id=";
          url[i++] = msg.id;
       
          var getUrl = url.join(""); 
@@ -2100,6 +2108,16 @@ function() {
          }
       }      
       
+      if (numberOfAttachments > 0)
+      {
+         var attBubble = document.getElementsByClassName("attBubbleContainer");
+         for (var index = 0; index < attBubble.length; index++) {
+            attBubble[index].style.backgroundImage = 'url(\'/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/progressround.gif\')';
+            attBubble[index].style.backgroundRepeat = "no-repeat";
+            attBubble[index].style.backgroundPosition = "right"; 
+         }
+      }
+      
       for (var inputIndex = 0; inputIndex < fileInputs.length; inputIndex++) 
       {                
          for (var multiselectIndex = 0; multiselectIndex < fileInputs[inputIndex].files.length; multiselectIndex++)           
@@ -2141,6 +2159,11 @@ function() {
                                  var attachment_list = myWindow.attachment_ids.join(",");
                                  var controller = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
                                  controller.saveDraft(ZmComposeController.DRAFT_TYPE_MANUAL, attachment_list);
+                                 
+                                 var attBubble = document.getElementsByClassName("attBubbleContainer");
+                                 for (var index = 0; index < attBubble.length; index++) {
+                                    attBubble[index].style.backgroundImage = 'url(\'\')';
+                                 }   
                               }
                            }
                         }
