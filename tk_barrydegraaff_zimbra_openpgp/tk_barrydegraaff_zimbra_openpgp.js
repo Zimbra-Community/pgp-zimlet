@@ -791,7 +791,7 @@ function(id, title, message) {
       pubkeyListHtml + 
       "<tr><td colspan=\"2\"><br><b>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][69]+"</b></td></tr>" +
       "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][68]+":</td><td><br><input onkeypress='return event.charCode >= 48 && event.charCode <= 57' type='number' id='max_message_size' name='max_message_size' value='" + (tk_barrydegraaff_zimbra_openpgp.settings['max_message_size'] > 0 ? tk_barrydegraaff_zimbra_openpgp.settings['max_message_size'] : '1000000') + "'</td></tr>" +
-      "<tr><td>User settings:</td><td><textarea readonly class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\">" + this.getUserProperty("zimbra_openpgp_options") + "</textarea></td></tr>" +
+      "<tr><td>User settings:</td><td><textarea readonly class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\">" + this.getUserProperty("zimbra_openpgp_options") + "</textarea></td></tr><tr><td colspan='2'><br><br><b>Zimbra OpenPGP Zimlet "+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][10]+": " + tk_barrydegraaff_zimbra_openpgp.version + "</b></td></tr>" +
       "</table></div>";
       this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       this._dialog.setContent(html);
