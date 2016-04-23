@@ -69,6 +69,11 @@ As root:
 
 "zimbraZimletUserProperties" will be increased by default in ZCS 8.7
 
+### X-Mailer header for Thunderbird/Enigmail support
+Thunderbird/Enigmail has some built in hacks to support email servers that do not support pgp/mime. Unfortunately that means that Zimbra OpenPGP Zimlet is identified wrongly as being Exchange server. This is fixed in Enigmail version 1.9.2. For compatibilty the X-Mailer header `X-Mailer: ... ZimbraWebClient ...` should be present in outgoing email. The sending of X-Mailer is enabled by default. If you changed the default you have to re-enable it using `zmprov mcf zimbraSmtpSendAddMailer "TRUE";`.
+
+See: https://sourceforge.net/p/enigmail/bugs/600/
+
 ### This zimlet does not work when composing in a new window
 See: https://bugzilla.zimbra.com/show_bug.cgi?id=97496
 
