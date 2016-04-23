@@ -5,7 +5,7 @@ If you find Zimbra OpenPGP Zimlet useful and want to support its continued devel
 - PayPal: info@barrydegraaff.tk
 - Bank transfer: IBAN NL55ABNA0623226413 ; BIC ABNANL2A
 
-Demo video: https://www.youtube.com/watch?v=APLFSEO7QXg
+Demo video: https://youtu.be/-fMe5Xab11Y
 
 User manual: https://barrydegraaff.github.io/help/
 
