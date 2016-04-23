@@ -568,29 +568,6 @@ function() {
    this.displayDialog(3, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][3], null);
 };
 
-/* This method creates a Zimbra tab
- * - currently hardcoded to provide help
- * */
-tk_barrydegraaff_zimbra_openpgp.prototype.appLaunch =
-function(appName) {
-   var app = appCtxt.getApp(appName);
-   app.setContent('<iframe style="width:100%; height:100%; border:0px;" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html">');
-
-   var toolbar = app.getToolbar(); // returns ZmToolBar
-   toolbar.setContent("<button style='margin:10px;' onclick='tk_barrydegraaff_zimbra_openpgp.prototype._resetApp()'>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][9]+"</button> <b>OpenPGP "+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][10]+": " + tk_barrydegraaff_zimbra_openpgp.version + "</b><br><br>");
-};
-
-/* This method destroys the Zimlet tab
- */
-tk_barrydegraaff_zimbra_openpgp.prototype._resetApp=
-function(appName) {
-   var app = appCtxt.getCurrentApp();
-   app.setContent('');
-   app.reset(false) ;
-   appCtxt.getAppController().activateApp("Mail") ;   
-   appCtxt.getAppChooser().getButton(tk_barrydegraaff_zimbra_openpgp.openPGPApp).setVisible(false);
-}   
-
 /* This method gets called by the Zimlet framework when double-click is performed.
  */
 tk_barrydegraaff_zimbra_openpgp.prototype.doubleClicked =
@@ -614,11 +591,6 @@ function(itemId) {
       this.displayDialog(5, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][4], null);
       break;
    case "help":
-      tk_barrydegraaff_zimbra_openpgp.openPGPApp = this.createApp('OpenPGP ' + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][11], "tk_barrydegraaff_zimbra_openpgp-panelIcon");
-      var app = appCtxt.getApp(tk_barrydegraaff_zimbra_openpgp.openPGPApp);   
-      app.launch();      
-      break;
-   case "help-new":
       window.open("/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html");
       break;
    }
@@ -920,7 +892,7 @@ function(id, title, message) {
       tk_barrydegraaff_zimbra_openpgp.prototype.passphraseRead(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value);
 
       html = "<div style='width:650px; height: 350; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
-      tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][36]+" <a style='color:blue; text-decoration: underline;' onclick=\"tk_barrydegraaff_zimbra_openpgp.prototype.menuItemSelected('help-new')\">"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][11]+"</a>.<br><br>" +
+      tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][36]+" <a style='color:blue; text-decoration: underline;' onclick=\"tk_barrydegraaff_zimbra_openpgp.prototype.menuItemSelected('help')\">"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][11]+"</a>.<br><br>" +
       "</td></tr><tr><td>" +
       tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][35]+":" +
       "</td><td>" + this.pubKeySelect() +
