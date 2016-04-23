@@ -584,7 +584,8 @@ function(appName) {
  */
 tk_barrydegraaff_zimbra_openpgp.prototype._resetApp=
 function(appName) {
-   app = appCtxt.getCurrentApp();
+   var app = appCtxt.getCurrentApp();
+   app.setContent('');
    app.reset(false) ;
    appCtxt.getAppController().activateApp("Mail") ;   
    appCtxt.getAppChooser().getButton(tk_barrydegraaff_zimbra_openpgp.openPGPApp).setVisible(false);
