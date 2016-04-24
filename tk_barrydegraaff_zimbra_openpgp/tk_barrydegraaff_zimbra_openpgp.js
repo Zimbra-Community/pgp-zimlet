@@ -807,8 +807,8 @@ function(id, title, message) {
       
       tk_barrydegraaff_zimbra_openpgp.prototype.passphraseRead(this.getUserPropertyInfo("zimbra_openpgp_privatepass").value);
 
-      html = "<div style='width:650px; height: 150px; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
-      tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][28] + " " + tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][18]+"<br><br>" +
+      html = "<div style='width:650px; height: 120px; overflow-x: hidden; overflow-y: hidden;'><table style='width:100%'><tr><td colspan='2'>" +
+      tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][36]+" <a style='color:blue; text-decoration: underline;' onclick=\"tk_barrydegraaff_zimbra_openpgp.prototype.menuItemSelected('help')\">"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][11]+"</a>.<br><br>" +
       "</td></tr><tr><td style=\"width:100px;\">" +
       tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][19]+":" +
       "</td><td style=\"width:500px\">" +
