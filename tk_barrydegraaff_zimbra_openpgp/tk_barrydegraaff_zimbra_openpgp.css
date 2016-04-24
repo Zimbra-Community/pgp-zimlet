@@ -25,20 +25,6 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
  overflow: hidden;
 }
 
-.Imgtk_barrydegraaff_zimbra_openpgp-sign {
- background: url("sign.png") no-repeat 0 0;
- width: 18px;
- height: 18px;
- overflow: hidden;
-}
-
-.Imgtk_barrydegraaff_zimbra_openpgp-pubkeys {
- background: url("pubkeys.png") no-repeat 0 0;
- width: 18px;
- height: 18px;
- overflow: hidden;
-}
-
 .Imgtk_barrydegraaff_zimbra_openpgp-keypair {
  background: url("keypair.png") no-repeat 0 0;
  width: 18px;
@@ -55,13 +41,6 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 
 .Imgtk_barrydegraaff_zimbra_openpgp-help {
  background: url("help.png") no-repeat 0 0;
- width: 18px;
- height: 18px;
- overflow: hidden;
-}
-
-.Imgtk_barrydegraaff_zimbra_openpgp-attachment {
- background: url("attachment.png") no-repeat 0 0;
  width: 18px;
  height: 18px;
  overflow: hidden;

@@ -5,7 +5,7 @@ If you find Zimbra OpenPGP Zimlet useful and want to support its continued devel
 - PayPal: info@barrydegraaff.tk
 - Bank transfer: IBAN NL55ABNA0623226413 ; BIC ABNANL2A
 
-Demo video: https://www.youtube.com/watch?v=APLFSEO7QXg
+Demo video: https://youtu.be/-fMe5Xab11Y
 
 User manual: https://barrydegraaff.github.io/help/
 
@@ -35,7 +35,7 @@ The recommended method is to deploy using git. (I no longer support zmzimletctl,
     [root@myzimbra ~]# rm pgp-zimlet -Rf
     [root@myzimbra ~]# git clone https://github.com/Zimbra-Community/pgp-zimlet
     [root@myzimbra ~]# cd pgp-zimlet
-    [root@myzimbra pgp-zimlet]# git checkout 2.2.2
+    [root@myzimbra pgp-zimlet]# git checkout 2.2.5
     [root@myzimbra pgp-zimlet]# chmod +rx install-dev.sh
     [root@myzimbra pgp-zimlet]# ./install-dev.sh
     [root@myzimbra pgp-zimlet]# su zimbra
@@ -68,6 +68,11 @@ As root:
     then as user zimbra: zmcontrol restart
 
 "zimbraZimletUserProperties" will be increased by default in ZCS 8.7
+
+### X-Mailer header for Thunderbird/Enigmail support
+Thunderbird/Enigmail has some built in hacks to support email servers that do not support pgp/mime. Unfortunately that means that Zimbra OpenPGP Zimlet is identified wrongly as being Exchange server. This is fixed in Enigmail version 1.9.2. For compatibilty the X-Mailer header `X-Mailer: ... ZimbraWebClient ...` should be present in outgoing email. The sending of X-Mailer is enabled by default. If you changed the default you have to re-enable it using `zmprov mcf zimbraSmtpSendAddMailer "TRUE";`.
+
+See: https://sourceforge.net/p/enigmail/bugs/600/
 
 ### This zimlet does not work when composing in a new window
 See: https://bugzilla.zimbra.com/show_bug.cgi?id=97496
