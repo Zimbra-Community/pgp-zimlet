@@ -153,7 +153,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.addAttachmentHandler = function(mime)
    {
       var MISSMIME = 'tk_barrydegraaff_zimbra_openpgp'+mime.replace("/","_");
       ZmMimeTable.MISSMIME=mime;
-      ZmMimeTable._table[ZmMimeTable.MISSMIME]={desc:ZmMsg.unknownBinaryType,image:"UnknownDoc",imageLarge:"UnknownDoc_48"};      
+      ZmMimeTable._table[ZmMimeTable.MISSMIME]={desc:"OpenPGP encrypted file",image:"tk_barrydegraaff_zimbra_openpgp-file-pgp-encrypted",imageLarge:"tk_barrydegraaff_zimbra_openpgp-file-pgp-encrypted"};      
    });
 
    this._msgController._listView[viewType].addAttachmentLinkHandler('application/pgp-encrypted',"tk_barrydegraaff_zimbra_openpgp",this.addPGPLink);
