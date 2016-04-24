@@ -984,6 +984,8 @@ function(id, title, message) {
    }
    try {
       this._dialog._setAllowSelection();
+      document.getElementById(this._dialog.__internalId+'_handle').style.backgroundColor = '#eeeeee';
+      document.getElementById(this._dialog.__internalId+'_title').style.textAlign = 'center';
       this._dialog.popup();
    } catch (err)
    {
