@@ -1710,7 +1710,6 @@ function() {
       
          if (tk_barrydegraaff_zimbra_openpgp.settings['direct_send'] == 'true')
          {
-            var composeView = appCtxt.getCurrentView();
             composeView._controller.sendMsg();
          }   
 
@@ -2157,7 +2156,6 @@ function() {
                                  
                                  if (tk_barrydegraaff_zimbra_openpgp.settings['direct_send'] == 'true')                                 
                                  {
-                                    var composeView = appCtxt.getCurrentView();
                                     controller.sendMsg(attachment_list);
                                  }
                                  else
