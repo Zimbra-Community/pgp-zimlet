@@ -76,7 +76,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
    //Some options are set, but not auto_decrypt, so set it to 'true' by default
    if(!tk_barrydegraaff_zimbra_openpgp.settings['direct_send'])
    {
-      tk_barrydegraaff_zimbra_openpgp.settings['direct_send'] = 'true';
+      tk_barrydegraaff_zimbra_openpgp.settings['direct_send'] = 'false';
    }
 
    //Some options are set, but not store_passphrase_locally, so set it to 'false' by default
