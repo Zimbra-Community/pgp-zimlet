@@ -2549,11 +2549,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.lookup = function() {
       }  
    }; 
 
-   
-   xmlHttp.onload = function(e) 
-   {
-   };
-   
    xmlHttp.send( null );
       
 }
