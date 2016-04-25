@@ -85,3 +85,4 @@ tk_barrydegraaff_zimbra_openpgp.lang['russian'][82] = 'Ответить';
 tk_barrydegraaff_zimbra_openpgp.lang['russian'][83] = 'Ответить всем';
 tk_barrydegraaff_zimbra_openpgp.lang['russian'][84] = '<b>ВНИМАНИЕ: НЕ ОТПРАВЛЯЙТЕ ВАШ СЕКРЕТНЫЙ КЛЮЧ ПО ЭЛЕКТРОННОЙ ПОЧТЕ!! <br>Нажмите <span style="color: red">ОТМЕНИТЬ</span>!!</b><br><br>Может быть, вы хотели послать свой открытый ключ?';
 tk_barrydegraaff_zimbra_openpgp.lang['russian'][85] = '<b>ВНИМАНИЕ: НЕ ОТПРАВЛЯЙТЕ ВАШ СЕКРЕТНЫЙ КЛЮЧ ПО ЭЛЕКТРОННОЙ ПОЧТЕ!!</b>';
+tk_barrydegraaff_zimbra_openpgp.lang['russian'][86] = 'Send after encrypt/sign';

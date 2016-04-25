@@ -85,3 +85,4 @@ tk_barrydegraaff_zimbra_openpgp.lang['german'][82] = 'Antworten';
 tk_barrydegraaff_zimbra_openpgp.lang['german'][83] = 'Allen Antworten';
 tk_barrydegraaff_zimbra_openpgp.lang['german'][84] = '<b>ACHTUNG: SENDEN SIE NICHT IHREN PRIVATE KEY VIA E-MAIL!! <br>Klick <span style="color: red">Abbruch</span>!!</b><br><br>Wollten Sie vielleicht Ihren Public Key senden?';
 tk_barrydegraaff_zimbra_openpgp.lang['german'][85] = '<b>ACHTUNG: SENDEN SIE NICHT IHREN PRIVATE KEY VIA E-MAIL</b>';
+tk_barrydegraaff_zimbra_openpgp.lang['german'][86] = 'Send after encrypt/sign';

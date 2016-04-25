@@ -85,3 +85,4 @@ tk_barrydegraaff_zimbra_openpgp.lang['italian'][82] = 'Rispondi';
 tk_barrydegraaff_zimbra_openpgp.lang['italian'][83] = 'Rispondi a tutti';
 tk_barrydegraaff_zimbra_openpgp.lang['italian'][84] = '<b>ATTENZIONE: NON INVIARE LA TUA CHIAVE PRIVATA VIA EMAIL!! <br>Clicca <span style="color: red">ANNULLA</span>!!</b><br><br>Probabilmente intendevi inviare la tua chiave pubblica?';
 tk_barrydegraaff_zimbra_openpgp.lang['italian'][85] = '<b>ATTENZIONE: NON INVIARE LA TUA CHIAVE PRIVATA VIA EMAIL!!</b>';
+tk_barrydegraaff_zimbra_openpgp.lang['italian'][86] = 'Send after encrypt/sign';
