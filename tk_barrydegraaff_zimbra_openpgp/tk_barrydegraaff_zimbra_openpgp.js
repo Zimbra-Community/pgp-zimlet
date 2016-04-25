@@ -100,7 +100,8 @@ tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
    this._zimletContext._panelActionMenu.args[0][0].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][3];
    this._zimletContext._panelActionMenu.args[0][1].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][4];
    this._zimletContext._panelActionMenu.args[0][2].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][77];
-   this._zimletContext._panelActionMenu.args[0][3].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][5];
+   this._zimletContext._panelActionMenu.args[0][3].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][87];
+   this._zimletContext._panelActionMenu.args[0][4].label = tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][5];
    
    tk_barrydegraaff_zimbra_openpgp.prototype.readAddressBook();
    
@@ -599,6 +600,9 @@ function(itemId) {
    case "help":
       window.open("/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/help/index.html");
       break;
+   case "lookup":
+      this.displayDialog(7, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][87], null);
+      break;
    }
 };
 
@@ -922,6 +926,20 @@ function(id, title, message) {
       this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnEncrypt));
       this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
       break;
+   case 7:
+   //lookup keyserver
+      html = "<div style='width:650px; height: 500px; overflow-x: hidden; overflow-y: scroll;'><table><tr><td>" +
+      "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='barrydegraaff_zimbra_openpgpQuery' type='text' value=''>" +
+      "</td><td>&nbsp;<button id='btnSearch' onclick=\"#\">"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][88]+"</button></td></tr><tr><td>" +
+      "<div id='barrydegraaff_zimbra_openpgpResult'></div>" +
+      "</td><td></td></tr></table></div>";
+      this._dialog = new ZmDialog( { title:title, parent:this.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
+      this._dialog.setContent(html);
+      var btnSearch = document.getElementById("btnSearch");
+      btnSearch.onclick = AjxCallback.simpleClosure(this.lookup, this);
+      this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.okBtnLookup));
+      this._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this.cancelBtn));
+      break;   
    case 9:
       //Import public key
       //Get selected mail message
@@ -2489,6 +2507,46 @@ tk_barrydegraaff_zimbra_openpgp.prototype.urlify = function(text) {
     var urlRegex = /(https?:\/\/[^\s]+)/g;
     return text.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');  
 }
+
+// Keyserver lookup
+tk_barrydegraaff_zimbra_openpgp.prototype.lookup = function() {
+   document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML = '<br><form id="lookupResult">';
+   var hkp = new openpgp.HKP(this._zimletContext.getConfig("keyserver"));   
+   var options = {
+       query: document.getElementById('barrydegraaff_zimbra_openpgpQuery').value
+   };
+   
+   hkp.lookup(options).then(function(key) {
+      var pubkey = openpgp.key.readArmored(key);       
+      for (index = 0; index < pubkey.keys.length; ++index) 
+      {
+         publicKeyPacket = pubkey.keys[index].primaryKey;
+         var keyLength = "";
+         if (publicKeyPacket != null) {
+            if (publicKeyPacket.mpi.length > 0) {
+               keyLength = (publicKeyPacket.mpi[0].byteLength() * 8);
+            }
+         }         
+         
+         document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML = document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML +
+         '<table><tr><td><input name="lookupResult" value="'+pubkey.keys[index].armor()+'" type="radio">&nbsp;</td><td><b>User ID[0]: ' + tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(pubkey.keys[index].users[0].userId.userid) + '</b></td></tr>' +
+         '<tr><td></td><td><b>Fingerprint:' + publicKeyPacket.fingerprint + '</b></td></tr>' +
+         '<tr><td></td><td>Primary key length: ' + keyLength + '</td></tr>' +
+         '<tr><td></td><td>Created:' + publicKeyPacket.created+'</td></tr></table><hr style="width:550px; color: #bbbbbb; background-color: #bbbbbb; height: 1px; border: 0;">';
+      }
+      document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML = document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML + '</form>';
+   });
+}
+
+// Handle selected keyserver lookup result
+tk_barrydegraaff_zimbra_openpgp.prototype.okBtnLookup = function() {
+var lookupResult = document.getElementsByName("lookupResult");
+   for(var i = 0; i < lookupResult.length; i++) {
+      if(lookupResult[i].checked == true) {
+         this.okBtnImportPubKey(openpgp.key.readArmored(lookupResult[i].value));
+      }
+   }
+};
 
 // Function to open a browser print dialog of a certain div
 tk_barrydegraaff_zimbra_openpgp.prototype.printdiv = function(printdivname, subject) {

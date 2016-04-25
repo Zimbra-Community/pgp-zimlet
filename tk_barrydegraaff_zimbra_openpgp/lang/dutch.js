@@ -85,4 +85,6 @@ tk_barrydegraaff_zimbra_openpgp.lang['dutch'][82] = 'Beantwoorden';
 tk_barrydegraaff_zimbra_openpgp.lang['dutch'][83] = 'Iedereen antwoorden';
 tk_barrydegraaff_zimbra_openpgp.lang['dutch'][84] = '<b>WAARSCHUWING: PRIVATE KEY VIA EMAIL VERZENDEN IS NIET OK!! <br>Klik <span style="color: red">ANNULEREN</span>!!</b><br><br>U kunt als volgt uw public key versturen.';
 tk_barrydegraaff_zimbra_openpgp.lang['dutch'][85] = '<b>WAARSCHUWING: PRIVATE KEY VIA EMAIL VERZENDEN IS NIET OK!!</b>';
-tk_barrydegraaff_zimbra_openpgp.lang['dutch'][86] = 'Send after encrypt/sign';
+tk_barrydegraaff_zimbra_openpgp.lang['dutch'][86] = 'Verzenden na versleutelen/ondertekenen';
+tk_barrydegraaff_zimbra_openpgp.lang['dutch'][87] = 'Opzoeken met Keyserver';
+tk_barrydegraaff_zimbra_openpgp.lang['dutch'][88] = 'Zoeken';
