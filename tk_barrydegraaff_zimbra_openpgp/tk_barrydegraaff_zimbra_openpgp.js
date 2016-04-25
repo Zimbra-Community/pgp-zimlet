@@ -2511,31 +2511,51 @@ tk_barrydegraaff_zimbra_openpgp.prototype.urlify = function(text) {
 // Keyserver lookup
 tk_barrydegraaff_zimbra_openpgp.prototype.lookup = function() {
    document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML = '<br><form id="lookupResult">';
-   var hkp = new openpgp.HKP(this._zimletContext.getConfig("keyserver"));   
-   var options = {
-       query: document.getElementById('barrydegraaff_zimbra_openpgpQuery').value
+
+   var xmlHttp = null;   
+   xmlHttp = new XMLHttpRequest();
+   xmlHttp.open( "GET", this._zimletContext.getConfig("keyserver")+'/pks/lookup?op=get&options=mr&search='+encodeURIComponent(document.getElementById('barrydegraaff_zimbra_openpgpQuery').value), true );
+
+   xmlHttp.onreadystatechange = function (oEvent) 
+   {  
+      if (xmlHttp.readyState === 4) 
+      {  
+         if (xmlHttp.status === 200) 
+         {  
+            var pubkey = openpgp.key.readArmored(xmlHttp.responseText);       
+            for (index = 0; index < pubkey.keys.length; ++index) 
+            {
+               publicKeyPacket = pubkey.keys[index].primaryKey;
+               var keyLength = "";
+               if (publicKeyPacket != null) {
+                  if (publicKeyPacket.mpi.length > 0) {
+                     keyLength = (publicKeyPacket.mpi[0].byteLength() * 8);
+                  }
+               }         
+               
+               document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML = document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML +
+               '<table><tr><td><input name="lookupResult" value="'+pubkey.keys[index].armor()+'" type="radio">&nbsp;</td><td><b>User ID[0]: ' + tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(pubkey.keys[index].users[0].userId.userid) + '</b></td></tr>' +
+               '<tr><td></td><td><b>Fingerprint:' + publicKeyPacket.fingerprint + '</b></td></tr>' +
+               '<tr><td></td><td>Primary key length: ' + keyLength + '</td></tr>' +
+               '<tr><td></td><td>Created:' + publicKeyPacket.created+'</td></tr></table><hr style="width:550px; color: #bbbbbb; background-color: #bbbbbb; height: 1px; border: 0;">';
+            }
+            document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML = document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML + '</form>';
+
+         } 
+         else 
+         {  
+            document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML = '<br>' + xmlHttp.status + ' '+ xmlHttp.statusText;  
+         }  
+      }  
+   }; 
+
+   
+   xmlHttp.onload = function(e) 
+   {
    };
    
-   hkp.lookup(options).then(function(key) {
-      var pubkey = openpgp.key.readArmored(key);       
-      for (index = 0; index < pubkey.keys.length; ++index) 
-      {
-         publicKeyPacket = pubkey.keys[index].primaryKey;
-         var keyLength = "";
-         if (publicKeyPacket != null) {
-            if (publicKeyPacket.mpi.length > 0) {
-               keyLength = (publicKeyPacket.mpi[0].byteLength() * 8);
-            }
-         }         
-         
-         document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML = document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML +
-         '<table><tr><td><input name="lookupResult" value="'+pubkey.keys[index].armor()+'" type="radio">&nbsp;</td><td><b>User ID[0]: ' + tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(pubkey.keys[index].users[0].userId.userid) + '</b></td></tr>' +
-         '<tr><td></td><td><b>Fingerprint:' + publicKeyPacket.fingerprint + '</b></td></tr>' +
-         '<tr><td></td><td>Primary key length: ' + keyLength + '</td></tr>' +
-         '<tr><td></td><td>Created:' + publicKeyPacket.created+'</td></tr></table><hr style="width:550px; color: #bbbbbb; background-color: #bbbbbb; height: 1px; border: 0;">';
-      }
-      document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML = document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML + '</form>';
-   });
+   xmlHttp.send( null );
+      
 }
 
 // Handle selected keyserver lookup result
