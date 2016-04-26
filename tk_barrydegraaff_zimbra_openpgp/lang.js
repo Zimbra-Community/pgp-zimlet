@@ -934,9 +934,9 @@ tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][82] = 'Trả lời';
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][83] = 'Trả lời tất cả';
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][84] = '<b>LƯU Ý: KHÔNG GỬI KHÓA BÍ MẬT CỦA BẠN QUA EMAIL!! <br>Nhấn <span style="color: red">BỎ QUA</span>!!</b><br><br>Có lẽ, bạn muốn gửi khóa công khai?';
 tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][85] = '<b>LƯU Ý: KHÔNG GỬI KHÓA BÍ MẬT CỦA BẠN QUA EMAIL!!</b>';
-tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][86] = 'Send after encrypt/sign';
-tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][87] = 'Keyserver lookup';
-tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][88] = 'Search';
+tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][86] = 'Gửi sau khi mã hóa/ký';
+tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][87] = 'Tra cứu Keyserver';
+tk_barrydegraaff_zimbra_openpgp.lang['vietnamese'][88] = 'Tìm kiếm';
 
 
 }
