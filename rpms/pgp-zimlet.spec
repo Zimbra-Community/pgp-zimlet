@@ -1,5 +1,5 @@
 Name:           pgp-zimlet
-Version:        2.2.5
+Version:        2.2.7
 Release:        1%{?dist}
 Summary:        Zimbra OpenPGP Zimlet
 
@@ -46,5 +46,7 @@ su - zimbra -c "zmzimletctl undeploy tk_barrydegraaff_zimbra_openpgp"
 
 
 %changelog
+* Tue Apr 26 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.2.7-1
+- Update to release 2.2.7.
 * Sun Apr 24 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.2.5-1
-- Initial release 2.0 from upstream.
+- Initial release 2.2.5 from upstream.
