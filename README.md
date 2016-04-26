@@ -20,6 +20,11 @@ This Zimlet is not available for use in Zimbra Desktop.
 
 Bugs and feedback: https://github.com/Zimbra-Community/pgp-zimlet/issues
 
+Report security issues to barrydg@zetalliance.org (PGP fingerprint: 9e0e165f06b365ee1e47683e20f37303c20703f8)
+
+Stay up-to-date: new releases are announced on the users mailing list: http://lists.zetalliance.org/mailman/listinfo/users_lists.zetalliance.org
+
+
 ========================================================================
 
 ### Install Zimbra OpenPGP Zimlet
