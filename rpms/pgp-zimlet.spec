@@ -1,6 +1,6 @@
 Name:           pgp-zimlet
 Version:        2.2.7
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Zimbra OpenPGP Zimlet
 
 Group:          Applications/Internet
@@ -36,9 +36,12 @@ cp -R tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.zip $RPM_B
 
 %post
 su - zimbra -c "zmzimletctl deploy /opt/zimbra/zimlets-extra/tk_barrydegraaff_zimbra_openpgp.zip"
+su - zimbra -c "zmprov fc all"
+
 
 %preun
 su - zimbra -c "zmzimletctl undeploy tk_barrydegraaff_zimbra_openpgp"
+su - zimbra -c "zmprov fc all"
 
 
 %files
@@ -46,6 +49,8 @@ su - zimbra -c "zmzimletctl undeploy tk_barrydegraaff_zimbra_openpgp"
 
 
 %changelog
+* Wed Apr 27 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.2.7-2
+- Add "flushCache" after installing/uninstalling.
 * Tue Apr 26 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.2.7-1
 - Update to release 2.2.7.
 * Sun Apr 24 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.2.5-1
