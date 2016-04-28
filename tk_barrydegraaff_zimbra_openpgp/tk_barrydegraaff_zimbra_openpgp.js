@@ -1254,6 +1254,11 @@ function(arguments) {
                      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML + tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(atob(partArr[1]));
                      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).setAttribute('data-decrypted',atob(partArr[1]));
                   }
+                  if (partArr[0].indexOf('Content-Transfer-Encoding: quoted-printable')> -1)
+                  {
+                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML + tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(tk_barrydegraaff_zimbra_openpgp.prototype.quoted_printable_decode(part));
+                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).setAttribute('data-decrypted',part);
+                  }                  
                   else
                   {
                      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML + tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(part);
