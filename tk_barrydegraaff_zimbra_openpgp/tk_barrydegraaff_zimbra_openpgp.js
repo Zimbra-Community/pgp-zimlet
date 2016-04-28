@@ -1251,40 +1251,42 @@ function(arguments) {
                {
                   if (partArr[0].indexOf('Content-Transfer-Encoding: base64')> -1)
                   {
-                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML + tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(atob(partArr[1]));
+                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML + tk_barrydegraaff_zimbra_openpgp.prototype.urlify(tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(atob(partArr[1])));
                      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).setAttribute('data-decrypted',atob(partArr[1]));
                   }
                   if (partArr[0].indexOf('Content-Transfer-Encoding: quoted-printable')> -1)
                   {
-                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML + tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(tk_barrydegraaff_zimbra_openpgp.prototype.quoted_printable_decode(part));
+                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML + tk_barrydegraaff_zimbra_openpgp.prototype.urlify(tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(tk_barrydegraaff_zimbra_openpgp.prototype.quoted_printable_decode(part)));
                      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).setAttribute('data-decrypted',part);
                   }                  
                   else
                   {
-                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML + tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(part);
+                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML + tk_barrydegraaff_zimbra_openpgp.prototype.urlify(tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(part));
                      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).setAttribute('data-decrypted',part);
                   }   
                }
                else if(partArr[0].indexOf('text/html')> 0)
                {
                   //rendering html messages is currently not supported, this is a not so nice attempt to display html as text
-                  var temp = document.createElement("div");
-                  temp.innerHTML = part;
-                  document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML + tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(temp.textContent || temp.innerText || "");
-                  document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).setAttribute('data-decrypted',temp.textContent || temp.innerText || "");
-                  temp = "";
+                  part = part.substring(part.indexOf('\n\n'));
+                  if (partArr[0].indexOf('Content-Transfer-Encoding: quoted-printable')> -1)
+                  {
+                     part = tk_barrydegraaff_zimbra_openpgp.prototype.quoted_printable_decode(part);
+                  }                     
+                  document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML + tk_barrydegraaff_zimbra_openpgp.prototype.urlify(tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(tk_barrydegraaff_zimbra_openpgp.prototype.htmlToText(part)));
+                  document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).setAttribute('data-decrypted',tk_barrydegraaff_zimbra_openpgp.prototype.htmlToText(part));
                }
             });
+
+            //Got NO attachments, remove the attLinks div from UI
+            try {
+               if(document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_att"+myWindow.arguments['domId']).innerHTML == '')
+               {
+                  var e = document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_att"+myWindow.arguments['domId']);
+                  e.parentNode.parentNode.parentNode.removeChild(e.parentNode.parentNode);
+               }
+            } catch (err) {}            
          }
-         
-         //Got NO attachments, remove the attLinks div from UI
-         try {
-            if(document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_att"+myWindow.arguments['domId']).innerHTML == '')
-            {
-               var e = document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_att"+myWindow.arguments['domId']);
-               e.parentNode.parentNode.parentNode.removeChild(e.parentNode.parentNode);
-            }
-         } catch (err) {}
          
          myWindow.cancelBtn();
       },
