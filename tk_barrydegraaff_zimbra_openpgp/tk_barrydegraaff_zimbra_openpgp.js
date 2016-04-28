@@ -1254,7 +1254,7 @@ function(arguments) {
                   if (partArr[0].indexOf('Content-Transfer-Encoding: quoted-printable')> -1)
                   {
                      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML + tk_barrydegraaff_zimbra_openpgp.prototype.urlify(tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(tk_barrydegraaff_zimbra_openpgp.prototype.quoted_printable_decode(part)));
-                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).setAttribute('data-decrypted',part);
+                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).setAttribute('data-decrypted',tk_barrydegraaff_zimbra_openpgp.prototype.quoted_printable_decode(part));
                   }                  
                   else
                   {
