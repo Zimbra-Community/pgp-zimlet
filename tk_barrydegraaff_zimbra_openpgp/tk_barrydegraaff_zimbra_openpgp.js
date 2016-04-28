@@ -1271,6 +1271,16 @@ function(arguments) {
                }
             });
          }
+         
+         //Got NO attachments, remove the attLinks div from UI
+         try {
+            if(document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_att"+myWindow.arguments['domId']).innerHTML == '')
+            {
+               var e = document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_att"+myWindow.arguments['domId']);
+               e.parentNode.parentNode.parentNode.removeChild(e.parentNode.parentNode);
+            }
+         } catch (err) {}
+         
          myWindow.cancelBtn();
       },
       function(err) {
