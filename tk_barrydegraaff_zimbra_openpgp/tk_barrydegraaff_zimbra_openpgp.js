@@ -1190,13 +1190,10 @@ function(arguments) {
          }    
          document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar'+myWindow.arguments['domId']).innerHTML='<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/icon.png"> OpenPGP: <b>'+ sigStatus + '</b>';
 
-         var preOpen = '<pre style="white-space: pre-wrap;word-wrap: break-word;">';
-         var preClose = '</pre>';
-
          // Got a decrypted message that does not need further mime parsing
          if(myWindow.arguments['hasMIME']== false)
          {
-            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML=preOpen + tk_barrydegraaff_zimbra_openpgp.prototype.urlify(tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(plaintext.data)) + preClose;
+            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).innerHTML=tk_barrydegraaff_zimbra_openpgp.prototype.urlify(tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(plaintext.data));
             document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).setAttribute('data-decrypted',plaintext.data);
          }
          // Go a message that needs MIME parsing (PGP/MIME)
