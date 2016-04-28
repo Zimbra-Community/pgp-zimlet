@@ -69,10 +69,10 @@ As root:
 
     nano /opt/zimbra/conf/attrs/zimbra-attrs.xml
     Find the line: name="zimbraZimletUserProperties" type="cstring" max="5120"
-    and change it to: name="zimbraZimletUserProperties" type="cstring" max="15120"
+    and change it to: name="zimbraZimletUserProperties" type="cstring" max="51200"
     then as user zimbra: zmcontrol restart
 
-"zimbraZimletUserProperties" will be increased by default in ZCS 8.7
+"zimbraZimletUserProperties" will be increased by default in ZCS 8.7 (to 51200)
 
 ### Keyserver lookup
 As of version 2.2.6 keyserver lookup is supported, the admin can set the keyserver to be queried in:
