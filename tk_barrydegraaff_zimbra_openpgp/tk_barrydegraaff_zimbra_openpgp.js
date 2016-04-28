@@ -328,6 +328,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
       }
 
       var pgpmime = false;
+      var alternative = false;
       if (!bp)
       {
          try
@@ -346,6 +347,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
                {
                   var msgSearch = '';
                   pgpmime =  true;
+                  alternative = true;
                }
                else
                {
@@ -528,6 +530,12 @@ tk_barrydegraaff_zimbra_openpgp.prototype.onMsgView = function (msg, oldMsg, msg
          {  
             document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+appCtxt.getCurrentAppName()+msg.id).innerHTML='<pre>This is an OpenPGP/MIME encrypted message (RFC 4880 and 3156)</pre>';
          }   
+                  
+         //support multipart/alternative mime used by Gmail / Mailvelope
+         if (alternative)
+         {
+            pgpmime = false;
+         }
          
          //Please provide private key and passphrase for decryption
          var args = [];
@@ -1262,7 +1270,7 @@ function(arguments) {
                   temp = "";
                }
             });
-         }         
+         }
          myWindow.cancelBtn();
       },
       function(err) {
