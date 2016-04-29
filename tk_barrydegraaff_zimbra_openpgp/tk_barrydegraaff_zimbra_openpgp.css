@@ -66,10 +66,12 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
    width:98%;
    background-size: 48px 48px;
    background: url("") center top no-repeat;
+   background-color: white;
 }
 
 .barrydegraaff_zimbra_openpgp-input textarea{
    height:50px;
+   background-color: white;
 }
 
 .DwtDialog textarea{
