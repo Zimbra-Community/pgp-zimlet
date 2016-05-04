@@ -1,6 +1,6 @@
 Name:           pgp-zimlet
-Version:        2.2.7
-Release:        2%{?dist}
+Version:        2.3.1
+Release:        3%{?dist}
 Summary:        Zimbra OpenPGP Zimlet
 
 Group:          Applications/Internet
@@ -40,8 +40,11 @@ su - zimbra -c "zmprov fc all"
 
 
 %preun
-su - zimbra -c "zmzimletctl undeploy tk_barrydegraaff_zimbra_openpgp"
-su - zimbra -c "zmprov fc all"
+if [ $1 -eq 0 ] ; then
+    su - zimbra -c "zmzimletctl undeploy tk_barrydegraaff_zimbra_openpgp"
+    su - zimbra -c "zmprov fc all"
+
+fi
 
 
 %files
@@ -49,9 +52,17 @@ su - zimbra -c "zmprov fc all"
 
 
 %changelog
+* Fri Apr 29 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.3.1-3
+- Fix preun parameters NOT to undeploy the zimlet when upgrading
+
+* Fri Apr 29 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.3.1-1
+- New release update.
+
 * Wed Apr 27 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.2.7-2
 - Add "flushCache" after installing/uninstalling.
+
 * Tue Apr 26 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.2.7-1
 - Update to release 2.2.7.
+
 * Sun Apr 24 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.2.5-1
 - Initial release 2.2.5 from upstream.
