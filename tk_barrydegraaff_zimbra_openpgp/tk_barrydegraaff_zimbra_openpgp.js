@@ -188,7 +188,7 @@ tk_barrydegraaff_zimbra_openpgp.prototype.addPubKeyLink =
 function(attachment) {
 	var html =
 			"<a href='#' class='AttLink' style='text-decoration:underline;' " +
-					"onClick=\"tk_barrydegraaff_zimbra_openpgp.prototype.importPubKey('" + attachment.label + "','" + attachment.url + "')\">"+
+					"onClick=\"tk_barrydegraaff_zimbra_openpgp.prototype.importPubKey('" + attachment.url + "')\">"+
 					tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][73] +
 					"</a>";
                
