@@ -805,8 +805,8 @@ function(id, title, message) {
       zimletInstance._dialog = new ZmDialog( { title:title, parent:zimletInstance.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       zimletInstance._dialog.setContent(html);
       var arguments = message;
-      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, zimletInstance.okBtnDecrypt, [arguments]));
-      zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, zimletInstance.cancelBtn));
+      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.okBtnDecrypt, [arguments]));
+      zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));
       
       //If a private key is available and a password is stored, auto decrypt the message if option auto_decrypt is set to true
       if((tk_barrydegraaff_zimbra_openpgp.privateKeyCache.length > 10) && 
@@ -820,7 +820,7 @@ function(id, title, message) {
       //Default dialog
       zimletInstance._dialog = new ZmDialog( { title:title, parent:zimletInstance.getShell(), standardButtons:[DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       zimletInstance._dialog.setContent(message);
-      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, zimletInstance.cancelBtn));
+      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));
       break;
    case 3:
       //Manage keys
@@ -875,8 +875,8 @@ function(id, title, message) {
       "</table></div>";
       zimletInstance._dialog = new ZmDialog( { title:title, parent:zimletInstance.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       zimletInstance._dialog.setContent(html);
-      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, zimletInstance.okBtnPubKeySave));
-      zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, zimletInstance.cancelBtn));
+      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.okBtnPubKeySave));
+      zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));
       break;
    case 4:
       //Sign message
@@ -901,8 +901,8 @@ function(id, title, message) {
       "</td></tr></table></div>";
       zimletInstance._dialog = new ZmDialog( { title:title, parent:zimletInstance.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       zimletInstance._dialog.setContent(html);
-      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, zimletInstance.okBtnSign));
-      zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, zimletInstance.cancelBtn));
+      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.okBtnSign));
+      zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));
       break;
    case 5:
       //Generate keypair
@@ -959,8 +959,8 @@ function(id, title, message) {
       "</td></tr></table></div>";
       zimletInstance._dialog = new ZmDialog( { title:title, parent:zimletInstance.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true  } );
       zimletInstance._dialog.setContent(html);
-      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, zimletInstance.okBtnKeyPair));
-      zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, zimletInstance.cancelBtn));
+      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.okBtnKeyPair));
+      zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));
       break;
    case 6:
       //Encrypt message
@@ -992,8 +992,8 @@ function(id, title, message) {
       zimletInstance._dialog = new ZmDialog( { title:title, parent:zimletInstance.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       zimletInstance._dialog.setContent(html);
       tk_barrydegraaff_zimbra_openpgp.prototype.addFileInputPgpAttach();
-      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, zimletInstance.okBtnEncrypt));
-      zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, zimletInstance.cancelBtn));
+      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.okBtnEncrypt));
+      zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));
       break;
    case 7:
    //lookup keyserver
@@ -1005,9 +1005,9 @@ function(id, title, message) {
       zimletInstance._dialog = new ZmDialog( { title:title, parent:zimletInstance.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       zimletInstance._dialog.setContent(html);
       var btnSearch = document.getElementById("btnSearch");
-      btnSearch.onclick = AjxCallback.simpleClosure(zimletInstance.lookup, this);
-      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, zimletInstance.okBtnLookup));
-      zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, zimletInstance.cancelBtn));
+      btnSearch.onclick = AjxCallback.simpleClosure(zimletInstance.lookup, zimletInstance);
+      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.okBtnLookup));
+      zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));
       break;   
    case 9:
       //Import public key
@@ -1036,8 +1036,8 @@ function(id, title, message) {
       tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][74]+ "<br>" + result + "</div>";
       zimletInstance._dialog = new ZmDialog( { title:title, parent:zimletInstance.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true  } );
       zimletInstance._dialog.setContent(html);
-      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, zimletInstance.okBtnImportPubKey, publicKeys));
-      zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, zimletInstance.cancelBtn));
+      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.okBtnImportPubKey, publicKeys));
+      zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));
       break;
    case 10:
       //Decrypt file from attachment link
@@ -1060,8 +1060,8 @@ function(id, title, message) {
       zimletInstance._dialog = new ZmDialog( { title:title, parent:zimletInstance.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       zimletInstance._dialog.setContent(html);
       
-      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, zimletInstance.okBtnDecryptFile, [message]));
-      zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, zimletInstance.cancelBtn));
+      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.okBtnDecryptFile, [message]));
+      zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));
 
       //If a private key is available and a password is stored, auto decrypt the message if option auto_decrypt is set to true
       if((tk_barrydegraaff_zimbra_openpgp.privateKeyCache.length > 10) && 
@@ -1269,7 +1269,7 @@ function(arguments) {
 
             //Check for nested multipart/mixed messages
             var partArr=multipart[0].split('\n\n', 2);
-            if (partArr[0].indexOf('Content-Type: multipart/mixed')> 0)
+            if (partArr[0].indexOf('Content-Type: multipart/mixed')> -1)
             {
                var boundary = partArr[0].match(/boundary="([^"\\]*(?:\\.[^"\\]*)*)"/i);
                boundary = '--'+boundary[1];
@@ -1284,7 +1284,7 @@ function(arguments) {
 
             multipart.forEach(function(part) {
                var partArr=part.split('\n\n', 2);
-               if (partArr[0].indexOf('Content-Disposition: attachment')> 0)
+               if (partArr[0].indexOf('Content-Disposition: attachment')> -1)
                {                                        
                   var filename = partArr[0].match(/filename="([^"\\]*(?:\\.[^"\\]*)*)"/i);
                   
@@ -1293,15 +1293,33 @@ function(arguments) {
                      partArr[1] = partArr[1].split('=\n', 1);
                      partArr[1] = partArr[1] + '=';
                      partArr[1] = partArr[1].replace(/(\r\n|\n|\r)/gm,"");
-                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.arguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.arguments['domId']).innerHTML + '<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/file-pgp-encrypted.png"> <a class="AttLink" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(\''+tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(filename[1])+'\',\'octet/stream\',\''+partArr[1]+'\')">'+tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(filename[1])+'</a><br>';
+                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.arguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.arguments['domId']).innerHTML + '<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/file-pgp-encrypted.png"> <a class="AttLink" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(\''+tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(filename[1])+'\',\'octet/stream\',\''+partArr[1]+'\')">'+tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(filename[1])+'</a>&nbsp;';
                   }
                   else
                   {
+                     if (partArr[0].indexOf('Content-Transfer-Encoding: quoted-printable')> -1)
+                     {
+                        part = tk_barrydegraaff_zimbra_openpgp.prototype.quoted_printable_decode(part);
+                     }                     
                      part = part.substring(part.indexOf('\n\n'));
-                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.arguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.arguments['domId']).innerHTML + '<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/file-pgp-encrypted.png"> <a class="AttLink" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(\''+tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(filename[1])+'\',\'octet/stream\',\''+btoa(part)+'\')">'+tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(filename[1])+'</a><br>';                     
-                  }        
+                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.arguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.arguments['domId']).innerHTML + '<img style="vertical-align:middle" src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/file-pgp-encrypted.png"> <a class="AttLink" onclick="tk_barrydegraaff_zimbra_openpgp.prototype.downloadBlob(\''+tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(filename[1])+'\',\'octet/stream\',\''+btoa(part)+'\')">'+tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(filename[1])+'</a>&nbsp;';
+                     if (partArr[0].indexOf('Content-Type: application/pgp-keys') > -1)
+                     {
+                        //Import public key
+                        var pubKeyTxt = part.match(/(-----BEGIN PGP PUBLIC KEY BLOCK-----)([^]+)(-----END PGP PUBLIC KEY BLOCK-----)/g);
+                        if(pubKeyTxt)
+                        {
+                           if(pubKeyTxt[0])
+                           {
+                              document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.arguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.arguments['domId']).innerHTML + '|&nbsp;<a class="AttLink" id="btnImport'+myWindow.arguments['domId']+'">'+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][73]+'</a>&nbsp;';
+                              var btnImport = document.getElementById("btnImport"+myWindow.arguments['domId']);
+                              btnImport.onclick = AjxCallback.simpleClosure(tk_barrydegraaff_zimbra_openpgp.prototype.displayDialog, this, 9, tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][73], pubKeyTxt[0]);
+                           }   
+                        }
+                     }
+                  }           
                }                     
-               else if(partArr[0].indexOf('text/plain')> 0)
+               else if(partArr[0].indexOf('text/plain')> -1)
                {
                   if (partArr[0].indexOf('Content-Transfer-Encoding: base64')> -1)
                   {
@@ -1319,7 +1337,7 @@ function(arguments) {
                      document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.arguments['domId']).setAttribute('data-decrypted',part);
                   }   
                }
-               else if(partArr[0].indexOf('text/html')> 0)
+               else if(partArr[0].indexOf('text/html')> -1)
                {
                   //rendering html messages is currently not supported, this is a not so nice attempt to display html as text
                   part = part.substring(part.indexOf('\n\n'));
