@@ -1,6 +1,6 @@
 Name:           pgp-zimlet
-Version:        2.3.1
-Release:        3%{?dist}
+Version:        2.3.3
+Release:        1%{?dist}
 Summary:        Zimbra OpenPGP Zimlet
 
 Group:          Applications/Internet
@@ -52,6 +52,9 @@ fi
 
 
 %changelog
+* Fri May 06 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.3.3-1
+- New release update.
+
 * Fri Apr 29 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.3.1-3
 - Fix preun parameters NOT to undeploy the zimlet when upgrading
 
