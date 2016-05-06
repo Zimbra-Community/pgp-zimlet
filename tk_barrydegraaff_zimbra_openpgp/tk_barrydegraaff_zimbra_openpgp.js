@@ -73,12 +73,6 @@ tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
       tk_barrydegraaff_zimbra_openpgp.settings['auto_decrypt'] = 'true';
    }
 
-   //Some options are set, but not auto_decrypt, so set it to 'true' by default
-   if(!tk_barrydegraaff_zimbra_openpgp.settings['direct_send'])
-   {
-      tk_barrydegraaff_zimbra_openpgp.settings['direct_send'] = 'false';
-   }
-
    //Some options are set, but not store_passphrase_locally, so set it to 'false' by default
    if(!tk_barrydegraaff_zimbra_openpgp.settings['store_passphrase_locally'])
    {
@@ -867,7 +861,6 @@ function(id, title, message) {
       "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][23]+":</td><td><br>" + langListHtml + "</td></tr>" +
       "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][27]+":</td><td><br><input type='checkbox' id='enable_contacts_scanning' name='enable_contacts_scanning' " + (tk_barrydegraaff_zimbra_openpgp.settings['enable_contacts_scanning']=='false' ? '' : 'checked') + " value='true'>" + "</td></tr>" +
       "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][66]+":</td><td><br><input type='checkbox' id='auto_decrypt' name='auto_decrypt' " + (tk_barrydegraaff_zimbra_openpgp.settings['auto_decrypt']=='false' ? '' : 'checked') + " value='true'>" + "</td></tr>" +
-      "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][86]+":</td><td><br><input type='checkbox' id='direct_send' name='direct_send' " + (tk_barrydegraaff_zimbra_openpgp.settings['direct_send']=='false' ? '' : 'checked') + " value='true'>" + "</td></tr>" +
       pubkeyListHtml + 
       "<tr><td colspan=\"2\"><br><b>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][69]+"</b></td></tr>" +
       "<tr><td><br>"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][68]+":</td><td><br><input onkeypress='return event.charCode >= 48 && event.charCode <= 57' type='number' id='max_message_size' name='max_message_size' value='" + (tk_barrydegraaff_zimbra_openpgp.settings['max_message_size'] > 0 ? tk_barrydegraaff_zimbra_openpgp.settings['max_message_size'] : '1000000') + "'</td></tr>" +
@@ -1618,7 +1611,6 @@ function() {
    //Per user configuration options are jsonified into a single Zimbra userProperty
    tk_barrydegraaff_zimbra_openpgp.settings['enable_contacts_scanning'] = (document.getElementById("enable_contacts_scanning").checked ? 'true' : 'false');
    tk_barrydegraaff_zimbra_openpgp.settings['auto_decrypt'] = (document.getElementById("auto_decrypt").checked ? 'true' : 'false');
-   tk_barrydegraaff_zimbra_openpgp.settings['direct_send'] = (document.getElementById("direct_send").checked ? 'true' : 'false');
    tk_barrydegraaff_zimbra_openpgp.settings['store_passphrase_locally'] = (document.getElementById("store_passphrase_locally").checked ? 'true' : 'false');
    tk_barrydegraaff_zimbra_openpgp.settings['language'] = (document.getElementById("zimbra_openpgp_language").value);
    tk_barrydegraaff_zimbra_openpgp.settings['max_message_size'] = (document.getElementById("max_message_size").value);
@@ -1836,11 +1828,6 @@ function() {
          composeView.getHtmlEditor().setMode(Dwt.TEXT);   
          composeView.getHtmlEditor().setContent(plaintext.data);    
       
-         if (tk_barrydegraaff_zimbra_openpgp.settings['direct_send'] == 'true')
-         {
-            composeView._controller.sendMsg();
-         }   
-
          try {
             myWindow._dialog.popdown();
          } catch (err) { }   
@@ -2281,16 +2268,7 @@ function() {
                                  for (var index = 0; index < attBubble.length; index++) {
                                     attBubble[index].style.backgroundImage = 'url(\'\')';
                                  }
-                                 
-                                 if (tk_barrydegraaff_zimbra_openpgp.settings['direct_send'] == 'true')                                 
-                                 {
-                                    controller.sendMsg(attachment_list);
-                                 }
-                                 else
-                                 {
-                                    controller.saveDraft(ZmComposeController.DRAFT_TYPE_MANUAL, attachment_list);
-                                 }   
-
+                                 controller.saveDraft(ZmComposeController.DRAFT_TYPE_MANUAL, attachment_list);
                                  try {
                                     myWindow._dialog.popdown();
                                  } catch (err) { } 
@@ -2315,12 +2293,6 @@ function() {
 
       if (numberOfAttachments == 0)
       {
-         if (tk_barrydegraaff_zimbra_openpgp.settings['direct_send'] == 'true')
-         {
-            var composeView = appCtxt.getCurrentView();
-            composeView._controller.sendMsg();
-         }   
-      
          try {
             myWindow._dialog.popdown();
          } catch (err) { }               
