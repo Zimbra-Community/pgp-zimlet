@@ -1011,7 +1011,7 @@ function(id, title, message) {
       var numStr = 1;
       var pubkeyNumStr = "zimbra_openpgp_pubkeys" + numStr;
       var pubkeyTxt = '<b>&bull; '+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][72]+'</b>';
-      html = "<div style='width:650px; height: 200px;'><br><textarea maxlength=\"51000\" class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput"+numStr+"'/>" + (zimletInstance.getUserPropertyInfo(pubkeyNumStr).value ? zimletInstance.getUserPropertyInfo(pubkeyNumStr).value : '') + "</textarea><br>"+ pubkeyTxt + "<br>" + "<label for='publicKeyInfo"+numStr+"'>"+(zimletInstance.getUserPropertyInfo(pubkeyNumStr).value ? zimletInstance.pubkeyInfo(zimletInstance.getUserPropertyInfo(pubkeyNumStr).value) : '')+"</label>" + "<br>" +
+      html = "<div style='width:650px; height: 200px;'><textarea maxlength=\"51000\" class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput"+numStr+"'/>" + (zimletInstance.getUserPropertyInfo(pubkeyNumStr).value ? zimletInstance.getUserPropertyInfo(pubkeyNumStr).value : '') + "</textarea><br>"+ pubkeyTxt + "<br>" + "<label for='publicKeyInfo"+numStr+"'>"+(zimletInstance.getUserPropertyInfo(pubkeyNumStr).value ? zimletInstance.pubkeyInfo(zimletInstance.getUserPropertyInfo(pubkeyNumStr).value) : '')+"</label>" + "<br>" +
       "<br><button id='btnSearch' onclick=\"#\">"+tk_barrydegraaff_zimbra_openpgp.lang[tk_barrydegraaff_zimbra_openpgp.settings['language']][86]+"</button><br><div id='barrydegraaff_zimbra_openpgpResult'></div>" +
       "</div>";
       zimletInstance._dialog = new ZmDialog( { title:title, parent:zimletInstance.getShell(), standardButtons:[DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
