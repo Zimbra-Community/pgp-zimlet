@@ -19,4 +19,4 @@
 * And uninstall: "yum remove pgp-zimlet"
 
 # References:
-* See https://fedoraproject.org/wiki/How_to_create_an_RPM_package for more infomrarion.
+* See https://fedoraproject.org/wiki/How_to_create_an_RPM_package for more information.
