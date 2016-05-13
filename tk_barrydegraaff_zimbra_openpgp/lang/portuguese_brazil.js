@@ -85,6 +85,6 @@ tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][82] = 'Responder';
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][83] = 'Responder Todos';
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][84] = '<b>ALERTA: NÃO ENVIE SUA CHAVE PRIVADA POR EMAIL!! <br>Clique <span style="color: red">CANCELAR</span>!!</b><br><br>Talvez você queira enviar sua chave publica?';
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][85] = '<b>ALERTA: NÃO ENVIE SUA CHAVE PRIVADA POR EMAIL!!</b>';
-tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][86] = '';
+tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][86] = 'Submit to keyserver';
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][87] = 'Verificar Keyserver';
 tk_barrydegraaff_zimbra_openpgp.lang['portuguese_brazil'][88] = 'Buscar';

@@ -42,6 +42,7 @@ them here has no effect.
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-keypair" label="Generate key pair" id="keypair" />
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-sendTo" label="Send To" id="sendTo" />
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-lookup" label="Keyserver lookup" id="lookup" />
+         <menuItem icon="tk_barrydegraaff_zimbra_openpgp-submit" label="Keyserver submit" id="submit" />
          <menuItem icon="tk_barrydegraaff_zimbra_openpgp-help" label="Help / About" id="help" />
       </contextMenu>
    </zimletPanelItem>
