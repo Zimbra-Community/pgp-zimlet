@@ -2665,7 +2665,14 @@ tk_barrydegraaff_zimbra_openpgp.prototype.submit = function() {
    {  
       if (xmlHttp.readyState === 4) 
       {         
-         document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML = '<br>' + xmlHttp.status + ' '+ tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(tk_barrydegraaff_zimbra_openpgp.prototype.htmlToText(xmlHttp.statusText + " "  + xmlHttp.responseText));
+         if (xmlHttp.status === 200) 
+         {  
+            document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML = '<br>' + xmlHttp.status + ' '+ tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(tk_barrydegraaff_zimbra_openpgp.prototype.htmlToText(xmlHttp.statusText + " "  + xmlHttp.responseText));
+         }
+         else
+         {  
+            document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML = '<br>' + xmlHttp.status + ' '+ tk_barrydegraaff_zimbra_openpgp.prototype.escapeHtml(tk_barrydegraaff_zimbra_openpgp.prototype.htmlToText(xmlHttp.statusText));
+         }            
       }
    }; 
    xmlHttp.send("keytext="+encodeURIComponent(keytext));
