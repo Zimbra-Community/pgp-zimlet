@@ -15,7 +15,7 @@ limitations under the License.
 
 HTML decoding functionality provided by: http://code.google.com/p/google-trekker/
 */
-tk_barrydegraaff_zimbra_openpgp.prototype.htmlToText = function (html) {
+OpenPGPZimlet.prototype.htmlToText = function (html) {
 	return html
 		// Remove line breaks
 		.replace(/(?:\n|\r\n|\r)/ig,"")
@@ -48,10 +48,10 @@ tk_barrydegraaff_zimbra_openpgp.prototype.htmlToText = function (html) {
 		// Replace multiple spaces with a single space.
  		.replace(/ {2,}/g," ")
 		// Decode HTML entities.
- 		.replace(/&([^;]+);/g, tk_barrydegraaff_zimbra_openpgp.prototype.decodeHtmlEntity );
+ 		.replace(/&([^;]+);/g, OpenPGPZimlet.prototype.decodeHtmlEntity );
 }
 
-tk_barrydegraaff_zimbra_openpgp.prototype.decodeHtmlEntity = function (m, n) {   
+OpenPGPZimlet.prototype.decodeHtmlEntity = function (m, n) {   
    var ENTITIES_MAP = {
      'nbsp' : 160,
      'iexcl' : 161,
