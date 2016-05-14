@@ -29,6 +29,6 @@ echo string count
 
 for i in {1..100}; do 
 echo -n $i ' '; 
-cat tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.js | grep "tk_barrydegraaff_zimbra_openpgp.lang\[tk_barrydegraaff_zimbra_openpgp.settings\['language'\]\]\[$i\]" | wc -l
+cat tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.js | grep " OpenPGPZimlet.lang\[$i\]" | wc -l
 
 done
