@@ -32,7 +32,7 @@ them here has no effect.
    <include>aes.js</include>
    <include>aes-ctr.js</include>
    <include>htmlToText.js</include>
-   <handlerObject>tk_barrydegraaff_zimbra_openpgp</handlerObject>
+   <handlerObject>tk_barrydegraaff_zimbra_openpgp_HandlerObject</handlerObject>
    <includeCSS>tk_barrydegraaff_zimbra_openpgp.css</includeCSS>
    <zimletPanelItem label="OpenPGP" icon="tk_barrydegraaff_zimbra_openpgp-panelIcon">
       <dragSource type="ZmConv" />

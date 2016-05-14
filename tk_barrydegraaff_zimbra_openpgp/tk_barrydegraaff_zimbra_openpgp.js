@@ -19,7 +19,23 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 */
 
 //Constructor
-tk_barrydegraaff_zimbra_openpgp = function() {
+function tk_barrydegraaff_zimbra_openpgp_HandlerObject() {
+};
+
+tk_barrydegraaff_zimbra_openpgp_HandlerObject.prototype = new ZmZimletBase();
+tk_barrydegraaff_zimbra_openpgp_HandlerObject.prototype.constructor = tk_barrydegraaff_zimbra_openpgp_HandlerObject;
+
+tk_barrydegraaff_zimbra_openpgp_HandlerObject.prototype.toString =
+function() {
+   return "tk_barrydegraaff_zimbra_openpgp_HandlerObject";
+};
+
+var tk_barrydegraaff_zimbra_openpgp = tk_barrydegraaff_zimbra_openpgp_HandlerObject;
+
+/* This method gets called when Zimbra Zimlet framework initializes
+ */
+tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
+
    tk_barrydegraaff_zimbra_openpgp.privateKeyCache='';
    tk_barrydegraaff_zimbra_openpgp.privatePassCache='';
    tk_barrydegraaff_zimbra_openpgp.addressBookPublicKeys = []; 
@@ -35,19 +51,7 @@ tk_barrydegraaff_zimbra_openpgp = function() {
    oScript.type = "text/javascript";
    oScript.src="/service/zimlet/_dev/tk_barrydegraaff_zimbra_openpgp/openpgp.js";
    oHead.appendChild( oScript); 
-};
-
-tk_barrydegraaff_zimbra_openpgp.prototype = new ZmZimletBase;
-tk_barrydegraaff_zimbra_openpgp.prototype.constructor = tk_barrydegraaff_zimbra_openpgp;
-
-tk_barrydegraaff_zimbra_openpgp.prototype.toString =
-function() {
-   return "tk_barrydegraaff_zimbra_openpgp";
-};
-
-/* This method gets called when Zimbra Zimlet framework initializes
- */
-tk_barrydegraaff_zimbra_openpgp.prototype.init = function() {
+   
    tk_barrydegraaff_zimbra_openpgp.version=this._zimletContext.version;
    //Make additional mail headers available
    AjxPackage.require({name:"MailCore", callback:new AjxCallback(this, this._applyRequestHeaders)});
