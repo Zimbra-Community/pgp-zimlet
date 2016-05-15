@@ -21,6 +21,7 @@ Adding PGP support to Zimbra Collaboration Suite.
 
 
 %build
+cd tk_barrydegraaff_zimbra_openpgp
 zip -r tk_barrydegraaff_zimbra_openpgp.zip *
 
 
