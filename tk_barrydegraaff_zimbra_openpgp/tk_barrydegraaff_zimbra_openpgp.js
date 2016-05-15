@@ -1776,7 +1776,7 @@ function(publicKey) {
    else if((publicKey.keys[0]) && (openslots[0]))
    {
       this.setUserProperty('zimbra_openpgp_pubkeys'+openslots[0], publicKey.keys[0].armor(), true);
-      OpenPGPZimlet.prototype.status(OpenPGPZimlet.lang[75] + " " + OpenPGPZimlet.lang['english'][26] + " " + openslots[0], ZmStatusView.LEVEL_INFO); 
+      OpenPGPZimlet.prototype.status(OpenPGPZimlet.lang[75] + " " + OpenPGPZimlet.lang[26] + " " + openslots[0], ZmStatusView.LEVEL_INFO); 
    }
    else
    {
