@@ -1,5 +1,5 @@
 Name:           pgp-zimlet
-Version:        2.3.3
+Version:        2.3.4
 Release:        1%{?dist}
 Summary:        Zimbra OpenPGP Zimlet
 
@@ -21,11 +21,6 @@ Adding PGP support to Zimbra Collaboration Suite.
 
 
 %build
-cat tk_barrydegraaff_zimbra_openpgp/lang/*.js >> tk_barrydegraaff_zimbra_openpgp/lang.js
-echo -e "\n\r\n\r}" >> tk_barrydegraaff_zimbra_openpgp/lang.js
-grep -lZr -e "_dev/" "tk_barrydegraaff_zimbra_openpgp/" | xargs -0 sed -i "s^_dev/^^g"
-cd tk_barrydegraaff_zimbra_openpgp
-rm -Rf lang
 zip -r tk_barrydegraaff_zimbra_openpgp.zip *
 
 
@@ -37,6 +32,7 @@ cp -R tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.zip $RPM_B
 %post
 su - zimbra -c "zmzimletctl deploy /opt/zimbra/zimlets-extra/tk_barrydegraaff_zimbra_openpgp.zip"
 su - zimbra -c "zmprov fc all"
+su - zimbra -c "zmmailboxdctl restart"
 
 
 %preun
