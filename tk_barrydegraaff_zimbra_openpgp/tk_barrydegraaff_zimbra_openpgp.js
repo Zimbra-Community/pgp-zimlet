@@ -1364,7 +1364,14 @@ function(arguments) {
                if(document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_att"+myWindow.arguments['domId']).innerHTML == '')
                {
                   var e = document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_att"+myWindow.arguments['domId']);
-                  e.parentNode.parentNode.parentNode.removeChild(e.parentNode.parentNode);
+                  if (appCtxt.get(ZmSetting.GROUP_MAIL_BY) === ZmSetting.GROUP_BY_CONV)
+                  {
+                     e.parentNode.parentNode.removeChild(e.parentNode);
+                  }
+                  else
+                  {
+                     e.parentNode.parentNode.parentNode.removeChild(e.parentNode.parentNode);
+                  }                  
                }
             } catch (err) {}            
          }
