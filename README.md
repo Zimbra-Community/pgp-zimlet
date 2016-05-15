@@ -29,25 +29,14 @@ Stay up-to-date: new releases are announced on the users mailing list: http://li
 
 ### Install Zimbra OpenPGP Zimlet
 
-The recommended method is to deploy using git. (I no longer support zmzimletctl, although that still works.)
+With translations support:
 
-    [root@myzimbra ~]# su zimbra
-    [zimbra@myzimbra ~]# zmzimletctl undeploy tk_barrydegraaff_zimbra_openpgp
-    [zimbra@myzimbra ~]# exit
-    [root@myzimbra ~]# yum install -y git 
-    [root@myzimbra ~]# apt-get -y install git
-    [root@myzimbra ~]# cd ~
-    [root@myzimbra ~]# rm pgp-zimlet -Rf
-    [root@myzimbra ~]# git clone https://github.com/Zimbra-Community/pgp-zimlet
-    [root@myzimbra ~]# cd pgp-zimlet
-    [root@myzimbra pgp-zimlet]# git checkout 2.3.3
-    [root@myzimbra pgp-zimlet]# chmod +rx install-dev.sh
-    [root@myzimbra pgp-zimlet]# ./install-dev.sh
-    [root@myzimbra pgp-zimlet]# su zimbra
-    [zimbra@myzimbra pgp-zimlet] zmprov mc default zimbraPrefZimletTreeOpen TRUE
-    [zimbra@myzimbra pgp-zimlet] zmcontrol restart
-    
-Please be warned, if you undeploy this Zimlet after some time Zimbra will truncate your users preferences (public keys) of this Zimlet.
+- https://github.com/Zimbra-Community/pgp-zimlet/wiki/Install-via-zmzimletctl
+
+Without translations support:
+
+- https://github.com/Zimbra-Community/pgp-zimlet/wiki/Install-from-git
+
 
 ========================================================================
 
