@@ -2403,14 +2403,13 @@ function(app, toolbar, controller, viewId) {
 OpenPGPZimlet.prototype.composeEncryptHandler =
 function(controller) {
    var composeMode = appCtxt.getCurrentView().getHtmlEditor().getMode();
-   var message = controller._getBodyContent();
 
    if(composeMode != 'text/plain')
    {
-      //Please format as plain text and try again.
-      OpenPGPZimlet.prototype.status(OpenPGPZimlet.lang[70], ZmStatusView.LEVEL_INFO); 
-      return;
+      appCtxt.getCurrentView().setComposeMode('text/plain');
    }
+   
+   var message = controller._getBodyContent();
    
    if(message.length < 1)
    {
@@ -2428,14 +2427,13 @@ function(controller) {
 OpenPGPZimlet.prototype.composeSignHandler =
 function(controller) {
    var composeMode = appCtxt.getCurrentView().getHtmlEditor().getMode();
-   var message = controller._getBodyContent();
    
    if(composeMode != 'text/plain')
    {
-      //Please format as plain text and try again.
-      OpenPGPZimlet.prototype.status(OpenPGPZimlet.lang[70], ZmStatusView.LEVEL_INFO); 
-      return;
+      appCtxt.getCurrentView().setComposeMode('text/plain');
    }
+   
+   var message = controller._getBodyContent();
    
    if(message.length < 1)
    {
