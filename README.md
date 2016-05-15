@@ -29,6 +29,12 @@ Stay up-to-date: new releases are announced on the users mailing list: http://li
 
 ### Install Zimbra OpenPGP Zimlet
 
+    [root@myzimbra ~]# rm -Rf /opt/zimbra/zimlets-deployed/_dev/tk_barrydegraaff_zimbra_openpgp/
+    [root@myzimbra ~]# su zimbra       
+    [zimbra@myzimbra ~] wget https://github.com/Zimbra-Community/pgp-zimlet/releases/download/2.3.4/tk_barrydegraaff_zimbra_openpgp.zip -O /tmp/tk_barrydegraaff_zimbra_openpgp.zip
+    [zimbra@myzimbra ~] zmzimletctl deploy /tmp/tk_barrydegraaff_zimbra_openpgp.zip
+    [zimbra@myzimbra ~] zmmailboxdctl restart
+
 With translations support:
 
 - https://github.com/Zimbra-Community/pgp-zimlet/wiki/Install-via-zmzimletctl
