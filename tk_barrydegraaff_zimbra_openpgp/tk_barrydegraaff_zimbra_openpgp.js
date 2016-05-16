@@ -663,6 +663,7 @@ function() {
  * */
 OpenPGPZimlet.prototype.menuItemSelected =
 function(itemId) {
+   var zimletInstance = appCtxt._zimletMgr.getZimletByName('tk_barrydegraaff_zimbra_openpgp').handlerObject;
    switch (itemId) {
    case "pubkeys":
       this.displayDialog(3, OpenPGPZimlet.lang[3], null);
@@ -674,7 +675,7 @@ function(itemId) {
       this.displayDialog(5, OpenPGPZimlet.lang[4], null);
       break;
    case "help":
-      window.open(this.getResource("help/index.html"));
+      window.open(zimletInstance.getResource("help/index.html"));
       break;
    case "lookup":
       this.displayDialog(7, OpenPGPZimlet.lang[87], null);
