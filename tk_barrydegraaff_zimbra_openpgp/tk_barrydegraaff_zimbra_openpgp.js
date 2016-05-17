@@ -2150,19 +2150,22 @@ function() {
       combinedPublicKeys.forEach(function(entry) {
          if(entry[0]) {
             for (i = 0; i < entry[0].users.length; i++) {
-               userid = entry[0].users[i].userId.userid.replace(/\</g,"&lt;");
-               userid = userid.replace(/\>/g,"&gt;") ;
-               var selected;
-               if((keycount == 0) && (publicKeys1.keys))
+               if (entry[0].users[i].userId)
                {
-                     selected = 'selected class="selectme" ';
-                     userIdCount++;
+                  userid = entry[0].users[i].userId.userid.replace(/\</g,"&lt;");
+                  userid = userid.replace(/\>/g,"&gt;") ;
+                  var selected;
+                  if((keycount == 0) && (publicKeys1.keys))
+                  {
+                        selected = 'selected class="selectme" ';
+                        userIdCount++;
+                  }
+                  else
+                  {
+                     selected = '';
+                  }                
+                  result = result + '<option ' + selected + ' title="fingerprint: '+entry[0].primaryKey.fingerprint+' \r\ncreated: '+entry[0].primaryKey.created+'" value="'+entry[0].armor()+'">'+userid+'</option>';
                }
-               else
-               {
-                  selected = '';
-               }                
-               result = result + '<option ' + selected + ' title="fingerprint: '+entry[0].primaryKey.fingerprint+' \r\ncreated: '+entry[0].primaryKey.created+'" value="'+entry[0].armor()+'">'+userid+'</option>';
             }
          }
          keycount++;
