@@ -24,6 +24,7 @@ Report security issues to barrydg@zetalliance.org (PGP fingerprint: 9e0e165f06b3
 
 Stay up-to-date: new releases are announced on the users mailing list: http://lists.zetalliance.org/mailman/listinfo/users_lists.zetalliance.org
 
+For developers: http://barrydegraaff.github.io/OpenPGPZimletJSDoc/OpenPGPZimlet.html
 
 ========================================================================
 
