@@ -1194,6 +1194,7 @@ function (a) {
  * and will show the decrypted OpenPGP encrypted message in the DOM.
  * @param {string} fArguments.message - the OpenPGP encrypted message
  * @param {string} fArguments.domId - the DOM id where to display the result
+ * @param {boolean} fArguments.hasMIME - if false this is an inline pgp message that does not require mime parsing, if true its a pgp/mime message that needs parsing
  * */ 
 OpenPGPZimlet.prototype.okBtnDecrypt =
 function(fArguments) {
