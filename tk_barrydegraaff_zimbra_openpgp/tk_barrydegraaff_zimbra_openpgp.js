@@ -1398,34 +1398,10 @@ function(fArguments) {
                         }
                      }           
                   }                     
-                  else if(partArr[0].indexOf('text/plain')> -1)
+                  else
                   {
-                     if (partArr[0].indexOf('Content-Transfer-Encoding: base64')> -1)
-                     {
-                        document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML + OpenPGPZimlet.prototype.urlify(OpenPGPZimlet.prototype.escapeHtml(atob(partArr[1])));
-                        document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).setAttribute('data-decrypted',atob(partArr[1]));
-                     }
-                     if (partArr[0].indexOf('Content-Transfer-Encoding: quoted-printable')> -1)
-                     {
-                        document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML + OpenPGPZimlet.prototype.urlify(OpenPGPZimlet.prototype.escapeHtml(OpenPGPZimlet.prototype.quoted_printable_decode(part)));
-                        document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).setAttribute('data-decrypted',OpenPGPZimlet.prototype.quoted_printable_decode(part));
-                     }                  
-                     else
-                     {
-                        document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML + OpenPGPZimlet.prototype.urlify(OpenPGPZimlet.prototype.escapeHtml(part));
-                        document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).setAttribute('data-decrypted',part);
-                     }   
-                  }
-                  else if(partArr[0].indexOf('text/html')> -1)
-                  {
-                     //rendering html messages is currently not supported, this is a not so nice attempt to display html as text
-                     part = part.substring(part.indexOf('\n\n'));
-                     if (partArr[0].indexOf('Content-Transfer-Encoding: quoted-printable')> -1)
-                     {
-                        part = OpenPGPZimlet.prototype.quoted_printable_decode(part);
-                     }                     
-                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML + OpenPGPZimlet.prototype.urlify(OpenPGPZimlet.prototype.escapeHtml(OpenPGPZimlet.prototype.htmlToText(part)));
-                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).setAttribute('data-decrypted',OpenPGPZimlet.prototype.htmlToText(part));
+                     //display body part
+                     OpenPGPZimlet.prototype.displayMimeBodyPart(part, myWindow.fArguments['domId']);
                   }
                });
             }   
@@ -1434,8 +1410,8 @@ function(fArguments) {
                /* A pgp/mime message without multipart boundary
                 * https://github.com/Zimbra-Community/pgp-zimlet/issues/182
                */
-               document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML + OpenPGPZimlet.prototype.urlify(OpenPGPZimlet.prototype.escapeHtml(plaintext.data));
-               document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).setAttribute('data-decrypted',plaintext.data);               
+               //display body part
+               OpenPGPZimlet.prototype.displayMimeBodyPart(plaintext.data, myWindow.fArguments['domId']);
             }   
 
             //Got NO attachments, remove the attLinks div from UI
@@ -1473,6 +1449,39 @@ function(fArguments) {
       OpenPGPZimlet.prototype.status(OpenPGPZimlet.lang[44], ZmStatusView.LEVEL_WARNING);
    }
 };
+
+/** This method parses/decodes and displays a body part from pgp/mime
+ * @param {string} part - message part
+ * @param {string} domId - the DOM id where to display the result
+ * */ 
+OpenPGPZimlet.prototype.displayMimeBodyPart =
+function(part, domId) {
+   var partArr=part.split('\n\n', 2);
+   partArr[1] = part.substring(part.indexOf('\n\n')+2);
+
+   var headers = partArr[0];
+   
+   var body = partArr[1];
+   
+   if (headers.indexOf('Content-Transfer-Encoding: base64')> -1)
+   {
+      body = atob(body);
+   }
+
+   if (headers.indexOf('Content-Transfer-Encoding: quoted-printable')> -1)
+   {
+      body = OpenPGPZimlet.prototype.quoted_printable_decode(body);
+   }
+   
+   if(headers.indexOf('text/html')> -1)
+   {
+      body = OpenPGPZimlet.prototype.htmlToText(body);
+   }
+
+   document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+domId).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+domId).innerHTML + OpenPGPZimlet.prototype.urlify(OpenPGPZimlet.prototype.escapeHtml(body));
+   document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+domId).setAttribute('data-decrypted',body);   
+}
+
 
 /** This method is called when the Decrypt File dialog "OK" button is clicked after private key has been entered for decrypting a file.
  * and will decrypt the OpenPGP encrypted file. The result is a download in the browser.
