@@ -1482,7 +1482,6 @@ function(part, domId) {
    document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+domId).setAttribute('data-decrypted',body);   
 }
 
-
 /** This method is called when the Decrypt File dialog "OK" button is clicked after private key has been entered for decrypting a file.
  * and will decrypt the OpenPGP encrypted file. The result is a download in the browser.
  * @param {arraybuffer} fArguments.0 - the OpenPGP encrypted file
