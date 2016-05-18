@@ -1465,7 +1465,8 @@ function(part, domId) {
    
    if (headers.indexOf('Content-Transfer-Encoding: base64')> -1)
    {
-      body = atob(body);
+      //just using atob will break utf-8 encoded characters in the base64 encoded message
+      body = decodeURIComponent(escape(window.atob(body)));
    }
 
    if (headers.indexOf('Content-Transfer-Encoding: quoted-printable')> -1)
