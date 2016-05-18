@@ -595,7 +595,7 @@ OpenPGPZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {
             {
                document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar'+appCtxt.getCurrentAppName()+msg.id).innerHTML = '<a id="btnReply'+msg.id+'" style="text-decoration: none" onclick="#"><img style="vertical-align:middle" src="'+this.getResource("reply-sender.png")+'"> '+OpenPGPZimlet.lang[82]+'</a>&nbsp;&nbsp;<a id="btnReplyAll'+msg.id+'" style="text-decoration: none" onclick="#"><img style="vertical-align:middle" src="'+this.getResource("reply-all.png")+'"> '+OpenPGPZimlet.lang[83]+'</a>&nbsp;&nbsp;<a id="btnPrint'+msg.id+'" style="text-decoration: none" onclick="#"><img style="vertical-align:middle" src="'+this.getResource("printButton.png")+'"> '+OpenPGPZimlet.lang[54]+'</a>&nbsp;&nbsp;';
                var btnPrint = document.getElementById("btnPrint"+msg.id);               
-               btnPrint.onclick = AjxCallback.simpleClosure(this.printdiv, this, 'tk_barrydegraaff_zimbra_openpgp_infobar_body'+appCtxt.getCurrentAppName()+msg.id, OpenPGPZimlet.prototype.escapeHtml(subject));
+               btnPrint.onclick = AjxCallback.simpleClosure(this.printdiv, this, 'tk_barrydegraaff_zimbra_openpgp_infobar_body'+appCtxt.getCurrentAppName()+msg.id, msg);
 
                var btnReply = document.getElementById("btnReply"+msg.id);
                btnReply.onclick = AjxCallback.simpleClosure(this.reply, this, msg, 'tk_barrydegraaff_zimbra_openpgp_infobar_body'+appCtxt.getCurrentAppName()+msg.id, 'reply');
@@ -1465,7 +1465,9 @@ function(part, domId) {
    
    if (headers.indexOf('Content-Transfer-Encoding: base64')> -1)
    {
-      body = atob(body);
+      //just using atob will break utf-8 encoded characters in the base64 encoded message
+      //http://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
+      body = decodeURIComponent(escape(window.atob(body)));
    }
 
    if (headers.indexOf('Content-Transfer-Encoding: quoted-printable')> -1)
@@ -1481,7 +1483,6 @@ function(part, domId) {
    document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+domId).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+domId).innerHTML + OpenPGPZimlet.prototype.urlify(OpenPGPZimlet.prototype.escapeHtml(body));
    document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+domId).setAttribute('data-decrypted',body);   
 }
-
 
 /** This method is called when the Decrypt File dialog "OK" button is clicked after private key has been entered for decrypting a file.
  * and will decrypt the OpenPGP encrypted file. The result is a download in the browser.
@@ -2696,36 +2697,12 @@ OpenPGPZimlet.prototype.base64DecToArr = function (sBase64, nBlocksSize) {
   return taBytes;
 }
 
-/** This method decodes a quoted-printable encoded string.
+/** This method decodes a quoted-printable encoded string. See {@link https://github.com/mathiasbynens/quoted-printable/blob/master/quoted-printable.js}.
  * @param {string} str - quoted-printable encoded string
  * @returns {string} - decoded string
  * */
 OpenPGPZimlet.prototype.quoted_printable_decode = function(str) {
-//https://raw.githubusercontent.com/kvz/phpjs/master/functions/strings/quoted_printable_decode.js
-  //       discuss at: http://phpjs.org/functions/quoted_printable_decode/
-  //      original by: Ole Vrijenhoek
-  //      bugfixed by: Brett Zamir (http://brett-zamir.me)
-  //      bugfixed by: Theriault
-  // reimplemented by: Theriault
-  //      improved by: Brett Zamir (http://brett-zamir.me)
-  //        example 1: quoted_printable_decode('a=3Db=3Dc');
-  //        returns 1: 'a=b=c'
-  //        example 2: quoted_printable_decode('abc  =20\r\n123  =20\r\n');
-  //        returns 2: 'abc   \r\n123   \r\n'
-  //        example 3: quoted_printable_decode('012345678901234567890123456789012345678901234567890123456789012345678901234=\r\n56789');
-  //        returns 3: '01234567890123456789012345678901234567890123456789012345678901234567890123456789'
-  //        example 4: quoted_printable_decode("Lorem ipsum dolor sit amet=23, consectetur adipisicing elit");
-  //        returns 4: 'Lorem ipsum dolor sit amet#, consectetur adipisicing elit'
-
-  var RFC2045Decode1 = /=\r\n/gm,
-    // Decodes all equal signs followed by two hex digits
-    RFC2045Decode2IN = /=([0-9A-F]{2})/gim,
-    // the RFC states against decoding lower case encodings, but following apparent PHP behavior
-    // RFC2045Decode2IN = /=([0-9A-F]{2})/gm,
-    RFC2045Decode2OUT = function (sMatch, sHex) {
-      return String.fromCharCode(parseInt(sHex, 16));
-    };
-  return str.replace(RFC2045Decode1, '').replace(RFC2045Decode2IN, RFC2045Decode2OUT);
+   return utf8.decode(quotedPrintable.decode(str));
 }
 
 /** This method creates clickable links in decrypted messages.
@@ -2826,13 +2803,38 @@ var lookupResult = document.getElementsByName("lookupResult");
 
 /** This method is called to print a decrypted message, pop-up the browser print preview.
  * @param {string} printdivname - the HTML DIV id that contains the message to print
- * @param {string} subject - the email subject 
+ * @param {ZmMailMsg} msg - an email in {@link https://files.zimbra.com/docs/zimlet/zcs/8.6.0/jsapi-zimbra-doc/symbols/ZmMailMsg.html ZmMailMsg} format
  * */
-OpenPGPZimlet.prototype.printdiv = function(printdivname, subject) {
+OpenPGPZimlet.prototype.printdiv = function(printdivname, msg) {
    var divToPrint=document.getElementById(printdivname);
+
+   var sendDate = String(msg.sentDate);
+   sendDate = OpenPGPZimlet.prototype.timeConverter(sendDate.substring(0,10))
+
+   var index=0;
+   var to = '';
+   for (index = 0; index < msg._addrs.TO._array.length; ++index) {
+       to =  to  + '"'+msg._addrs.TO._array[index].name+'" <'+msg._addrs.TO._array[index].address+'>, ';
+   }
+   to = to.substring(0, to.length-2);
+
+   var index=0;
+   var cc = '';
+   for (index = 0; index < msg._addrs.CC._array.length; ++index) {
+       cc =  cc  + '"'+msg._addrs.CC._array[index].name+'" <'+msg._addrs.CC._array[index].address+'>, ';
+   }
+   cc = cc.substring(0, cc.length-2);
+
+   var header = '​​​​From: "'+msg._addrs.FROM._array[0].name+'" <'+msg._addrs.FROM._array[0].address+'>\r\n' +
+   'To: '+to+'\r\n' +
+   'Cc: '+cc+'\r\n' +
+   'Sent: '+sendDate+'\r\n\r\n';
+   
+   var subject = msg.subject.replace(/\*\*\*.*\*\*\*/,'');
+
    var newWin=window.open('','Print-Window','width=800,height=600');
    newWin.document.open();
-   newWin.document.write('<html><head><title>'+OpenPGPZimlet.prototype.escapeHtml(subject)+'</title></head><body><h1>'+OpenPGPZimlet.prototype.escapeHtml(subject)+'</h1><pre style="white-space: pre-wrap;word-wrap: break-word;">'+divToPrint.innerHTML+'</pre></body></html>');
+   newWin.document.write('<html><head><title>'+OpenPGPZimlet.prototype.escapeHtml(subject)+'</title></head><body><h1>'+OpenPGPZimlet.prototype.escapeHtml(subject)+'</h1><pre style="white-space: pre-wrap;word-wrap: break-word;">'+OpenPGPZimlet.prototype.escapeHtml(header) + divToPrint.innerHTML+'</pre></body></html>');
    newWin.document.close();
    newWin.focus();
    newWin.print();
