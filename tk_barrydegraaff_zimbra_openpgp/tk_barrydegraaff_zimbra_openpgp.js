@@ -1466,6 +1466,7 @@ function(part, domId) {
    if (headers.indexOf('Content-Transfer-Encoding: base64')> -1)
    {
       //just using atob will break utf-8 encoded characters in the base64 encoded message
+      //http://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
       body = decodeURIComponent(escape(window.atob(body)));
    }
 
@@ -2696,36 +2697,12 @@ OpenPGPZimlet.prototype.base64DecToArr = function (sBase64, nBlocksSize) {
   return taBytes;
 }
 
-/** This method decodes a quoted-printable encoded string.
+/** This method decodes a quoted-printable encoded string. See {@link https://github.com/mathiasbynens/quoted-printable/blob/master/quoted-printable.js}.
  * @param {string} str - quoted-printable encoded string
  * @returns {string} - decoded string
  * */
 OpenPGPZimlet.prototype.quoted_printable_decode = function(str) {
-//https://raw.githubusercontent.com/kvz/phpjs/master/functions/strings/quoted_printable_decode.js
-  //       discuss at: http://phpjs.org/functions/quoted_printable_decode/
-  //      original by: Ole Vrijenhoek
-  //      bugfixed by: Brett Zamir (http://brett-zamir.me)
-  //      bugfixed by: Theriault
-  // reimplemented by: Theriault
-  //      improved by: Brett Zamir (http://brett-zamir.me)
-  //        example 1: quoted_printable_decode('a=3Db=3Dc');
-  //        returns 1: 'a=b=c'
-  //        example 2: quoted_printable_decode('abc  =20\r\n123  =20\r\n');
-  //        returns 2: 'abc   \r\n123   \r\n'
-  //        example 3: quoted_printable_decode('012345678901234567890123456789012345678901234567890123456789012345678901234=\r\n56789');
-  //        returns 3: '01234567890123456789012345678901234567890123456789012345678901234567890123456789'
-  //        example 4: quoted_printable_decode("Lorem ipsum dolor sit amet=23, consectetur adipisicing elit");
-  //        returns 4: 'Lorem ipsum dolor sit amet#, consectetur adipisicing elit'
-
-  var RFC2045Decode1 = /=\r\n/gm,
-    // Decodes all equal signs followed by two hex digits
-    RFC2045Decode2IN = /=([0-9A-F]{2})/gim,
-    // the RFC states against decoding lower case encodings, but following apparent PHP behavior
-    // RFC2045Decode2IN = /=([0-9A-F]{2})/gm,
-    RFC2045Decode2OUT = function (sMatch, sHex) {
-      return String.fromCharCode(parseInt(sHex, 16));
-    };
-  return str.replace(RFC2045Decode1, '').replace(RFC2045Decode2IN, RFC2045Decode2OUT);
+   return utf8.decode(quotedPrintable.decode(str));
 }
 
 /** This method creates clickable links in decrypted messages.
