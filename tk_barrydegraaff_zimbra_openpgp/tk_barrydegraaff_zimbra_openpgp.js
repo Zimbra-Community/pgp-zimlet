@@ -595,7 +595,7 @@ OpenPGPZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {
             {
                document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar'+appCtxt.getCurrentAppName()+msg.id).innerHTML = '<a id="btnReply'+msg.id+'" style="text-decoration: none" onclick="#"><img style="vertical-align:middle" src="'+this.getResource("reply-sender.png")+'"> '+OpenPGPZimlet.lang[82]+'</a>&nbsp;&nbsp;<a id="btnReplyAll'+msg.id+'" style="text-decoration: none" onclick="#"><img style="vertical-align:middle" src="'+this.getResource("reply-all.png")+'"> '+OpenPGPZimlet.lang[83]+'</a>&nbsp;&nbsp;<a id="btnPrint'+msg.id+'" style="text-decoration: none" onclick="#"><img style="vertical-align:middle" src="'+this.getResource("printButton.png")+'"> '+OpenPGPZimlet.lang[54]+'</a>&nbsp;&nbsp;';
                var btnPrint = document.getElementById("btnPrint"+msg.id);               
-               btnPrint.onclick = AjxCallback.simpleClosure(this.printdiv, this, 'tk_barrydegraaff_zimbra_openpgp_infobar_body'+appCtxt.getCurrentAppName()+msg.id, OpenPGPZimlet.prototype.escapeHtml(subject));
+               btnPrint.onclick = AjxCallback.simpleClosure(this.printdiv, this, 'tk_barrydegraaff_zimbra_openpgp_infobar_body'+appCtxt.getCurrentAppName()+msg.id, msg);
 
                var btnReply = document.getElementById("btnReply"+msg.id);
                btnReply.onclick = AjxCallback.simpleClosure(this.reply, this, msg, 'tk_barrydegraaff_zimbra_openpgp_infobar_body'+appCtxt.getCurrentAppName()+msg.id, 'reply');
@@ -2825,13 +2825,38 @@ var lookupResult = document.getElementsByName("lookupResult");
 
 /** This method is called to print a decrypted message, pop-up the browser print preview.
  * @param {string} printdivname - the HTML DIV id that contains the message to print
- * @param {string} subject - the email subject 
+ * @param {ZmMailMsg} msg - an email in {@link https://files.zimbra.com/docs/zimlet/zcs/8.6.0/jsapi-zimbra-doc/symbols/ZmMailMsg.html ZmMailMsg} format
  * */
-OpenPGPZimlet.prototype.printdiv = function(printdivname, subject) {
+OpenPGPZimlet.prototype.printdiv = function(printdivname, msg) {
    var divToPrint=document.getElementById(printdivname);
+
+   var sendDate = String(msg.sentDate);
+   sendDate = OpenPGPZimlet.prototype.timeConverter(sendDate.substring(0,10))
+
+   var index=0;
+   var to = '';
+   for (index = 0; index < msg._addrs.TO._array.length; ++index) {
+       to =  to  + '"'+msg._addrs.TO._array[index].name+'" <'+msg._addrs.TO._array[index].address+'>, ';
+   }
+   to = to.substring(0, to.length-2);
+
+   var index=0;
+   var cc = '';
+   for (index = 0; index < msg._addrs.CC._array.length; ++index) {
+       cc =  cc  + '"'+msg._addrs.CC._array[index].name+'" <'+msg._addrs.CC._array[index].address+'>, ';
+   }
+   cc = cc.substring(0, cc.length-2);
+
+   var header = '​​​​From: "'+msg._addrs.FROM._array[0].name+'" <'+msg._addrs.FROM._array[0].address+'>\r\n' +
+   'To: '+to+'\r\n' +
+   'Cc: '+cc+'\r\n' +
+   'Sent: '+sendDate+'\r\n\r\n';
+   
+   var subject = msg.subject.replace(/\*\*\*.*\*\*\*/,'');
+
    var newWin=window.open('','Print-Window','width=800,height=600');
    newWin.document.open();
-   newWin.document.write('<html><head><title>'+OpenPGPZimlet.prototype.escapeHtml(subject)+'</title></head><body><h1>'+OpenPGPZimlet.prototype.escapeHtml(subject)+'</h1><pre style="white-space: pre-wrap;word-wrap: break-word;">'+divToPrint.innerHTML+'</pre></body></html>');
+   newWin.document.write('<html><head><title>'+OpenPGPZimlet.prototype.escapeHtml(subject)+'</title></head><body><h1>'+OpenPGPZimlet.prototype.escapeHtml(subject)+'</h1><pre style="white-space: pre-wrap;word-wrap: break-word;">'+OpenPGPZimlet.prototype.escapeHtml(header) + divToPrint.innerHTML+'</pre></body></html>');
    newWin.document.close();
    newWin.focus();
    newWin.print();
