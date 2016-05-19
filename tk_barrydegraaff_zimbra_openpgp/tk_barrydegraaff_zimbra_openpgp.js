@@ -2869,12 +2869,12 @@ OpenPGPZimlet.prototype.reply = function(msg, decrypted, action) {
       }
       cc = cc.substring(0, cc.length-2);
 
-      var header = '----- Original Message -----\r\n' +
-      '​​​​From: "'+msg._addrs.FROM._array[0].name+'" <'+msg._addrs.FROM._array[0].address+'>\r\n' +
-      'To: '+to+'\r\n' +
-      'Cc: '+cc+'\r\n' +
-      'Sent: '+sendDate+'\r\n' +
-      'Subject: '+msg.subject.replace(/\*\*\*.*\*\*\*/,'')+'\r\n\r\n';
+      var header = '----- Original Message -----\n' +
+      '​​​​From: "'+msg._addrs.FROM._array[0].name+'" <'+msg._addrs.FROM._array[0].address+'>\n' +
+      'To: '+to+'\n' +
+      'Cc: '+cc+'\n' +
+      'Sent: '+sendDate+'\n' +
+      'Subject: '+msg.subject.replace(/\*\*\*.*\*\*\*/,'')+'\n\n';
 
       if (action == 'replyAll')
       {
@@ -2884,11 +2884,16 @@ OpenPGPZimlet.prototype.reply = function(msg, decrypted, action) {
       {
          var ccOverride = null;
       }
+      
+      var extraBodyText = header+document.getElementById(decrypted).dataset.decrypted
+      extraBodyText = extraBodyText.replace(/^/gm, "> ");
+      extraBodyText = '-\r\n\r\n'+extraBodyText;
+      
       var appCtxt = window.top.appCtxt;
       var zmApp = appCtxt.getApp();
       var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
       var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
-      toOverride:'"'+msg._addrs.FROM._array[0].name+'" <'+msg._addrs.FROM._array[0].address+'>\r\n', ccOverride:ccOverride, subjOverride:msg.subject.replace(/\*\*\*.*\*\*\*/,''), extraBodyText:'-\r\n\r\n\r\n\r\n'+header+document.getElementById(decrypted).dataset.decrypted, callback:null}
+      toOverride:'"'+msg._addrs.FROM._array[0].name+'" <'+msg._addrs.FROM._array[0].address+'>\r\n', ccOverride:ccOverride, subjOverride:msg.subject.replace(/\*\*\*.*\*\*\*/,''), extraBodyText:extraBodyText, callback:null}
       composeController.doAction(params); // opens asynchronously the window.
    }
 }
