@@ -687,7 +687,8 @@ function(mail, boolAndErrorMsgArray) {
  * */
 OpenPGPZimlet.prototype.escapeHtml =
 function (unsafe) {
-    return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    unsafe = unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    return DOMPurify.sanitize(unsafe);
 };
 
 /** This method gets called by the Zimlet framework when single-click is performed. And calls the Manage Keys dialog.
@@ -1327,11 +1328,6 @@ function(fArguments) {
             try {
                document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML='';
             } catch (err) {}
-
-            if(myWindow.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value == 'debug')
-            {
-               document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML='<textarea rows="20" cols="200" style="witdh:500px; height=500px">'+plaintext.data+'</textarea>';
-            }   
                        
             var boundary = plaintext.data.match(/boundary="([^"\\]*(?:\\.[^"\\]*)*)"/i);
             
