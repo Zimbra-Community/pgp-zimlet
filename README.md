@@ -9,6 +9,8 @@ Demo video: https://youtu.be/-fMe5Xab11Y
 
 User manual: https://barrydegraaff.github.io/help/
 
+Feature list: https://github.com/Zimbra-Community/pgp-zimlet/wiki
+
 Adding PGP support to Zimbra Collaboration Suite, currently tested on:
 - Windows: Internet Explorer 11, Google Chrome, Chromium, Firefox
 - Linux: Google Chrome, Chromium, Firefox, Iceweasel
