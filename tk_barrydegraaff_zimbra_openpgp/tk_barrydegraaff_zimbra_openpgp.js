@@ -2885,7 +2885,7 @@ OpenPGPZimlet.prototype.reply = function(msg, decrypted, action) {
          var ccOverride = null;
       }
       
-      var extraBodyText = header+document.getElementById(decrypted).dataset.decrypted
+      var extraBodyText = header+document.getElementById(decrypted).dataset.decrypted;
       extraBodyText = extraBodyText.replace(/^/gm, "> ");
       extraBodyText = '-\r\n\r\n'+extraBodyText;
       
