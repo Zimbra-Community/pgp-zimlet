@@ -2167,6 +2167,7 @@ function() {
       var result = '';
       var keycount = 0;
       var userIdCount = 0;
+      var unOrderedPubKeys = '';
       combinedPublicKeys.forEach(function(entry) {
          if(entry[0]) {
             for (i = 0; i < entry[0].users.length; i++) {
@@ -2179,18 +2180,28 @@ function() {
                   {
                         selected = 'selected class="selectme" ';
                         userIdCount++;
+                        result = result + '<option ' + selected + ' title="fingerprint: '+entry[0].primaryKey.fingerprint+' \r\ncreated: '+entry[0].primaryKey.created+'" value="'+entry[0].armor()+'">'+userid+'</option>';
                   }
                   else
                   {
                      selected = '';
+                     unOrderedPubKeys = unOrderedPubKeys + '<optionbarrydegraaff_zimbra_openpgp_split data-userid="'+userid.toLowerCase()+'"' + selected + ' title="fingerprint: '+entry[0].primaryKey.fingerprint+' \r\ncreated: '+entry[0].primaryKey.created+'" value="'+entry[0].armor()+'">'+userid+'</option>';
                   }                
-                  result = result + '<option ' + selected + ' title="fingerprint: '+entry[0].primaryKey.fingerprint+' \r\ncreated: '+entry[0].primaryKey.created+'" value="'+entry[0].armor()+'">'+userid+'</option>';
                }
             }
          }
          keycount++;
       });
-      result = '<select class="barrydegraaff_zimbra_openpgp-input" id="pubKeySelect" multiple onclick="OpenPGPZimlet.prototype.forceSelectSelf()">' + result + '</select>';
+      
+      // The sorting of the public key list is done in a way that the users own public key is shown first (and is selected)
+      // There has to be a better way to do this programmatically, split is a bit ugly.
+      var orderedPubKeys = unOrderedPubKeys.split(/\<optionbarrydegraaff_zimbra_openpgp_split/);
+      orderedPubKeys.sort();      
+      orderedPubKeys.forEach(function(entry) {
+         result = result + '<option' + entry;
+      });
+      
+      result = '<select style="height:200px;" class="barrydegraaff_zimbra_openpgp-input" id="pubKeySelect" multiple onclick="OpenPGPZimlet.prototype.forceSelectSelf()">' + result + '</select>';
    }
    catch(err) {
       //Could not parse your trusted public keys!
