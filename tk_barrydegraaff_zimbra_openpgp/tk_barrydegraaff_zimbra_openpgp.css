@@ -81,6 +81,12 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
    background-color: white;
 }
 
+#pubKeySelect option
+{
+   padding: 3px;
+   padding-left: 5px;
+}
+
 .DwtDialog textarea{
    width:98%;
 }
