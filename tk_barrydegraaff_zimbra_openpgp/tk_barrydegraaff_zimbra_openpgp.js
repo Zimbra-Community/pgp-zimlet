@@ -1023,7 +1023,7 @@ function(id, title, message) {
       OpenPGPZimlet.lang[36]+" <a style='color:blue; text-decoration: underline;' onclick=\"OpenPGPZimlet.prototype.menuItemSelected('help')\">"+OpenPGPZimlet.lang[11]+"</a>.<br><br>" +
       "</td></tr><tr><td>" +
       OpenPGPZimlet.lang[35]+":" +
-      "</td><td>" + zimletInstance.pubKeySelect(message) + "<br><br>" +
+      "</td><td>" + zimletInstance.pubKeySelect(message) + "<button id=\"btnremoveForceSelect\" onclick=\"OpenPGPZimlet.prototype.removeForceSelect()\">X</button><br><br>" +
       "</td></tr>" +
       "<tr><td colspan='2'>OpenPGP " + OpenPGPZimlet.lang[40] + "<br></td></tr>" +
       "<tr><td></td><td><div id='fileInputPgpAttach'></div></td></tr>" +
@@ -2233,15 +2233,7 @@ function(controller) {
                   
                   if(userid.match(new RegExp(emailRegex,'gmi')))
                   {                     
-                     var from = [collection.getById(controller._currentIdentityId).sendFromAddress];
-                     if(userid.match(new RegExp(from,'gmi')))
-                     {
-                        selected = 'selected class="selectme" ';
-                     }
-                     else
-                     {
-                        selected = 'selected';
-                     }   
+                     selected = 'selected class="selectme" ';
                      result = result + '<option ' + selected + ' title="fingerprint: '+entry[0].primaryKey.fingerprint+' \r\ncreated: '+entry[0].primaryKey.created+'" value="'+entry[0].armor()+'">'+userid+'</option>';
                   }
                   else
@@ -2262,7 +2254,7 @@ function(controller) {
          result = result + '<option' + entry;
       });
       
-      result = '<select style="height:200px;" class="barrydegraaff_zimbra_openpgp-input" id="pubKeySelect" multiple onclick="OpenPGPZimlet.prototype.forceSelectSelf()">' + result + '</select>';
+      result = '<select style="height:175px;" class="barrydegraaff_zimbra_openpgp-input" id="pubKeySelect" multiple onclick="OpenPGPZimlet.prototype.forceSelect()">' + result + '</select>';
    }
    catch(err) {
       //Could not parse your trusted public keys!
@@ -2275,37 +2267,31 @@ function(controller) {
 /** When a user encrypts a message, the Zimlets selects the first public key by default (encrypt to self).
  * If you do not want to encrypt to yourself, you must click your name, and then the recipient
  */
-OpenPGPZimlet.prototype.forceSelectSelf =
+OpenPGPZimlet.prototype.forceSelect =
 function() {
    var pubKeySelect = document.getElementById('pubKeySelect');
-   var selection = [];
-   var numberSelected = 0;
-   for (k=0; k < pubKeySelect.options.length ; k++) {
-      if (pubKeySelect.options[k].selected) {                  
-         selection[k]=k;
-         numberSelected++;
-      }   
-   }
+   try{
+      var selectme = document.getElementsByClassName("selectme");
+      for (var index = 0; index < selectme.length; index++) {
+         selectme[index].selected = true;
+      }
+   } catch (err) { }
+}   
 
-   if((selection[0]== 0) && (numberSelected == 1))
-   {
-      try{         
+/** When a user encrypts a message, the Zimlets selects the first public key by default (encrypt to self).
+ * If you do not want to encrypt to yourself, you must click the X button, that calls the removeForceSelect
+ */
+OpenPGPZimlet.prototype.removeForceSelect =
+function() {
+   try{
+      do {
          var selectme = document.getElementsByClassName("selectme");
-         for (var index = 0; index < selectme.length; index++) {
-            selectme[index].selected = false;
-            selectme[index].className = 'nonotselect';
-         }
-      } catch (err) { }
-   }
-   else
-   {
-      try{
-         var selectme = document.getElementsByClassName("selectme");
-         for (var index = 0; index < selectme.length; index++) {
-            selectme[index].selected = true;
-         }
-      } catch (err) { }
-   }
+         selectme[0].selected = false;
+         selectme[0].className = 'nonotselect';
+      }
+      while (document.getElementsByClassName("selectme"));
+   } catch (err) { }
+   document.getElementById('btnremoveForceSelect').style.display = 'none';
 }   
 
 /** This method is called when OK is pressed in encrypt dialog. Compose Tab -> Encrypt button -> Dialog -> OK.
