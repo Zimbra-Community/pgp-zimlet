@@ -1028,8 +1028,7 @@ function(id, title, message) {
       OpenPGPZimlet.lang[36]+" <a style='color:blue; text-decoration: underline;' onclick=\"OpenPGPZimlet.prototype.menuItemSelected('help')\">"+OpenPGPZimlet.lang[11]+"</a>.<br><br>" +
       "</td></tr><tr><td>" +
       OpenPGPZimlet.lang[35]+":" +
-      "</td><td>" + zimletInstance.pubKeySelect() +
-      "<textarea style=\"display:none\" class=\"barrydegraaff_zimbra_openpgp-msg\" id='message'>"+ (message ? message : '' ) +"</textarea><br><br>" +
+      "</td><td>" + zimletInstance.pubKeySelect(message) + "<br><br>" +
       "</td></tr>" +
       "<tr><td colspan='2'>OpenPGP " + OpenPGPZimlet.lang[40] + "<br></td></tr>" +
       "<tr><td></td><td><div id='fileInputPgpAttach'></div></td></tr>" +
@@ -1045,7 +1044,7 @@ function(id, title, message) {
       zimletInstance._dialog = new ZmDialog( { title:title, parent:zimletInstance.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       zimletInstance._dialog.setContent(html);
       OpenPGPZimlet.prototype.addFileInputPgpAttach();
-      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.okBtnEncrypt));
+      zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.okBtnEncrypt, [message]));
       zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));
       break;
    case 7:
@@ -1991,7 +1990,7 @@ function(message) {
          var zmApp = appCtxt.getApp();
          var newWindow = zmApp != null ? (zmApp._inNewWindow ? true : false) : true;
          var params = {action:ZmOperation.NEW_MESSAGE, inNewWindow:null, composeMode:Dwt.TEXT,
-         toOverride:null, subjOverride:null, extraBodyText:"-\r\n\r\n\r\n\r\n\r\n\r\n"+result + atob(message), callback:null}
+         toOverride:null, subjOverride:OpenPGPZimlet.lang[26], extraBodyText:"-\r\n\r\n\r\n\r\n\r\n\r\n"+result + atob(message), callback:null}
          composeController.doAction(params); // opens asynchronously the window.
       }
    }
@@ -2121,11 +2120,73 @@ function(pubkey) {
 }
 
 /** This method generates an HTML select list with public keys from the server LDAP combined with those in the users contacts (optional).
+ *
+ * @parameter {ZmComposeController}  controller - the current compose tab
  * @returns {string} result - HTML string with SELECT input
  * */
 OpenPGPZimlet.prototype.pubKeySelect =
-function() {
+function(controller) {
+   var msg = controller.getMsg();
+   // Build a regular expression so we can link email addresses to public keys
+   var emailRegex = '';   
+   var ac = window.parentAppCtxt || window.appCtxt;
+   var collection = ac.getIdentityCollection();
    
+   try {
+      //reply action from built in Zimbra reply button (maybe encrypted mail)
+      if (msg)
+      {
+         var to = (msg._addrs.TO._array);
+         var cc = (msg._addrs.CC._array);
+         var bcc = (msg._addrs.BCC._array);
+         var from = (msg._addrs.FROM._array);
+         var addrs = to;
+         addrs = addrs.concat(cc);
+         addrs = addrs.concat(bcc);
+         addrs = addrs.concat(from);
+   
+         for (i = 0; i < addrs.length; i++) {
+            emailRegex = emailRegex + addrs[i].address + '|';
+         };
+      }
+      //reply action from PGP Zimlet reply link (should be decypted mail)
+      else
+      {
+         var to = [];
+         var cc = [];
+         var from = [];
+         if(controller._toOverride)
+         {
+            to = controller._toOverride.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
+         }            
+         
+         if(controller._ccOverride) 
+         {
+            cc = controller._ccOverride.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
+         }  
+   
+         from[0] = collection.getById(controller._currentIdentityId).sendFromAddress;
+         addrs = to;
+         addrs = addrs.concat(cc);
+         addrs = addrs.concat(from);
+                 
+         for (i = 0; i < addrs.length; i++) {
+            emailRegex = emailRegex + addrs[i] + '|';
+         };
+      }
+   }   
+   catch (err) {console.log(err)}   
+   
+   if (emailRegex == '')
+   {
+      var from = [collection.getById(controller._currentIdentityId).sendFromAddress];
+      emailRegex = from;
+   }
+   else
+   {
+      emailRegex = emailRegex.substring(0, emailRegex.length - 1);
+   }   
+ 
    try {
       var publicKeys1 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
       var publicKeys2 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value);
@@ -2165,8 +2226,6 @@ function() {
       });      
       
       var result = '';
-      var keycount = 0;
-      var userIdCount = 0;
       var unOrderedPubKeys = '';
       combinedPublicKeys.forEach(function(entry) {
          if(entry[0]) {
@@ -2176,11 +2235,19 @@ function() {
                   userid = entry[0].users[i].userId.userid.replace(/\</g,"&lt;");
                   userid = userid.replace(/\>/g,"&gt;") ;
                   var selected;
-                  if((keycount == 0) && (publicKeys1.keys))
-                  {
+                  
+                  if(userid.match(new RegExp(emailRegex,'gmi')))
+                  {                     
+                     var from = [collection.getById(controller._currentIdentityId).sendFromAddress];
+                     if(userid.match(new RegExp(from,'gmi')))
+                     {
                         selected = 'selected class="selectme" ';
-                        userIdCount++;
-                        result = result + '<option ' + selected + ' title="fingerprint: '+entry[0].primaryKey.fingerprint+' \r\ncreated: '+entry[0].primaryKey.created+'" value="'+entry[0].armor()+'">'+userid+'</option>';
+                     }
+                     else
+                     {
+                        selected = 'selected';
+                     }   
+                     result = result + '<option ' + selected + ' title="fingerprint: '+entry[0].primaryKey.fingerprint+' \r\ncreated: '+entry[0].primaryKey.created+'" value="'+entry[0].armor()+'">'+userid+'</option>';
                   }
                   else
                   {
@@ -2190,7 +2257,6 @@ function() {
                }
             }
          }
-         keycount++;
       });
       
       // The sorting of the public key list is done in a way that the users own public key is shown first (and is selected)
@@ -2249,11 +2315,13 @@ function() {
 
 /** This method is called when OK is pressed in encrypt dialog. Compose Tab -> Encrypt button -> Dialog -> OK.
  * It should encrypt the email message and put it back in the current compose tab and also upload encrypted attachment and attach them to the current draft email.
+ * 
+ * @parameter {ZmComposeController}  controller - the current compose tab
  * */
 OpenPGPZimlet.prototype.okBtnEncrypt =
-function() {
-
-   if (document.getElementById("message").value.match(/----BEGIN PGP PRIVATE KEY BLOCK----/i))
+function(controller) {
+   var msg = controller._getBodyContent();
+   if (msg.match(/----BEGIN PGP PRIVATE KEY BLOCK----/i))
    {
       OpenPGPZimlet.prototype.status(OpenPGPZimlet.lang[85], ZmStatusView.LEVEL_WARNING);
       return;         
@@ -2265,16 +2333,15 @@ function() {
    document.getElementById("privateKeyInput").style.backgroundImage = "url('"+this.getResource("loading.gif")+"')";
    
    var pubKeySelect = document.getElementById("pubKeySelect");
-   var msg = document.getElementById("message").value;
      
    var pubKeys = [];
-   var addresses = '';
+   var addresses = [];
 
    // Build Public Keys list from selected
    for (k=0; k < pubKeySelect.options.length ; k++) {
       if (pubKeySelect.options[k].selected) {
          pubKeys=pubKeys.concat(openpgp.key.readArmored(pubKeySelect.options[k].value).keys);
-         addresses=addresses + pubKeySelect.options[k].label + '; ';
+         addresses[k]=pubKeySelect.options[k].label;
       }   
    }
 
@@ -2335,7 +2402,21 @@ function() {
       var composeView = appCtxt.getCurrentView();
       composeView.getHtmlEditor().setMode(Dwt.TEXT);   
       composeView.getHtmlEditor().setContent(message.data);                
-      composeView.setAddress(AjxEmailAddress.TO, addresses);
+      
+      //prevent sending message to the users inbox
+      var ac = window.parentAppCtxt || window.appCtxt;
+ 		var collection = ac.getIdentityCollection();
+      var from = [collection.getById(controller._currentIdentityId).sendFromAddress];
+      
+      var to = '';
+      addresses.forEach(function(address) {
+         if(!address.match(new RegExp(from,'gmi')))
+         {
+            to = to + address + '; ';
+         }
+      });
+      
+      composeView.setAddress(AjxEmailAddress.TO, to);
       var fileInputs = document.getElementsByClassName("fileInputPgpAttach");
       
       var numberOfAttachments = 0;
@@ -2480,7 +2561,7 @@ function ()
   * @param	{ZmApp}				app				the application
   * @param	{ZmButtonToolBar}	toolbar			the toolbar
   * @param	{ZmController}		controller		the application controller
-  * @param	{string}			viewId			the view Id
+  * @param	{string}			   viewId			the view Id
  * */
 OpenPGPZimlet.prototype.initializeToolbar =
 function(app, toolbar, controller, viewId) {
@@ -2531,7 +2612,7 @@ function(controller) {
    {
       appCtxt.getCurrentView().setComposeMode('text/plain');
    }
-   
+
    var message = controller._getBodyContent();
    
    if(message.length < 1)
@@ -2541,7 +2622,7 @@ function(controller) {
       return;
    }
   
-   this.displayDialog(6, OpenPGPZimlet.lang[2], message);
+   this.displayDialog(6, OpenPGPZimlet.lang[2], controller);
 };
 
 /** This method is called when the Sign button is clicked in the compose tab. It switches the compose mode to text/plain and opens the sign dialog.
@@ -2891,7 +2972,7 @@ OpenPGPZimlet.prototype.reply = function(msg, decrypted, action) {
       {
          var ccOverride = null;
       }
-      
+     
       var extraBodyText = header+document.getElementById(decrypted).dataset.decrypted;
       extraBodyText = extraBodyText.replace(/^/gm, "> ");
       extraBodyText = '-\r\n\r\n'+extraBodyText;
