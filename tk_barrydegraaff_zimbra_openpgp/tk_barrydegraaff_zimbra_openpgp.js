@@ -2238,7 +2238,8 @@ function(controller) {
       });      
       
       var result = '';
-      var unOrderedPubKeys = '';
+      var orderedPubKeys = [];
+      var keyCount = 0;
       combinedPublicKeys.forEach(function(entry) {
          if(entry[0]) {
             for (i = 0; i < entry[0].users.length; i++) {
@@ -2256,25 +2257,23 @@ function(controller) {
                   else
                   {
                      selected = '';
-                     unOrderedPubKeys = unOrderedPubKeys + '<optionbarrydegraaff_zimbra_openpgp_split data-userid="'+userid.toLowerCase()+'"' + selected + ' title="fingerprint: '+entry[0].primaryKey.fingerprint+' \r\ncreated: '+entry[0].primaryKey.created+'" value="'+entry[0].armor()+'">'+userid+'</option>';
+                     orderedPubKeys[keyCount] = '<option data-userid="'+userid.toLowerCase()+'"' + selected + ' title="fingerprint: '+entry[0].primaryKey.fingerprint+' \r\ncreated: '+entry[0].primaryKey.created+'" value="'+entry[0].armor()+'">'+userid+'</option>';
+                     keyCount++;
                   }                
                }
             }
          }
       });
       
-      // The sorting of the public key list is done in a way that the users own public key is shown first (and is selected)
-      // There has to be a better way to do this programmatically, split is a bit ugly.
-      var orderedPubKeys = unOrderedPubKeys.split(/\<optionbarrydegraaff_zimbra_openpgp_split/);
       orderedPubKeys.sort();      
       orderedPubKeys.forEach(function(entry) {
-         result = result + '<option' + entry;
+         result = result + entry;
       });
-      
       result = '<select style="height:175px;" class="barrydegraaff_zimbra_openpgp-input" id="pubKeySelect" multiple onclick="OpenPGPZimlet.prototype.forceSelect()">' + result + '</select>';
    }
    catch(err) {
       //Could not parse your trusted public keys!
+      console.log(err);
       OpenPGPZimlet.prototype.status(OpenPGPZimlet.lang[13], ZmStatusView.LEVEL_WARNING);
       return;
    }
