@@ -2133,7 +2133,7 @@ function(pubkey) {
 
 /** This method generates an HTML select list with public keys from the server LDAP combined with those in the users contacts (optional).
  *
- * @parameter {ZmComposeController}  controller - the current compose tab
+ * @param {ZmComposeController}  controller - the current compose tab
  * @returns {string} result - HTML string with SELECT input
  * */
 OpenPGPZimlet.prototype.pubKeySelect =
@@ -2313,7 +2313,7 @@ function() {
 /** This method is called when OK is pressed in encrypt dialog. Compose Tab -> Encrypt button -> Dialog -> OK.
  * It should encrypt the email message and put it back in the current compose tab and also upload encrypted attachment and attach them to the current draft email.
  * 
- * @parameter {ZmComposeController}  controller - the current compose tab
+ * @param {ZmComposeController}  controller - the current compose tab
  * */
 OpenPGPZimlet.prototype.okBtnEncrypt =
 function(controller) {
@@ -2599,7 +2599,7 @@ function(app, toolbar, controller, viewId) {
 
 /** This method is called when the Encrypt button is clicked in the compose tab. It switches the compose mode to text/plain and opens the encrypt dialog.
  * See {@link https://files.zimbra.com/docs/zimlet/zcs/8.6.0/jsapi-zimbra-doc/symbols/ZmComposeController.html ZmComposeController}.
- * @parameter {ZmComposeController}  controller - the current compose tab
+ * @param {ZmComposeController}  controller - the current compose tab
  * */
 OpenPGPZimlet.prototype.composeEncryptHandler =
 function(controller) {
@@ -2624,7 +2624,7 @@ function(controller) {
 
 /** This method is called when the Sign button is clicked in the compose tab. It switches the compose mode to text/plain and opens the sign dialog.
  * See {@link https://files.zimbra.com/docs/zimlet/zcs/8.6.0/jsapi-zimbra-doc/symbols/ZmComposeController.html ZmComposeController}.
- * @parameter {ZmComposeController}  controller - the current compose tab
+ * @param {ZmComposeController}  controller - the current compose tab
  * */
 OpenPGPZimlet.prototype.composeSignHandler =
 function(controller) {
