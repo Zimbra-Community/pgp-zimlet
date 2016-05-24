@@ -1365,8 +1365,37 @@ function(fArguments) {
                   var partArr=part.split('\n\n', 2);
                   if (partArr[0].indexOf('Content-Disposition: attachment')> -1)
                   {                                        
-                     var filename = partArr[0].match(/filename="([^"\\]*(?:\\.[^"\\]*)*)"/i);
-                     
+                     var filename = [];
+                     if(partArr[0].match(/filename="([^"\\]*(?:\\.[^"\\]*)*)"/i))
+                     {
+                        filename = partArr[0].match(/filename="([^"\\]*(?:\\.[^"\\]*)*)"/i);
+                     }
+                     else
+                     {
+                       //check for RFC 2184 long file name
+                       if(partArr[0].match(/filename\*/i))
+                       {
+                          try {
+                             var filenamePart = partArr[0].match(/(filename\*.|filename\*.\*)=.*/gmi);
+                             filename[1] = '';
+                             
+                             filenamePart.forEach(function(part) {
+                                var parsedPart = part.match(/filename.*="([^"\\]*(?:\\.[^"\\]*)*)"/i);   
+                                filename[1] = filename[1] + parsedPart[1];
+                             });
+                          }   
+                          catch (err) {
+                             console.log(err);
+                             filename[1] = 'rename-this-file.txt';
+                          }   
+                       }
+                       else
+                       {
+                          //dunno what filename this is
+                          filename[1] = 'rename-this-file.txt';
+                       }   
+                     }
+                                                
                      if (partArr[0].indexOf('Content-Transfer-Encoding: base64')> -1)
                      {
                         partArr[1] = partArr[1].split('=\n', 1);
