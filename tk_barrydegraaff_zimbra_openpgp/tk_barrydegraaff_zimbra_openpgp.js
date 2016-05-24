@@ -1373,11 +1373,11 @@ function(fArguments) {
                      else
                      {
                        try {
-                          var filenamePart = partArr[0].match(/(filename\*.|filename\*.\*)=.*/gmi);
+                          var filenameParts = partArr[0].match(/(filename\*.|filename\*.\*)=.*/gmi);
                           filename[1] = '';
                           
-                          filenamePart.forEach(function(part) {
-                             var parsedPart = part.match(/filename.*="([^"\\]*(?:\\.[^"\\]*)*)"/i);   
+                          filenameParts.forEach(function(filenamePart) {
+                             var parsedPart = filenamePart.match(/filename.*="([^"\\]*(?:\\.[^"\\]*)*)"/i);   
                              filename[1] = filename[1] + parsedPart[1];
                           });
                        }   
