@@ -4,7 +4,7 @@
 * By default, the newly created RPM package would be written to ~/rpmbuild/RPMS/noarch/pgp-zimlet-...rpm
 
 # Prebuilt packages
-* We are working out to make an official repository for all RPM packages. In this meantime, please use Copr at: https://copr.fedorainfracloud.org/coprs/tuanta/zimlets/
+* We are working out to make an official repository for all RPM packages. In this meantime, please use Copr at: https://copr.fedorainfracloud.org/coprs/zetalliance/zimlets/
 
 # Installing RPM packages
 * Install: "rpm -Uvh <path-to-rpm-file>"
@@ -12,8 +12,8 @@
 
 # Installing from Copr repository using YUM
 * Enable Copr repo: download this file and save into /etc/yum.repos.d:
-  * For EL6: https://copr.fedorainfracloud.org/coprs/tuanta/zimlets/repo/epel-6/tuanta-zimlets-epel-6.repo
-  * For EL7: https://copr.fedorainfracloud.org/coprs/tuanta/zimlets/repo/epel-7/tuanta-zimlets-epel-7.repo
+  * For EL6: https://copr.fedorainfracloud.org/coprs/zetalliance/zimlets/repo/epel-6/zetalliance-zimlets-epel-6.repo
+  * For EL7: https://copr.fedorainfracloud.org/coprs/zetalliance/zimlets/repo/epel-7/zetalliance-zimlets-epel-7.repo
 * Install using YUM: "yum install pgp-zimlet"
 * Update new releases: "yum update pgp-zimlet"
 * And uninstall: "yum remove pgp-zimlet"
