@@ -1363,7 +1363,7 @@ function(fArguments) {
    
                multipart.forEach(function(part) {
                   var partArr=part.split('\n\n', 2);
-                  if (partArr[0].indexOf('Content-Disposition: attachment')> -1)
+                  if ((partArr[0].indexOf('Content-Disposition: attachment')> -1) || (partArr[0].indexOf('Content-Disposition: inline')> -1))
                   {                                        
                      var filename = [];
                      if(partArr[0].match(/filename="([^"\\]*(?:\\.[^"\\]*)*)"/i))
