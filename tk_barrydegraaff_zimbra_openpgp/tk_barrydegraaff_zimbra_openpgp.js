@@ -1075,8 +1075,17 @@ function(id, title, message) {
       //Get selected mail message
       try {
          var publicKeys = openpgp.key.readArmored(message);
-         userid = publicKeys.keys[0].users[0].userId.userid;
-         userid = OpenPGPZimlet.prototype.escapeHtml(userid);
+         var userid = '';
+         
+         if(publicKeys.keys[0]) {
+            publicKeys.keys[0].users.forEach(function(key){
+               
+               if (key.userId)
+               {
+                  userid = userid + "<tr><td>User ID:</td><td>" + OpenPGPZimlet.prototype.escapeHtml(key.userId.userid) + "</td></tr>";
+               }
+            });
+         }
          
          publicKeyPacket = publicKeys.keys[0].primaryKey;
          var keyLength = "";
@@ -1091,9 +1100,9 @@ function(id, title, message) {
          return;
       }   
       
-      result = "<br><table style=\"padding: 5px;\"><tr><td>User ID[0]:</td><td>" + userid + "</td></tr><tr><td>Fingerprint:</td><td><b>" + publicKeyPacket.fingerprint + "</b></td></tr><tr><td> Primary key length:&nbsp;</td><td>" + keyLength + "</td></tr><tr><td>Created:<td>" + publicKeyPacket.created + "</td></tr></table>";
+      result = "<br><table style=\"padding: 5px;\">"+userid+"<tr><td>Fingerprint:</td><td><b>" + publicKeyPacket.fingerprint + "</b></td></tr><tr><td> Primary key length:&nbsp;</td><td>" + keyLength + "</td></tr><tr><td>Created:<td>" + publicKeyPacket.created + "</td></tr></table>";
 
-      html = "<div style='width:650px; height: 100px; overflow-x: hidden; overflow-y: hidden;'>" +
+      html = "<div style='width:650px; height: 200px; overflow-x: hidden; overflow-y: scroll;'>" +
       OpenPGPZimlet.lang[74]+ "<br>" + result + "</div>";
       zimletInstance._dialog = new ZmDialog( { title:title, parent:zimletInstance.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true  } );
       zimletInstance._dialog.setContent(html);
@@ -2089,13 +2098,21 @@ function() {
  * @returns {string} result - HTML string with key details
  * */
 OpenPGPZimlet.prototype.pubkeyInfo =
-function(pubkey) {
-   
+function(pubkey) {   
    try {
       var publicKeys = openpgp.key.readArmored(pubkey);
+      var userid = '';
       
-      userid = publicKeys.keys[0].users[0].userId.userid;
-      userid = OpenPGPZimlet.prototype.escapeHtml(userid);
+      if(publicKeys.keys[0]) {
+         publicKeys.keys[0].users.forEach(function(key){
+            
+            if (key.userId)
+            {
+               userid = userid + "&bull; User ID: " + OpenPGPZimlet.prototype.escapeHtml(key.userId.userid) + "<br>";
+               
+            }
+         });
+      }
       
       publicKeyPacket = publicKeys.keys[0].primaryKey;
       var keyLength = "";
@@ -2105,7 +2122,7 @@ function(pubkey) {
          }
       }
       
-      result = "<small>&bull; User ID[0]: " + userid + "<br>&bull; Fingerprint: " + publicKeyPacket.fingerprint + "<br>&bull; Primary key length: " + keyLength + "<br>&bull; Created: " + publicKeyPacket.created + '</small>';
+      result = "<small>"+userid+"&bull; Fingerprint: " + publicKeyPacket.fingerprint + "<br>&bull; Primary key length: " + keyLength + "<br>&bull; Created: " + publicKeyPacket.created + '</small>';
    }
    catch(err) {
       //Could not parse your trusted public keys!
@@ -2811,9 +2828,21 @@ OpenPGPZimlet.prototype.lookup = function() {
                      keyLength = (publicKeyPacket.mpi[0].byteLength() * 8);
                   }
                }         
+
+               var userid = '';
+               
+               if(pubkey.keys[index]) {
+                  pubkey.keys[index].users.forEach(function(key){
+                     
+                     if (key.userId)
+                     {
+                        userid = userid + "User ID: " + OpenPGPZimlet.prototype.escapeHtml(key.userId.userid) + "<br>";
+                     }
+                  });
+               }
                
                document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML = document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML +
-               '<table><tr><td><input name="lookupResult" value="'+pubkey.keys[index].armor()+'" type="radio">&nbsp;</td><td><b>User ID[0]: ' + OpenPGPZimlet.prototype.escapeHtml(pubkey.keys[index].users[0].userId.userid) + '</b></td></tr>' +
+               '<table><tr><td><input name="lookupResult" value="'+pubkey.keys[index].armor()+'" type="radio">&nbsp;</td><td><b>'+userid+'</b></td></tr>' +
                '<tr><td></td><td><b>Fingerprint:' + publicKeyPacket.fingerprint + '</b></td></tr>' +
                '<tr><td></td><td>Primary key length: ' + keyLength + '</td></tr>' +
                '<tr><td></td><td>Created:' + publicKeyPacket.created+'</td></tr></table><hr style="width:550px; color: #bbbbbb; background-color: #bbbbbb; height: 1px; border: 0;">';
