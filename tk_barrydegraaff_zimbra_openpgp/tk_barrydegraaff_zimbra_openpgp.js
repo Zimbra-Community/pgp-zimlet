@@ -1072,7 +1072,7 @@ function(id, title, message) {
       break;            
    case 9:
       //Import public key
-      //Get selected mail message
+      //Imports only 1 key at the time. If more keys are present in the armored block, only the first is processed.
       try {
          var publicKeys = openpgp.key.readArmored(message);
          var userid = '';
@@ -1801,6 +1801,7 @@ function() {
 };
 
 /** This method is called for importing a public key received via email or key server lookup.
+ * It imports only 1 key at the time. If more keys are present in the armored block, only the first is processed.
  * @param {string} publicKey - ASCII armored PGP Public Key
  */
 OpenPGPZimlet.prototype.okBtnImportPubKey = 
@@ -1850,19 +1851,43 @@ function(publicKey) {
          }
          else
          {
-            var publicKeyPacket = pubKey[0].primaryKey;
-            if (publicKeyPacket != null) {
-            fingerprints[publicKeyPacket.fingerprint] = publicKeyPacket.fingerprint;
-            }
+            pubKey.forEach(function(entry) {
+               var publicKeyPacket = entry.primaryKey;
+               if (publicKeyPacket != null) {
+                  fingerprints[publicKeyPacket.fingerprint] = publicKeyPacket.fingerprint;
+               }         
+            });
+            
          }
          freecount++;
       });
 
       //Place our own Public Key in the list of known fingerprints
       var publicKeys1= openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
-      fingerprints[publicKeys1.keys[0].primaryKey.fingerprint] = publicKeys1.keys[0].primaryKey.fingerprint;
+      publicKeys1.forEach(function(entry) {
+         var publicKeyPacket = entry.primaryKey;
+         if (publicKeyPacket != null) {
+            fingerprints[publicKeyPacket.fingerprint] = publicKeyPacket.fingerprint;
+         }         
+      });
 
-   } catch (err) { }
+      //Place the Public Keys from the address book in the list of known fingerprints
+      OpenPGPZimlet.addressBookPublicKeys.forEach(function(pubKey) {
+         var pubKey = openpgp.key.readArmored(pubKey);
+         combinedPublicKeys = combinedPublicKeys.concat([pubKey.keys]);            
+      });      
+      
+      combinedPublicKeys.forEach(function(entries) {
+         entries.forEach(function(entry) {
+            var publicKeyPacket = entry.primaryKey;
+            if (publicKeyPacket != null) {
+               fingerprints[publicKeyPacket.fingerprint] = publicKeyPacket.fingerprint;
+            }   
+         });
+      });
+                     
+
+   } catch (err) { console.log(err) }
    
    //Check the fingerprint of the key we are importing   
    try {
@@ -2101,32 +2126,38 @@ OpenPGPZimlet.prototype.pubkeyInfo =
 function(pubkey) {   
    try {
       var publicKeys = openpgp.key.readArmored(pubkey);
-      var userid = '';
       
-      if(publicKeys.keys[0]) {
-         publicKeys.keys[0].users.forEach(function(key){
-            
-            if (key.userId)
-            {
-               userid = userid + "&bull; User ID: " + OpenPGPZimlet.prototype.escapeHtml(key.userId.userid) + "<br>";
-               
+      var result = '';
+      if (publicKeys.keys)
+      {
+         publicKeys.keys.forEach(function(pubkey) {
+            var userid = '';
+            pubkey.users.forEach(function(key){            
+               if (key.userId)
+               {
+                  userid = userid + "&bull; User ID: " + OpenPGPZimlet.prototype.escapeHtml(key.userId.userid) + "<br>";
+                  
+               }
+            });
+   
+            publicKeyPacket = pubkey.primaryKey;
+            var keyLength = "";
+            if (publicKeyPacket != null) {
+               if (publicKeyPacket.mpi.length > 0) {
+                  keyLength = (publicKeyPacket.mpi[0].byteLength() * 8);
+               }
             }
-         });
+            
+            result = result + "<small><b>"+userid+"</b>&bull; Fingerprint: " + publicKeyPacket.fingerprint + "<br>&bull; Primary key length: " + keyLength + "<br>&bull; Created: " + publicKeyPacket.created + '</small><br><br>';
+         });   
       }
-      
-      publicKeyPacket = publicKeys.keys[0].primaryKey;
-      var keyLength = "";
-      if (publicKeyPacket != null) {
-         if (publicKeyPacket.mpi.length > 0) {
-            keyLength = (publicKeyPacket.mpi[0].byteLength() * 8);
-         }
-      }
-      
-      result = "<small>"+userid+"&bull; Fingerprint: " + publicKeyPacket.fingerprint + "<br>&bull; Primary key length: " + keyLength + "<br>&bull; Created: " + publicKeyPacket.created + '</small>';
+      //remove last <br>
+      result = result.substring(0,result.length - 4);
    }
    catch(err) {
       //Could not parse your trusted public keys!
       result = '<small>'+OpenPGPZimlet.lang[13]+'</small>';
+      console.log(err);
    }
    return result;
 }
@@ -2240,29 +2271,29 @@ function(controller) {
       var result = '';
       var orderedPubKeys = [];
       var keyCount = 0;
-      combinedPublicKeys.forEach(function(entry) {
-         if(entry[0]) {
-            for (i = 0; i < entry[0].users.length; i++) {
-               if (entry[0].users[i].userId)
+      combinedPublicKeys.forEach(function(entries) {
+         entries.forEach(function(entry) {
+            for (i = 0; i < entry.users.length; i++) {
+               if (entry.users[i].userId)
                {
-                  userid = entry[0].users[i].userId.userid.replace(/\</g,"&lt;");
+                  userid = entry.users[i].userId.userid.replace(/\</g,"&lt;");
                   userid = userid.replace(/\>/g,"&gt;") ;
                   var selected;
                   
                   if(userid.match(new RegExp(emailRegex,'gmi')))
                   {                     
                      selected = 'selected class="selectme" ';
-                     result = result + '<option ' + selected + ' title="fingerprint: '+entry[0].primaryKey.fingerprint+' \r\ncreated: '+entry[0].primaryKey.created+'" value="'+entry[0].armor()+'">'+userid+'</option>';
+                     result = result + '<option ' + selected + ' title="fingerprint: '+entry.primaryKey.fingerprint+' \r\ncreated: '+entry.primaryKey.created+'" value="'+entry.armor()+'">'+userid+'</option>';
                   }
                   else
                   {
                      selected = '';
-                     orderedPubKeys[keyCount] = '<option data-userid="'+userid.toLowerCase()+'"' + selected + ' title="fingerprint: '+entry[0].primaryKey.fingerprint+' \r\ncreated: '+entry[0].primaryKey.created+'" value="'+entry[0].armor()+'">'+userid+'</option>';
+                     orderedPubKeys[keyCount] = '<option data-userid="'+userid.toLowerCase()+'"' + selected + ' title="fingerprint: '+entry.primaryKey.fingerprint+' \r\ncreated: '+entry.primaryKey.created+'" value="'+entry.armor()+'">'+userid+'</option>';
                      keyCount++;
                   }                
                }
             }
-         }
+         });
       });
       
       orderedPubKeys.sort();      
