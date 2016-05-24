@@ -299,7 +299,16 @@ parser.onend = function(){
     console.log('Parsing is finished');
 };
 
-parser.write(new Uint8Array(document.getElementById('input').value));
+//mimeparser.js:75 Uncaught TypeError: Cannot read property 'fromTypedArray' of undefinedMimeParser.write @ mimeparser.js:75(anonymous function) @ mimeparser-test.html:302
+parser.write(new TextEncoder("utf-8").encode(document.getElementById('input').value));
+
+//mimeparser.js:348 Uncaught TypeError: Cannot read property 'parseHeaderValue' of undefined
+//MimeNode._parseHeaderValue	@	mimeparser.js:348
+//MimeNode._parseHeaders	@	mimeparser.js:313
+//MimeNode._processHeaderLine	@	mimeparser.js:278
+//MimeNode.writeLine	@	mimeparser.js:252
+//MimeParser.write	@	mimeparser.js:79
+parser.write(document.getElementById('input').value);
 parser.end();
 
 
