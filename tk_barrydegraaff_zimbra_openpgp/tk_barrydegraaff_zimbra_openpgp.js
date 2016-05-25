@@ -1351,6 +1351,7 @@ function(fArguments) {
                {                 
                   var body = OpenPGPZimlet.prototype.Uint8ToString(node.content);
                   document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML + '<img style="vertical-align:middle" src="'+myWindow.getResource("file-pgp-encrypted.png")+'"> <a class="AttLink" onclick="OpenPGPZimlet.prototype.downloadBlob(\''+OpenPGPZimlet.prototype.escapeHtml(node.contentType.params.name)+'\',\'octet/stream\',\''+btoa(body)+'\')">'+OpenPGPZimlet.prototype.escapeHtml(node.contentType.params.name)+'</a>&nbsp;';
+
                   if(node.contentType.value='application/pgp-keys')
                   {
                      //Import public key
@@ -1360,6 +1361,7 @@ function(fArguments) {
                         if(pubKeyTxt[0])
                         {
                            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML + '|&nbsp;<a class="AttLink" id="btnImport'+myWindow.fArguments['domId']+'">'+OpenPGPZimlet.lang[73]+'</a>&nbsp;';
+                           //whoops this code assumes there is only one public key attachments, it will fail with multiple BUG
                            var btnImport = document.getElementById("btnImport"+myWindow.fArguments['domId']);
                            btnImport.onclick = AjxCallback.simpleClosure(OpenPGPZimlet.prototype.displayDialog, this, 9, OpenPGPZimlet.lang[73], pubKeyTxt[0]);
                         }   
