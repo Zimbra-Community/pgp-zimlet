@@ -34,7 +34,12 @@ them here has no effect.
    <include>htmlToText.js</include>
    <include>quoted-printable.js</include>
    <include>utf8.js</include>
-   <include>purify.js</include>   
+   <include>purify.js</include>
+   <include>mimeparser.js</include>
+   <include>addressparser.js</include>
+   <include>mimefuncs.js</include>
+   <include>mimeparser.js</include>
+   <include>stringencoding.js</include>
    <handlerObject>tk_barrydegraaff_zimbra_openpgp_HandlerObject</handlerObject>
    <includeCSS>tk_barrydegraaff_zimbra_openpgp.css</includeCSS>
    <zimletPanelItem label="OpenPGP" icon="tk_barrydegraaff_zimbra_openpgp-panelIcon">

@@ -631,7 +631,7 @@ OpenPGPZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {
          }
          else
          {  
-            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+appCtxt.getCurrentAppName()+msg.id).innerHTML='<pre>This is an OpenPGP/MIME encrypted message (RFC 4880 and 3156)</pre>';
+            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+appCtxt.getCurrentAppName()+msg.id).innerHTML='';
          }   
                   
          //support multipart/alternative mime used by Gmail / Mailvelope
@@ -1327,116 +1327,52 @@ function(fArguments) {
          // Go a message that needs MIME parsing (PGP/MIME)
          else
          {
-            document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML='';
-            try {
-               document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML='';
-            } catch (err) {}
-                       
-            var boundary = plaintext.data.match(/boundary="([^"\\]*(?:\\.[^"\\]*)*)"/i);
+            var parser = new (MimeParser);
+
+            parser.onheader = function(node){
+            };            
             
-            //Got a multipart message
-            if(boundary)
-            {
-               boundary = '--'+boundary[1];
-   
-               var multipart = plaintext.data.split(boundary);
-               
-               //Remove the headers from the message
-               multipart.shift();
-               //Remove junk on the end of the message
-               multipart.pop();
-   
-               //Check for nested multipart/mixed messages
-               var partArr=multipart[0].split('\n\n', 2);
-               if (partArr[0].indexOf('Content-Type: multipart/mixed')> -1)
+            parser.onbody = function(node, chunk){
+               if(node.headers['content-type'][0].type == 'text')
                {
-                  var boundary = partArr[0].match(/boundary="([^"\\]*(?:\\.[^"\\]*)*)"/i);
-                  boundary = '--'+boundary[1];
-      
-                  var multipart = plaintext.data.split(boundary);
-                  
-                  //Remove the headers from the message
-                  multipart.shift();
-                  //Remove junk on the end of the message
-                  multipart.pop();               
-               }
-   
-               multipart.forEach(function(part) {
-                  var partArr=part.split('\n\n', 2);
-                  if (partArr[0].indexOf('Content-Disposition: attachment')> -1)
-                  {                                        
-                     var filename = [];
-                     if(partArr[0].match(/filename="([^"\\]*(?:\\.[^"\\]*)*)"/i))
-                     {
-                        filename = partArr[0].match(/filename="([^"\\]*(?:\\.[^"\\]*)*)"/i);
-                     }
-                     else
-                     {
-                       try {
-                          var filenameParts = partArr[0].match(/(filename\*.|filename\*.\*)=.*/gmi);
-                          filename[1] = '';
-                          
-                          filenameParts.forEach(function(filenamePart) {
-                             var parsedPart = filenamePart.match(/filename.*="([^"\\]*(?:\\.[^"\\]*)*)"/i);   
-                             filename[1] = filename[1] + parsedPart[1];
-                          });
-                       }   
-                       catch (err) {
-                          console.log(err);
-                          filename[1] = 'rename-this-file.txt';
-                       }
-                       if(filename[1] == '')   
-                       {
-                          filename[1] = 'rename-this-file.txt';
-                       }                       
-                     }
-                                                
-                     if (partArr[0].indexOf('Content-Transfer-Encoding: base64')> -1)
-                     {
-                        partArr[1] = partArr[1].split('=\n', 1);
-                        partArr[1] = partArr[1] + '=';
-                        partArr[1] = partArr[1].replace(/(\r\n|\n|\r)/gm,"");
-                        document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML + '<img style="vertical-align:middle" src="'+myWindow.getResource("file-pgp-encrypted.png")+'"> <a class="AttLink" onclick="OpenPGPZimlet.prototype.downloadBlob(\''+OpenPGPZimlet.prototype.escapeHtml(filename[1])+'\',\'octet/stream\',\''+partArr[1]+'\')">'+OpenPGPZimlet.prototype.escapeHtml(filename[1])+'</a>&nbsp;';
-                     }
-                     else
-                     {
-                        if (partArr[0].indexOf('Content-Transfer-Encoding: quoted-printable')> -1)
-                        {
-                           part = OpenPGPZimlet.prototype.quoted_printable_decode(part);
-                        }                     
-                        part = part.substring(part.indexOf('\n\n'));
-                        document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML + '<img style="vertical-align:middle" src="'+myWindow.getResource("file-pgp-encrypted.png")+'"> <a class="AttLink" onclick="OpenPGPZimlet.prototype.downloadBlob(\''+OpenPGPZimlet.prototype.escapeHtml(filename[1])+'\',\'octet/stream\',\''+btoa(part)+'\')">'+OpenPGPZimlet.prototype.escapeHtml(filename[1])+'</a>&nbsp;';
-                        if (partArr[0].indexOf('Content-Type: application/pgp-keys') > -1)
-                        {
-                           //Import public key
-                           var pubKeyTxt = part.match(/(-----BEGIN PGP PUBLIC KEY BLOCK-----)([^]+)(-----END PGP PUBLIC KEY BLOCK-----)/g);
-                           if(pubKeyTxt)
-                           {
-                              if(pubKeyTxt[0])
-                              {
-                                 document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML + '|&nbsp;<a class="AttLink" id="btnImport'+myWindow.fArguments['domId']+'">'+OpenPGPZimlet.lang[73]+'</a>&nbsp;';
-                                 var btnImport = document.getElementById("btnImport"+myWindow.fArguments['domId']);
-                                 btnImport.onclick = AjxCallback.simpleClosure(OpenPGPZimlet.prototype.displayDialog, this, 9, OpenPGPZimlet.lang[73], pubKeyTxt[0]);
-                              }   
-                           }
-                        }
-                     }           
-                  }                     
-                  else
+                  if((node.headers['content-type'][0].value == 'text/html')||(node.headers['content-type'][0].value == 'text/plain'))
                   {
-                     //display body part
-                     OpenPGPZimlet.prototype.displayMimeBodyPart(part, myWindow.fArguments['domId']);
+                     var body = body = new TextDecoder("utf-8").decode(node.content);
+                     if(node.headers['content-type'][0].value == 'text/html')
+                     {
+                        body = OpenPGPZimlet.prototype.htmlToText(body);
+                     }
+   
+                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML + OpenPGPZimlet.prototype.urlify(OpenPGPZimlet.prototype.escapeHtml(body));
+                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).setAttribute('data-decrypted',body);   
+                  }   
+               }
+               if(node.headers['content-disposition'] && node.headers['content-disposition'][0].value == 'attachment')
+               {                 
+                  var body = OpenPGPZimlet.prototype.Uint8ToString(node.content);
+                  document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML + '<img style="vertical-align:middle" src="'+myWindow.getResource("file-pgp-encrypted.png")+'"> <a class="AttLink" onclick="OpenPGPZimlet.prototype.downloadBlob(\''+OpenPGPZimlet.prototype.escapeHtml(node.contentType.params.name)+'\',\'octet/stream\',\''+btoa(body)+'\')">'+OpenPGPZimlet.prototype.escapeHtml(node.contentType.params.name)+'</a>&nbsp;';
+                  if(node.contentType.value='application/pgp-keys')
+                  {
+                     //Import public key
+                     var pubKeyTxt = body.match(/(-----BEGIN PGP PUBLIC KEY BLOCK-----)([^]+)(-----END PGP PUBLIC KEY BLOCK-----)/g);
+                     if(pubKeyTxt)
+                     {
+                        if(pubKeyTxt[0])
+                        {
+                           document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML + '|&nbsp;<a class="AttLink" id="btnImport'+myWindow.fArguments['domId']+'">'+OpenPGPZimlet.lang[73]+'</a>&nbsp;';
+                           var btnImport = document.getElementById("btnImport"+myWindow.fArguments['domId']);
+                           btnImport.onclick = AjxCallback.simpleClosure(OpenPGPZimlet.prototype.displayDialog, this, 9, OpenPGPZimlet.lang[73], pubKeyTxt[0]);
+                        }   
+                     }
                   }
-               });
-            }   
-            else
-            {
-               /* A pgp/mime message without multipart boundary
-                * https://github.com/Zimbra-Community/pgp-zimlet/issues/182
-               */
-               //display body part
-               OpenPGPZimlet.prototype.displayMimeBodyPart(plaintext.data, myWindow.fArguments['domId']);
-            }   
+               }               
+            };
+            
+            parser.onend = function(){
+            };
+
+            parser.write(plaintext.data);
+            parser.end();
 
             //Got NO attachments, remove the attLinks div from UI
             try {
@@ -1474,38 +1410,19 @@ function(fArguments) {
    }
 };
 
-/** This method parses/decodes and displays a body part from pgp/mime
- * @param {string} part - message part
- * @param {string} domId - the DOM id where to display the result
+/** Uint8ToString converts a Uint8Array byte array from emailjs-mime-parser to a string that can be encoded to base64.
+ * See {@link http://stackoverflow.com/questions/12710001/how-to-convert-uint8-array-to-base64-encoded-string}
+ * @param {Uint8Array} u8a - byte array from emailjs-mime-parser
+ * @returns {string} c - string that can be base64 encoded
  * */ 
-OpenPGPZimlet.prototype.displayMimeBodyPart =
-function(part, domId) {
-   var partArr=part.split('\n\n', 2);
-   partArr[1] = part.substring(part.indexOf('\n\n')+2);
-
-   var headers = partArr[0];
-   
-   var body = partArr[1];
-   
-   if (headers.indexOf('Content-Transfer-Encoding: base64')> -1)
-   {
-      //just using atob will break utf-8 encoded characters in the base64 encoded message
-      //http://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
-      body = decodeURIComponent(escape(window.atob(body)));
-   }
-
-   if (headers.indexOf('Content-Transfer-Encoding: quoted-printable')> -1)
-   {
-      body = OpenPGPZimlet.prototype.quoted_printable_decode(body);
-   }
-   
-   if(headers.indexOf('text/html')> -1)
-   {
-      body = OpenPGPZimlet.prototype.htmlToText(body);
-   }
-
-   document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+domId).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+domId).innerHTML + OpenPGPZimlet.prototype.urlify(OpenPGPZimlet.prototype.escapeHtml(body));
-   document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+domId).setAttribute('data-decrypted',body);   
+OpenPGPZimlet.prototype.Uint8ToString =
+function(u8a) {
+  var CHUNK_SZ = 0x8000;
+  var c = [];
+  for (var i=0; i < u8a.length; i+=CHUNK_SZ) {
+    c.push(String.fromCharCode.apply(null, u8a.subarray(i, i+CHUNK_SZ)));
+  }
+  return c.join("");
 }
 
 /** This method is called when the Decrypt File dialog "OK" button is clicked after private key has been entered for decrypting a file.
