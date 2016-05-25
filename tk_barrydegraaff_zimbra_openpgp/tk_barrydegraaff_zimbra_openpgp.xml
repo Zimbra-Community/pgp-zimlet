@@ -35,7 +35,6 @@ them here has no effect.
    <include>quoted-printable.js</include>
    <include>utf8.js</include>
    <include>purify.js</include>
-   <include>mimeparser.js</include>
    <include>addressparser.js</include>
    <include>mimefuncs.js</include>
    <include>mimeparser.js</include>
