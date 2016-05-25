@@ -4,8 +4,8 @@
 <title>emailjs-mime-parser test for Zimbra OpenPGP Zimlet</title>
 <script src="mimeparser.js"></script>
 <script src="addressparser.js"></script>
-<script src="mimeparser.js"></script>
 <script src="mimefuncs.js"></script>
+<script src="mimeparser.js"></script>
 <script src="stringencoding.js"></script>
 </head>
 <body>
@@ -287,29 +287,26 @@ YKol3axAvFrRmeZOrB39Q2QBYNlrErZ4EjAsQTGrkLwYDvMKtIXetKA5u6a06YueFYklg0vc
 var parser = new (MimeParser);
 
 parser.onheader = function(node){
-    console.log(node.header.join('\n')); // List all headers 
-    console.log(node.headers['content-type']); // List value for Content-Type 
+    //console.log(node.header.join('\n')); // List all headers 
+    //console.log(node.headers['content-type']); // List value for Content-Type 
+    
 };            
 
 parser.onbody = function(node, chunk){
-   console.log('Received %s bytes for %s', chunk.byteLength, node.path.join("."));
+   //console.log('Received %s bytes for %s', chunk.byteLength, node.path.join("."));
 };
 
-parser.onend = function(){
+parser.onend = function(node){
     console.log('Parsing is finished');
 };
 
-//mimeparser.js:75 Uncaught TypeError: Cannot read property 'fromTypedArray' of undefinedMimeParser.write @ mimeparser.js:75(anonymous function) @ mimeparser-test.html:302
-parser.write(new TextEncoder("utf-8").encode(document.getElementById('input').value));
-
-//mimeparser.js:348 Uncaught TypeError: Cannot read property 'parseHeaderValue' of undefined
-//MimeNode._parseHeaderValue	@	mimeparser.js:348
-//MimeNode._parseHeaders	@	mimeparser.js:313
-//MimeNode._processHeaderLine	@	mimeparser.js:278
-//MimeNode.writeLine	@	mimeparser.js:252
-//MimeParser.write	@	mimeparser.js:79
 parser.write(document.getElementById('input').value);
 parser.end();
+
+console.log(parser);
+
+var body = new TextDecoder("utf-8").decode(parser.nodes.node1.content);
+console.log(body);
 
 
 </script>
