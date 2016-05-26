@@ -1360,9 +1360,8 @@ function(fArguments) {
                      {
                         if(pubKeyTxt[0])
                         {
-                           document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML + '|&nbsp;<a class="AttLink" id="btnImport'+myWindow.fArguments['domId']+'">'+OpenPGPZimlet.lang[73]+'</a>&nbsp;';
-                           //whoops this code assumes there is only one public key attachments, it will fail with multiple BUG
-                           var btnImport = document.getElementById("btnImport"+myWindow.fArguments['domId']);
+                           document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML + '|&nbsp;<a class="AttLink" id="btnImport'+myWindow.fArguments['domId']+btoa(unescape(encodeURIComponent(node.contentType.params.name)))+'">'+OpenPGPZimlet.lang[73]+'</a>&nbsp;';
+                           var btnImport = document.getElementById("btnImport"+myWindow.fArguments['domId']+btoa(unescape(encodeURIComponent(node.contentType.params.name))));
                            btnImport.onclick = AjxCallback.simpleClosure(OpenPGPZimlet.prototype.displayDialog, this, 9, OpenPGPZimlet.lang[73], pubKeyTxt[0]);
                         }   
                      }
