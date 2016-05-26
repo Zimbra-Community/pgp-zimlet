@@ -1747,16 +1747,14 @@ function() {
 /** This method is called for importing a public key received via email or key server lookup.
  * It imports only 1 key at the time. If more keys are present in the armored block, only the first is processed.
  * @param {Object} publicKey - PGP Public Key object
- * @param {boolean} noPopDown - if true, do not pop-down the dialog after importing
  */
 OpenPGPZimlet.prototype.okBtnImportPubKey = 
-function(publicKey, noPopDown) { 
+function(publicKey) { 
    var zimletInstance = appCtxt._zimletMgr.getZimletByName('tk_barrydegraaff_zimbra_openpgp').handlerObject;
    //Find an open/free Trusted Public Key field to store our import
-   var freecount = 1;
+   var freecount = 2;
    var freekey= 0;
    try {
-      var publicKeys1 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
       var publicKeys2 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value);
       var publicKeys3 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys3").value);
       var publicKeys4 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys4").value);
@@ -1786,7 +1784,7 @@ function(publicKey, noPopDown) {
       var publicKeys28 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys28").value);
       var publicKeys29 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value);
       var publicKeys30 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value);
-      var combinedPublicKeys = [publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys];
+      var combinedPublicKeys = [publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys];
 
       var openslots = [];
       var fingerprints = [];
@@ -1808,6 +1806,14 @@ function(publicKey, noPopDown) {
          }
          freecount++;
       });
+
+      //Place our own Public Key in the list of known fingerprints
+      //do not support multiple keys in this block
+      try
+      {
+         var publicKeys1= openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
+         fingerprints[publicKeys1.keys[0].primaryKey.fingerprint] = publicKeys1.keys[0].primaryKey.fingerprint;
+      } catch (err) {};   
 
       //Place the Public Keys from the address book in the list of known fingerprints
       OpenPGPZimlet.addressBookPublicKeys.forEach(function(pubKey) {
@@ -1848,15 +1854,11 @@ function(publicKey, noPopDown) {
       OpenPGPZimlet.prototype.status(OpenPGPZimlet.lang[76], ZmStatusView.LEVEL_WARNING); 
    } 
 
-   if(noPopDown != true)
-   {
-      try{
-         zimletInstance._dialog.setContent('');
-         zimletInstance._dialog.popdown();
-      }
-         catch (err) {}
-   }      
-          
+   try{
+      zimletInstance._dialog.setContent('');
+      zimletInstance._dialog.popdown();
+   }
+      catch (err) {}  
 };
 
 /** This method is called for clear-signing messages. Compose -> Sign button -> Dialog -> OK.
@@ -2041,7 +2043,7 @@ function() {
                myWindow.setUserProperty("zimbra_openpgp_privatepass", '---cryptedpp---' + encryptedPassphrase, false);
             }
             OpenPGPZimlet.privatePassCache = passphrase;
-            OpenPGPZimlet.prototype.okBtnImportPubKey(openpgp.key.readArmored(key.publicKeyArmored), true);
+            myWindow.setUserProperty("zimbra_openpgp_pubkeys1", key.publicKeyArmored, true);
          }
          //Your new key pair
          myWindow._dialog.setTitle(OpenPGPZimlet.lang[50]);
