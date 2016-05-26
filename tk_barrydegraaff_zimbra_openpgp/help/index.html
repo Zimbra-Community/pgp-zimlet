@@ -53,6 +53,7 @@ border: 1px solid #888888;
 <li><a href="#contacts-scanning">Storing public keys to Zimbra contacts</a></li>
 <li><a href="#attachments">Working with attachments</a></li>
 <li><a href="#thunderbird-enigmail">Thunderbird/Enigmail compatibility</a></li>
+<li><a href="#thunderbird-enigmail-export">Exporting public keys from Enigmail to Zimbra</a></li>
 <li><a href="#fingerprint">Fingerprint</a></li>
 <li><a href="#about">About OpenPGP Zimlet</a></li>
 <li><a href="#licenses">License and third party FOSS libraries</a></li>
@@ -163,8 +164,8 @@ Go to your Sent folder and click the mail you just sent. You should see "Got a g
 <br><br></section><section id="contacts-scanning">
 <h1>Storing public keys to Zimbra contacts</h1>
 Optionally you can store public keys in Contacts, the Zimbra Addressbook. First enable the Scan Contacts option then copy/paste public keys to the notes field of your contacts.<br>
+<br><img src="thunderbird-enigmail-import-keys.png" alt=""><br>
 <br><img src="scan-contacts.png" alt=""><br>
-<br><img src="scan-contacts-book.png" alt=""><br><hr><br>
 
 
 <br><br></section><section id="thunderbird-enigmail">
@@ -174,6 +175,14 @@ OpenPGP/MIME encrypted messages using RFC 3156 implemented in Thunderbird/Enigma
 
 Attachments encrypted by Zimbra OpenPGP Zimlet can be decrypted by Thunderbird/Enigmail users, right click the attachment and click `Decrypt and Open`.<br>
 <br><img src="attachment-decrypt-enigmail.png" alt=""><br><hr><br>
+
+
+<br><br></section><section id="thunderbird-enigmail-export">
+<h1>Exporting public keys from Enigmail to Zimbra</h1>
+You can export all your public keys from Enigmail to Zimbra, first copy them from Enigmail Key Management, and then paste them in the notes field of a new contact in Zimbra, also enable <a href="#contacts-scanning">contacts scanning</a>.<br>
+<br><img src="thunderbird-enigmail-export-keys.png" alt=""><br>
+<br><img src="thunderbird-enigmail-import-keys.png" alt=""><br><hr><br>
+
 
 
 
@@ -202,8 +211,9 @@ Please report <a href="https://github.com/Zimbra-Community/pgp-zimlet/issues">bu
 </li><li><a href="http://blog.iwayvietnam.com/tuanta/about/">Truong Anh Tuan</a> <small>enhancements</small>
 </li><li><a href="http://www.onecentral.nl">Marius Savelbergh</a> <small>funds</small>
 </li><li><a href="http://www.profluid.de/">Klaus Belser</a> <small>funds</small>
-</li><li><a href="http://www.hivos.org">Hivos.org</a> <small>funds</small>
-</li><li><a href="http://openpgpjs.org/">OpenPGP.js</a><small></small>
+</li><li><a href="https://www.hivos.org">Hivos.org</a> <small>funds</small>
+</li><li><a href="https://openpgpjs.org/">OpenPGP.js</a> <small>Tankred Hase</small>
+</li><li><a href="https://github.com/emailjs/">emailJS</a> <small>Andris Reinman</small>
 </li><li><small>and others.<br></small>
 </li></ul>
 
@@ -225,38 +235,58 @@ Copyright (C) 2014-2016&nbsp; Barry de Graaff
 <b>openpgp.js</b><br>
 <b>openpgp.worker.js</b><br>
 OpenPGP.js is a Javascript implementation of the OpenPGP protocol. This is defined in RFC 4880.<br>
-https://github.com/openpgpjs/openpgpjs<br>
+https://github.com/openpgpjs/openpgpjs/blob/master/LICENSE<br>
 Licensed under the GNU Lesser General Public License (3.0 or any later version).<br>
+<br>
+<b>mimeparser.js</b><br>
+A "low level" mime parsing module.<br>
+https://github.com/emailjs/emailjs-mime-parser/blob/master/LICENSE<br>
+Copyright (c) 2013 Andris Reinman.<br>
+<br>
+<b>addressparser.js</b><br>
+A UMD module that allows you to parse mime formatted e-mail address lists in node and the browser.<br>
+https://github.com/emailjs/emailjs-addressparser/blob/master/LICENSE<br>
+Copyright (c) 2013 Andris Reinman.<br>
+<br>
+<b>mimefuncs.js</b><br>
+Encode and decode quoted printable and base64 strings.<br>
+https://www.npmjs.com/package/mimefuncs#license<br>
+Copyright (c) 2013 Andris Reinman.<br>
+<br>
+<b>stringencoding.js</b><br>
+A polyfill for the Encoding Living Standard API for the Web, allowing encoding and decoding of textual data to and from Typed Array buffers for binary data in JavaScript.<br>
+https://github.com/inexorabletash/text-encoding/blob/master/LICENSE.md<br>
+Released into the public domain.<br>
 <br>
 <b>zlib.min.js.map</b><br>
 JavaScript Zlib Library<br>
-https://github.com/imaya/zlib.js<br>
+https://github.com/imaya/zlib.js/blob/master/LICENSE<br>
 Copyright © 2012 imaya. Licensed under the MIT License.<br>
 <br>
 <b>aes.js, aes-ctr.js</b><br>
 JavaScript implementation of AES standard (NIST FIPS-197) for symmetric encryption.
 http://www.movable-type.co.uk/scripts/aes.html<br>
-https://github.com/chrisveness/crypto<br>
+https://github.com/chrisveness/crypto/blob/master/LICENSE<br>
 Copyright © 2014 Chris Veness. Licensed under the MIT License.<br>
 <br>
 <b>htmlToText.js</b><br>
 jsHtmlToText is a *very* basic regex-based HTML stripper. <br>
-https://github.com/eldios/htmlToText<br>
+https://github.com/eldios/htmlToText/blob/master/jsHtmlToText.js<br>
 Copyright (C) 2006 Google Inc. Licensed under the Apache License, Version 2.0<br>
 <br>
 <b>quoted-printable.js</b><br>
 A robust &amp; character encoding–agnostic JavaScript implementation of the `Quoted-Printable` content transfer encoding as defined by RFC 2045. https://mths.be/quoted-printable<br>
-https://github.com/mathiasbynens/quoted-printable<br>
+https://github.com/mathiasbynens/quoted-printable/blob/master/LICENSE-MIT.txt<br>
 Mathias Bynens Licensed under the MIT License.<br>
 <br>
 <b>utf8.js</b><br>
 A robust UTF-8 encoder/decoder in JavaScript.<br>
-https://github.com/mathiasbynens/utf8.js<br>
+https://github.com/mathiasbynens/utf8.js/blob/master/LICENSE-MIT.txt<br>
 Mathias Bynens Licensed under the MIT License.<br>
 <br>
 <b>purify.js</b><br>
 DOMPurify is a DOM-only, super-fast, uber-tolerant XSS sanitizer for HTML, MathML and SVG.<br>
-https://github.com/cure53/DOMPurify<br>
+https://github.com/cure53/DOMPurify/blob/master/LICENSE<br>
 Purify Copyright 2015 Mario Heiderich under the Apache License Version 2.0.<br>
 <br>
 
