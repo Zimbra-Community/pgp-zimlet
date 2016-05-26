@@ -822,10 +822,6 @@ OpenPGPZimlet.prototype.verify = function(fArguments) {
          sigStatus ='<b style="color:red">'+OpenPGPZimlet.lang[15]+'</b>';
          document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar'+myWindow.fArguments[1]).innerHTML= '<img style="vertical-align:middle" src="'+myWindow.getResource("icon.png")+'"> OpenPGP: '+sigStatus;
       }
-      if (message.text.indexOf('<html><body>') > -1 ) 
-      {       
-         myWindow.displayDialog(2, OpenPGPZimlet.lang[16] + ': ' + sigStatus, '<div style="width:650px; height: 350px; overflow-x: auto; overflow-y: auto; background-color:white; padding:5px;">'+message.text+'</div>');
-      }
    },
    function (err) {
       //Error verifying signature
@@ -2767,6 +2763,7 @@ OpenPGPZimlet.prototype.base64DecToArr = function (sBase64, nBlocksSize) {
  * */
 OpenPGPZimlet.prototype.quoted_printable_decode = function(str) {
    return utf8.decode(quotedPrintable.decode(str));
+   // to-do use this: return mimefuncs.quotedPrintableDecode(str);
 }
 
 /** This method creates clickable links in decrypted messages.
