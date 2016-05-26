@@ -1744,44 +1744,47 @@ function() {
 
 /** This method is called for importing a public key received via email or key server lookup.
  * It imports only 1 key at the time. If more keys are present in the armored block, only the first is processed.
- * @param {string} publicKey - ASCII armored PGP Public Key
+ * @param {Object} publicKey - PGP Public Key object
+ * @param {boolean} noPopDown - if true, do not pop-down the dialog after importing
  */
 OpenPGPZimlet.prototype.okBtnImportPubKey = 
-function(publicKey) { 
+function(publicKey, noPopDown) { 
+   var zimletInstance = appCtxt._zimletMgr.getZimletByName('tk_barrydegraaff_zimbra_openpgp').handlerObject;
    //Find an open/free Trusted Public Key field to store our import
-   var freecount = 2;
+   var freecount = 1;
    var freekey= 0;
    try {
-      var publicKeys2 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value);
-      var publicKeys3 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys3").value);
-      var publicKeys4 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys4").value);
-      var publicKeys5 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys5").value);
-      var publicKeys6 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys6").value);
-      var publicKeys7 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys7").value);
-      var publicKeys8 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys8").value);
-      var publicKeys9 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys9").value);
-      var publicKeys10 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys10").value);
-      var publicKeys11 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys11").value);
-      var publicKeys12 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys12").value);
-      var publicKeys13 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys13").value);
-      var publicKeys14 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys14").value);
-      var publicKeys15 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys15").value);
-      var publicKeys16 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys16").value);
-      var publicKeys17 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys17").value);
-      var publicKeys18 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys18").value);
-      var publicKeys19 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys19").value);
-      var publicKeys20 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys20").value);
-      var publicKeys21 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys21").value);
-      var publicKeys22 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys22").value);
-      var publicKeys23 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys23").value);
-      var publicKeys24 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys24").value);
-      var publicKeys25 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys25").value);
-      var publicKeys26 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys26").value);
-      var publicKeys27 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys27").value);
-      var publicKeys28 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys28").value);
-      var publicKeys29 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value);
-      var publicKeys30 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value);
-      var combinedPublicKeys = [publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys];
+      var publicKeys1 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
+      var publicKeys2 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys2").value);
+      var publicKeys3 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys3").value);
+      var publicKeys4 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys4").value);
+      var publicKeys5 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys5").value);
+      var publicKeys6 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys6").value);
+      var publicKeys7 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys7").value);
+      var publicKeys8 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys8").value);
+      var publicKeys9 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys9").value);
+      var publicKeys10 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys10").value);
+      var publicKeys11 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys11").value);
+      var publicKeys12 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys12").value);
+      var publicKeys13 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys13").value);
+      var publicKeys14 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys14").value);
+      var publicKeys15 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys15").value);
+      var publicKeys16 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys16").value);
+      var publicKeys17 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys17").value);
+      var publicKeys18 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys18").value);
+      var publicKeys19 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys19").value);
+      var publicKeys20 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys20").value);
+      var publicKeys21 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys21").value);
+      var publicKeys22 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys22").value);
+      var publicKeys23 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys23").value);
+      var publicKeys24 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys24").value);
+      var publicKeys25 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys25").value);
+      var publicKeys26 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys26").value);
+      var publicKeys27 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys27").value);
+      var publicKeys28 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys28").value);
+      var publicKeys29 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys29").value);
+      var publicKeys30 = openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys30").value);
+      var combinedPublicKeys = [publicKeys1.keys, publicKeys2.keys, publicKeys3.keys, publicKeys4.keys, publicKeys5.keys, publicKeys6.keys, publicKeys7.keys, publicKeys8.keys, publicKeys9.keys, publicKeys10.keys, publicKeys11.keys, publicKeys12.keys, publicKeys13.keys, publicKeys14.keys, publicKeys15.keys, publicKeys16.keys, publicKeys17.keys, publicKeys18.keys, publicKeys19.keys, publicKeys20.keys, publicKeys21.keys, publicKeys22.keys, publicKeys23.keys, publicKeys24.keys, publicKeys25.keys, publicKeys26.keys, publicKeys27.keys, publicKeys28.keys, publicKeys29.keys, publicKeys30.keys];
 
       var openslots = [];
       var fingerprints = [];
@@ -1802,15 +1805,6 @@ function(publicKey) {
             
          }
          freecount++;
-      });
-
-      //Place our own Public Key in the list of known fingerprints
-      var publicKeys1= openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
-      publicKeys1.forEach(function(entry) {
-         var publicKeyPacket = entry.primaryKey;
-         if (publicKeyPacket != null) {
-            fingerprints[publicKeyPacket.fingerprint] = publicKeyPacket.fingerprint;
-         }         
       });
 
       //Place the Public Keys from the address book in the list of known fingerprints
@@ -1835,7 +1829,7 @@ function(publicKey) {
    try {
       var publicKeyPacket = publicKey.keys[0].primaryKey;
       var importFingerprint = publicKeyPacket.fingerprint;
-   } catch (err) { }
+   } catch (err) {console.log(err)}
   
    //Find out if the fingerprint of the key we are importing is already trusted and avoid dupes
    if((publicKey.keys[0]) && (importFingerprint == fingerprints[importFingerprint]))
@@ -1844,7 +1838,7 @@ function(publicKey) {
    }
    else if((publicKey.keys[0]) && (openslots[0]))
    {
-      this.setUserProperty('zimbra_openpgp_pubkeys'+openslots[0], publicKey.keys[0].armor(), true);
+      zimletInstance.setUserProperty('zimbra_openpgp_pubkeys'+openslots[0], publicKey.keys[0].armor(), true);
       OpenPGPZimlet.prototype.status(OpenPGPZimlet.lang[75] + " " + OpenPGPZimlet.lang[26] + " " + openslots[0], ZmStatusView.LEVEL_INFO); 
    }
    else
@@ -1852,12 +1846,14 @@ function(publicKey) {
       OpenPGPZimlet.prototype.status(OpenPGPZimlet.lang[76], ZmStatusView.LEVEL_WARNING); 
    } 
 
-   try{
-      this._dialog.setContent('');
-      this._dialog.popdown();
-   }
-      catch (err) {
-   }
+   if(noPopDown != true)
+   {
+      try{
+         zimletInstance._dialog.setContent('');
+         zimletInstance._dialog.popdown();
+      }
+         catch (err) {}
+   }      
           
 };
 
@@ -2043,7 +2039,7 @@ function() {
                myWindow.setUserProperty("zimbra_openpgp_privatepass", '---cryptedpp---' + encryptedPassphrase, false);
             }
             OpenPGPZimlet.privatePassCache = passphrase;
-            myWindow.setUserProperty("zimbra_openpgp_pubkeys1", key.publicKeyArmored, true);
+            OpenPGPZimlet.prototype.okBtnImportPubKey(openpgp.key.readArmored(key.publicKeyArmored), true);
          }
          //Your new key pair
          myWindow._dialog.setTitle(OpenPGPZimlet.lang[50]);
