@@ -1327,71 +1327,73 @@ function(fArguments) {
          // Go a message that needs MIME parsing (PGP/MIME)
          else
          {
-            var parser = new (MimeParser);
-
-            parser.onheader = function(node){
-            };            
-            
-            parser.onbody = function(node, chunk){
-               if(node.headers['content-type'][0].type == 'text')
-               {
-                  if((node.headers['content-type'][0].value == 'text/html')||(node.headers['content-type'][0].value == 'text/plain'))
-                  {
-                     var body = body = new TextDecoder("utf-8").decode(node.content);
-                     if(node.headers['content-type'][0].value == 'text/html')
-                     {
-                        body = OpenPGPZimlet.prototype.htmlToText(body);
-                     }
+            try 
+            {
+               var parser = new (MimeParser);
    
-                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML + OpenPGPZimlet.prototype.urlify(OpenPGPZimlet.prototype.escapeHtml(body));
-                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).setAttribute('data-decrypted',body);   
-                  }   
-               }
-               if(node.headers['content-disposition'] && node.headers['content-disposition'][0].value == 'attachment')
-               {                 
-                  var body = OpenPGPZimlet.prototype.Uint8ToString(node.content);
-                  document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML + '<img style="vertical-align:middle" src="'+myWindow.getResource("file-pgp-encrypted.png")+'"> <a class="AttLink" onclick="OpenPGPZimlet.prototype.downloadBlob(\''+OpenPGPZimlet.prototype.escapeHtml(node.contentType.params.name)+'\',\'octet/stream\',\''+btoa(body)+'\')">'+OpenPGPZimlet.prototype.escapeHtml(node.contentType.params.name)+'</a>&nbsp;';
-
-                  if(node.contentType.value='application/pgp-keys')
+               parser.onheader = function(node){
+               };            
+               
+               parser.onbody = function(node, chunk){
+                  if(node.headers['content-type'][0].type == 'text')
                   {
-                     //Import public key
-                     var pubKeyTxt = body.match(/(-----BEGIN PGP PUBLIC KEY BLOCK-----)([^]+)(-----END PGP PUBLIC KEY BLOCK-----)/g);
-                     if(pubKeyTxt)
+                     if((node.headers['content-type'][0].value == 'text/html')||(node.headers['content-type'][0].value == 'text/plain'))
                      {
-                        if(pubKeyTxt[0])
+                        var body = body = new TextDecoder("utf-8").decode(node.content);
+                        if(node.headers['content-type'][0].value == 'text/html')
                         {
-                           document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML + '|&nbsp;<a class="AttLink" id="btnImport'+myWindow.fArguments['domId']+btoa(unescape(encodeURIComponent(node.contentType.params.name)))+'">'+OpenPGPZimlet.lang[73]+'</a>&nbsp;';
-                           var btnImport = document.getElementById("btnImport"+myWindow.fArguments['domId']+btoa(unescape(encodeURIComponent(node.contentType.params.name))));
-                           btnImport.onclick = AjxCallback.simpleClosure(OpenPGPZimlet.prototype.displayDialog, this, 9, OpenPGPZimlet.lang[73], pubKeyTxt[0]);
-                        }   
+                           body = OpenPGPZimlet.prototype.htmlToText(body);
+                        }
+      
+                        document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML + OpenPGPZimlet.prototype.urlify(OpenPGPZimlet.prototype.escapeHtml(body));
+                        document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).setAttribute('data-decrypted',body);   
+                     }   
+                  }
+                  if(node.headers['content-disposition'] && node.headers['content-disposition'][0].value == 'attachment')
+                  {                 
+                     var body = OpenPGPZimlet.prototype.Uint8ToString(node.content);
+                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML + '<img style="vertical-align:middle" src="'+myWindow.getResource("file-pgp-encrypted.png")+'"> <a class="AttLink" onclick="OpenPGPZimlet.prototype.downloadBlob(\''+OpenPGPZimlet.prototype.escapeHtml(node.contentType.params.name)+'\',\'octet/stream\',\''+btoa(body)+'\')">'+OpenPGPZimlet.prototype.escapeHtml(node.contentType.params.name)+'</a>&nbsp;';
+   
+                     if(node.contentType.value='application/pgp-keys')
+                     {
+                        //Import public key
+                        var pubKeyTxt = body.match(/(-----BEGIN PGP PUBLIC KEY BLOCK-----)([^]+)(-----END PGP PUBLIC KEY BLOCK-----)/g);
+                        if(pubKeyTxt)
+                        {
+                           if(pubKeyTxt[0])
+                           {
+                              document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML + '|&nbsp;<a class="AttLink" id="btnImport'+myWindow.fArguments['domId']+btoa(unescape(encodeURIComponent(node.contentType.params.name)))+'">'+OpenPGPZimlet.lang[73]+'</a>&nbsp;';
+                              var btnImport = document.getElementById("btnImport"+myWindow.fArguments['domId']+btoa(unescape(encodeURIComponent(node.contentType.params.name))));
+                              btnImport.onclick = AjxCallback.simpleClosure(OpenPGPZimlet.prototype.displayDialog, this, 9, OpenPGPZimlet.lang[73], pubKeyTxt[0]);
+                           }   
+                        }
                      }
-                  }
-               }               
-            };
-            
-            parser.onend = function(){
-            };
-
-            parser.write(plaintext.data);
-            parser.end();
-
-            //Got NO attachments, remove the attLinks div from UI
-            try {
-               if(document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_att"+myWindow.fArguments['domId']).innerHTML == '')
-               {
-                  var e = document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_att"+myWindow.fArguments['domId']);
-                  if (appCtxt.get(ZmSetting.GROUP_MAIL_BY) === ZmSetting.GROUP_BY_CONV)
+                  }               
+               };
+               
+               parser.onend = function(){
+               };
+   
+               parser.write(plaintext.data);
+               parser.end();
+   
+               //Got NO attachments, remove the attLinks div from UI
+               try {
+                  if(document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_att"+myWindow.fArguments['domId']).innerHTML == '')
                   {
-                     e.parentNode.parentNode.removeChild(e.parentNode);
+                     var e = document.getElementById("tk_barrydegraaff_zimbra_openpgp_infobar_att"+myWindow.fArguments['domId']);
+                     if (appCtxt.get(ZmSetting.GROUP_MAIL_BY) === ZmSetting.GROUP_BY_CONV)
+                     {
+                        e.parentNode.parentNode.removeChild(e.parentNode);
+                     }
+                     else
+                     {
+                        e.parentNode.parentNode.parentNode.removeChild(e.parentNode.parentNode);
+                     }                  
                   }
-                  else
-                  {
-                     e.parentNode.parentNode.parentNode.removeChild(e.parentNode.parentNode);
-                  }                  
-               }
-            } catch (err) {}            
+               } catch (err) {}            
+            } catch (err) { console.log(err) }            
          }
-         
          myWindow.cancelBtn();
       },
       function(err) {
