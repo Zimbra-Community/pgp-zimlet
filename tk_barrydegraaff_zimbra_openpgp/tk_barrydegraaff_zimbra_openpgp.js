@@ -1811,7 +1811,7 @@ function(publicKey) {
       //do not support multiple keys in this block
       try
       {
-         var publicKeys1= openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
+         var publicKeys1= openpgp.key.readArmored(zimletInstance.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
          fingerprints[publicKeys1.keys[0].primaryKey.fingerprint] = publicKeys1.keys[0].primaryKey.fingerprint;
       } catch (err) {};   
 
