@@ -1,4 +1,4 @@
-<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="2.5.0" label="OpenPGP" description="Encrypt/Decrypt messages with OpenPGP">
+<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="2.5.1" label="OpenPGP" description="Encrypt/Decrypt messages with OpenPGP">
    <summary>
 Zimbra OpenPGP Zimlet
 
