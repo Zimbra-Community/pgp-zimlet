@@ -531,9 +531,13 @@ OpenPGPZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {
          xmlHttp = new XMLHttpRequest();
          xmlHttp.open( "GET", getUrl, false );
          xmlHttp.send( null );
-         
          try {
             //Do not attempt to decode quoted-printable if we have a BEGIN PGP MESSAGE block, as this breaks the armor
+            
+            //BUG? TO-DO It seems like msg.attrs['Content-Transfer-Encoding'] only works reliable in By-Message view.
+            //The use case of this code is pretty small, is hard to test and above all seems like a lot of work, 
+            //just to see if there is BEGIN PGP SIGNED MESSAGE in the body
+            //redefining msgSearch here is ugly
             if ((msg.attrs['Content-Transfer-Encoding'].indexOf('quoted-printable') > -1) && (msgSearch.indexOf("BEGIN PGP MESSAGE") < 0 ))
             {         
                var message = OpenPGPZimlet.prototype.quoted_printable_decode(xmlHttp.responseText);
@@ -2757,13 +2761,12 @@ OpenPGPZimlet.prototype.base64DecToArr = function (sBase64, nBlocksSize) {
   return taBytes;
 }
 
-/** This method decodes a quoted-printable encoded string. See {@link https://github.com/mathiasbynens/quoted-printable/blob/master/quoted-printable.js}.
+/** This method decodes a quoted-printable encoded string.
  * @param {string} str - quoted-printable encoded string
  * @returns {string} - decoded string
  * */
 OpenPGPZimlet.prototype.quoted_printable_decode = function(str) {
-   return utf8.decode(quotedPrintable.decode(str));
-   // to-do use this: return mimefuncs.quotedPrintableDecode(str);
+   return mimefuncs.quotedPrintableDecode(str);
 }
 
 /** This method creates clickable links in decrypted messages.

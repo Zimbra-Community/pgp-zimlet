@@ -32,8 +32,6 @@ them here has no effect.
    <include>aes.js</include>
    <include>aes-ctr.js</include>
    <include>htmlToText.js</include>
-   <include>quoted-printable.js</include>
-   <include>utf8.js</include>
    <include>purify.js</include>
    <include>addressparser.js</include>
    <include>mimefuncs.js</include>
