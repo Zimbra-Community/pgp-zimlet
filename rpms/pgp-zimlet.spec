@@ -1,6 +1,6 @@
 Name:           pgp-zimlet
 Version:        2.5.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Zimbra OpenPGP Zimlet
 
 Group:          Applications/Internet
@@ -32,6 +32,9 @@ cp -R tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.zip $RPM_B
 
 %post
 su - zimbra -c "zmzimletctl deploy /opt/zimbra/zimlets-extra/tk_barrydegraaff_zimbra_openpgp.zip"
+
+
+%posttrans
 su - zimbra -c "zmprov fc all"
 su - zimbra -c "zmmailboxdctl restart"
 
@@ -49,6 +52,9 @@ fi
 
 
 %changelog
+* Fri May 27 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.5.2-2
+- Add "posttrans" for some commands run once per transaction only.
+
 * Fri May 27 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.5.2-1
 - New release update.
 
