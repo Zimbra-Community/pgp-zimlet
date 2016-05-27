@@ -1,5 +1,5 @@
 Name:           pgp-zimlet
-Version:        2.5.1
+Version:        2.5.2
 Release:        1%{?dist}
 Summary:        Zimbra OpenPGP Zimlet
 
@@ -49,6 +49,9 @@ fi
 
 
 %changelog
+* Fri May 27 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.5.2-1
+- New release update.
+
 * Thu May 26 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.5.1-1
 - New release update.
 
