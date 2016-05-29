@@ -1295,7 +1295,7 @@ function(fArguments) {
          {
             document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML=OpenPGPZimlet.prototype.urlify(OpenPGPZimlet.prototype.escapeHtml(plaintext.data));
          }
-         // Go a message that needs MIME parsing (PGP/MIME)
+         // Got a message that needs MIME parsing (PGP/MIME)
          else
          {
             try 
