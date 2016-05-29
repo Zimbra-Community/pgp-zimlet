@@ -524,7 +524,6 @@ OpenPGPZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {
       }
 
       if (msgSearch.indexOf("BEGIN PGP SIGNED MESSAGE") > 0 ) {
-         document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+appCtxt.getCurrentAppName()+msg.id).style.display="none";
          if (OpenPGPZimlet.prototype.addressBookReadInProgress == true)
          {
             //Still loading contacts, ignoring your addressbook
