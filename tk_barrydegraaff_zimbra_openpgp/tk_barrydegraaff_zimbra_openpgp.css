@@ -114,3 +114,8 @@ font-family: monospace;
 white-space: pre-wrap;
 word-wrap: break-word;
 }
+
+.tk_barrydegraaff_zimbra_openpgp_infobar_body:empty,  .tk_barrydegraaff_zimbra_openpgp_infobar:empty, .tk_barrydegraaff_zimbra_openpgp_actionbar:empty {
+   display:none;
+   margin:0;
+}
