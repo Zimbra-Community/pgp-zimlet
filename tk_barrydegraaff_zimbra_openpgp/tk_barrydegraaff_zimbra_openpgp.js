@@ -2921,7 +2921,7 @@ OpenPGPZimlet.prototype.printdiv = function(printdivname, msg) {
 /** This method is called when the Reply(All) links are clicked on a decrypted message (in the reading pane).
  * It opens a new compose window with the ---original message---.
  * @param {ZmMailMsg} msg - an email in {@link https://files.zimbra.com/docs/zimlet/zcs/8.6.0/jsapi-zimbra-doc/symbols/ZmMailMsg.html ZmMailMsg} format
- * @param {string} decrypted - the decrypted mail body
+ * @param {string} decrypted - the DOM id of the decrypted mail body
  * @param {string} action - parameter to distinguish between 'replyAll' or reply
  * */
 OpenPGPZimlet.prototype.reply = function(msg, decrypted, action) {
