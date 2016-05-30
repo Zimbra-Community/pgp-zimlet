@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#remove zimlet install flag
+grep -v "pgp-zimlet" /tmp/zimlet-install > /tmp/zimlet-install.post.pgp-zimlet
+mv /tmp/zimlet-install.post.pgp-zimlet /tmp/zimlet-install
+
+#execute mailboxd restart if no flags are left
+if [ "$(wc -l < /tmp/zimlet-install)" -eq 0 ]; then
+   su - zimbra -c 'zmprov fc all && zmmailboxdctl restart'
+fi
