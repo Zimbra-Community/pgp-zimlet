@@ -1251,6 +1251,9 @@ function(fArguments) {
             var pubKeyEntry = openpgp.key.readArmored(pubKeyEntry);
             pubKey = pubKey.concat(pubKeyEntry.keys);
          });
+         
+         var globalTrust = openpgp.key.readArmored(OpenPGPZimlet.globalTrust);
+         pubKey = pubKey.concat(globalTrust.keys);
       }
       catch(err) {
          document.getElementById("privateKeyInput").style.backgroundImage = "url('')";
