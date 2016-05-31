@@ -1,0 +1,9 @@
+#!/bin/sh -e
+#set -x
+
+#undeploy the zimlet
+su - zimbra -c "zmzimletctl -l undeploy tk_barrydegraaff_zimbra_openpgp"
+su - zimbra -c "zmprov fc all"
+
+# set flag that zmmailboxdcontrol restart is required
+echo "pgp-zimlet" >> /tmp/zimlet-install

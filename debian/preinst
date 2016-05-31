@@ -1,0 +1,5 @@
+#!/bin/sh -e
+#set -x
+
+# set flag that zmmailboxdcontrol restart is required
+echo "pgp-zimlet" >> /tmp/zimlet-install
