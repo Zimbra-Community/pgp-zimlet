@@ -372,6 +372,8 @@ OpenPGPZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {
       g.setAttribute("class", 'tk_barrydegraaff_zimbra_openpgp_infobar');
       el.insertBefore(g, el.firstChild); 
       
+      OpenPGPZimlet.prototype.setMargin(0);
+      
       //Detect what kind of message we have
       var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
       
@@ -475,7 +477,8 @@ OpenPGPZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {
       } catch (err) {
          return;   
       }  
-     
+
+      OpenPGPZimlet.prototype.setMargin(0);     
    
       //Performance, do not GET the entire mail, if it is not PGP mail
       if ((pgpmime) ||
@@ -558,6 +561,7 @@ OpenPGPZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {
             this.status(OpenPGPZimlet.lang[7], ZmStatusView.LEVEL_CRITICAL);
             return;
          }
+         OpenPGPZimlet.prototype.setMargin(6);
          OpenPGPZimlet.prototype.verify([message, appCtxt.getCurrentAppName()+msg.id] );
       }   
       else if (msgSearch.indexOf("BEGIN PGP MESSAGE") > 0 ) {
@@ -617,6 +621,7 @@ OpenPGPZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {
          args['domId'] = appCtxt.getCurrentAppName()+msg.id;
          args['hasMIME'] = pgpmime;
          args['msg'] = msg;
+         OpenPGPZimlet.prototype.setMargin(6);
          this.displayDialog(1, OpenPGPZimlet.lang[8], args);  
       }
       else if (pgpKeys == true)
@@ -629,6 +634,27 @@ OpenPGPZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {
       }   
    }
 };   
+/** Work-around for: 1. onMsgView adds DOM elements for EVERY email message, this includes non-pgp ones, but we do not want to change the UI in those cases
+ * 2. IE is not able to deal with CSS3 :empty selector properly, so we cannot use CSS to fix this. onMsgView needs a rewrite.
+ * @param {integer} margin - margin to set for Zimlet DOM element
+ * */
+OpenPGPZimlet.prototype.setMargin =
+function(margin) {
+   try {
+      var myElements = document.getElementsByClassName("tk_barrydegraaff_zimbra_openpgp_infobar_body");
+      for (var i = 0; i < myElements.length; i++) {
+         myElements[i].style.margin = margin + 'px';
+      }
+      var myElements = document.getElementsByClassName("tk_barrydegraaff_zimbra_openpgp_infobar");
+      for (var i = 0; i < myElements.length; i++) {
+         myElements[i].style.margin = margin + 'px';
+      }
+      var myElements = document.getElementsByClassName("tk_barrydegraaff_zimbra_openpgp_actionbar");
+      for (var i = 0; i < myElements.length; i++) {
+         myElements[i].style.margin = margin + 'px';
+      }
+   } catch (err) {console.log(err)}; 
+};
 
 /** This method is called by the Zimlet framework whenever an email is about to be send. This method checks if a user tries to send a private key and warns them it is NOT a good idea. */
 OpenPGPZimlet.prototype.emailErrorCheck =
