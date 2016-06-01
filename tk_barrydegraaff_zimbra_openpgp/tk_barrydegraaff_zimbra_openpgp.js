@@ -372,8 +372,6 @@ OpenPGPZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {
       g.setAttribute("class", 'tk_barrydegraaff_zimbra_openpgp_infobar');
       el.insertBefore(g, el.firstChild); 
       
-      OpenPGPZimlet.prototype.setMargin(0);
-      
       //Detect what kind of message we have
       var bp = msg.getBodyPart(ZmMimeTable.TEXT_PLAIN);
       
@@ -476,9 +474,7 @@ OpenPGPZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {
       el.insertBefore(g, bodynode);
       } catch (err) {
          return;   
-      }  
-
-      OpenPGPZimlet.prototype.setMargin(0);     
+      }      
    
       //Performance, do not GET the entire mail, if it is not PGP mail
       if ((pgpmime) ||
@@ -871,9 +867,18 @@ function(id, title, message) {
       zimletInstance._dialog = new ZmDialog( { title:title, parent:zimletInstance.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       zimletInstance._dialog.setContent(html);
       var fArguments = message;
+
       zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.okBtnDecrypt, [fArguments]));
       zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));
-      
+
+      // We cannot use = new DwtTabGroup as that would remove the listeners on the dialog buttons
+      // Also we need to count our number of tab stops because of:
+      // _baseTabGroupSize is a work-around from Zimbra Bug 38281: for multiuse dialogs, we need to re-add the discretionary tab stops to the base list (the dialog buttons)
+      // See: https://files.zimbra.com/docs/zimlet/zcs/8.6.0/jsapi-zimbra-doc/symbols/src/WebRoot_js_zimbraMail_share_view_dialog_ZmDialog.js.html      
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('privateKeyInput'),0);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('passphraseInput'),1);
+      zimletInstance._dialog._baseTabGroupSize = 4;
+
       //If a private key is available and a password is stored, auto decrypt the message if option auto_decrypt is set to true
       if((OpenPGPZimlet.privateKeyCache.length > 10) && 
       (OpenPGPZimlet.settings['auto_decrypt'] == 'true') &&
@@ -915,7 +920,7 @@ function(id, title, message) {
       "</td></tr>" +      
       "<tr><td style=\"width:100px\">"+OpenPGPZimlet.lang[19]+":</td><td style=\"width:500px\">"+OpenPGPZimlet.lang[25]+"<textarea class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='privateKeyInput'/>" + OpenPGPZimlet.privateKeyCache + "</textarea>" +
       "<input type='checkbox' id='set_new_aes_password' name='set_new_aes_password' value='true'>" + OpenPGPZimlet.lang[67] +
-      "<tr><td>"+OpenPGPZimlet.lang[20]+":</td><td><br>"+OpenPGPZimlet.lang[24]+"<input class=\"barrydegraaff_zimbra_openpgp-input\" id='privatePassInput' type='password' value='" + OpenPGPZimlet.privatePassCache + "'><br><button type=\"button\" onclick=\"OpenPGPZimlet.prototype.toggle_password('privatePassInput')\">"+OpenPGPZimlet.lang[55]+"</button><input type='checkbox' id='store_passphrase_locally' name='store_passphrase_locally' " + (OpenPGPZimlet.settings['store_passphrase_locally']=='false' ? '' : 'checked') + " value='false'> "+OpenPGPZimlet.lang[71]+"</td></tr>" +
+      "<tr><td>"+OpenPGPZimlet.lang[20]+":</td><td><br>"+OpenPGPZimlet.lang[24]+"<input class=\"barrydegraaff_zimbra_openpgp-input\" id='privatePassInput' type='password' value='" + OpenPGPZimlet.privatePassCache + "'><br><button id=\"showhide\" type=\"button\" onkeyup=\"OpenPGPZimlet.prototype.toggle_password('privatePassInput')\" onclick=\"OpenPGPZimlet.prototype.toggle_password('privatePassInput')\">"+OpenPGPZimlet.lang[55]+"</button><input type='checkbox' id='store_passphrase_locally' name='store_passphrase_locally' " + (OpenPGPZimlet.settings['store_passphrase_locally']=='false' ? '' : 'checked') + " value='false'> "+OpenPGPZimlet.lang[71]+"</td></tr>" +
       "<tr><td><br>"+OpenPGPZimlet.lang[27]+":</td><td><br><input type='checkbox' id='enable_contacts_scanning' name='enable_contacts_scanning' " + (OpenPGPZimlet.settings['enable_contacts_scanning']=='false' ? '' : 'checked') + " value='true'>" + "</td></tr>" +
       "<tr><td><br>"+OpenPGPZimlet.lang[66]+":</td><td><br><input type='checkbox' id='auto_decrypt' name='auto_decrypt' " + (OpenPGPZimlet.settings['auto_decrypt']=='false' ? '' : 'checked') + " value='true'>" + "</td></tr>" +
       pubkeyListHtml + 
@@ -927,6 +932,53 @@ function(id, title, message) {
       zimletInstance._dialog.setContent(html);
       zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.okBtnPubKeySave));
       zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));
+
+      // We cannot use = new DwtTabGroup as that would remove the listeners on the dialog buttons
+      // Also we need to count our number of tab stops because of:
+      // _baseTabGroupSize is a work-around from Zimbra Bug 38281: for multiuse dialogs, we need to re-add the discretionary tab stops to the base list (the dialog buttons)
+      // See: https://files.zimbra.com/docs/zimlet/zcs/8.6.0/jsapi-zimbra-doc/symbols/src/WebRoot_js_zimbraMail_share_view_dialog_ZmDialog.js.html      
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('privateKeyInput'),0);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('set_new_aes_password'),1);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('privatePassInput'),2);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('showhide'),3);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('store_passphrase_locally'),4);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('enable_contacts_scanning'),5);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('auto_decrypt'),6);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput1'),7);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput2'),8);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput3'),9);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput4'),10);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput5'),11);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput6'),12);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput7'),13);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput8'),14);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput9'),15);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput10'),16);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput11'),17);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput12'),18);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput13'),19);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput14'),20);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput15'),21);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput16'),22);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput17'),23);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput18'),24);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput19'),25);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput20'),26);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput21'),27);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput22'),28);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput23'),19);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput24'),30);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput25'),31);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput26'),32);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput27'),33);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput28'),34);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput29'),35);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput30'),36);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('max_message_size'),37);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById(zimletInstance._dialog._button[1].__internalId));
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById(zimletInstance._dialog._button[2].__internalId));
+      zimletInstance._dialog._baseTabGroupSize = 40;
+      
       break;
    case 4:
       //Sign message
@@ -953,6 +1005,10 @@ function(id, title, message) {
       zimletInstance._dialog.setContent(html);
       zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.okBtnSign));
       zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));
+
+      zimletInstance._dialog._baseTabGroupSize = 4;
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('privateKeyInput'),0);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('passphraseInput'),1);    
       break;
    case 5:
       //Generate keypair
@@ -997,8 +1053,8 @@ function(id, title, message) {
       OpenPGPZimlet.lang[20]+":" +
       "</td><td>" +
       "<input class=\"barrydegraaff_zimbra_openpgp-input\" id='passphraseInput' type='password' value='" + (OpenPGPZimlet.privatePassCache ? OpenPGPZimlet.privatePassCache : OpenPGPZimlet.prototype.pwgen()) + "'>" +
-      "</td></tr><tr><td></td><td><button type=\"button\" onclick='document.getElementById(\"passphraseInput\").value=OpenPGPZimlet.prototype.pwgen()'>"+OpenPGPZimlet.lang[34]+"</button>" +
-      "<button type=\"button\" onclick=\"OpenPGPZimlet.prototype.toggle_password('passphraseInput')\">"+OpenPGPZimlet.lang[55]+"</button></td></tr><tr><td style=\"width:100px;\">" +
+      "</td></tr><tr><td></td><td><button id=\"pwgen\"type=\"button\" onkeypress='document.getElementById(\"passphraseInput\").value=OpenPGPZimlet.prototype.pwgen()' onclick='document.getElementById(\"passphraseInput\").value=OpenPGPZimlet.prototype.pwgen()'>"+OpenPGPZimlet.lang[34]+"</button>" +
+      "<button type=\"button\" id=\"showhide\"onkeyup=\"OpenPGPZimlet.prototype.toggle_password('passphraseInput')\" onclick=\"OpenPGPZimlet.prototype.toggle_password('passphraseInput')\">"+OpenPGPZimlet.lang[55]+"</button></td></tr><tr><td style=\"width:100px;\">" +
       OpenPGPZimlet.lang[31]+":" +
       "</td><td style=\"width:500px\">" +
       "<select class=\"barrydegraaff_zimbra_openpgp-input\" id=\"keyLength\" name=\"keyLength\"><option selected=\"selected\" value=\"1024\">1024</option><option value=\"2048\">2048</option><option value=\"4096\">4096</option></select>" +
@@ -1011,6 +1067,15 @@ function(id, title, message) {
       zimletInstance._dialog.setContent(html);
       zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.okBtnKeyPair));
       zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));
+
+      zimletInstance._dialog._baseTabGroupSize = 9;
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('uidName'),0);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('uidEmail'),1);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('passphraseInput'),2);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('pwgen'),3);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('showhide'),4);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('keyLength'),5);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('keyStore'),6);
       break;
    case 6:
       //Encrypt message
@@ -1025,7 +1090,7 @@ function(id, title, message) {
       OpenPGPZimlet.lang[36]+" <a style='color:blue; text-decoration: underline;' onclick=\"OpenPGPZimlet.prototype.menuItemSelected('help')\">"+OpenPGPZimlet.lang[11]+"</a>.<br><br>" +
       "</td></tr><tr><td>" +
       OpenPGPZimlet.lang[35]+":" +
-      "</td><td>" + zimletInstance.pubKeySelect(message) + "<button id=\"btnremoveForceSelect\" onclick=\"OpenPGPZimlet.prototype.removeForceSelect()\">X</button><br><br>" +
+      "</td><td>" + zimletInstance.pubKeySelect(message) + "<button id=\"btnremoveForceSelect\" onkeypress=\"OpenPGPZimlet.prototype.removeForceSelect()\" onclick=\"OpenPGPZimlet.prototype.removeForceSelect()\">X</button><br><br>" +
       "</td></tr>" +
       "<tr><td colspan='2'>OpenPGP " + OpenPGPZimlet.lang[40] + "<br></td></tr>" +
       "<tr><td></td><td><div id='fileInputPgpAttach'></div></td></tr>" +
@@ -1043,6 +1108,14 @@ function(id, title, message) {
       OpenPGPZimlet.prototype.addFileInputPgpAttach();
       zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.okBtnEncrypt, [message]));
       zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));
+
+      zimletInstance._dialog._baseTabGroupSize = 7;
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('pubKeySelect'),0);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('btnremoveForceSelect'),1);
+      var fileSelector = document.getElementsByClassName('fileInputPgpAttach');
+      zimletInstance._dialog._tabGroup.addMember(fileSelector[0],2);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('privateKeyInput'),3);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('passphraseInput'),4);
       break;
    case 7:
    //lookup keyserver
@@ -1055,8 +1128,14 @@ function(id, title, message) {
       zimletInstance._dialog.setContent(html);
       var btnSearch = document.getElementById("btnSearch");
       btnSearch.onclick = AjxCallback.simpleClosure(zimletInstance.lookup, zimletInstance);
+      btnSearch.onkeyup = AjxCallback.simpleClosure(zimletInstance.lookup, zimletInstance);
       zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.okBtnLookup));
       zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));
+      
+      zimletInstance._dialog._baseTabGroupSize = 4;
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('barrydegraaff_zimbra_openpgpQuery'),0);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('btnSearch'),1);
+      
       break;
    case 8:
    //add/submit keyserver
@@ -1070,7 +1149,12 @@ function(id, title, message) {
       zimletInstance._dialog.setContent(html);
       var btnSearch = document.getElementById("btnSearch");
       btnSearch.onclick = AjxCallback.simpleClosure(zimletInstance.submit, zimletInstance);      
+      btnSearch.onkeypress = AjxCallback.simpleClosure(zimletInstance.submit, zimletInstance);      
       zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));
+      
+      zimletInstance._dialog._baseTabGroupSize = 3;
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('publicKeyInput1'),0);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('btnSearch'),1);
       break;            
    case 9:
       //Import public key
@@ -1109,7 +1193,7 @@ function(id, title, message) {
       zimletInstance._dialog = new ZmDialog( { title:title, parent:zimletInstance.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true  } );
       zimletInstance._dialog.setContent(html);
       zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.okBtnImportPubKey, publicKeys));
-      zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));
+      zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));      
       break;
    case 10:
       //Decrypt file from attachment link
@@ -1134,7 +1218,11 @@ function(id, title, message) {
       
       zimletInstance._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(zimletInstance, zimletInstance.okBtnDecryptFile, [message]));
       zimletInstance._dialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(zimletInstance, zimletInstance.cancelBtn));
-
+      
+      zimletInstance._dialog._baseTabGroupSize = 4;
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('privateKeyInput'),0);
+      zimletInstance._dialog._tabGroup.addMember(document.getElementById('passphraseInput'),1);
+      
       //If a private key is available and a password is stored, auto decrypt the message if option auto_decrypt is set to true
       if((OpenPGPZimlet.privateKeyCache.length > 10) && 
       (OpenPGPZimlet.settings['auto_decrypt'] == 'true') &&
@@ -2015,9 +2103,7 @@ function() {
       this.status(OpenPGPZimlet.lang[46], ZmStatusView.LEVEL_WARNING);
       return;
    }
-
    
-
    this._dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this.cancelBtn));
    this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, false);
    this._dialog.setButtonVisible(DwtDialog.OK_BUTTON, false);
@@ -2073,8 +2159,10 @@ function() {
          }
          //Your new key pair
          myWindow._dialog.setTitle(OpenPGPZimlet.lang[50]);
-         myWindow._dialog.setContent('<div style="width:650px; height: 240px; overflow-x: hidden; overflow-y: auto;"><table style="width:650px;">'+OpenPGPZimlet.lang[49]+':<br><br><textarea class="barrydegraaff_zimbra_openpgp-msg" style="height:200px;">Passphrase ' + passphrase + ' for ' + uidName + ' <' + uidEmail + '>' + '\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored+'\r\n\r\nlength: '+keyLength+' ' + '\r\nfingerprint: '+key.key.primaryKey.fingerprint+' \r\ncreated: '+key.key.primaryKey.created+'</textarea></div>');
+         myWindow._dialog.setContent('<div style="width:650px; height: 240px; overflow-x: hidden; overflow-y: auto;"><table style="width:650px;">'+OpenPGPZimlet.lang[49]+':<br><br><textarea class="barrydegraaff_zimbra_openpgp-msg" id="newkeypair" style="height:200px;">Passphrase ' + passphrase + ' for ' + uidName + ' <' + uidEmail + '>' + '\r\n\r\n'+key.privateKeyArmored+'\r\n\r\n'+key.publicKeyArmored+'\r\n\r\nlength: '+keyLength+' ' + '\r\nfingerprint: '+key.key.primaryKey.fingerprint+' \r\ncreated: '+key.key.primaryKey.created+'</textarea></div>');
          myWindow._dialog.setButtonVisible(DwtDialog.OK_BUTTON, true);
+         myWindow._dialog._baseTabGroupSize = 2;
+         myWindow._dialog._tabGroup.addMember(document.getElementById('newkeypair'),0); 
       },function(err) {
          // failure generating key
       });       
@@ -2272,7 +2360,7 @@ function(controller) {
       orderedPubKeys.forEach(function(entry) {
          result = result + entry;
       });
-      result = '<select style="height:175px;" class="barrydegraaff_zimbra_openpgp-input" id="pubKeySelect" multiple onclick="OpenPGPZimlet.prototype.forceSelect()">' + result + '</select>';
+      result = '<select style="height:175px;" class="barrydegraaff_zimbra_openpgp-input" id="pubKeySelect" multiple onclick="OpenPGPZimlet.prototype.forceSelect()" onkeyup="OpenPGPZimlet.prototype.forceSelect()">' + result + '</select>';
    }
    catch(err) {
       //Could not parse your trusted public keys!
