@@ -1198,10 +1198,10 @@ function (a) {
 
 /** This method is called when the Decrypt dialog "OK" button is clicked after private key has been entered.
  * and will show the decrypted OpenPGP encrypted message in the DOM.
- * @param {string} fArguments.message - the OpenPGP encrypted message
- * @param {string} fArguments.domId - the DOM id where to display the result
- * @param {boolean} fArguments.hasMIME - if false this is an inline pgp message that does not require mime parsing, if true its a pgp/mime message that needs parsing
- * @param {ZmMailMsg} msg - an email in {@link https://files.zimbra.com/docs/zimlet/zcs/8.6.0/jsapi-zimbra-doc/symbols/ZmMailMsg.html ZmMailMsg} format
+ * @param {string}    fArguments.message - the OpenPGP encrypted message
+ * @param {string}    fArguments.domId - the DOM id where to display the result
+ * @param {boolean}   fArguments.hasMIME - if false this is an inline pgp message that does not require mime parsing, if true its a pgp/mime message that needs parsing
+ * @param {ZmMailMsg} fArguments.msg - an email in {@link https://files.zimbra.com/docs/zimlet/zcs/8.6.0/jsapi-zimbra-doc/symbols/ZmMailMsg.html ZmMailMsg} format
  * */ 
 OpenPGPZimlet.prototype.okBtnDecrypt =
 function(fArguments) {
