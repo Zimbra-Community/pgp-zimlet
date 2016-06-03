@@ -46,7 +46,20 @@ Without translations support:
 
 - https://github.com/Zimbra-Community/pgp-zimlet/wiki/Install-from-git
 
+========================================================================
+### `***UNCHECKED***` gets added to the subject of encrypted mail
 
+    As root su to the root.
+    nano /opt/zimbra/amavisd/sbin/amavisd
+    
+    change the line:
+    $undecipherable_subject_tag = '***UNCHECKED*** ';
+    to:
+    $undecipherable_subject_tag = '';
+     
+    As zimbra:
+    zmamavisdctl restart
+    
 ========================================================================
 
 ### About private key security
