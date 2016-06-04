@@ -2798,6 +2798,12 @@ function(controller) {
    
    var message = controller._getBodyContent();
    
+   //Cannot clear sign a public key as dash escaping breaks the public key armor (by RFC)
+   if(message.substring(0,10000).match(/^-----BEGIN PGP PUBLIC KEY BLOCK-----$/m))
+   {
+      return;
+   }   
+   
    if(message.length < 1)
    {
       //Please compose message first
