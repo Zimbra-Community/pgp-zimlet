@@ -1176,7 +1176,7 @@ function(id, title, message) {
       "</td><td>&nbsp;<button id='btnSearch' onclick=\"#\">"+OpenPGPZimlet.lang[88]+"</button></td></tr><tr><td>" +
       "<div id='barrydegraaff_zimbra_openpgpResult'></div>" +
       "</td><td></td></tr></table></div>";
-      zimletInstance._dialog = new ZmDialog( { title:title, parent:zimletInstance.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
+      zimletInstance._dialog = new ZmDialog( { title:title + ' (' + zimletInstance._zimletContext.getConfig("keyserver").replace(/https:\/\/|\/$/,'')+')', parent:zimletInstance.getShell(), standardButtons:[DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       zimletInstance._dialog.setContent(html);
       var btnSearch = document.getElementById("btnSearch");
       btnSearch.onclick = AjxCallback.simpleClosure(zimletInstance.lookup, zimletInstance);
@@ -1197,7 +1197,7 @@ function(id, title, message) {
       html = "<div style='width:650px; height: 250px;  overflow-x: hidden; overflow-y: scroll;'><textarea maxlength=\"51000\" class=\"barrydegraaff_zimbra_openpgp-input\" rows=\"3\" cols=\"65\" id='publicKeyInput"+numStr+"'/>" + (zimletInstance.getUserPropertyInfo(pubkeyNumStr).value ? zimletInstance.getUserPropertyInfo(pubkeyNumStr).value : '') + "</textarea><br>"+ pubkeyTxt + "<br>" + "<label for='publicKeyInfo"+numStr+"'>"+(zimletInstance.getUserPropertyInfo(pubkeyNumStr).value ? zimletInstance.pubkeyInfo(zimletInstance.getUserPropertyInfo(pubkeyNumStr).value) : '')+"</label>" + "<br>" +
       "<br><button id='btnSearch' onclick=\"#\">"+OpenPGPZimlet.lang[86]+"</button><br><div id='barrydegraaff_zimbra_openpgpResult'></div>" +
       "</div>";
-      zimletInstance._dialog = new ZmDialog( { title:title, parent:zimletInstance.getShell(), standardButtons:[DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
+      zimletInstance._dialog = new ZmDialog( { title:title + ' (' + zimletInstance._zimletContext.getConfig("keyserver").replace(/https:\/\/|\/$/,'')+')', parent:zimletInstance.getShell(), standardButtons:[DwtDialog.OK_BUTTON], disposeOnPopDown:true } );
       zimletInstance._dialog.setContent(html);
       var btnSearch = document.getElementById("btnSearch");
       btnSearch.onclick = AjxCallback.simpleClosure(zimletInstance.submit, zimletInstance);      
