@@ -2400,6 +2400,8 @@ function(controller) {
       var result = '';
       var orderedPubKeys = [];
       var keyCount = 0;
+      var dupesCheck = [];
+      
       combinedPublicKeys.forEach(function(entries) {
          entries.forEach(function(entry) {
             for (i = 0; i < entry.users.length; i++) {
@@ -2409,22 +2411,25 @@ function(controller) {
                   userid = userid.replace(/\>/g,"&gt;") ;
                   var selected;
                   
-                  if(userid.match(new RegExp(emailRegex,'gmi')))
-                  {                     
-                     selected = 'selected class="selectme" ';
-                     result = result + '<option ' + selected + ' title="fingerprint: '+entry.primaryKey.fingerprint+' \r\ncreated: '+entry.primaryKey.created+'" value="'+entry.armor()+'">'+userid+'</option>';
-                  }
-                  else
+                  if(!dupesCheck[entry.primaryKey.fingerprint+userid])
                   {
-                     selected = '';
-                     orderedPubKeys[keyCount] = '<option data-userid="'+userid.toLowerCase()+'"' + selected + ' title="fingerprint: '+entry.primaryKey.fingerprint+' \r\ncreated: '+entry.primaryKey.created+'" value="'+entry.armor()+'">'+userid+'</option>';
-                     keyCount++;
+                     if(userid.match(new RegExp(emailRegex,'gmi')))
+                     {                     
+                        selected = 'selected class="selectme" ';
+                        result = result + '<option ' + selected + ' title="fingerprint: '+entry.primaryKey.fingerprint+' \r\ncreated: '+entry.primaryKey.created+'" value="'+entry.armor()+'">'+userid+'</option>';
+                     }
+                     else
+                     {
+                        selected = '';
+                        orderedPubKeys[keyCount] = '<option data-userid="'+userid.toLowerCase()+'"' + selected + ' title="fingerprint: '+entry.primaryKey.fingerprint+' \r\ncreated: '+entry.primaryKey.created+'" value="'+entry.armor()+'">'+userid+'</option>';
+                        keyCount++;
+                     }
+                     dupesCheck[entry.primaryKey.fingerprint+userid]=entry.primaryKey.fingerprint+userid;
                   }                
                }
             }
          });
       });
-      
       orderedPubKeys.sort();      
       orderedPubKeys.forEach(function(entry) {
          result = result + entry;
