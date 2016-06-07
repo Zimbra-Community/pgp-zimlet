@@ -1,6 +1,6 @@
 Name:           pgp-zimlet
-Version:        2.5.2
-Release:        2%{?dist}
+Version:        2.5.5
+Release:        1%{?dist}
 Summary:        Zimbra OpenPGP Zimlet
 
 Group:          Applications/Internet
@@ -52,6 +52,9 @@ fi
 
 
 %changelog
+* Tue Jun 7 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.5.5-1
+- New release update.
+
 * Fri May 27 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.5.2-2
 - Add "posttrans" for some commands run once per transaction only.
 
