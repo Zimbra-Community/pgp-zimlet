@@ -1478,26 +1478,25 @@ function(fArguments) {
          //Display signature status in the infobar 
          document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar'+myWindow.fArguments['domId']).innerHTML='<img style="vertical-align:middle" src="'+myWindow.getResource("icon.png")+'"> OpenPGP: <b>'+ sigStatus + '</b>';
 
-         //Display reply, reply-all and print button in the action bar
-         if(document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar'+myWindow.fArguments['domId']))
-         {
-            if(document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']))
-            {
-               document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar'+myWindow.fArguments['domId']).innerHTML = '<a id="btnReply'+myWindow.fArguments['msg'].id+'" style="text-decoration: none" onclick="#"><img style="vertical-align:middle" src="'+myWindow.getResource("reply-sender.png")+'"> '+OpenPGPZimlet.lang[82]+'</a>&nbsp;&nbsp;<a id="btnReplyAll'+myWindow.fArguments['msg'].id+'" style="text-decoration: none" onclick="#"><img style="vertical-align:middle" src="'+myWindow.getResource("reply-all.png")+'"> '+OpenPGPZimlet.lang[83]+'</a>&nbsp;&nbsp;<a id="btnPrint'+myWindow.fArguments['msg'].id+'" style="text-decoration: none" onclick="#"><img style="vertical-align:middle" src="'+myWindow.getResource("printButton.png")+'"> '+OpenPGPZimlet.lang[54]+'</a>&nbsp;&nbsp;';
-               var btnPrint = document.getElementById("btnPrint"+myWindow.fArguments['msg'].id);               
-               btnPrint.onclick = AjxCallback.simpleClosure(myWindow.printdiv, myWindow, 'tk_barrydegraaff_zimbra_openpgp_infobar_body'+appCtxt.getCurrentAppName()+myWindow.fArguments['msg'].id, myWindow.fArguments['msg']);
-               //This listener passes the unsanitized html to the compose window on purpose, the composer is set to plain text
-               var btnReply = document.getElementById("btnReply"+myWindow.fArguments['msg'].id);
-               btnReply.onclick = AjxCallback.simpleClosure(myWindow.reply, myWindow, [myWindow.fArguments.msg], plaintext.data, 'reply');
-               //This listener passes the unsanitized html to the compose window on purpose, the composer is set to plain text
-               var btnReplyAll = document.getElementById("btnReplyAll"+myWindow.fArguments['msg'].id);
-               btnReplyAll.onclick = AjxCallback.simpleClosure(myWindow.reply, myWindow, [myWindow.fArguments.msg], plaintext.data, 'replyAll');               
-            }
-         }
-
          // Got a decrypted message that does not need further mime parsing
          if(myWindow.fArguments['hasMIME']== false)
          {
+            //Display reply, reply-all and print button in the action bar
+            if(document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar'+myWindow.fArguments['domId']))
+            {
+               if(document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']))
+               {
+                  document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar'+myWindow.fArguments['domId']).innerHTML = '<a id="btnReply'+myWindow.fArguments['msg'].id+'" style="text-decoration: none" onclick="#"><img style="vertical-align:middle" src="'+myWindow.getResource("reply-sender.png")+'"> '+OpenPGPZimlet.lang[82]+'</a>&nbsp;&nbsp;<a id="btnReplyAll'+myWindow.fArguments['msg'].id+'" style="text-decoration: none" onclick="#"><img style="vertical-align:middle" src="'+myWindow.getResource("reply-all.png")+'"> '+OpenPGPZimlet.lang[83]+'</a>&nbsp;&nbsp;<a id="btnPrint'+myWindow.fArguments['msg'].id+'" style="text-decoration: none" onclick="#"><img style="vertical-align:middle" src="'+myWindow.getResource("printButton.png")+'"> '+OpenPGPZimlet.lang[54]+'</a>&nbsp;&nbsp;';
+                  var btnPrint = document.getElementById("btnPrint"+myWindow.fArguments['msg'].id);               
+                  btnPrint.onclick = AjxCallback.simpleClosure(myWindow.printdiv, myWindow, 'tk_barrydegraaff_zimbra_openpgp_infobar_body'+appCtxt.getCurrentAppName()+myWindow.fArguments['msg'].id, myWindow.fArguments['msg']);
+                  //This listener passes the unsanitized html to the compose window on purpose, the composer is set to plain text
+                  var btnReply = document.getElementById("btnReply"+myWindow.fArguments['msg'].id);
+                  btnReply.onclick = AjxCallback.simpleClosure(myWindow.reply, myWindow, [myWindow.fArguments.msg], plaintext.data, 'reply');
+                  //This listener passes the unsanitized html to the compose window on purpose, the composer is set to plain text
+                  var btnReplyAll = document.getElementById("btnReplyAll"+myWindow.fArguments['msg'].id);
+                  btnReplyAll.onclick = AjxCallback.simpleClosure(myWindow.reply, myWindow, [myWindow.fArguments.msg], plaintext.data, 'replyAll');               
+               }
+            }
             document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML=OpenPGPZimlet.prototype.urlify(OpenPGPZimlet.prototype.escapeHtml(plaintext.data));
          }
          // Got a message that needs MIME parsing (PGP/MIME)
@@ -1520,7 +1519,22 @@ function(fArguments) {
                         {
                            body = OpenPGPZimlet.prototype.htmlToText(body);
                         }
-      
+                        //Display reply, reply-all and print button in the action bar
+                        if(document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar'+myWindow.fArguments['domId']))
+                        {
+                           if(document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']))
+                           {
+                              document.getElementById('tk_barrydegraaff_zimbra_openpgp_actionbar'+myWindow.fArguments['domId']).innerHTML = '<a id="btnReply'+myWindow.fArguments['msg'].id+'" style="text-decoration: none" onclick="#"><img style="vertical-align:middle" src="'+myWindow.getResource("reply-sender.png")+'"> '+OpenPGPZimlet.lang[82]+'</a>&nbsp;&nbsp;<a id="btnReplyAll'+myWindow.fArguments['msg'].id+'" style="text-decoration: none" onclick="#"><img style="vertical-align:middle" src="'+myWindow.getResource("reply-all.png")+'"> '+OpenPGPZimlet.lang[83]+'</a>&nbsp;&nbsp;<a id="btnPrint'+myWindow.fArguments['msg'].id+'" style="text-decoration: none" onclick="#"><img style="vertical-align:middle" src="'+myWindow.getResource("printButton.png")+'"> '+OpenPGPZimlet.lang[54]+'</a>&nbsp;&nbsp;';
+                              var btnPrint = document.getElementById("btnPrint"+myWindow.fArguments['msg'].id);               
+                              btnPrint.onclick = AjxCallback.simpleClosure(myWindow.printdiv, myWindow, 'tk_barrydegraaff_zimbra_openpgp_infobar_body'+appCtxt.getCurrentAppName()+myWindow.fArguments['msg'].id, myWindow.fArguments['msg']);
+                              //This listener passes the unsanitized html to the compose window on purpose, the composer is set to plain text
+                              var btnReply = document.getElementById("btnReply"+myWindow.fArguments['msg'].id);
+                              btnReply.onclick = AjxCallback.simpleClosure(myWindow.reply, myWindow, [myWindow.fArguments.msg], body, 'reply');
+                              //This listener passes the unsanitized html to the compose window on purpose, the composer is set to plain text
+                              var btnReplyAll = document.getElementById("btnReplyAll"+myWindow.fArguments['msg'].id);
+                              btnReplyAll.onclick = AjxCallback.simpleClosure(myWindow.reply, myWindow, [myWindow.fArguments.msg], body, 'replyAll');               
+                           }
+                        }      
                         document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML + OpenPGPZimlet.prototype.urlify(OpenPGPZimlet.prototype.escapeHtml(body));
                      }   
                   }
