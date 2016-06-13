@@ -1,6 +1,6 @@
 Name:           pgp-zimlet
 Version:        2.5.7
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Zimbra OpenPGP Zimlet
 
 Group:          Applications/Internet
@@ -31,7 +31,14 @@ cp -R tk_barrydegraaff_zimbra_openpgp/tk_barrydegraaff_zimbra_openpgp.zip $RPM_B
 
 
 %post
+if [ $1 -eq 2 ] ; then
+    su - zimbra -c "cp /opt/zimbra/zimlets-deployed/tk_barrydegraaff_zimbra_openpgp/config_template.xml /opt/zimbra/zimlets-deployed/pgp-zimlet-config_template.xml"
+fi
 su - zimbra -c "zmzimletctl deploy /opt/zimbra/zimlets-extra/tk_barrydegraaff_zimbra_openpgp.zip"
+if [ $1 -eq 2 ] ; then
+    su - zimbra -c "mv -f /opt/zimbra/zimlets-deployed/pgp-zimlet-config_template.xml /opt/zimbra/zimlets-deployed/tk_barrydegraaff_zimbra_openpgp/config_template.xml"
+    su - zimbra -c "zmzimletctl configure /opt/zimbra/zimlets-deployed/tk_barrydegraaff_zimbra_openpgp/config_template.xml"
+fi
 
 
 %posttrans
@@ -52,6 +59,9 @@ fi
 
 
 %changelog
+* Mon Jun 13 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.5.7-2
+- For retaining the zimlet configure after upgrade.
+
 * Fri Jun 10 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.5.7-1
 - New release update.
 
