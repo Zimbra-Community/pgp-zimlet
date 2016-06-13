@@ -687,8 +687,11 @@ function(mail, boolAndErrorMsgArray) {
  * */
 OpenPGPZimlet.prototype.escapeHtml =
 function (unsafe) {
-    unsafe = unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-    return DOMPurify.sanitize(unsafe);
+    if(unsafe)
+    {
+       unsafe = unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+       return DOMPurify.sanitize(unsafe);
+    }   
 };
 
 /** This method gets called by the Zimlet framework when single-click is performed. And calls the Manage Keys dialog.
@@ -1541,7 +1544,23 @@ function(fArguments) {
                   if(node.headers['content-disposition'] && node.headers['content-disposition'][0].value == 'attachment')
                   {                 
                      var body = OpenPGPZimlet.prototype.Uint8ToString(node.content);
-                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML + '<img style="vertical-align:middle" src="'+myWindow.getResource("file-pgp-encrypted.png")+'"> <a class="AttLink" onclick="OpenPGPZimlet.prototype.downloadBlob(\''+OpenPGPZimlet.prototype.escapeHtml(node.contentType.params.name)+'\',\'octet/stream\',\''+btoa(body)+'\')">'+OpenPGPZimlet.prototype.escapeHtml(node.contentType.params.name)+'</a>&nbsp;';
+
+                     // work-around for https://github.com/emailjs/emailjs-mime-parser/issues/14
+                     // https://github.com/Zimbra-Community/pgp-zimlet/issues/202
+                     try {
+                        if(node.contentType.params.name)
+                        {
+                           var filename = node.contentType.params.name;
+                        }
+                        else
+                        {
+                           var filename = node.headers['content-disposition'][0].params.filename;                           
+                        }
+                     } catch (err) {
+                        var filename = 'unknown.file';
+                     }
+                        
+                     document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML + '<img style="vertical-align:middle" src="'+myWindow.getResource("file-pgp-encrypted.png")+'"> <a class="AttLink" onclick="OpenPGPZimlet.prototype.downloadBlob(\''+OpenPGPZimlet.prototype.escapeHtml(filename)+'\',\'octet/stream\',\''+btoa(body)+'\')">'+OpenPGPZimlet.prototype.escapeHtml(filename)+'</a>&nbsp;';
    
                      if(node.contentType.value='application/pgp-keys')
                      {
@@ -1551,8 +1570,8 @@ function(fArguments) {
                         {
                            if(pubKeyTxt[0])
                            {
-                              document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML + '|&nbsp;<a class="AttLink" id="btnImport'+myWindow.fArguments['domId']+btoa(unescape(encodeURIComponent(node.contentType.params.name)))+'">'+OpenPGPZimlet.lang[73]+'</a>&nbsp;';
-                              var btnImport = document.getElementById("btnImport"+myWindow.fArguments['domId']+btoa(unescape(encodeURIComponent(node.contentType.params.name))));
+                              document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_att'+myWindow.fArguments['domId']).innerHTML + '|&nbsp;<a class="AttLink" id="btnImport'+myWindow.fArguments['domId']+btoa(unescape(encodeURIComponent(filename)))+'">'+OpenPGPZimlet.lang[73]+'</a>&nbsp;';
+                              var btnImport = document.getElementById("btnImport"+myWindow.fArguments['domId']+btoa(unescape(encodeURIComponent(filename))));
                               btnImport.onclick = AjxCallback.simpleClosure(OpenPGPZimlet.prototype.displayDialog, this, 9, OpenPGPZimlet.lang[73], pubKeyTxt[0]);
                            }   
                         }
