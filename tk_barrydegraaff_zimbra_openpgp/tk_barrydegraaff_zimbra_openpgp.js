@@ -204,7 +204,8 @@ OpenPGPZimlet.prototype.addAttachmentHandler = function()
 
    OpenPGPZimlet.mime = [
    'application/pgp-encrypted',
-   'application/pgp-keys'
+   'application/pgp-keys',
+   'application/octet-stream'
    ];
    OpenPGPZimlet.mime.forEach(function(mime) 
    {
@@ -214,6 +215,7 @@ OpenPGPZimlet.prototype.addAttachmentHandler = function()
    });
 
    this._msgController._listView[viewType].addAttachmentLinkHandler('application/pgp-encrypted',"tk_barrydegraaff_zimbra_openpgp",this.addPGPLink);
+   this._msgController._listView[viewType].addAttachmentLinkHandler('application/octet-stream',"tk_barrydegraaff_zimbra_openpgp",this.addPGPLink);
    this._msgController._listView[viewType].addAttachmentLinkHandler('application/pgp-keys',"tk_barrydegraaff_zimbra_openpgp",this.addPubKeyLink);
 };
 
