@@ -204,17 +204,33 @@ OpenPGPZimlet.prototype.addAttachmentHandler = function()
 
    OpenPGPZimlet.mime = [
    'application/pgp-encrypted',
-   'application/pgp-keys'
+   'application/pgp-keys',
+   'text/plain'
    ];
+   
    OpenPGPZimlet.mime.forEach(function(mime) 
    {
-      var MISSMIME = 'tk_barrydegraaff_zimbra_openpgp'+mime.replace("/","_");
+      var MISSMIME = 'OpenPGPZimlet'+mime.replace("/","_");
       ZmMimeTable.MISSMIME=mime;
       ZmMimeTable._table[ZmMimeTable.MISSMIME]={desc:"OpenPGP encrypted file",image:"tk_barrydegraaff_zimbra_openpgp-file-pgp-encrypted",imageLarge:"tk_barrydegraaff_zimbra_openpgp-file-pgp-encrypted"};      
    });
 
-   this._msgController._listView[viewType].addAttachmentLinkHandler('application/pgp-encrypted',"tk_barrydegraaff_zimbra_openpgp",this.addPGPLink);
-   this._msgController._listView[viewType].addAttachmentLinkHandler('application/pgp-keys',"tk_barrydegraaff_zimbra_openpgp",this.addPubKeyLink);
+	for (var mimeType in ZmMimeTable._table) {
+		
+      if(mimeType == 'application/pgp-encrypted')
+      {
+         this._msgController._listView[viewType].addAttachmentLinkHandler(mimeType,"OpenPGPZimlet",this.addPGPLink);
+      }
+      else if(mimeType == 'application/pgp-keys')
+      {
+         this._msgController._listView[viewType].addAttachmentLinkHandler(mimeType,"OpenPGPZimlet",this.addPubKeyLink);
+      }
+      else if(mimeType == 'text/plain')
+      {
+         //see: https://github.com/Zimbra-Community/pgp-zimlet/issues/204
+         this._msgController._listView[viewType].addAttachmentLinkHandler(mimeType,"OpenPGPZimlet",this.addPGPLink);
+      }
+	}
 };
 
 /** This method is called from addAttachmentHandler
@@ -223,9 +239,9 @@ OpenPGPZimlet.prototype.addAttachmentHandler = function()
  * */
 OpenPGPZimlet.prototype.addPGPLink = 
 function(attachment) {
-	var html =
+   var html =
 			"<a href='#' class='AttLink' style='text-decoration:underline;' " +
-					"onClick=\"OpenPGPZimlet.prototype.decryptAttachment('" + attachment.label + "','" + attachment.url + "')\">"+
+					"onClick=\"OpenPGPZimlet.prototype.decryptAttachment('" + attachment.label + "','" + attachment.url + "','" + attachment.ct + "')\">"+
 					OpenPGPZimlet.lang[60] +
 					"</a>";
                
@@ -265,20 +281,24 @@ function() {
 /** This method is called when a user clicks the `Decrypt` link next to an attachment and opens a decrypt dialog
  * @param {string} name - attachment filename
  * @param {string} url - attachment rest api fetch url
+  @param {string} ct - attachment Content-Type
  * */
 OpenPGPZimlet.prototype.decryptAttachment =
-function(name, url) {
+function(name, url, ct) {
    //Now make an ajax request and fetch the attachment
    var xmlHttp = null;   
    xmlHttp = new XMLHttpRequest();
-   xmlHttp.open( "GET", url, true );        
-   xmlHttp.responseType = "arraybuffer";
+   xmlHttp.open( "GET", url, true );
+   if(ct != 'text/plain')
+   {
+      xmlHttp.responseType = "arraybuffer";
+   }   
    xmlHttp.send( null );
   
    xmlHttp.onload = function(e) 
    {
       var zimletInstance = appCtxt._zimletMgr.getZimletByName('tk_barrydegraaff_zimbra_openpgp').handlerObject;
-      zimletInstance.displayDialog(10, OpenPGPZimlet.lang[60], [xmlHttp.response, name]);
+      zimletInstance.displayDialog(10, OpenPGPZimlet.lang[60], [xmlHttp.response, name, ct]);
    };
 };
 
@@ -1640,6 +1660,7 @@ function(u8a) {
  * and will decrypt the OpenPGP encrypted file. The result is a download in the browser.
  * @param {arraybuffer} fArguments.0 - the OpenPGP encrypted file
  * @param {string} fArguments.1 - the file name
+ * @param {string} fArguments.2 - the file Content-Type
  * */ 
 OpenPGPZimlet.prototype.okBtnDecryptFile =
 function(fArguments) {
@@ -1669,7 +1690,14 @@ function(fArguments) {
 
    if (success) {
       try {
-         var message = openpgp.message.read(new Uint8Array(fArguments[0]));
+         if(fArguments[2] == 'text/plain')
+         {
+            var message = openpgp.message.readArmored(fArguments[0]);
+         }
+         else
+         {
+            var message = openpgp.message.read(new Uint8Array(fArguments[0]));
+         }   
       }
       catch(err) {
          this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, true);
@@ -1728,12 +1756,24 @@ function(fArguments) {
       // There should be a cleaner way to do this than stashing 
       // the parent in myWindow but I've not worked it out yet!
       var myWindow = this;
-      options = {
-          message: message,           // parse encrypted bytes
-          publicKeys: pubKey,         // for verification (optional)
-          privateKey: privKey,        // for decryption
-          format: 'binary'
-      };
+
+         if(fArguments[2] == 'text/plain')
+         {
+            options = {
+                message: message,           // parse encrypted bytes
+                publicKeys: pubKey,         // for verification (optional)
+                privateKey: privKey,        // for decryption
+            };
+         }
+         else
+         {
+            options = {
+                message: message,           // parse encrypted bytes
+                publicKeys: pubKey,         // for verification (optional)
+                privateKey: privKey,        // for decryption
+                format: 'binary'
+            };
+         }
       
       myWindow.fArguments = fArguments;
       
@@ -1760,6 +1800,12 @@ function(fArguments) {
          
          //Remove .pgp from decrypted file
          if (myWindow.fArguments[1].substring(myWindow.fArguments[1].length -4) == '.pgp')
+         {
+            myWindow.fArguments[1] = myWindow.fArguments[1].substring(0, myWindow.fArguments[1].length -4);
+         }
+
+         //Remove .asc from decrypted file
+         if (myWindow.fArguments[1].substring(myWindow.fArguments[1].length -4) == '.asc')
          {
             myWindow.fArguments[1] = myWindow.fArguments[1].substring(0, myWindow.fArguments[1].length -4);
          }
