@@ -212,7 +212,7 @@ OpenPGPZimlet.prototype.addAttachmentHandler = function()
    {
       var MISSMIME = 'OpenPGPZimlet'+mime.replace("/","_");
       ZmMimeTable.MISSMIME=mime;
-      ZmMimeTable._table[ZmMimeTable.MISSMIME]={desc:ZmMsg.unknownBinaryType,image:"tk_barrydegraaff_zimbra_openpgp-file-pgp-encrypted",imageLarge:"tk_barrydegraaff_zimbra_openpgp-file-pgp-encrypted"};      
+      ZmMimeTable._table[ZmMimeTable.MISSMIME]={desc:"OpenPGP encrypted file",image:"tk_barrydegraaff_zimbra_openpgp-file-pgp-encrypted",imageLarge:"tk_barrydegraaff_zimbra_openpgp-file-pgp-encrypted"};      
    });
 
 	for (var mimeType in ZmMimeTable._table) {
