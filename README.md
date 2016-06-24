@@ -92,6 +92,8 @@ As of version 2.2.6 keyserver lookup is supported, the admin can set the keyserv
     nano /opt/zimbra/zimlets-deployed/_dev/tk_barrydegraaff_zimbra_openpgp/config_template.xml
     <property name="keyserver">https://sks-keyservers.net</property>
 
+If you can use your keyserver from a browser, but not from the Zimlet, you may need to enable CORS. See: http://enable-cors.org/server.html and https://github.com/Zimbra-Community/pgp-zimlet/issues/205
+
 ### X-Mailer header for Thunderbird/Enigmail support
 Thunderbird/Enigmail has some built in hacks to support email servers that do not support pgp/mime. Unfortunately that means that Zimbra OpenPGP Zimlet is identified wrongly as being Exchange server. This is fixed in Enigmail version 1.9.2. For compatibilty the X-Mailer header `X-Mailer: ... ZimbraWebClient ...` should be present in outgoing email. The sending of X-Mailer is enabled by default. If you changed the default you have to re-enable it using `zmprov mcf zimbraSmtpSendAddMailer "TRUE";`.
 
