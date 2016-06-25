@@ -1537,7 +1537,7 @@ function(fArguments) {
                   {
                      if((node.headers['content-type'][0].value == 'text/html')||(node.headers['content-type'][0].value == 'text/plain'))
                      {
-                        var body = body = new TextDecoder("utf-8").decode(node.content);
+                        var body = new TextDecoder("utf-8").decode(node.content);
                         if(node.headers['content-type'][0].value == 'text/html')
                         {
                            body = OpenPGPZimlet.prototype.htmlToText(body);
