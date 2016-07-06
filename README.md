@@ -14,7 +14,7 @@ Feature list: https://github.com/Zimbra-Community/pgp-zimlet/wiki
 Adding PGP support to Zimbra Collaboration Suite, currently tested on:
 - Windows: Internet Explorer 11, Google Chrome, Chromium, Firefox
 - Linux: Google Chrome, Chromium, Firefox, Iceweasel
-- OSX: Google Chrome, (Safari see https://github.com/Zimbra-Community/pgp-zimlet/issues/207)
+- OSX: Google Chrome, (Safari is untested as of the 2.x release see https://github.com/Zimbra-Community/pgp-zimlet/issues/207)
 
 This Zimlet ONLY WORKS with Zimbra version 8.5 and above.
 
