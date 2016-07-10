@@ -4,7 +4,7 @@
 # For this to work your KVM host and your workstation should be able to resolve 
 # and connect to https://raw.githubusercontent.com
 
-lvcreate -L 11G -n zimbra-dev-disk1 vg_dev
+lvcreate -L 12G -n zimbra-dev-disk1 vg_dev
 
 virt-install \
   --connect qemu:///system \
@@ -20,4 +20,4 @@ virt-install \
   --os-type linux \
   --os-variant rhel6 \
   --location http://ftp.tudelft.nl/centos.org/7/os/x86_64/ \
-  -x "ks=https://raw.githubusercontent.com/Zimbra-Community/pgp-zimlet/master/kvm/centos7-ext4.cfg"
+  -x "ks=https://raw.githubusercontent.com/Zimbra-Community/pgp-zimlet/stable/kvm/centos7-ext4.cfg"
