@@ -1525,6 +1525,11 @@ function(fArguments) {
          // Got a message that needs MIME parsing (PGP/MIME)
          else
          {
+            //to download source message for debugging run in the browser console: OpenPGPZimlet.debug = true;
+            if (OpenPGPZimlet.debug)
+            {
+               OpenPGPZimlet.prototype.downloadBlob('debug.txt','octet/stream',btoa(plaintext.data));
+            }   
             try 
             {
                var parser = new (MimeParser);
@@ -1561,7 +1566,8 @@ function(fArguments) {
                         document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML = document.getElementById('tk_barrydegraaff_zimbra_openpgp_infobar_body'+myWindow.fArguments['domId']).innerHTML + OpenPGPZimlet.prototype.urlify(OpenPGPZimlet.prototype.escapeHtml(body));
                      }   
                   }
-                  if(node.headers['content-disposition'] && node.headers['content-disposition'][0].value == 'attachment')
+                  if((node.headers['content-disposition'] && node.headers['content-disposition'][0].value == 'attachment') || 
+                  (node.headers['content-disposition'] && node.headers['content-disposition'][0].value == 'inline'))
                   {                 
                      var body = OpenPGPZimlet.prototype.Uint8ToString(node.content);
 
