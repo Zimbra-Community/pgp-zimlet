@@ -78,7 +78,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 
 .barrydegraaff_zimbra_openpgp-input textarea{
    height:50px;
-   background-color: white;
+   background-color: white;   
 }
 
 #pubKeySelect option
@@ -89,6 +89,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 
 .DwtDialog textarea{
    width:98%;
+   font-family: monospace !important;
 }
 
 #passphraseInput {
@@ -102,6 +103,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
    height: 200px;
    background-size: 48px 48px;
    background: url("") center top no-repeat;
+   font-family: monospace;   
 }
 
 .tk_barrydegraaff_zimbra_openpgp_infobar_body
