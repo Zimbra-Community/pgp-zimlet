@@ -59,7 +59,7 @@ fi
 
 
 %changelog
-* Mon Aug 31 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.6.0-1
+* Wed Aug 31 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.6.0-1
 - New release update.
 
 * Mon Jun 27 2016 Truong Anh Tuan <tuanta@iwayvietnam.com> - 2.5.9-1
