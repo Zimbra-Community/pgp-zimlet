@@ -2991,15 +2991,34 @@ OpenPGPZimlet.prototype.downloadBlob = function (filename, type, base64Data) {
       var blob = new Blob([dataBin], { type: type });
    }
    
-   if (!window.navigator.msSaveOrOpenBlob) 
-   {
-      var a = document.createElement("a");
-      document.body.appendChild(a);
-      a.style = "display: none";
-      url = window.URL.createObjectURL(blob);
-      a.href = url;
-      a.download = filename;
-      a.click();
+   if (!window.navigator.msSaveOrOpenBlob)
+   {       
+      if(navigator.userAgent.toLowerCase().indexOf('macintosh') > -1)
+      {
+         console.log('OpenPGP Zimlet working around a bug in Safari, if you see this, but not using Safari, please file a bug.');
+         // See also: https://github.com/eligrey/FileSaver.js/issues/12 ,  https://github.com/eligrey/FileSaver.js/issues/215 , https://github.com/Zimbra-Community/pgp-zimlet/issues/209         
+         if (type=='zimbra/pgp')
+         {
+            base64Data = btoa((OpenPGPZimlet.prototype.Uint8ToString(base64Data)));
+         }   
+         // The only blob download safari supports is using DATA URI's. Also Safari does not open pop-ups if that pop-up occurs over 950 ms after the user clicks.
+         // Since PGP decryption can take longer, we ask the user for another click via the status toaster. Its ugly, I know. Also the user will have to manually rename
+         // the downloaded file, its ugly, I know.
+         var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.FADE_OUT ];
+         appCtxt.getAppController().setStatusMsg('<a target="_blank" style="text-decoration: underline;color:blue" href="data:octet/stream;base64,'+base64Data+'">'+ZmMsg.errorJavaScriptDisabled+ ' ('+ ZmMsg.saveFile +')</a>', ZmStatusView.LEVEL_INFO, null, transitions);
+      }
+      else
+      {         
+         window.URL = window.URL || window.webkitURL;
+         console.log('s'+window.URL);
+         var a = document.createElement("a");
+         document.body.appendChild(a);
+         a.style = "display: none";
+         url = window.URL.createObjectURL(blob);
+         a.href = url;
+         a.download = filename;
+         a.click();
+      }        
    }
    else
    {
