@@ -3009,8 +3009,6 @@ OpenPGPZimlet.prototype.downloadBlob = function (filename, type, base64Data) {
       }
       else
       {         
-         window.URL = window.URL || window.webkitURL;
-         console.log('s'+window.URL);
          var a = document.createElement("a");
          document.body.appendChild(a);
          a.style = "display: none";
