@@ -1,7 +1,7 @@
 Source: pgp-zimlet
 Section: misc
 Priority: optional
-Maintainer: Barry De Graaff <barrydg@zetalliance.org>
+Maintainer: Barry De Graaff <info@barrydegraaff.tk>
 Build-Depends: cdbs, debhelper (>= 5)
 Standards-Version: 3.8.0
 Homepage: https://github.com/Zimbra-Community/pgp-zimlet
