@@ -1254,6 +1254,22 @@ function(id, title, message) {
                }
             });
          }
+
+         var expiration = '';
+         var expirationStrike ='';
+         if(publicKeys.keys[0].getExpirationTime())
+         {
+            if((publicKeys.keys[0].getExpirationTime())&&(publicKeys.keys[0].getExpirationTime() < new Date()))
+            {
+               //is expired
+               expiration = "<tr><td>Expiration:</td><td style='color:red'>" + publicKeys.keys[0].getExpirationTime()+"</td></tr>";
+               expirationStrike = "text-decoration: line-through;"
+            }
+            else
+            {
+               expiration = "<tr><td>Expiration:</td><td>" + publicKeys.keys[0].getExpirationTime()+"</td></tr>";
+            }
+         }
          
          publicKeyPacket = publicKeys.keys[0].primaryKey;
          var keyLength = "";
@@ -1268,7 +1284,7 @@ function(id, title, message) {
          return;
       }   
       
-      result = "<br><table style=\"padding: 5px;\">"+userid+"<tr><td>Fingerprint:</td><td><b>" + publicKeyPacket.fingerprint + "</b></td></tr><tr><td> Primary key length:&nbsp;</td><td>" + keyLength + "</td></tr><tr><td>Created:<td>" + publicKeyPacket.created + "</td></tr></table>";
+      result = "<br><table style=\"padding: 5px;"+expirationStrike+"\">"+userid+"<tr><td>Fingerprint:</td><td><b>" + publicKeyPacket.fingerprint + "</b></td></tr><tr><td> Primary key length:&nbsp;</td><td>" + keyLength + "</td></tr><tr><td>Created:<td>" + publicKeyPacket.created + "</td></tr>"+expiration+"</table>";
 
       html = "<div style='width:650px; height: 200px; overflow-x: hidden; overflow-y: scroll;'>" +
       OpenPGPZimlet.lang[74]+ "<br>" + result + "</div>";
@@ -2348,6 +2364,21 @@ function(pubkey) {
       if (publicKeys.keys)
       {
          publicKeys.keys.forEach(function(pubkey) {
+            var expiration = '';
+            var expirationStrike ='';
+            if(pubkey.getExpirationTime())
+            {
+               if((pubkey.getExpirationTime())&&(pubkey.getExpirationTime() < new Date()))
+               {
+                  //is expired
+                  expiration = "<br>&bull; Expiration: <span style='color:red'>" + pubkey.getExpirationTime() + "</span>";
+                  expirationStrike = " style='text-decoration: line-through;' "
+               }
+               else
+               {
+                  expiration = "<br>&bull; Expiration: " + pubkey.getExpirationTime();
+               }
+            }            
             var userid = '';
             pubkey.users.forEach(function(key){            
                if (key.userId)
@@ -2365,7 +2396,7 @@ function(pubkey) {
                }
             }
             
-            result = result + "<small><b>"+userid+"</b>&bull; Fingerprint: " + publicKeyPacket.fingerprint + "<br>&bull; Primary key length: " + keyLength + "<br>&bull; Created: " + publicKeyPacket.created + '</small><br><br>';
+            result = result + "<small "+expirationStrike+"><b>"+userid+"</b>&bull; Fingerprint: " + publicKeyPacket.fingerprint + "<br>&bull; Primary key length: " + keyLength + "<br>&bull; Created: " + publicKeyPacket.created + expiration + '</small><br><br>';
          });   
       }
       //remove last <br>
@@ -2496,6 +2527,21 @@ function(controller) {
       
       combinedPublicKeys.forEach(function(entries) {
          entries.forEach(function(entry) {
+            var expiration = '';
+            var expirationStrike ='';
+            if(entry.getExpirationTime())
+            {
+               if((entry.getExpirationTime())&&(entry.getExpirationTime() < new Date()))
+               {
+                  //is expired
+                  expiration = "\r\nexpiration: " + entry.getExpirationTime();
+                  expirationStrike = "[expired] "
+               }
+               else
+               {
+                  expiration = "\r\nexpiration: " + entry.getExpirationTime();
+               }  
+            }                      
             for (i = 0; i < entry.users.length; i++) {
                if (entry.users[i].userId)
                {
@@ -2508,12 +2554,12 @@ function(controller) {
                      if(userid.match(new RegExp(emailRegex,'gmi')))
                      {                     
                         selected = 'selected class="selectme" ';
-                        result = result + '<option ' + selected + ' title="fingerprint: '+entry.primaryKey.fingerprint+' \r\ncreated: '+entry.primaryKey.created+'" value="'+entry.armor()+'">'+userid+'</option>';
+                        result = result + '<option ' + selected + ' title="fingerprint: '+entry.primaryKey.fingerprint+' \r\ncreated: '+entry.primaryKey.created+expiration+'" value="'+entry.armor()+'">'+expirationStrike+userid+'</option>';
                      }
                      else
                      {
                         selected = '';
-                        orderedPubKeys[keyCount] = '<option data-userid="'+userid.toLowerCase()+'"' + selected + ' title="fingerprint: '+entry.primaryKey.fingerprint+' \r\ncreated: '+entry.primaryKey.created+'" value="'+entry.armor()+'">'+userid+'</option>';
+                        orderedPubKeys[keyCount] = '<option data-userid="'+userid.toLowerCase()+'"' + selected + ' title="fingerprint: '+entry.primaryKey.fingerprint+' \r\ncreated: '+entry.primaryKey.created+expiration+'" value="'+entry.armor()+'">'+expirationStrike+userid+'</option>';
                         keyCount++;
                      }
                      dupesCheck[entry.primaryKey.fingerprint+userid]=entry.primaryKey.fingerprint+userid;
@@ -3109,8 +3155,23 @@ OpenPGPZimlet.prototype.lookup = function() {
                   }
                }         
 
-               var userid = '';
-               
+               var expiration = '';
+               var expirationStrike ='';
+               if(pubkey.keys[index].getExpirationTime())
+               {
+                  if((pubkey.keys[index].getExpirationTime())&&(pubkey.keys[index].getExpirationTime() < new Date()))
+                  {
+                     //is expired
+                     expiration = "<tr><td></td><td style='color:red'>Expiration: " + pubkey.keys[index].getExpirationTime()+"</td></tr>";
+                     expirationStrike = " style='text-decoration: line-through;' "
+                  }
+                  else
+                  {
+                     expiration = "<tr><td></td><td>Expiration: " + pubkey.keys[index].getExpirationTime()+"</td></tr>";
+                  }
+               }
+
+               var userid = '';               
                if(pubkey.keys[index]) {
                   pubkey.keys[index].users.forEach(function(key){
                      
@@ -3122,10 +3183,10 @@ OpenPGPZimlet.prototype.lookup = function() {
                }
                
                document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML = document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML +
-               '<table><tr><td><input name="lookupResult" value="'+pubkey.keys[index].armor()+'" type="radio">&nbsp;</td><td><b>'+userid+'</b></td></tr>' +
+               '<table '+expirationStrike+'><tr><td><input name="lookupResult" value="'+pubkey.keys[index].armor()+'" type="radio">&nbsp;</td><td><b>'+userid+'</b></td></tr>' +
                '<tr><td></td><td><b>Fingerprint:' + publicKeyPacket.fingerprint + '</b></td></tr>' +
                '<tr><td></td><td>Primary key length: ' + keyLength + '</td></tr>' +
-               '<tr><td></td><td>Created:' + publicKeyPacket.created+'</td></tr></table><hr style="width:550px; color: #bbbbbb; background-color: #bbbbbb; height: 1px; border: 0;">';
+               '<tr><td></td><td>Created:' + publicKeyPacket.created+'</td></tr>'+expiration+'</table><hr style="width:550px; color: #bbbbbb; background-color: #bbbbbb; height: 1px; border: 0;">';
             }
             document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML = document.getElementById('barrydegraaff_zimbra_openpgpResult').innerHTML + '</form>';
 
