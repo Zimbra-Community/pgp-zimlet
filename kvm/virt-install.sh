@@ -4,7 +4,7 @@
 # For this to work your KVM host and your workstation should be able to resolve 
 # and connect to https://raw.githubusercontent.com
 
-lvcreate -L 12G -n zimbra-dev-disk1 vg_dev
+lvcreate -L 20G -n zimbra-dev-disk1 vg_dev
 
 virt-install \
   --connect qemu:///system \
