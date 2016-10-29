@@ -2906,6 +2906,19 @@ function(app, toolbar, controller, viewId) {
  * @param {ZmComposeController}  controller - the current compose tab
  * */
 OpenPGPZimlet.prototype.composeEncryptHandler =
+function(controller) { 
+   var composeMode = appCtxt.getCurrentView().getHtmlEditor().getMode();
+   if(composeMode != 'text/plain')
+   {
+      appCtxt.getCurrentView().setComposeMode('text/plain');
+      setTimeout(function(){ OpenPGPZimlet.prototype.composeEncryptHandlerAfter(controller) }, 200);
+   }   
+   else
+   {
+      OpenPGPZimlet.prototype.composeEncryptHandlerAfter(controller);
+   }
+};  
+OpenPGPZimlet.prototype.composeEncryptHandlerAfter =
 function(controller) {
    var composeMode = appCtxt.getCurrentView().getHtmlEditor().getMode();
 
@@ -2931,16 +2944,22 @@ function(controller) {
  * @param {ZmComposeController}  controller - the current compose tab
  * */
 OpenPGPZimlet.prototype.composeSignHandler =
-function(controller) {
+function(controller) { 
    var composeMode = appCtxt.getCurrentView().getHtmlEditor().getMode();
-   
    if(composeMode != 'text/plain')
    {
       appCtxt.getCurrentView().setComposeMode('text/plain');
+      setTimeout(function(){ OpenPGPZimlet.prototype.composeSignHandlerAfter(controller) }, 200);
+   }   
+   else
+   {
+      OpenPGPZimlet.prototype.composeSignHandlerAfter(controller);
    }
-   
+}; 
+
+OpenPGPZimlet.prototype.composeSignHandlerAfter =
+function(controller) {
    var message = controller._getBodyContent();
-     
    if(message.length < 1)
    {
       //Please compose message first
