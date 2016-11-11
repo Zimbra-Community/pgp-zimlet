@@ -587,7 +587,7 @@ OpenPGPZimlet.prototype.onMsgView = function (msg, oldMsg, msgView) {
          }
          catch(err) {
             //Could not read armored message!
-            this.status(OpenPGPZimlet.lang[7], ZmStatusView.LEVEL_CRITICAL);
+            console.log(OpenPGPZimlet.lang[7]);
             return;
          }
          OpenPGPZimlet.prototype.setMargin(6);
