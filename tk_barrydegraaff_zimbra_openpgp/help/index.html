@@ -31,195 +31,182 @@ hr {
    background-color: #888888;
    height: 1px;  
 }
-img
-{
-border: 1px solid #888888;
-   
-}
 </style>
 </head>
 
 
-<body style="font-family: sans-serif; font-size:14px;">    
+<body style="font-family: sans-serif; font-size:14px;"> 
 <div style="width:990px">
-<h1>OpenPGP Zimlet User Help</h1>
-<h2>Contents</h2>
+
+				<h1 id="firstHeading" class="firstHeading" lang="en">OpenPGP Zimlet</h1>
+      
+
+
+					<!-- start content -->
+					<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div id="toc" class="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li><a href="#why">Why Use PGP?</a></li>
-<li><a href="#generate">Generating a new key pair</a></li>
-<li><a href="#sign">Clear signing a message</a></li>
-<li><a href="#adding">Adding Public Keys</a></li>
-<li><a href="#encrypt">Encrypting a message</a></li>
-<li><a href="#contacts-scanning">Storing public keys to Zimbra contacts</a></li>
-<li><a href="#attachments">Working with attachments</a></li>
-<li><a href="#thunderbird-enigmail">Thunderbird/Enigmail compatibility</a></li>
-<li><a href="#thunderbird-enigmail-export">Exporting public keys from Enigmail to Zimbra</a></li>
-<li><a href="#fingerprint">Fingerprint</a></li>
-<li><a href="#about">About OpenPGP Zimlet</a></li>
-<li><a href="#licenses">License and third party FOSS libraries</a></li>
-</ul>
-<br>
-   
-<section id="why">
-<h2>Why Use PGP?</h2>
-
-PGP stands for "Pretty Good Privacy," and it's most often used for two things: 
-<ol>
-<li><b>Privacy:</b><br>Prevent people other than the intended recipients from reading an email message.</li>
-<li><b>Authenticity:</b><br>Ensure a message was send by the person you think it was and no one else altered the email message.</li>
-</ol>
-PGP uses a system involving Private Keys and Public Keys. The tutorial below shows you how to get started with PGP in Zimbra web mail.<br><br>
-
-<img src="../icon.png" alt="" style="float: left; margin-top:13px; padding-right:5px; border:0px;"><h1>OpenPGP Zimlet</h1>
-
-<video controls src="Zimbra OpenPGP Zimlet version 2.2.0.m4v" width="1280" height="720">
-<br><br>
-Zimbra OpenPGP Zimlet works best if Zimbra is set to `By Message` view and Reading Pane `On The Right`.<br><br>
-<img src="by-message-reading-pane.png" alt=""><br><br>
-<p>Find the OpenPGP menu under Zimlets in your Zimbra web mail. Right click on OpenPGP and select "Manage keys".
-
-<br><br><img src="manage-key-menu.png" alt=""><br><hr><br>
-New users should see that there are no keys stored in the "Manage keys" window. If you are new to PGP you can now click the Cancel button to go to the next step.
-<br><br>
-<img src="manage-key-window-without-generated.png" alt=""><br><hr><br>
-</section><section id="generate">
-<h2>Generating a new key pair</h2>
-Right click on OpenPGP and then click "Generate key pair".
-<br><br><img src="generate-keypair-menu.png" alt=""><br><hr><br>
-In the "Generate new key pair" window check if all the fields are correctly filled by the server. Correct when necessary. See the table below:<br><br>
-<table>
-<tr><td>Name</td><td>example: Firstname Lastname <br>Your name. This will be used as part of the User ID of your new key pair.</td></tr>
-<tr><td>Email address</td><td>example: lellison@redhat.com,jwhitehurst@oracle.com<br>One or more email adresses you want to use with your new key pair.<br></td></tr>
-<tr><td>Passphrase</td><td>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a>
 <ul>
-<li>20 to 30 characters or more</li>
-<li>Not reused between sites, applications and other different sources</li>
-<li>Do not store your passphrase in the same location as your private key</li>
+<li class="toclevel-2 tocsection-2"><a href="#How_It_All_Works"><span class="tocnumber">1.1</span> <span class="toctext">How It All Works</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#OpenPGP_Zimlet_Setup_Guide"><span class="tocnumber">1.2</span> <span class="toctext">OpenPGP Zimlet Setup Guide</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#How_to_Send_and_Receive_Public_Keys"><span class="tocnumber">1.3</span> <span class="toctext">How to Send and Receive Public Keys</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Auto_Decrypt"><span class="tocnumber">1.4</span> <span class="toctext">Auto Decrypt</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#How_to_Send_Encrypted_Messages_with_OpenPGP"><span class="tocnumber">1.5</span> <span class="toctext">How to Send Encrypted Messages with OpenPGP</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Managing_your_contacts_Public_Keys"><span class="tocnumber">1.6</span> <span class="toctext">Managing your contacts Public Keys</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Importing_your_own_PGP_Private_Key_to_OpenPGP"><span class="tocnumber">1.7</span> <span class="toctext">Importing your own PGP Private Key to OpenPGP</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Supported_Formats_of_OpenPGP"><span class="tocnumber">1.8</span> <span class="toctext">Supported Formats of OpenPGP</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#About_Private_Key_Security"><span class="tocnumber">1.9</span> <span class="toctext">About Private Key Security</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Zimbra_Desktop"><span class="tocnumber">1.10</span> <span class="toctext">Zimbra Desktop</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#contacts-scanning"><span class="tocnumber">1.11</span> Storing public keys to Zimbra contacts</a></li>
+<li class="toclevel-2 tocsection-14"><a href="#thunderbird-enigmail"><span class="tocnumber">1.12</span> Thunderbird/Enigmail compatibility</a></li>
+<li class="toclevel-2 tocsection-15"><a href="#thunderbird-enigmail-export"><span class="tocnumber">1.13</span> Exporting public keys from Enigmail to Zimbra</a></li>
+<li class="toclevel-2 tocsection-16"><a href="#fingerprint"><span class="tocnumber">1.15</span> Fingerprint</a></li>
 </ul>
-</td></tr>
-<tr><td>Key Length</td><td>
-Longer is better and also slower.<br>
-The following list is ordered by best browser PGP performance and a Key Length recommendation for every day use:
-<ul>
-<li>Google Chrome: 4096.</li>
-<li>Firefox: 2048.</li>
-<li>Internet Explorer 1024.</li>
-
+</li>
 </ul>
-If you want maximum security try Google Chrome 4096. Also note that Internet Explorer is the <b>slowest</b> browser.
-</td></tr>
-<tr><td>Store and overwrite</td><td>Recommended for new users, automatically set the generated keys to the "Manage keys" window.</td></tr>
-</table><br>When you are done, click OK and wait for your browser to generate your keys.<br>
-<br><img src="generate-keypair-window.png" alt=""><br><hr><br>
+</div>
 
-Copy and paste the result and store it in a safe place. When you are done, click OK.<br>
-<br><img src="generate-keypair-result.png" alt=""><br><hr><br>
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<p>The OpenPGP Zimlet allows XMission's Zimbra webmail to encrypt and sign email messages. 
+</p><p>OpenPGP encryption prevents your messages from being opened by anyone other than the intended recipient. It will prevents your message from being altered or changed by anyone other than yourself, maintaining the authenticity of your content. 
+</p>
+<ul><li><i>What is a <b>Zimlet</b>?</i> - Zimlets are add-on features to your Zimbra email found in your Zimbra's Preferences tab under "Zimlets" They enhance the functionality of your Zimbra client.</li>
+<li><i>What is <b>PGP/OpenPGP</b>?</i> - PGP stands for "<b>P</b>retty <b>G</b>ood <b>P</b>rivacy". It is an encryption method shared between two people that have exchanged public and private keys to one another. OpenPGP is a PGP standard using the PGP security software of version 5.x+ as a basis.</li>
+<li><i>What is a <b>Public/Private Key</b>?</i> - Both Public and Private keys are two unique cryptographic keys that work together to both encrypt and decrypt information, in this case, in plain text. </li></ul>
+<p><span style="color:red"> <b>Note:</b> </span> Your <b>public</b> key may be shared with <i>others</i>, while your <b>private</b> key remains <i>secret</i> to yourself and your Zimbra OpenPGP Zimlet!
+</p>
+<ul><li><i>What email applications support <b>Encryption</b>?</i> Most modern email and webmail applications can support PGP key encryption technology including Zimbra webmail, Microsoft Outlook, Thunderbird, and more.</li></ul>
+<p><br>
+</p>
+<h3><span class="mw-headline" id="How_It_All_Works">How It All Works</span></h3>
+<hr>
+<p>By creating a message that is encrypted with the OpenPGP Zimlet, only recipients with a matching private key are able to decrypt and read your email. The OpenPGP Zimlet makes this process as simple as clicking a few buttons. After composing your email, you may click the "Encrypt Message" option. 
+</p><p><span style="color:red"> <b>Note:</b> </span> Only <b>Plain Text</b> in the message body is encrypted. This Zimlet automatically converts messages to plain text when you click "Encrypt message."
+</p><p><a href="https://wiki.xmission.com/File:Email-encryption-graphic.png" class="image"><img alt="Email-encryption-graphic.png" src="Email-encryption-graphic.png" width="794" height="106"></a>
+</p>
+<h3><span class="mw-headline" id="OpenPGP_Zimlet_Setup_Guide">OpenPGP Zimlet Setup Guide</span></h3>
+<hr>
+<p>1. Open your <b>Preferences</b> in Zimbra.
+</p><p><a href="https://wiki.xmission.com/File:Preferences.png" class="image"><img alt="Preferences.png" src="500px-Preferences.png" width="500" height="90" srcset="/images/c/c1/Preferences.png 1.5x, /images/c/c1/Preferences.png 2x"></a>
+</p><p>2. Navigate to <b>"Zimlets"</b>.
+</p><p><a href="https://wiki.xmission.com/File:Zimlets1.png" class="image"><img alt="Zimlets1.png" src="Zimlets1.png" width="199" height="519"></a>
+</p><p>3. Check the box for <b>"OpenPGP"</b>.
+</p><p><a href="https://wiki.xmission.com/File:Openpgpzimletsmall.png" class="image"><img alt="Openpgpzimletsmall.png" src="Openpgpzimletsmall.png" width="503" height="139"></a>
+</p><p>4. Return to your <b>"Mail"</b> tab and expand the <b>"Zimlets"</b> options to find <b>"OpenPGP"</b>.
+</p><p><a href="https://wiki.xmission.com/File:Openzimlets.png" class="image"><img alt="Openzimlets.png" src="Openzimlets.png" width="193" height="334"></a>
+</p><p>5. Right click on <b>OpenPGP</b> and select <b>"Generate Key Pair"</b>.
+</p><p><a href="https://wiki.xmission.com/File:Genkeypair.png" class="image"><img alt="Genkeypair.png" src="Genkeypair.png" width="311" height="208"></a>
+</p><p>6. After generating your Key Pair, it will look similar to the message below:
+</p><p><a href="https://wiki.xmission.com/File:Generatedkeypair.png" class="image"><img alt="Generatedkeypair.png" src="500px-Generatedkeypair.png" width="500" height="250" srcset="/images/8/89/Generatedkeypair.png 1.5x, /images/8/89/Generatedkeypair.png 2x"></a>
+</p>
+<h3><span class="mw-headline" id="How_to_Send_and_Receive_Public_Keys">How to Send and Receive Public Keys</span></h3>
+<hr>
+<p>1. To send a public key, simply <b>right click</b> the OpenPGP zimlet under the "Zimlets" windows and select <b>"Send someone my public key"</b>.
+</p><p><a href="https://wiki.xmission.com/File:Sendsomeonekey.png" class="image"><img alt="Sendsomeonekey.png" src="Sendsomeonekey.png" width="311" height="208"></a>
+</p><p>2. To receive a public key from someone, they will commonly need to send you their key. You will receive an email with a message similar to the picture below:
+</p><p><a href="https://wiki.xmission.com/File:Receivedkey.png" class="image"><img alt="Receivedkey.png" src="500px-Receivedkey.png" width="500" height="146" srcset="/images/d/d5/Receivedkey.png 1.5x, /images/d/d5/Receivedkey.png 2x"></a>
+</p>
+<h3><span class="mw-headline" id="Auto_Decrypt">Auto Decrypt</span></h3>
+<hr>
+<ul><li>You can <b>enable/disable</b> the "Auto decrypt" option, inside the "Manage Keys" menu.</li></ul>
+<p><a href="https://wiki.xmission.com/File:Autodecrypt.png" class="image"><img alt="Autodecrypt.png" src="500px-Autodecrypt.png" width="500" height="441" srcset="/images/b/b4/Autodecrypt.png 1.5x, /images/b/b4/Autodecrypt.png 2x"></a>
+</p>
+<h3><span class="mw-headline" id="How_to_Send_Encrypted_Messages_with_OpenPGP">How to Send Encrypted Messages with OpenPGP</span></h3>
+<hr>
+<p>1. Compose the body of your  message followed by clicking <b>"Encrypt Message"</b>.
+</p>
+<ul><li><span style="color:red"> <b>Note:</b> </span> <b>All messages must have the body formatted in plain text</b>.</li></ul>
+<p><a href="https://wiki.xmission.com/File:Encryptmssg.png" class="image"><img alt="Encryptmssg.png" src="500px-Encryptmssg.png" width="500" height="279" srcset="/images/1/12/Encryptmssg.png 1.5x, /images/1/12/Encryptmssg.png 2x"></a>
+</p><p>2. Once you have finished, and have clicked <b>"Encrypt Message"</b> you will receive a confirmation window.
+</p>
+<ul><li> <span style="color:red"> <b>Note:</b> </span> If you are sending to multiple recipients, you will need to use CTRL+Left Click to select multiple addresses. Use CMD+click on Mac.</li></ul>
+<p><a href="https://wiki.xmission.com/File:Finishingmessage.png" class="image"><img alt="Finishingmessage.png" src="500px-Finishingmessage.png" width="500" height="349" srcset="/images/2/28/Finishingmessage.png 1.5x, /images/2/28/Finishingmessage.png 2x"></a>
+</p>
+<ul><li> <span style="color:red"> <b>Note:</b> </span> It is important to add your attachments during this screen, or else they will not be encrypted. </li></ul>
+<p>3. The body of your message will be encrypted and encoded as base64. You may now send the message to the desired recipients.
+</p><p><a href="https://wiki.xmission.com/File:Finishedpgp.png" class="image"><img alt="Finishedpgp.png" src="500px-Finishedpgp.png" width="500" height="431" srcset="/images/1/15/Finishedpgp.png 1.5x, /images/1/15/Finishedpgp.png 2x"></a>
+</p>
+<h3><span class="mw-headline" id="Managing_your_contacts_Public_Keys">Managing your contacts Public Keys</span></h3>
+<hr>
+<p>When you accept public keys, the OpenPGP Zimlet automatically adds them to your <b>"Managed Keys"</b> under the <b>"Public Keys"</b> section. This is unique to the user that sent them. 
+</p><p><a href="https://wiki.xmission.com/File:Managepubkeys.png" class="image"><img alt="Managepubkeys.png" src="500px-Managepubkeys.png" width="500" height="440" srcset="/images/4/43/Managepubkeys.png 1.5x, /images/4/43/Managepubkeys.png 2x"></a>
+</p><p><br>
+</p>
+<h3><span class="mw-headline" id="Importing_your_own_PGP_Private_Key_to_OpenPGP">Importing your own PGP Private Key to OpenPGP</span></h3>
+<hr>
+<p>If you already have your own PGP Private Key, you can simply paste your key into the Private Key field inside the <b>"Manage Keys"</b> section of the OpenPGP zimlet. 
+</p><p><a href="https://wiki.xmission.com/File:Privatekey1.png" class="image"><img alt="Privatekey1.png" src="500px-Privatekey1.png" width="500" height="443" srcset="/images/a/a1/Privatekey1.png 1.5x, /images/a/a1/Privatekey1.png 2x"></a>
+</p>
+<h3><span class="mw-headline" id="Supported_Formats_of_OpenPGP">Supported Formats of OpenPGP</span></h3>
+<hr>
+<p><b>Sending Messages</b>
+</p>
+<ul><li>Inline-PGP encrypted messages with full UTF-8 support in text/plain format</li>
+<li>Inline-PGP clear signed messages with full UTF-8 support in text/plain format</li>
+<li>Inline-PGP encrypted attachments</li></ul>
+<p><b>Receiving Messages</b>
+</p>
+<ul><li>Inline-PGP encrypted messages with full UTF-8 support in text/plain format</li>
+<li>Inline-PGP clear signed messages with full UTF-8 support in text/plain format</li>
+<li>Inline-PGP encrypted attachments</li>
+<li>PGP/MIME messages with body parts text/plain</li>
+<li>PGP/MIME messages with body parts text/html will be converted to text</li>
+<li>PGP/MIME messages with parts that use transfer encoding base64 and quoted-printable and charset UTF-8</li>
+<li>PGP/MIME encrypted attachments</li></ul>
+<p><br>
+</p>
+<h3><span class="mw-headline" id="About_Private_Key_Security">About Private Key Security</span></h3>
+<hr>
+<p>It is important to keep your private key secure when using public key cryptography methods such as such as PGP. You should not share your private key with anyone under any circumstances.
+</p><p>With that said, please note that the OpenPGP Zimlet does NOT store your private key on our servers. If you choose to "store" your private key, it will be stored <em>in your browser, <b>not on our servers</b></em>. It is stored with AES-256 encryption. If you choose to store the passphrase to your key, that passphrase can be stored either on our servers or in your browser's local storage. If you store your passphrase, it is potentially possible for somebody with access to your computer to acquire your unencrypted private key.
+</p><p>You can also choose to store nothing, providing your private key and passphrase manually every time you need to sign or encrypt a message.
+</p><p>We recommend storing your key, but not your passphrase, in your browser. This provides a good balance between security and convenience.
+</p>
+<h3><span class="mw-headline" id="Zimbra_Desktop">Zimbra Desktop</span></h3>
+<hr>
+<p>Those using the Zimbra Desktop application this Zimlet is not compatible for install. You will need to log in to your webmail to utilize this Zimlet.
+</p>
 
-Now go back to the "Manage keys" window. You should see your keys and passphrase there now. Click OK.<br>
-<br><img src="manage-key-window-with-generated.png" alt=""><br><hr><br>
 
 
-<br><br></section><section id="sign">
-<h2>Clear signing a message</h2>
-Compose an E-mail message like usual in Zimbra, then click the Sign button when you are done.<br>
-<br><img src="sign-message-menu.png" alt=""><br><hr><br>
-
-Enter your Private Key and Passphrase if needed. Click OK when you are done.<br>
-<br><img src="sign-message-window.png" alt=""><br><hr><br>
-
-You will now see the Zimbra compose window with your signed message. Enter a subject and select recipients like a normal mail and click Save Draft and Close when you are done.<br>
-<br><img src="sign-message-window-compose.png" alt=""><br><hr><br>
-
-Go to your Drafts folder and click the mail you just created. You should see "Got a good signature". You can now open and send your mail.<br>
-<br><img src="sign-message-goodsig.png" alt=""><br><hr><br>
-
-
-<br><br></section><section id="adding">
-<h2>Adding Public Keys</h2>
-Before you can encrypt messages or verify signatures you must copy-paste Public Keys of the people you wish to communicate with to the "Manage keys" window. This example adds Public Key 2. Click OK when you are done.<br>
-<br><img src="manage-key-window-add-co-worker.png" alt=""><br><hr><br>
-
-<br><br></section><section id="encrypt">
-<h2>Encrypting a message</h2>
-Compose an E-mail message like usual in Zimbra, then click the Encrypt button when you are done.<br>
-<br><img src="1-compose-encrypt.png" alt=""><br><hr><br>
-In the "Encrypt message" window:
-<ol>
-<li>Select one or more recipients using (CTRL+click). You may wish to select yourself so you can read the message afterwards</li>
-</ol>
-In case the private key and passphrase are set, your encrypted message will also be signed.<br>
-<br><img src="2-encrypt-dialog.png" alt=""><br><hr>
-
-<section id="attachments">
-<h2>Adding attachments</h2>
-If you want to attach encrypted documents to your mail, select them using the Choose Files button. You can select multiple files from your computer and/or use the + and - button to add and remove attachments to your message. Please note that filenames are NOT encrypted.<br>
-<br><img src="5-encrypt-attachments.png" alt=""><br><hr><br>
-</section>
-
-You will now see the Zimbra compose window with your encrypted message. Enter a subject and verify the recipients like a normal mail and click Send when you are done.<br>
-<br><img src="3-encrypt-result.png" alt=""><br><hr><br>
-
-Go to your Sent folder and click the mail you just sent. You should see "Got a good signature.", in case you selected yourself as one of the recipients you should now also see your message text. You can also open attachments by clicking the Decrypt file link.<br>
-<br><img src="4-decrypted.png" alt=""><br><hr><br>
-
-<br><br></section><section id="contacts-scanning">
-<h1>Storing public keys to Zimbra contacts</h1>
+<section id="contacts-scanning">
+<h3><span class="mw-headline">Storing public keys to Zimbra contacts</span></h3>
+<hr>
 Optionally you can store public keys in Contacts, the Zimbra Addressbook. First enable the Scan Contacts option then copy/paste public keys to the notes field of your contacts.<br>
 <br><img src="thunderbird-enigmail-import-keys.png" alt=""><br>
 <br><img src="scan-contacts.png" alt=""><br>
 
 
 <br><br></section><section id="thunderbird-enigmail">
-<h1>Reading messages encrypted/signed with Thunderbird/Enigmail</h1>
+<h3><span class="mw-headline">Reading messages encrypted/signed with Thunderbird/Enigmail</span></h3>
+<hr>
 OpenPGP/MIME encrypted messages using RFC 3156 implemented in Thunderbird/Enigmail can be decrypted and verified by this Zimlet. This is beta functionality. Plain text messages and attachments are supported. HTML formatted messages are converted to plain text.<br>
-<br><img src="thunderbird-enigmail-support.png" alt=""><br><hr><br>
+<br><img src="thunderbird-enigmail-support.png" alt=""><br><br>
 
 Attachments encrypted by Zimbra OpenPGP Zimlet can be decrypted by Thunderbird/Enigmail users, right click the attachment and click `Decrypt and Open`.<br>
-<br><img src="attachment-decrypt-enigmail.png" alt=""><br><hr><br>
+<br><img src="attachment-decrypt-enigmail.png" alt=""><br><br>
 
 
 <br><br></section><section id="thunderbird-enigmail-export">
-<h1>Exporting public keys from Enigmail to Zimbra</h1>
+<h3><span class="mw-headline">Exporting public keys from Enigmail to Zimbra</span></h3>
+<hr>
 You can export all your public keys from Enigmail to Zimbra, first copy them from Enigmail Key Management, and then paste them in the notes field of a new contact in Zimbra, also enable <a href="#contacts-scanning">contacts scanning</a>.<br>
 <br><img src="thunderbird-enigmail-export-keys.png" alt=""><br>
-<br><img src="thunderbird-enigmail-import-keys.png" alt=""><br><hr><br>
-
-
-
-
+<br><img src="thunderbird-enigmail-import-keys.png" alt=""><br><br>
 
 <br><br></section><section id="fingerprint">
-<h1>Fingerprint</h1>
+<h3><span class="mw-headline">Fingerprint</span></h3>
+<hr>
 Key fingerprint verification is actually much easier than it sounds.  In a nutshell, both sides should compare the fingerprints of the public key in question.  If the fingerprints match, then they can proceed to send a message.  If they do not, then the key can NOT be trusted. 
 <br> <br> 
 The process of comparing fingerprints should be performed through a mechanism whereby the identity of the owner of the public key in question is known or trusted.  This may come in the form of a phone call to a trusted phone number, a face-to-face conversation or for example a business card exchange. The goal is to ensure that the person you are communicating with is who you think he or she is.  If you know the key’s owner and recognize their voice, it is easy enough to call them and verify the key’s fingerprint over the telephone.
  <br> <br> 
 It is best to use a different communication method than the one that was used to send the key itself. A good combination is to send the key via e-mail, and the key fingerprint via a telephone conversation or received in person on a business card.<br> 
-<br> <hr><br>
-
-
-
-<br><br></section><section id="about">
-<h1>Zimbra OpenPGP Zimlet</h1>If you find Zimbra OpenPGP Zimlet useful and want to support its continued development, you can make donations via:
-<ul>
-<li>PayPal: <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=info%40barrydegraaff%2etk&amp;lc=US&amp;item_name=Zimbra%20OpenPGP%20Zimlet&amp;no_note=0&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest">info@barrydegraaff.tk</a></li>
-<li>Bank transfer: IBAN NL55ABNA0623226413 ; BIC ABNANL2A</li>
-</ul>
-Please report <a href="https://github.com/Zimbra-Community/pgp-zimlet/issues">bugs</a>
- on Github.
-<br><br><b>Credits</b>
-<br><ul><li><a href="http://www.premierheart.com/">Michael Graziano</a> <small>enhancements</small>
-</li><li><a href="http://blog.iwayvietnam.com/tuanta/about/">Truong Anh Tuan</a> <small>enhancements</small>
-</li><li><a href="http://www.onecentral.nl">Marius Savelbergh</a> <small>funds</small>
-</li><li><a href="http://www.profluid.de/">Klaus Belser</a> <small>funds</small>
-</li><li><a href="https://www.hivos.org">Hivos.org</a> <small>funds</small>
-</li><li><a href="https://openpgpjs.org/">OpenPGP.js</a> <small>Tankred Hase</small>
-</li><li><a href="https://github.com/emailjs/">emailJS</a> <small>Andris Reinman</small>
-</li><li><small>and others.<br></small>
-</li></ul>
+<br><br>
 
 <br><br></section><section id="licenses">
-<h1>License and third party FOSS libraries</h1>
+<h3><span class="mw-headline">License and third party FOSS libraries</span></h3>
+<hr>
 Copyright (C) 2014-2016&nbsp; Barry de Graaff 
 <br><br>This program is free software: you can redistribute it and/or modify
 <br> it under the terms of the GNU General Public License as published by
@@ -285,77 +272,10 @@ Purify Copyright 2015 Mario Heiderich under the Apache License Version 2.0.<br>
 Icons and logo where taken from the tango-icon-theme package and where released to the Public Domain by the Tango Desktop Project.<br>
 File encrypted icon (file-pgp-encrypted) by Jakub Steiner http://jimmac.musichall.cz/ This file is licensed under the Creative Commons Attribution-Share Alike 2.0 Generic license.<br>
 </section>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-</div>
+
+
+<p>This help page was written by <a target="_blank" rel="nofollow noreferrer noopener" href="https://wiki.xmission.com/OpenPGP_Zimlet">XMission</a>.
+</p>
+
+
+</div></div>
