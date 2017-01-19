@@ -1,4 +1,4 @@
-<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="2.6.8" label="OpenPGP" description="Encrypt/Decrypt messages with OpenPGP">
+<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="2.6.9" label="OpenPGP" description="Encrypt/Decrypt messages with OpenPGP">
    <summary>
 Zimbra OpenPGP Zimlet
 
@@ -38,6 +38,7 @@ them here has no effect.
    <include>mimeparser.js</include>
    <include>encoding.js</include>
    <include>encoding-indexes.js</include>
+   <include>he.js</include>
    <handlerObject>tk_barrydegraaff_zimbra_openpgp_HandlerObject</handlerObject>
    <includeCSS>tk_barrydegraaff_zimbra_openpgp.css</includeCSS>
    <zimletPanelItem label="OpenPGP" icon="tk_barrydegraaff_zimbra_openpgp-panelIcon">

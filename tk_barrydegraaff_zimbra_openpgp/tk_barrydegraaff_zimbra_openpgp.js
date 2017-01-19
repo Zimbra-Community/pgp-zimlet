@@ -2763,7 +2763,14 @@ function(controller) {
                      req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
                      req.setRequestHeader("Content-Type",  "application/octet-stream" + ";");
                      req.setRequestHeader("X-Zimbra-Csrf-Token", window.csrfToken);
-                     req.setRequestHeader("Content-Disposition", 'attachment; filename="'+ file.name + '.pgp"');
+                     try {
+                        //works for ASCII file names
+                        req.setRequestHeader("Content-Disposition", 'attachment; filename="'+ file.name + '.pgp"');
+                     }
+                     catch (err) {
+                        req.setRequestHeader("Content-Disposition", 'attachment;');
+                        req.setRequestHeader("Content-Disposition", 'attachment; filename="'+ OpenPGPZimlet.prototype.HTMLentityEncode(file.name) + '.pgp"');
+                     }
                      req.onload = function(e)
                      {
                         var resp = eval("["+req.responseText+"]");
@@ -2824,6 +2831,9 @@ function(controller) {
   });      
 };
 
+OpenPGPZimlet.prototype.HTMLentityEncode = function (string) {
+		return he.encode(string);
+};
 
 /** This method is called when the dialog "CANCEL" button is clicked.
  * It pops-down the current dialog.
