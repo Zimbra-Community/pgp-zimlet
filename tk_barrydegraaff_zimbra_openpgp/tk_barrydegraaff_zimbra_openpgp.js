@@ -2768,7 +2768,6 @@ function(controller) {
                         req.setRequestHeader("Content-Disposition", 'attachment; filename="'+ file.name + '.pgp"');
                      }
                      catch (err) {
-                        req.setRequestHeader("Content-Disposition", 'attachment;');
                         req.setRequestHeader("Content-Disposition", 'attachment; filename="'+ OpenPGPZimlet.prototype.HTMLentityEncode(file.name) + '.pgp"');
                      }
                      req.onload = function(e)
