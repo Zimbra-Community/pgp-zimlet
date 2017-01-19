@@ -1838,6 +1838,12 @@ function(fArguments) {
          {
             myWindow.fArguments[1] = myWindow.fArguments[1].substring(0, myWindow.fArguments[1].length -4);
          }
+
+         //Remove .gpg from decrypted file
+         if (myWindow.fArguments[1].substring(myWindow.fArguments[1].length -4) == '.gpg')
+         {
+            myWindow.fArguments[1] = myWindow.fArguments[1].substring(0, myWindow.fArguments[1].length -4);
+         }
          
          OpenPGPZimlet.prototype.downloadBlob(myWindow.fArguments[1],'zimbra/pgp',plaintext.data);
 
