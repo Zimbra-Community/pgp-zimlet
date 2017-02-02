@@ -1436,9 +1436,17 @@ function(fArguments) {
          document.getElementById("privateKeyInput").style.backgroundImage = "url('')";
          this._dialog.setButtonVisible(DwtDialog.CANCEL_BUTTON, true);
          this._dialog.setButtonVisible(DwtDialog.OK_BUTTON, true);
-         //Could not read armored message!
-         this.status(OpenPGPZimlet.lang[7], ZmStatusView.LEVEL_CRITICAL);
-         return;
+         
+         try {
+            //one last final try..
+            var message = openpgp.message.readArmored(OpenPGPZimlet.prototype.quoted_printable_decode(fArguments['message']));
+         }
+         catch(err)
+         {
+            //Could not read armored message!
+            this.status(OpenPGPZimlet.lang[7], ZmStatusView.LEVEL_CRITICAL);
+            return;
+         }   
       }
       try {
          var publicKeys1 = openpgp.key.readArmored(this.getUserPropertyInfo("zimbra_openpgp_pubkeys1").value);
