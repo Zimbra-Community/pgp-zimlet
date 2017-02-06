@@ -24,8 +24,6 @@ Bugs and feedback: https://github.com/Zimbra-Community/pgp-zimlet/issues
 
 Report security issues to info@barrydegraaff.tk (PGP fingerprint: 97f4694a1d9aedad012533db725ddd156d36a2d0)
 
-Stay up-to-date: new releases are announced on the users mailing list: http://lists.zetalliance.org/mailman/listinfo/users_lists.zetalliance.org
-
 For developers: http://barrydegraaff.github.io/OpenPGPZimletJSDoc/OpenPGPZimlet.html
 
 ========================================================================
@@ -105,7 +103,7 @@ See: https://bugzilla.zimbra.com/show_bug.cgi?id=97496
 
 ### License
 
-Copyright (C) 2014-2016  Barry de Graaff
+Copyright (C) 2014-2017  Barry de Graaff
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
