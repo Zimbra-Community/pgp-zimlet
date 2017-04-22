@@ -50,6 +50,8 @@ Without translations support:
 
     As root su to the root.
     nano /opt/zimbra/common/sbin/amavisd
+    or if you are on 8.6 and before: 
+    nano /opt/zimbra/amavisd/sbin/amavisd
     
     change the line:
     $undecipherable_subject_tag = '***UNCHECKED*** ';
