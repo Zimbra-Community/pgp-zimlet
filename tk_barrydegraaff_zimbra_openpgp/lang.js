@@ -131,5 +131,6 @@ OpenPGPZimlet.prototype.lang = function () {
    if(OpenPGPZimlet.lang[1].indexOf('???') == 0)
    {
       //Seems we are running from dev folder on the server, but not passed ?dev=1 in the browser, fallback to english
-      OpenPGPZimlet.lang = english;            
-   }};
+      OpenPGPZimlet.lang = english;
+   }
+};
