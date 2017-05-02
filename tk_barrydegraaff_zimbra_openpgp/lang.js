@@ -132,4 +132,4 @@ OpenPGPZimlet.prototype.lang = function () {
    {
       //Seems we are running from dev folder on the server, but not passed ?dev=1 in the browser, fallback to english
       OpenPGPZimlet.lang = english;            
-   }}
+   }};

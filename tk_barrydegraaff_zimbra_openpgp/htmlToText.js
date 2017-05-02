@@ -49,7 +49,7 @@ OpenPGPZimlet.prototype.htmlToText = function (html) {
  		.replace(/ {2,}/g," ")
 		// Decode HTML entities.
  		.replace(/&([^;]+);/g, OpenPGPZimlet.prototype.decodeHtmlEntity );
-}
+};
 
 OpenPGPZimlet.prototype.decodeHtmlEntity = function (m, n) {   
    var ENTITIES_MAP = {
@@ -181,7 +181,7 @@ OpenPGPZimlet.prototype.decodeHtmlEntity = function (m, n) {
      'lsaquo' : 8249,
      'rsaquo' : 8250,
      'euro' : 8364
-   };
+   }
 
 	// Determine the character code of the entity. Range is 0 to 65535
 	// (characters in JavaScript are Unicode, and entities can represent
@@ -208,5 +208,5 @@ OpenPGPZimlet.prototype.decodeHtmlEntity = function (m, n) {
 	// If still nothing, pass entity through
 	return (code === undefined || code === NaN) ?
 		'&' + n + ';' : String.fromCharCode(code);
-}
+};
 

@@ -192,7 +192,7 @@ OpenPGPZimlet.prototype.init = function() {
 	if (appCtxt.get(ZmSetting.MAIL_ENABLED)) {
 		AjxPackage.require({name:"MailCore", callback:new AjxCallback(this, this.addAttachmentHandler)});
 	}
-}
+};
 
 /** This method gets called from init and adds a handler for decrypting attachments and importing public key attachments
  * */
@@ -333,7 +333,7 @@ function(url) {
  * */
 OpenPGPZimlet.prototype.onContactEdit = function (view, contact, elementId) {
    OpenPGPZimlet.prototype.editAddressBookEvent = true;
-}
+};
 
 /** The Zimlet API does not provide an onContactSave event, but we need to read the address book on changes.
  * So we combine onContactEdit and onShowView to create an event when a user edits the address book.
@@ -345,7 +345,7 @@ OpenPGPZimlet.prototype.onShowView = function (view) {
       OpenPGPZimlet.prototype.editAddressBookEvent = false;
       OpenPGPZimlet.prototype.readAddressBook();      
    }
-}
+};
 
 /** This method is called from init and makes the Content-Type header available to determine if a mail message is pgp/mime. 
  * See {@link https://files.zimbra.com/docs/zimlet/zcs/8.6.0/jsapi-zimbra-doc/symbols/ZmMailMsg.html#.addRequestHeaders ZmMailMsg.html#.addRequestHeaders}.
@@ -860,7 +860,7 @@ OpenPGPZimlet.prototype.verify = function(fArguments) {
       //Error verifying signature
       myWindow.status(OpenPGPZimlet.lang[17], ZmStatusView.LEVEL_WARNING);
    });
-}
+};
 
 /** This method shows a `ZmToast` status message. That fades in and out in a few seconds.
  * @param {string} text - the message to display
@@ -1390,7 +1390,7 @@ function () {
    var newfileInputPgpAttach = document.createElement('div');
    newfileInputPgpAttach.insertAdjacentHTML('afterbegin',"<input type='file' multiple class='fileInputPgpAttach'><button onclick='OpenPGPZimlet.prototype.clearFileInputPgpAttach(this)'>-</button><button onclick='OpenPGPZimlet.prototype.addFileInputPgpAttach()'>+</button>");
    parentDiv.parentNode.insertBefore(newfileInputPgpAttach, parentDiv);
-}
+};
 
 /** This method removes an attachment file picker from the UI if the user requests it (- button), in case there is only one file picker, empty that one but leave it in the DOM.
  * @param {button} obj - the clicked button
@@ -1407,7 +1407,7 @@ function (obj) {
       obj.parentNode.innerHTML = '';
       OpenPGPZimlet.prototype.addFileInputPgpAttach();
    }   
-}
+};
 
 /** This method remove duplicates from an array or array like object.
  * @param {array} a - the array or object with duplicates
@@ -1424,7 +1424,7 @@ function (a) {
         else
             return objs.indexOf(item) >= 0 ? false : objs.push(item);
     });
-}
+};
 
 /** This method is called when the Decrypt dialog "OK" button is clicked after private key has been entered.
  * and will show the decrypted OpenPGP encrypted message in the DOM.
@@ -1721,7 +1721,7 @@ function(u8a) {
     c.push(String.fromCharCode.apply(null, u8a.subarray(i, i+CHUNK_SZ)));
   }
   return c.join("");
-}
+};
 
 /** This method is called when the Decrypt File dialog "OK" button is clicked after private key has been entered for decrypting a file.
  * and will decrypt the OpenPGP encrypted file. The result is a download in the browser.
@@ -1926,7 +1926,7 @@ function(aes_password, privatekey) {
       localStorage['zimbra_openpgp_privatekey'+OpenPGPZimlet.prototype.getUsername()] = '';
       OpenPGPZimlet.privateKeyCache='';
    }   
-}
+};
 
 /** This method decrypts a private key from html localstorage with AES-256 encryption.
  * It also encrypts localStorage that was created in previous versions of the Zimlet.
@@ -1959,7 +1959,7 @@ function() {
    {
       return;
    }
-}
+};
 
 /** This method decodes a passphrase from server LDAP or decrypts it from html localstorage.
 */
@@ -1993,7 +1993,7 @@ function(zimbra_openpgp_privatepassFromUserProperty) {
    {
       OpenPGPZimlet.privatePassCache = '';
    }
-}   
+};   
 
 /** This method is called when the dialog "OK" button is clicked in the Manage Public Keys dialog.
  */
@@ -2452,7 +2452,7 @@ function(pubkey) {
       console.log(err);
    }
    return result;
-}
+};
 
 /** This method generates an HTML select list with public keys from the server LDAP combined with those in the users contacts (optional).
  *
@@ -2625,7 +2625,7 @@ function(controller) {
       return;
    }
    return result;
-}
+};
 
 /** When a user encrypts a message, the Zimlets selects the first public key by default (encrypt to self).
  * If you do not want to encrypt to yourself, you must click your name, and then the recipient
@@ -2639,7 +2639,7 @@ function() {
          selectme[index].selected = true;
       }
    } catch (err) { }
-}   
+};   
 
 /** When a user encrypts a message, the Zimlets selects the first public key by default (encrypt to self).
  * If you do not want to encrypt to yourself, you must click the X button, that calls the removeForceSelect
@@ -2655,7 +2655,7 @@ function() {
       while (document.getElementsByClassName("selectme"));
    } catch (err) { }
    document.getElementById('btnremoveForceSelect').style.display = 'none';
-}   
+};   
 
 /** This method is called when OK is pressed in encrypt dialog. Compose Tab -> Encrypt button -> Dialog -> OK.
  * It should encrypt the email message and put it back in the current compose tab and also upload encrypted attachment and attach them to the current draft email.
@@ -2906,7 +2906,7 @@ function ()
       pass += chars.charAt(i);
    }
    return pass;
-}
+};
 
 /** Add encrypt and sign buttons to the toolbar in the compose tab. 
   * This method is called by the Zimlet framework when application toolbars are initialized.
@@ -3140,7 +3140,7 @@ OpenPGPZimlet.prototype.downloadBlob = function (filename, type, base64Data) {
    {
       window.navigator.msSaveOrOpenBlob(blob, filename);
    }
-}
+};
 
 /** Array of bytes to base64 string decoding
  * See {@link https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding$revision/773109 MDN Base64 encoding and decoding}.
@@ -3158,7 +3158,7 @@ OpenPGPZimlet.prototype.b64ToUint6 = function (nChr) {
       63
     :
       0;
-}
+};
 
 /** Base64 decode binary safe. 
  * See {@link https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding$revision/773109 MDN Base64 encoding and decoding}.
@@ -3180,7 +3180,7 @@ OpenPGPZimlet.prototype.base64DecToArr = function (sBase64, nBlocksSize) {
     }
   }
   return taBytes;
-}
+};
 
 /** This method decodes a quoted-printable encoded string.
  * @param {string} str - quoted-printable encoded string
@@ -3188,7 +3188,7 @@ OpenPGPZimlet.prototype.base64DecToArr = function (sBase64, nBlocksSize) {
  * */
 OpenPGPZimlet.prototype.quoted_printable_decode = function(str) {
    return mimefuncs.quotedPrintableDecode(str);
-}
+};
 
 /** This method creates clickable links in decrypted messages.
  * See {@link https://gist.github.com/vinitkumar/10000895}.
@@ -3198,7 +3198,7 @@ OpenPGPZimlet.prototype.quoted_printable_decode = function(str) {
 OpenPGPZimlet.prototype.urlify = function(text) {
     var urlRegex = /(https?:\/\/[^\s]+)/g;
     return text.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');  
-}
+};
 
 /** This method performs a keyserver lookup.
  * It uses the keyserver defined in config_template.xml and stores the result to the Zimbra LDAP.
@@ -3271,7 +3271,7 @@ OpenPGPZimlet.prototype.lookup = function() {
    }; 
 
    xmlHttp.send( null );
-}
+};
 
 /** This method submits a public key to a keyserver.
  * It uses the keyserver defined in config_template.xml.
@@ -3299,7 +3299,7 @@ OpenPGPZimlet.prototype.submit = function() {
       }
    }; 
    xmlHttp.send("keytext="+encodeURIComponent(keytext));
-}
+};
 
 /** This method is called when the OK button is pressed in the Keyserver Lookup dialog.
  * At this time the UI only allows selection a single key for import. As dealing with multiple would be possible, but we could not re-use the code as the LDAP is too slow for dealing with multiple requests when fired with the current code.
@@ -3351,7 +3351,7 @@ OpenPGPZimlet.prototype.printdiv = function(printdivname, msg) {
    newWin.focus();
    newWin.print();
    newWin.close();
-}
+};
 
 /** This method is called when the Reply(All) links are clicked on a decrypted message (in the reading pane).
  * It opens a new compose window with the ---original message---.
@@ -3408,7 +3408,7 @@ OpenPGPZimlet.prototype.reply = function(msg, decrypted, action) {
       toOverride:'"'+msg._addrs.FROM._array[0].name+'" <'+msg._addrs.FROM._array[0].address+'>\r\n', ccOverride:ccOverride, subjOverride:msg.subject.replace(/\*\*\*.*\*\*\*/,''), extraBodyText:extraBodyText, callback:null}
       composeController.doAction(params); // opens asynchronously the window.
    }
-}
+};
 
 /** This method converts a UNIX time stamp to a time that is usable in JavaScript.
  * See {@link http://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript}.
@@ -3426,7 +3426,7 @@ OpenPGPZimlet.prototype.timeConverter = function (UNIX_timestamp) {
   var sec = a.getSeconds();
   var time = date + ' ' + month + ' ' + year + ' ' + ("0" + hour).slice(-2) + ':' + ("0" + min).slice(-2) + ':' + ("0" + sec).slice(-2) ;
   return time;
-}
+};
 
 /** Function to handle a show/hide button for password type input fields
  */
@@ -3441,4 +3441,4 @@ OpenPGPZimlet.prototype.toggle_password = function (target) {
    {
       tag.setAttribute('type', 'password');   
    }
-}
+};
