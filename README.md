@@ -1,7 +1,7 @@
 Zimbra OpenPGP Zimlet
 ==========
 
-**** This Zimlet is now deprecated use:  https://github.com/iwayvietnam/openpgp-secure-zimlet ***
+**This Zimlet is now deprecated use:  https://github.com/iwayvietnam/openpgp-secure-zimlet**
 
 Demo video: https://youtu.be/-fMe5Xab11Y
 
