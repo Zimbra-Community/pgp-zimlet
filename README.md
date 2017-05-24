@@ -1,9 +1,7 @@
 Zimbra OpenPGP Zimlet
 ==========
 
-If you find Zimbra OpenPGP Zimlet useful and want to support its continued development, you can make donations via:
-- PayPal: info@barrydegraaff.tk
-- Bank transfer: IBAN NL55ABNA0623226413 ; BIC ABNANL2A
+**** This Zimlet is now deprecated use:  https://github.com/iwayvietnam/openpgp-secure-zimlet ***
 
 Demo video: https://youtu.be/-fMe5Xab11Y
 
