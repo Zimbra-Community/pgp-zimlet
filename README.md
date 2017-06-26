@@ -61,7 +61,7 @@ Without translations support:
 
 ### About private key security
 
-When you generate a private key with this zimlet or copy-paste it when signing or decrypting, it is NOT being send to the server and it is NOT stored on the server.
+When you generate a private key with this zimlet or copy-paste it when signing or decrypting, it is NOT being sent to the server and it is NOT stored on the server.
 
 As of version 1.2.4 you can optionally store your private key in your browsers local storage. If you do not store your private key the server will ask you to provide it for each session. Also you can optionally store your passphrase to the Zimbra server. If you do not store your passphrase the server will ask you to provide it every time it is needed.
 
