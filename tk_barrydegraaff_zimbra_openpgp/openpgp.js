@@ -4534,9 +4534,10 @@ CleartextMessage.prototype.getSigningKeyIds = function () {
 /**
  * Sign the cleartext message
  * @param  {Array<module:key~Key>} privateKeys private keys with decrypted secret key data for signing
+ * @return {module:message~CleartextMessage} new cleartext message with signed content
  */
 CleartextMessage.prototype.sign = function (privateKeys) {
-  this.signature = this.signDetached(privateKeys);
+  return new CleartextMessage(this.text, this.signDetached(privateKeys));
 };
 
 /**
@@ -4603,7 +4604,10 @@ CleartextMessage.prototype.verifyDetached = function (signature, keys) {
       verifiedSig.keyid = signatureList[i].issuerKeyId;
       verifiedSig.valid = null;
     }
-    verifiedSig.signature = new sigModule.Signature([signatureList[i]]);
+
+    var packetlist = new _packet2.default.List();
+    packetlist.push(signatureList[i]);
+    verifiedSig.signature = new sigModule.Signature(packetlist);
 
     result.push(verifiedSig);
   }
@@ -4829,6 +4833,7 @@ exports.default = {
   aead_protect: false, // use Authenticated Encryption with Additional Data (AEAD) protection for symmetric encryption
   integrity_protect: true, // use integrity protection for symmetric encryption
   ignore_mdc_error: false, // fail on decrypt if message is not integrity protected
+  checksum_required: false, // do not throw error when armor is missing a checksum
   rsa_blinding: true,
   use_native: true, // use native node.js crypto and Web Crypto apis (if available)
   zero_copy: false, // use transferable objects between the Web Worker and main thread
@@ -4836,8 +4841,8 @@ exports.default = {
   tolerant: true, // ignore unsupported/unrecognizable packets instead of throwing an error
   show_version: true,
   show_comment: true,
-  versionstring: "OpenPGP.js v2.5.4",
-  commentstring: "http://openpgpjs.org",
+  versionstring: "OpenPGP.js v2.5.12",
+  commentstring: "https://openpgpjs.org",
   keyserver: "https://keyserver.ubuntu.com",
   node_store: './openpgp.store'
 };
@@ -11533,7 +11538,10 @@ function RSA() {
         keyGenOpt = {
           name: 'RSA-OAEP',
           modulusLength: B, // the specified keysize in bits
-          publicExponent: Euint8.subarray(0, 3) // take three bytes (max 65537)
+          publicExponent: Euint8.subarray(0, 3), // take three bytes (max 65537)
+          hash: {
+            name: 'SHA-1' // not required for actual RSA keys, but for crypto api 'sign' and 'verify'
+          }
         };
         keys = webCrypto.generateKey(keyGenOpt, true, ['encrypt', 'decrypt']);
       } else {
@@ -12142,30 +12150,9 @@ var crc_table = [0x00000000, 0x00864cfb, 0x018ad50d, 0x010c99f6, 0x0393e6e1, 0x0
 
 function createcrc24(input) {
   var crc = 0xB704CE;
-  var index = 0;
 
-  while (input.length - index > 16) {
+  for (var index = 0; index < input.length; index++) {
     crc = crc << 8 ^ crc_table[(crc >> 16 ^ input[index]) & 0xff];
-    crc = crc << 8 ^ crc_table[(crc >> 16 ^ input[index + 1]) & 0xff];
-    crc = crc << 8 ^ crc_table[(crc >> 16 ^ input[index + 2]) & 0xff];
-    crc = crc << 8 ^ crc_table[(crc >> 16 ^ input[index + 3]) & 0xff];
-    crc = crc << 8 ^ crc_table[(crc >> 16 ^ input[index + 4]) & 0xff];
-    crc = crc << 8 ^ crc_table[(crc >> 16 ^ input[index + 5]) & 0xff];
-    crc = crc << 8 ^ crc_table[(crc >> 16 ^ input[index + 6]) & 0xff];
-    crc = crc << 8 ^ crc_table[(crc >> 16 ^ input[index + 7]) & 0xff];
-    crc = crc << 8 ^ crc_table[(crc >> 16 ^ input[index + 8]) & 0xff];
-    crc = crc << 8 ^ crc_table[(crc >> 16 ^ input[index + 9]) & 0xff];
-    crc = crc << 8 ^ crc_table[(crc >> 16 ^ input[index + 10]) & 0xff];
-    crc = crc << 8 ^ crc_table[(crc >> 16 ^ input[index + 11]) & 0xff];
-    crc = crc << 8 ^ crc_table[(crc >> 16 ^ input[index + 12]) & 0xff];
-    crc = crc << 8 ^ crc_table[(crc >> 16 ^ input[index + 13]) & 0xff];
-    crc = crc << 8 ^ crc_table[(crc >> 16 ^ input[index + 14]) & 0xff];
-    crc = crc << 8 ^ crc_table[(crc >> 16 ^ input[index + 15]) & 0xff];
-    index += 16;
-  }
-
-  for (var j = index; j < input.length; j++) {
-    crc = crc << 8 ^ crc_table[(crc >> 16 ^ input[index++]) & 0xff];
   }
   return crc & 0xffffff;
 }
@@ -12173,8 +12160,7 @@ function createcrc24(input) {
 /**
  * Splits a message into two parts, the headers and the body. This is an internal function
  * @param {String} text OpenPGP armored message part
- * @returns {(Boolean|Object)} Either false in case of an error
- * or an object with attribute "headers" containing the headers and
+ * @returns {Object} An object with attribute "headers" containing the headers
  * and an attribute "body" containing the body.
  */
 function splitHeaders(text) {
@@ -12207,8 +12193,11 @@ function splitHeaders(text) {
  */
 function verifyHeaders(headers) {
   for (var i = 0; i < headers.length; i++) {
-    if (!/^(Version|Comment|MessageID|Hash|Charset): .+$/.test(headers[i])) {
+    if (!/^[^:\s]+: .+$/.test(headers[i])) {
       throw new Error('Improperly formatted armor header: ' + headers[i]);
+    }
+    if (_config2.default.debug && !/^(Version|Comment|MessageID|Hash|Charset): .+$/.test(headers[i])) {
+      console.log('Unknown header: ' + headers[i]);
     }
   }
 }
@@ -12216,20 +12205,20 @@ function verifyHeaders(headers) {
 /**
  * Splits a message into two parts, the body and the checksum. This is an internal function
  * @param {String} text OpenPGP armored message part
- * @returns {(Boolean|Object)} Either false in case of an error
- * or an object with attribute "body" containing the body
+ * @returns {Object} An object with attribute "body" containing the body
  * and an attribute "checksum" containing the checksum.
  */
 function splitChecksum(text) {
-  var reChecksumStart = /^=/m;
+  text = text.trim();
   var body = text;
   var checksum = "";
 
-  var matchResult = reChecksumStart.exec(text);
+  var lastEquals = text.lastIndexOf("=");
 
-  if (matchResult !== null) {
-    body = text.slice(0, matchResult.index);
-    checksum = text.slice(matchResult.index + 1);
+  if (lastEquals >= 0 && lastEquals !== text.length - 1) {
+    // '=' as the last char means no checksum
+    body = text.slice(0, lastEquals);
+    checksum = text.slice(lastEquals + 1).substr(0, 4);
   }
 
   return { body: body, checksum: checksum };
@@ -12251,6 +12240,7 @@ function dearmor(text) {
 
   var type = getType(text);
 
+  text = text.trim() + "\n";
   var splittext = text.split(reSplit);
 
   // IE has a bug in split with a re. If the pattern matches the beginning of the
@@ -12292,9 +12282,8 @@ function dearmor(text) {
     checksum = sig_sum.checksum;
   }
 
-  checksum = checksum.substr(0, 4);
-
-  if (!verifyCheckSum(result.data, checksum)) {
+  if (!verifyCheckSum(result.data, checksum) && (checksum || _config2.default.checksum_required)) {
+    // will NOT throw error if checksum is empty AND checksum is not required (GPG compatibility)
     throw new Error("Ascii armor integrity check on message failed: '" + checksum + "' should be '" + getCheckSum(result.data) + "'");
   }
 
@@ -13280,7 +13269,7 @@ Key.prototype.packetlist2structure = function (packetlist) {
               _util2.default.print_debug('Dropping subkey binding signature without preceding subkey packet');
               continue;
             }
-            subKey.bindingSignature = packetlist[i];
+            subKey.bindingSignatures.push(packetlist[i]);
             break;
           case _enums2.default.signature.key_revocation:
             this.revocationSignature = packetlist[i];
@@ -14039,7 +14028,7 @@ function SubKey(subKeyPacket) {
     return new SubKey(subKeyPacket);
   }
   this.subKey = subKeyPacket;
-  this.bindingSignature = null;
+  this.bindingSignatures = [];
   this.revocationSignature = null;
 }
 
@@ -14051,7 +14040,9 @@ SubKey.prototype.toPacketlist = function () {
   var packetlist = new _packet2.default.List();
   packetlist.push(this.subKey);
   packetlist.push(this.revocationSignature);
-  packetlist.push(this.bindingSignature);
+  for (var i = 0; i < this.bindingSignatures.length; i++) {
+    packetlist.push(this.bindingSignatures[i]);
+  }
   return packetlist;
 };
 
@@ -14061,7 +14052,15 @@ SubKey.prototype.toPacketlist = function () {
  * @return {Boolean}
  */
 SubKey.prototype.isValidEncryptionKey = function (primaryKey) {
-  return this.verify(primaryKey) === _enums2.default.keyStatus.valid && isValidEncryptionKeyPacket(this.subKey, this.bindingSignature);
+  if (this.verify(primaryKey) !== _enums2.default.keyStatus.valid) {
+    return false;
+  }
+  for (var i = 0; i < this.bindingSignatures.length; i++) {
+    if (isValidEncryptionKeyPacket(this.subKey, this.bindingSignatures[i])) {
+      return true;
+    }
+  }
+  return false;
 };
 
 /**
@@ -14070,7 +14069,15 @@ SubKey.prototype.isValidEncryptionKey = function (primaryKey) {
  * @return {Boolean}
  */
 SubKey.prototype.isValidSigningKey = function (primaryKey) {
-  return this.verify(primaryKey) === _enums2.default.keyStatus.valid && isValidSigningKeyPacket(this.subKey, this.bindingSignature);
+  if (this.verify(primaryKey) !== _enums2.default.keyStatus.valid) {
+    return false;
+  }
+  for (var i = 0; i < this.bindingSignatures.length; i++) {
+    if (isValidSigningKeyPacket(this.subKey, this.bindingSignatures[i])) {
+      return true;
+    }
+  }
+  return false;
 };
 
 /**
@@ -14087,21 +14094,39 @@ SubKey.prototype.verify = function (primaryKey) {
   if (this.subKey.version === 3 && this.subKey.expirationTimeV3 !== 0 && Date.now() > this.subKey.created.getTime() + this.subKey.expirationTimeV3 * 24 * 3600 * 1000) {
     return _enums2.default.keyStatus.expired;
   }
-  // check subkey binding signature
-  if (!this.bindingSignature) {
-    return _enums2.default.keyStatus.invalid;
+  // check subkey binding signatures (at least one valid binding sig needed)
+  for (var i = 0; i < this.bindingSignatures.length; i++) {
+    var isLast = i === this.bindingSignatures.length - 1;
+    var sig = this.bindingSignatures[i];
+    // check binding signature is not expired
+    if (sig.isExpired()) {
+      if (isLast) {
+        return _enums2.default.keyStatus.expired; // last expired binding signature
+      } else {
+        continue;
+      }
+    }
+    // check binding signature can verify
+    if (!(sig.verified || sig.verify(primaryKey, { key: primaryKey, bind: this.subKey }))) {
+      if (isLast) {
+        return _enums2.default.keyStatus.invalid; // last invalid binding signature
+      } else {
+        continue;
+      }
+    }
+    // check V4 expiration time
+    if (this.subKey.version === 4) {
+      if (sig.keyNeverExpires === false && Date.now() > this.subKey.created.getTime() + sig.keyExpirationTime * 1000) {
+        if (isLast) {
+          return _enums2.default.keyStatus.expired; // last V4 expired binding signature
+        } else {
+          continue;
+        }
+      }
+    }
+    return _enums2.default.keyStatus.valid; // found a binding signature that passed all checks
   }
-  if (this.bindingSignature.isExpired()) {
-    return _enums2.default.keyStatus.expired;
-  }
-  if (!(this.bindingSignature.verified || this.bindingSignature.verify(primaryKey, { key: primaryKey, bind: this.subKey }))) {
-    return _enums2.default.keyStatus.invalid;
-  }
-  // check V4 expiration time
-  if (this.subKey.version === 4 && this.bindingSignature.keyNeverExpires === false && Date.now() > this.subKey.created.getTime() + this.bindingSignature.keyExpirationTime * 1000) {
-    return _enums2.default.keyStatus.expired;
-  }
-  return _enums2.default.keyStatus.valid;
+  return _enums2.default.keyStatus.invalid; // no binding signatures to check
 };
 
 /**
@@ -14109,7 +14134,17 @@ SubKey.prototype.verify = function (primaryKey) {
  * @return {Date|null}
  */
 SubKey.prototype.getExpirationTime = function () {
-  return getExpirationTime(this.subKey, this.bindingSignature);
+  var highest;
+  for (var i = 0; i < this.bindingSignatures.length; i++) {
+    var current = getExpirationTime(this.subKey, this.bindingSignatures[i]);
+    if (current === null) {
+      return null;
+    }
+    if (!highest || current > highest) {
+      highest = current;
+    }
+  }
+  return highest;
 };
 
 /**
@@ -14128,9 +14163,14 @@ SubKey.prototype.update = function (subKey, primaryKey) {
   if (this.subKey.tag === _enums2.default.packet.publicSubkey && subKey.subKey.tag === _enums2.default.packet.secretSubkey) {
     this.subKey = subKey.subKey;
   }
-  // binding signature
-  if (!this.bindingSignature && subKey.bindingSignature && (subKey.bindingSignature.verified || subKey.bindingSignature.verify(primaryKey, { key: primaryKey, bind: this.subKey }))) {
-    this.bindingSignature = subKey.bindingSignature;
+  // update missing binding signatures
+  if (this.bindingSignatures.length < subKey.bindingSignatures.length) {
+    for (var i = this.bindingSignatures.length; i < subKey.bindingSignatures.length; i++) {
+      var newSig = subKey.bindingSignatures[i];
+      if (newSig.verified || newSig.verify(primaryKey, { key: primaryKey, bind: this.subKey })) {
+        this.bindingSignatures.push(newSig);
+      }
+    }
   }
   // revocation signature
   if (!this.revocationSignature && subKey.revocationSignature && !subKey.revocationSignature.isExpired() && (subKey.revocationSignature.verified || subKey.revocationSignature.verify(primaryKey, { key: primaryKey, bind: this.subKey }))) {
@@ -14329,6 +14369,10 @@ function wrapKeyObject(secretKeyPacket, secretSubkeyPacket, options) {
   subkeySignaturePacket.publicKeyAlgorithm = options.keyType;
   subkeySignaturePacket.hashAlgorithm = _config2.default.prefer_hash_algorithm;
   subkeySignaturePacket.keyFlags = [_enums2.default.keyFlags.encrypt_communication | _enums2.default.keyFlags.encrypt_storage];
+  if (options.keyExpirationTime > 0) {
+    subkeySignaturePacket.keyExpirationTime = options.keyExpirationTime;
+    subkeySignaturePacket.keyNeverExpires = false;
+  }
   subkeySignaturePacket.sign(secretKeyPacket, dataToSign);
 
   packetlist.push(secretSubkeyPacket);
@@ -14449,7 +14493,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * Initialization routine for the keyring. This method reads the
  * keyring from HTML5 local storage and initializes this instance.
  * @constructor
- * @param {class} [storeHandler] class implementing load() and store() methods
+ * @param {class} [storeHandler] class implementing loadPublic(), loadPrivate(), storePublic(), and storePrivate() methods
  */
 function Keyring(storeHandler) {
   this.storeHandler = storeHandler || new _localstore2.default();
@@ -15273,7 +15317,10 @@ function createVerificationObjects(signatureList, literalDataList, keys) {
       verifiedSig.keyid = signatureList[i].issuerKeyId;
       verifiedSig.valid = null;
     }
-    verifiedSig.signature = new sigModule.Signature([signatureList[i]]);
+
+    var packetlist = new _packet2.default.List();
+    packetlist.push(signatureList[i]);
+    verifiedSig.signature = new sigModule.Signature(packetlist);
 
     result.push(verifiedSig);
   }
@@ -15756,7 +15803,7 @@ function decrypt(_ref6) {
 
 /**
  * Signs a cleartext message.
- * @param  {String} data                        cleartext input to be signed
+ * @param  {String | Uint8Array} data           cleartext input to be signed
  * @param  {Key|Array<Key>} privateKeys         array of keys or single key with decrypted secret key data to sign cleartext
  * @param  {Boolean} armor                      (optional) if the return value should be ascii armored or the message object
  * @param  {Boolean} detached                   (optional) if the return value should contain a detached signature
@@ -15773,7 +15820,7 @@ function sign(_ref7) {
   var _ref7$detached = _ref7.detached;
   var detached = _ref7$detached === undefined ? false : _ref7$detached;
 
-  checkString(data);
+  checkData(data);
   privateKeys = toArray(privateKeys);
 
   if (asyncProxy) {
@@ -15783,24 +15830,29 @@ function sign(_ref7) {
 
   var result = {};
   return execute(function () {
+    var message;
 
-    var cleartextMessage = new cleartext.CleartextMessage(data);
+    if (_util2.default.isString(data)) {
+      message = new cleartext.CleartextMessage(data);
+    } else {
+      message = messageLib.fromBinary(data);
+    }
 
     if (detached) {
-      var signature = cleartextMessage.signDetached(privateKeys);
+      var signature = message.signDetached(privateKeys);
       if (armor) {
         result.signature = signature.armor();
       } else {
         result.signature = signature;
       }
     } else {
-      cleartextMessage.sign(privateKeys);
+      message = message.sign(privateKeys);
     }
 
     if (armor) {
-      result.data = cleartextMessage.armor();
+      result.data = message.armor();
     } else {
-      result.message = cleartextMessage;
+      result.message = message;
     }
     return result;
   }, 'Error signing cleartext message');
@@ -15821,7 +15873,7 @@ function verify(_ref8) {
   var _ref8$signature = _ref8.signature;
   var signature = _ref8$signature === undefined ? null : _ref8$signature;
 
-  checkCleartextMessage(message);
+  checkCleartextOrMessage(message);
   publicKeys = toArray(publicKeys);
 
   if (asyncProxy) {
@@ -15831,8 +15883,11 @@ function verify(_ref8) {
 
   var result = {};
   return execute(function () {
-    result.data = message.getText();
-
+    if (cleartext.CleartextMessage.prototype.isPrototypeOf(message)) {
+      result.data = message.getText();
+    } else {
+      result.data = message.getLiteralData();
+    }
     if (signature) {
       //detached signature
       result.signatures = message.verifyDetached(signature, publicKeys);
@@ -15865,7 +15920,7 @@ function encryptSessionKey(_ref9) {
   var publicKeys = _ref9.publicKeys;
   var passwords = _ref9.passwords;
 
-  checkbinary(data);checkString(algorithm, 'algorithm');publicKeys = toArray(publicKeys);passwords = toArray(passwords);
+  checkBinary(data);checkString(algorithm, 'algorithm');publicKeys = toArray(publicKeys);passwords = toArray(passwords);
 
   if (asyncProxy) {
     // use web worker if available
@@ -15923,7 +15978,7 @@ function checkString(data, name) {
     throw new Error('Parameter [' + (name || 'data') + '] must be of type String');
   }
 }
-function checkbinary(data, name) {
+function checkBinary(data, name) {
   if (!_util2.default.isUint8Array(data)) {
     throw new Error('Parameter [' + (name || 'data') + '] must be of type Uint8Array');
   }
@@ -15938,9 +15993,9 @@ function checkMessage(message) {
     throw new Error('Parameter [message] needs to be of type Message');
   }
 }
-function checkCleartextMessage(message) {
-  if (!cleartext.CleartextMessage.prototype.isPrototypeOf(message)) {
-    throw new Error('Parameter [message] needs to be of type CleartextMessage');
+function checkCleartextOrMessage(message) {
+  if (!cleartext.CleartextMessage.prototype.isPrototypeOf(message) && !messageLib.Message.prototype.isPrototypeOf(message)) {
+    throw new Error('Parameter [message] needs to be of type Message or CleartextMessage');
   }
 }
 
@@ -16420,8 +16475,7 @@ function parseClonedPackets(options, method) {
   if (options.key) {
     options.key = packetlistCloneToKey(options.key);
   }
-  if (options.message && (method === 'sign' || method === 'verify')) {
-    // sign and verify support only CleartextMessage
+  if (options.message && options.message.signature) {
     options.message = packetlistCloneToCleartextMessage(options.message);
   } else if (options.message) {
     options.message = packetlistCloneToMessage(options.message);
@@ -20531,12 +20585,9 @@ exports.default = {
 
   readNumber: function readNumber(bytes) {
     var n = 0;
-
     for (var i = 0; i < bytes.length; i++) {
-      n <<= 8;
-      n += bytes[i];
+      n += Math.pow(256, i) * bytes[bytes.length - 1 - i];
     }
-
     return n;
   },
 
