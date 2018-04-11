@@ -101,7 +101,7 @@ See: https://bugzilla.zimbra.com/show_bug.cgi?id=97496
 
 ### License
 
-Copyright (C) 2014-2017  Barry de Graaff
+Copyright (C) 2014-2018  Barry de Graaff
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
