@@ -12,7 +12,7 @@ Adding PGP support to Zimbra Collaboration Suite, currently tested on:
 - Linux: Google Chrome, Chromium, Firefox, Iceweasel
 - MacOS OSX: Google Chrome, Safari 10.0
 
-This Zimlet ONLY WORKS with Zimbra version 8.6 and above and is tested on 8.7.
+This Zimlet ONLY WORKS with Zimbra version 8.6 and above and is tested on 8.8.
 
 This Zimlet is not available for use in Zimbra Desktop.
 
@@ -28,7 +28,7 @@ For developers: http://barrydegraaff.github.io/OpenPGPZimletJSDoc/OpenPGPZimlet.
 
     [root@myzimbra ~]# rm -Rf /opt/zimbra/zimlets-deployed/_dev/tk_barrydegraaff_zimbra_openpgp/
     [root@myzimbra ~]# su zimbra       
-    [zimbra@myzimbra ~] wget https://github.com/Zimbra-Community/pgp-zimlet/releases/download/2.7.4/tk_barrydegraaff_zimbra_openpgp.zip -O /tmp/tk_barrydegraaff_zimbra_openpgp.zip
+    [zimbra@myzimbra ~] wget https://github.com/Zimbra-Community/pgp-zimlet/releases/download/2.7.5/tk_barrydegraaff_zimbra_openpgp.zip -O /tmp/tk_barrydegraaff_zimbra_openpgp.zip
     [zimbra@myzimbra ~] zmzimletctl deploy /tmp/tk_barrydegraaff_zimbra_openpgp.zip
     [zimbra@myzimbra ~] zmmailboxdctl restart
 
