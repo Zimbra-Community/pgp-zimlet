@@ -3,9 +3,9 @@
 virsh destroy zimbra-dev
 virsh undefine zimbra-dev
 
-lvremove -f /dev/vg_dev/zimbra-dev-snap
+lvremove -f /dev/fedorab/zimbra-dev-snap
 
-lvcreate -L5G -s -n /dev/vg_dev/zimbra-dev-snap /dev/vg_dev/zimbra-dev-disk1
+lvcreate -L10G -s -n /dev/fedorab/zimbra-dev-snap /dev/fedorab/zimbra-dev-disk1
 
 virt-install \
 --connect qemu:///system \
@@ -14,11 +14,11 @@ virt-install \
 --network=default,model=virtio,mac=52:54:00:d4:22:bf \
 --noautoconsole \
 --name zimbra-dev \
---disk path=/dev/vg_dev/zimbra-dev-snap,bus=virtio,cache=none \
---ram 6000 \
+--disk path=/dev/fedorab/zimbra-dev-snap,bus=virtio,cache=none \
+--ram 8000 \
 --vcpus=4 \
 --vnc \
 --os-type linux \
---os-variant rhel6 \
+--os-variant rhel7.0 \
 --import
 
