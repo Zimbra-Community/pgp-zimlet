@@ -1,11 +1,11 @@
-<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="2.7.5" label="OpenPGP" description="Encrypt/Decrypt messages with OpenPGP">
+<zimlet name="tk_barrydegraaff_zimbra_openpgp" version="2.7.6" label="OpenPGP" description="Encrypt/Decrypt messages with OpenPGP">
    <summary>
 Zimbra OpenPGP Zimlet
 
    https://github.com/Zimbra-Community/pgp-zimlet
    https://www.indiegogo.com/projects/zimbra-openpgp-zimlet
 
-Copyright (C) 2014-2018  Barry de Graaff
+Copyright (C) 2014-2020  Barry de Graaff
 
 Bugs and feedback: https://github.com/Zimbra-Community/pgp-zimlet/issues
 
