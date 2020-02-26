@@ -8,11 +8,11 @@ User manual: https://barrydegraaff.github.io/help/
 Feature list: https://github.com/Zimbra-Community/pgp-zimlet/wiki
 
 Adding PGP support to Zimbra Collaboration Suite, currently tested on:
-- Windows: Internet Explorer 11, Google Chrome, Chromium, Firefox
-- Linux: Google Chrome, Chromium, Firefox, Iceweasel
-- MacOS OSX: Google Chrome, Safari 10.0
+- Windows: Google Chrome, Chromium, Firefox
+- Linux: Google Chrome, Chromium, Firefox
+- MacOS OSX: Google Chrome, Safari
 
-This Zimlet ONLY WORKS with Zimbra version 8.7.11 and above and is tested on 8.8.
+This Zimlet ONLY WORKS with Zimbra version 8.8.15 and above.
 
 This Zimlet is not available for use in Zimbra Desktop.
 
@@ -28,7 +28,7 @@ For developers: http://barrydegraaff.github.io/OpenPGPZimletJSDoc/OpenPGPZimlet.
 
     [root@myzimbra ~]# rm -Rf /opt/zimbra/zimlets-deployed/_dev/tk_barrydegraaff_zimbra_openpgp/
     [root@myzimbra ~]# su zimbra       
-    [zimbra@myzimbra ~] wget https://github.com/Zimbra-Community/pgp-zimlet/releases/download/2.7.5/tk_barrydegraaff_zimbra_openpgp.zip -O /tmp/tk_barrydegraaff_zimbra_openpgp.zip
+    [zimbra@myzimbra ~] wget https://github.com/Zimbra-Community/pgp-zimlet/releases/download/2.7.6/tk_barrydegraaff_zimbra_openpgp.zip -O /tmp/tk_barrydegraaff_zimbra_openpgp.zip
     [zimbra@myzimbra ~] zmzimletctl deploy /tmp/tk_barrydegraaff_zimbra_openpgp.zip
     [zimbra@myzimbra ~] zmmailboxdctl restart
 
@@ -101,7 +101,7 @@ See: https://bugzilla.zimbra.com/show_bug.cgi?id=97496
 
 ### License
 
-Copyright (C) 2014-2018  Barry de Graaff
+Copyright (C) 2014-2020  Barry de Graaff
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
