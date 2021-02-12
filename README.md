@@ -3,7 +3,7 @@ Zimbra OpenPGP Zimlet
 
 Demo video: https://youtu.be/-fMe5Xab11Y
 
-User manual: https://barrydegraaff.github.io/help/
+User manual: https://zetalliance.org/pgp-zimlet/
 
 Feature list: https://github.com/Zimbra-Community/pgp-zimlet/wiki
 

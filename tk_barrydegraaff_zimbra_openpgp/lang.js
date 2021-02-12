@@ -106,7 +106,7 @@ OpenPGPZimlet.prototype.lang = function () {
    english[71] = 'Store passphrase in browsers local storage';
    english[72] = 'This should be your own public key, it is selected by default when encrypting.'; 
    english[73] = 'Import public key'; 
-   english[74] = 'Do you wish to import this public key? Please <a target="_blank" href="https://barrydegraaff.github.io/help/#fingerprint">verify the fingerprint</a>.'; 
+   english[74] = 'Do you wish to import this public key? Please <a target="_blank" href="https://zetalliance.org/pgp-zimlet/#fingerprint">verify the fingerprint</a>.'; 
    english[75] = 'Imported';
    english[76] = 'Failed to import this public key';
    english[77] = 'Send someone my public key';
