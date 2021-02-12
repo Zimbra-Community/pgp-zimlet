@@ -27,7 +27,7 @@ Report security issues to info@barrydegraaff.tk (PGP fingerprint: 97f4694a1d9aed
 
     [root@myzimbra ~]# rm -Rf /opt/zimbra/zimlets-deployed/_dev/tk_barrydegraaff_zimbra_openpgp/
     [root@myzimbra ~]# su zimbra       
-    [zimbra@myzimbra ~] wget https://github.com/Zimbra-Community/pgp-zimlet/releases/download/2.7.6/tk_barrydegraaff_zimbra_openpgp.zip -O /tmp/tk_barrydegraaff_zimbra_openpgp.zip
+    [zimbra@myzimbra ~] wget https://github.com/Zimbra-Community/pgp-zimlet/releases/download/2.7.7/tk_barrydegraaff_zimbra_openpgp.zip -O /tmp/tk_barrydegraaff_zimbra_openpgp.zip
     [zimbra@myzimbra ~] zmzimletctl deploy /tmp/tk_barrydegraaff_zimbra_openpgp.zip
     [zimbra@myzimbra ~] zmmailboxdctl restart
 
