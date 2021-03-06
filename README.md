@@ -1,8 +1,6 @@
 Zimbra OpenPGP Zimlet
 ==========
 
-Demo video: https://youtu.be/-fMe5Xab11Y
-
 User manual: https://zetalliance.org/pgp-zimlet/
 
 Feature list: https://github.com/Zimbra-Community/pgp-zimlet/wiki
@@ -100,7 +98,7 @@ See: https://bugzilla.zimbra.com/show_bug.cgi?id=97496
 
 ### License
 
-Copyright (C) 2014-2020  Barry de Graaff
+Copyright (C) 2014-2021  Barry de Graaff
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
