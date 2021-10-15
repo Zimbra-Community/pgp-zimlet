@@ -16,9 +16,6 @@ This Zimlet is not available for use in Zimbra Desktop.
 
 Bugs and feedback: https://github.com/Zimbra-Community/pgp-zimlet/issues
 
-Report security issues to info@barrydegraaff.tk (PGP fingerprint: 97f4694a1d9aedad012533db725ddd156d36a2d0)
-
-
 ========================================================================
 
 ### Install Zimbra OpenPGP Zimlet
