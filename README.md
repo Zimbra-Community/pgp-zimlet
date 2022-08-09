@@ -1,5 +1,8 @@
-Zimbra OpenPGP Zimlet
+~Zimbra OpenPGP Zimlet~
 ==========
+
+**This Zimlet is deprecated and will not be supported on Zimbra versions beyond 9.0**
+
 
 User manual: https://zetalliance.org/pgp-zimlet/
 
